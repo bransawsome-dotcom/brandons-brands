@@ -16,7 +16,7 @@ export default function AuthCallbackPage() {
         router.replace("/login");
         return;
       }
-
+if (!supabase) return;
       const { error } = await supabase.auth.exchangeCodeForSession(code);
 
       if (error) {
