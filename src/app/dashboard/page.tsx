@@ -111,8 +111,8 @@ export default function DashboardPage() {
     .slice(0, 4);
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-6 py-12 sm:px-10 lg:px-16">
-      <div className="rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/90 via-black/70 to-slate-950/95 p-8 shadow-[0_30px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl">
+    <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-16">
+      <div className="rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/90 via-black/70 to-slate-950/95 p-5 shadow-[0_30px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:p-8">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div className="space-y-2">
             <p className="text-sm uppercase tracking-[0.35em] text-[#D9A43A]">Dashboard</p>

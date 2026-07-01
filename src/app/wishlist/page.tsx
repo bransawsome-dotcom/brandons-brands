@@ -125,7 +125,7 @@ export default function WishlistPage() {
 
   return (
     <div className="mx-auto w-full max-w-7xl px-6 py-16 sm:px-10 lg:px-16">
-      <div className="rounded-[2rem] border border-white/10 bg-white/5 p-8 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl">
+      <div className="rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">
         <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.3em] text-blue-300">Wishlist</p>
@@ -142,7 +142,7 @@ export default function WishlistPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="grid gap-6 rounded-[1.75rem] border border-white/10 bg-black/30 p-6">
-          <div className="grid gap-6 lg:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2">
             <label className="space-y-2 text-sm text-slate-300">
               Brand
               <input
@@ -167,7 +167,7 @@ export default function WishlistPage() {
             </label>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2">
             <label className="space-y-2 text-sm text-slate-300">
               Priority
               <select
@@ -215,7 +215,7 @@ export default function WishlistPage() {
 
           <button
             type="submit"
-            className="w-full rounded-full bg-[#D9A43A] px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-black shadow-[0_20px_60px_rgba(217,164,58,0.22)] transition hover:-translate-y-0.5 hover:bg-[#e1b54a] sm:w-auto"
+            className="w-full rounded-full bg-[#D9A43A] px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-black shadow-[0_20px_60px_rgba(217,164,58,0.22)] transition hover:-translate-y-0.5 hover:bg-[#e1b54a]"
           >
             Add Wishlist Item
           </button>

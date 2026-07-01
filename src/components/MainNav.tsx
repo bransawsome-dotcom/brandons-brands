@@ -31,35 +31,35 @@ export default function MainNav() {
   };
 
   return (
-    <nav className="flex flex-wrap items-center gap-3 text-sm font-medium text-slate-200">
+    <nav className="flex w-full flex-wrap gap-2 text-sm font-medium text-slate-200 sm:justify-end">
       {navLinks.map((item) => {
         const active = isActive(pathname, item.href);
         return (
           <Link
             key={item.href}
             href={item.href}
-            className={`rounded-full px-4 py-2 transition ${active ? "bg-white/10 text-white" : "hover:bg-white/10 hover:text-white"}`}
+            className={`min-w-[110px] rounded-full px-3 py-2 text-center transition ${active ? "bg-white/10 text-white" : "hover:bg-white/10 hover:text-white"}`}
           >
             {item.label}
           </Link>
         );
       })}
       {guestMode ? (
-        <span className="rounded-full border border-[#D9A43A]/30 bg-[#D9A43A]/10 px-4 py-2 text-xs uppercase tracking-[0.18em] text-[#D9A43A]">
+        <span className="min-w-[110px] rounded-full border border-[#D9A43A]/30 bg-[#D9A43A]/10 px-3 py-2 text-center text-xs uppercase tracking-[0.18em] text-[#D9A43A]">
           Guest Mode
         </span>
       ) : user ? (
         <button
           type="button"
           onClick={handleSignOut}
-          className="rounded-full px-4 py-2 transition bg-white/5 text-slate-200 hover:bg-white/10"
+          className="min-w-[110px] rounded-full px-3 py-2 text-center transition bg-white/5 text-slate-200 hover:bg-white/10"
         >
           Logout
         </button>
       ) : (
         <Link
           href="/login"
-          className="rounded-full px-4 py-2 transition bg-white/5 text-slate-200 hover:bg-white/10"
+          className="min-w-[110px] rounded-full px-3 py-2 text-center transition bg-white/5 text-slate-200 hover:bg-white/10"
         >
           Login
         </Link>

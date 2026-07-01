@@ -167,15 +167,15 @@ export default function CollectionPage() {
 
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-6 py-16 sm:px-10 lg:px-16">
-      <div className="rounded-[2rem] border border-white/10 bg-white/5 p-8 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl">
+    <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-16">
+      <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-blue-300">My Collection</p>
-            <h1 className="mt-3 text-4xl font-semibold tracking-[-0.03em] text-white sm:text-5xl">
+            <p className="text-xs uppercase tracking-[0.35em] text-blue-300 sm:text-sm">My Collection</p>
+            <h1 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-white sm:text-5xl">
               Build a luxury watch archive.
             </h1>
-            <p className="mt-4 max-w-2xl text-base leading-7 text-slate-300">
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
               Add new watches with photo upload, brand, model, price and notes. Switch between grid and list views for a premium management experience.
             </p>
           </div>
@@ -183,14 +183,14 @@ export default function CollectionPage() {
             <button
               type="button"
               onClick={() => setView("grid")}
-              className={`rounded-full px-5 py-3 text-sm font-semibold transition ${view === "grid" ? "bg-blue-500 text-white" : "bg-white/5 text-blue-200 hover:bg-white/10"}`}
+              className={`w-full rounded-full px-5 py-3 text-sm font-semibold transition sm:w-auto ${view === "grid" ? "bg-blue-500 text-white" : "bg-white/5 text-blue-200 hover:bg-white/10"}`}
             >
               Grid View
             </button>
             <button
               type="button"
               onClick={() => setView("list")}
-              className={`rounded-full px-5 py-3 text-sm font-semibold transition ${view === "list" ? "bg-blue-500 text-white" : "bg-white/5 text-blue-200 hover:bg-white/10"}`}
+              className={`w-full rounded-full px-5 py-3 text-sm font-semibold transition sm:w-auto ${view === "list" ? "bg-blue-500 text-white" : "bg-white/5 text-blue-200 hover:bg-white/10"}`}
             >
               List View
             </button>
@@ -204,7 +204,7 @@ export default function CollectionPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search brand, model, nickname, reference..."
-              className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none"
+              className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none text-sm"
             />
           </div>
           <div>
@@ -234,8 +234,8 @@ export default function CollectionPage() {
           </div>
         </div>
         <div className="mb-6 grid gap-4 sm:grid-cols-2">
-          <input value={priceMin} onChange={(e) => setPriceMin(e.target.value)} placeholder="Min $" className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none" />
-          <input value={priceMax} onChange={(e) => setPriceMax(e.target.value)} placeholder="Max $" className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none" />
+          <input value={priceMin} onChange={(e) => setPriceMin(e.target.value)} placeholder="Min $" className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none text-sm" />
+          <input value={priceMax} onChange={(e) => setPriceMax(e.target.value)} placeholder="Max $" className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none text-sm" />
         </div>
 
         <form onSubmit={handleSubmit} className="grid gap-6 rounded-[1.75rem] border border-white/10 bg-black/30 p-6">

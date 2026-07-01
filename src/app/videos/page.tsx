@@ -1,7 +1,7 @@
 export default function VideosPage() {
   return (
-    <div className="mx-auto w-full max-w-7xl px-6 py-16 sm:px-10 lg:px-16">
-      <div className="rounded-[2rem] border border-white/10 bg-white/5 p-8 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl">
+    <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-16">
+      <div className="rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">
         <div className="mb-10">
           <p className="text-sm uppercase tracking-[0.3em] text-blue-300">Instagram Reels</p>
           <h1 className="mt-3 text-4xl font-semibold tracking-[-0.03em] text-white sm:text-5xl">

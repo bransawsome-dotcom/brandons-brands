@@ -29,8 +29,8 @@ export default function WatchDetailsPage() {
     });
   }, [slug, loading, userId]);
 
-  if (!slug) return <div className="p-8">Invalid watch.</div>;
-  if (!watch) return <div className="p-8">Watch not found.</div>;
+  if (!slug) return <div className="p-6 text-sm">Invalid watch.</div>;
+  if (!watch) return <div className="p-6 text-sm">Watch not found.</div>;
 
   const handleDelete = async () => {
     await deleteCollectionItem(watch.id, userId);
@@ -93,7 +93,7 @@ export default function WatchDetailsPage() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-6 py-12">
+    <div className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6 sm:py-12">
       <div className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl">
         <div className="grid gap-6 lg:grid-cols-2">
           <div className="h-96 w-full overflow-hidden rounded-lg bg-slate-950/90">

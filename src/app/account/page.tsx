@@ -20,9 +20,9 @@ export default function AccountPage() {
   }, [loading, user?.id]);
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-6 py-16 sm:px-10 lg:px-16">
+    <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-16">
       <div className="grid gap-8 lg:grid-cols-[320px_1fr]">
-        <section className="rounded-[2rem] border border-white/10 bg-white/5 p-8 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl">
+        <section className="rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">
           <div className="flex flex-col items-center gap-6 text-center">
             <div className="flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-blue-500/20 via-slate-800 to-slate-900 shadow-[0_20px_60px_rgba(30,58,138,0.35)]">
               <span className="text-4xl font-semibold text-white">BB</span>
