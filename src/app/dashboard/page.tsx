@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useMemo } from "react";
 import { loadCollection, type Watch } from "@/lib/localData";
+import { useRequireAuth } from "@/components/AuthProvider";
 
 function formatCurrency(v?: string | number) {
   const n = typeof v === "number" ? v : parseFloat(String(v || "0"));
@@ -53,7 +54,8 @@ function ValueChart({ points }: { points: { label: string; value: number }[] }) 
 }
 
 export default function DashboardPage() {
-  const watches = useMemo<Watch[]>(() => loadCollection(), []);
+  const { user } = useRequireAuth();
+  const watches = useMemo<Watch[]>(() => (user ? loadCollection(user.id) : []), [user?.id]);
 
   const totalEstimatedValue = watches.reduce((sum, watch) => sum + (parseFloat(watch.estimated_value || "0") || 0), 0);
   const totalPurchaseCost = watches.reduce((sum, watch) => sum + (parseFloat(watch.purchase_price || "0") || 0), 0);

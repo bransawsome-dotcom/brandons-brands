@@ -1,24 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { loadCollection, loadWishlist } from "@/lib/localData";
+import { useRequireAuth } from "@/components/AuthProvider";
 
 export default function AccountPage() {
-  const [watchCount, setWatchCount] = useState<number>(2);
-  const [wishlistCount, setWishlistCount] = useState<number>(2);
+  const [watchCount, setWatchCount] = useState<number>(0);
+  const [wishlistCount, setWishlistCount] = useState<number>(0);
   const [message, setMessage] = useState<string | null>(null);
+  const { user, loading, signOut } = useRequireAuth();
 
   useEffect(() => {
-    setWatchCount(2);
-    setWishlistCount(2);
-  }, []);
-
-  const signInWithEmail = async () => {
-    setMessage("Local mode active. No authentication required.");
-  };
-
-  const signOut = async () => {
-    setMessage("Local mode active. No sign out required.");
-  };
+    if (loading) return;
+    if (!user) return;
+    setWatchCount(loadCollection(user.id).length);
+    setWishlistCount(loadWishlist(user.id).length);
+  }, [loading, user?.id]);
 
   return (
     <div className="mx-auto w-full max-w-7xl px-6 py-16 sm:px-10 lg:px-16">
@@ -33,7 +30,7 @@ export default function AccountPage() {
               <h1 className="mt-3 text-3xl font-semibold text-white">Guest Collector</h1>
             </div>
             <p className="text-sm leading-6 text-slate-300">
-              Local mode active. Your collection works without Supabase.
+              Secure your collection with private user authentication and separate watch data.
             </p>
           </div>
         </section>
@@ -57,20 +54,20 @@ export default function AccountPage() {
             <div className="mt-4 space-y-4 text-sm text-slate-300">
               <div className="flex items-center justify-between rounded-3xl bg-white/5 px-4 py-3">
                 <span className="font-medium text-white">Email</span>
-                <span>local@brandonsbrands.com</span>
+                <span>{user?.email ?? "—"}</span>
               </div>
               <div className="flex items-center justify-between rounded-3xl bg-white/5 px-4 py-3">
                 <span className="font-medium text-white">User ID</span>
-                <span>local-mode</span>
+                <span>{user?.id ?? "—"}</span>
               </div>
               <div className="flex items-center justify-between rounded-3xl bg-white/5 px-4 py-3">
                 <span className="font-medium text-white">Auth</span>
                 <button
                   type="button"
-                  onClick={signInWithEmail}
+                  onClick={signOut}
                   className="rounded-full bg-[#D9A43A] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-[#e1b54a]"
                 >
-                  Local Mode
+                  Logout
                 </button>
               </div>
             </div>

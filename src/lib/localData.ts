@@ -31,6 +31,14 @@ export type WishlistItem = {
 const COLLECTION_STORAGE_KEY = "brandons-brands-collection";
 const WISHLIST_STORAGE_KEY = "brandons-brands-wishlist";
 
+function getCollectionKey(userId?: string | null) {
+  return userId ? `${COLLECTION_STORAGE_KEY}-${userId}` : COLLECTION_STORAGE_KEY;
+}
+
+function getWishlistKey(userId?: string | null) {
+  return userId ? `${WISHLIST_STORAGE_KEY}-${userId}` : WISHLIST_STORAGE_KEY;
+}
+
 const defaultWatches: Watch[] = [
   {
     id: "1",
@@ -140,8 +148,9 @@ function saveJson<T>(key: string, data: T) {
   window.localStorage.setItem(key, JSON.stringify(data));
 }
 
-export function loadCollection(): Watch[] {
-  const collection = readJson<Watch[]>(COLLECTION_STORAGE_KEY, defaultWatches);
+export function loadCollection(userId?: string | null): Watch[] {
+  const fallback = userId ? [] : defaultWatches;
+  const collection = readJson<Watch[]>(getCollectionKey(userId), fallback);
   const seen = new Set<string>();
   let mutated = false;
 
@@ -162,22 +171,22 @@ export function loadCollection(): Watch[] {
   return normalized;
 }
 
-export function saveCollection(watches: Watch[]) {
-  saveJson(COLLECTION_STORAGE_KEY, watches);
+export function saveCollection(userId: string | null | undefined, watches: Watch[]) {
+  saveJson(getCollectionKey(userId), watches);
 }
 
-export function getWatchById(id: string): Watch | undefined {
-  const all = loadCollection();
+export function getWatchById(id: string, userId?: string | null): Watch | undefined {
+  const all = loadCollection(userId);
   return all.find((w) => w.id === id);
 }
 
-export function getWatchBySlug(slug: string): Watch | undefined {
-  const all = loadCollection();
+export function getWatchBySlug(slug: string, userId?: string | null): Watch | undefined {
+  const all = loadCollection(userId);
   return all.find((w) => w.slug === slug);
 }
 
-export function updateWatch(updated: Watch) {
-  const all = loadCollection();
+export function updateWatch(updated: Watch, userId?: string | null) {
+  const all = loadCollection(userId);
   const next = all.map((w) =>
     w.id === updated.id
       ? {
@@ -192,26 +201,27 @@ export function updateWatch(updated: Watch) {
     ...watch,
     slug: ensureUniqueSlug(watch.slug, uniqueSlugs),
   }));
-  saveCollection(normalized);
+  saveCollection(userId, normalized);
   return normalized;
 }
 
-export function deleteWatchById(id: string) {
-  const all = loadCollection();
+export function deleteWatchById(id: string, userId?: string | null) {
+  const all = loadCollection(userId);
   const next = all.filter((w) => w.id !== id);
-  saveCollection(next);
+  saveCollection(userId, next);
   return next;
 }
 
-export function loadWishlist(): WishlistItem[] {
-  return readJson<WishlistItem[]>(WISHLIST_STORAGE_KEY, defaultWishlist);
+export function loadWishlist(userId?: string | null): WishlistItem[] {
+  const fallback = userId ? [] : defaultWishlist;
+  return readJson<WishlistItem[]>(getWishlistKey(userId), fallback);
 }
 
-export function saveWishlist(wishlist: WishlistItem[]) {
-  saveJson(WISHLIST_STORAGE_KEY, wishlist);
+export function saveWishlist(userId: string | null | undefined, wishlist: WishlistItem[]) {
+  saveJson(getWishlistKey(userId), wishlist);
 }
 
-export function addWatchToCollection(watch: Watch) {
-  const collection = loadCollection();
-  saveCollection([watch, ...collection]);
+export function addWatchToCollection(watch: Watch, userId?: string | null) {
+  const collection = loadCollection(userId);
+  saveCollection(userId, [watch, ...collection]);
 }

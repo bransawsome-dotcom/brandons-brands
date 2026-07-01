@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuth } from "@/components/AuthProvider";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -21,6 +22,13 @@ function isActive(pathname: string | null, href: string) {
 
 export default function MainNav() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push("/login");
+  };
 
   return (
     <nav className="flex flex-wrap items-center gap-3 text-sm font-medium text-slate-200">
@@ -36,6 +44,22 @@ export default function MainNav() {
           </Link>
         );
       })}
+      {user ? (
+        <button
+          type="button"
+          onClick={handleSignOut}
+          className="rounded-full px-4 py-2 transition bg-white/5 text-slate-200 hover:bg-white/10"
+        >
+          Logout
+        </button>
+      ) : (
+        <Link
+          href="/login"
+          className="rounded-full px-4 py-2 transition bg-white/5 text-slate-200 hover:bg-white/10"
+        >
+          Login
+        </Link>
+      )}
     </nav>
   );
 }

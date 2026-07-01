@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 import { loadCollection, saveCollection, type Watch } from "@/lib/localData";
+import { useRequireAuth } from "@/components/AuthProvider";
 
 function buildSlug(brand: string, model: string) {
   return `${brand.trim().toLowerCase()} ${model.trim().toLowerCase()}`
@@ -24,6 +25,8 @@ const initialForm = {
 export default function CollectionPage() {
   const [watches, setWatches] = useState<Watch[]>([]);
   const [search, setSearch] = useState("");
+  const { user, loading: authLoading } = useRequireAuth();
+  const userId = user?.id ?? null;
   const [brandFilter, setBrandFilter] = useState("");
   const [conditionFilter, setConditionFilter] = useState("");
   const [sortOption, setSortOption] = useState<"highest" | "lowest" | "newest" | "oldest" | "brand">("highest");
@@ -38,13 +41,14 @@ export default function CollectionPage() {
   const [preview, setPreview] = useState<string>("");
 
   useEffect(() => {
-    const saved = loadCollection();
+    if (authLoading) return;
+    const saved = loadCollection(userId);
     setWatches(saved);
     setLoading(false);
-  }, []);
+  }, [authLoading, userId]);
 
   function fetchWatches() {
-    const saved = loadCollection();
+    const saved = loadCollection(userId);
     setWatches(saved);
   }
 
@@ -139,7 +143,7 @@ export default function CollectionPage() {
 
     const updated = [newWatch, ...watches];
     setWatches(updated);
-    saveCollection(updated);
+    saveCollection(userId, updated);
     setForm(initialForm);
     setPhotoFile(null);
     setPreview("");

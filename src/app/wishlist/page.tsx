@@ -2,6 +2,7 @@
 
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 import { loadWishlist, saveWishlist, type WishlistItem } from "@/lib/localData";
+import { useRequireAuth } from "@/components/AuthProvider";
 
 const initialForm = {
   brand: "",
@@ -17,6 +18,8 @@ const initialForm = {
 const priorityOptions = ["High", "Medium", "Low"] as const;
 
 export default function WishlistPage() {
+  const { user, loading: authLoading } = useRequireAuth();
+  const userId = user?.id ?? null;
   const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
   const [form, setForm] = useState(initialForm);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -26,10 +29,11 @@ export default function WishlistPage() {
   const [priorityFilter, setPriorityFilter] = useState<string>("");
 
   useEffect(() => {
-    const saved = loadWishlist();
+    if (authLoading) return;
+    const saved = loadWishlist(userId);
     setWishlist(saved);
     setLoading(false);
-  }, []);
+  }, [authLoading, userId]);
 
   const filteredWishlist = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -86,7 +90,7 @@ export default function WishlistPage() {
       : [newItem, ...wishlist];
 
     setWishlist(updated);
-    saveWishlist(updated);
+    saveWishlist(userId, updated);
     setForm(initialForm);
     setEditingId(null);
     setMessage(editingId ? "Wishlist item saved." : "Wishlist item added.");
@@ -98,7 +102,7 @@ export default function WishlistPage() {
 
     const next = wishlist.filter((item) => item.id !== id);
     setWishlist(next);
-    saveWishlist(next);
+    saveWishlist(userId, next);
     setMessage("Wishlist item deleted.");
   };
 
