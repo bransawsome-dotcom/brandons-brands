@@ -1,7 +1,14 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import Link from "next/link";
+import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 import { loadCollection, saveCollection, type Watch } from "@/lib/localData";
+
+function buildSlug(brand: string, model: string) {
+  return `${brand.trim().toLowerCase()} ${model.trim().toLowerCase()}`
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
 
 const initialForm = {
   image_url: "",
@@ -16,6 +23,11 @@ const initialForm = {
 
 export default function CollectionPage() {
   const [watches, setWatches] = useState<Watch[]>([]);
+  const [search, setSearch] = useState("");
+  const [brandFilter, setBrandFilter] = useState("");
+  const [priceMin, setPriceMin] = useState("");
+  const [priceMax, setPriceMax] = useState("");
+  const [selectedWatch, setSelectedWatch] = useState<Watch | null>(null);
   const [form, setForm] = useState(initialForm);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<"grid" | "list">("grid");
@@ -33,6 +45,31 @@ export default function CollectionPage() {
     const saved = loadCollection();
     setWatches(saved);
   }
+
+  const uniqueBrands = useMemo(() => {
+    const brands = Array.from(new Set(watches.map((w) => w.brand))).filter(Boolean) as string[];
+    return brands.sort();
+  }, [watches]);
+
+  const filteredWatches = useMemo(() => {
+    return watches.filter((w) => {
+      const q = search.trim().toLowerCase();
+      if (q) {
+        const hay = `${w.brand} ${w.model} ${w.reference_number ?? ""}`.toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+
+      if (brandFilter && w.brand !== brandFilter) return false;
+
+      const val = parseFloat(w.estimated_value || "0") || 0;
+      const min = parseFloat(priceMin || "0") || 0;
+      const max = priceMax ? parseFloat(priceMax) : Infinity;
+      if (val < min) return false;
+      if (val > max) return false;
+
+      return true;
+    });
+  }, [watches, search, brandFilter, priceMin, priceMax]);
 
   const uploadImage = async (file: File) => {
     return URL.createObjectURL(file);
@@ -61,6 +98,7 @@ export default function CollectionPage() {
     const imageUrl = photoFile ? await uploadImage(photoFile) : form.image_url;
     const newWatch: Watch = {
       id: `${Date.now()}`,
+      slug: buildSlug(form.brand, form.model),
       image_url: imageUrl || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1200&q=80",
       brand: form.brand.trim(),
       model: form.model.trim(),
@@ -91,7 +129,7 @@ export default function CollectionPage() {
   return (
     <div className="mx-auto w-full max-w-7xl px-6 py-16 sm:px-10 lg:px-16">
       <div className="rounded-[2rem] border border-white/10 bg-white/5 p-8 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl">
-        <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.3em] text-blue-300">My Collection</p>
             <h1 className="mt-3 text-4xl font-semibold tracking-[-0.03em] text-white sm:text-5xl">
@@ -116,6 +154,30 @@ export default function CollectionPage() {
             >
               List View
             </button>
+          </div>
+        </div>
+
+        {/* Search & Filters */}
+        <div className="mt-6 mb-6 grid gap-4 rounded-[1.25rem] border border-white/6 bg-black/20 p-4 sm:grid-cols-3">
+          <div className="sm:col-span-1">
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search brand, model, reference..."
+              className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none"
+            />
+          </div>
+          <div className="sm:col-span-1">
+            <select value={brandFilter} onChange={(e) => setBrandFilter(e.target.value)} className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none">
+              <option value="">All Brands</option>
+              {uniqueBrands.map((b) => (
+                <option key={b} value={b}>{b}</option>
+              ))}
+            </select>
+          </div>
+          <div className="sm:col-span-1 flex gap-3">
+            <input value={priceMin} onChange={(e) => setPriceMin(e.target.value)} placeholder="Min $" className="w-1/2 rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none" />
+            <input value={priceMax} onChange={(e) => setPriceMax(e.target.value)} placeholder="Max $" className="w-1/2 rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none" />
           </div>
         </div>
 
@@ -251,47 +313,72 @@ export default function CollectionPage() {
             <p className="text-sm uppercase tracking-[0.3em] text-blue-300">Your luxury archive</p>
             <h2 className="mt-3 text-3xl font-semibold text-white">{view === "grid" ? "Gallery view" : "List view"}</h2>
           </div>
-          <div className="text-sm text-slate-400">{watches.length} watch{watches.length === 1 ? "" : "es"}</div>
+          <div className="text-sm text-slate-400">{filteredWatches.length} watch{filteredWatches.length === 1 ? "" : "s"}</div>
         </div>
 
         {loading ? (
           <div className="rounded-[2rem] border border-white/10 bg-white/5 p-12 text-center text-slate-300">Loading your collection…</div>
-        ) : watches.length ? (
+        ) : filteredWatches.length ? (
           <div className={view === "grid" ? "grid gap-6 md:grid-cols-2 xl:grid-cols-3" : "space-y-6"}>
-            {watches.map((watch) => (
-              <article key={watch.id} className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-[0_25px_70px_rgba(0,0,0,0.28)] backdrop-blur-xl">
-                <div className="grid gap-6 lg:grid-cols-2">
-                  <div className="h-72 bg-slate-950/90">
-                    {watch.image_url ? (
-                      <img src={watch.image_url} alt={`${watch.brand} ${watch.model}`} className="h-full w-full object-cover" />
-                    ) : (
-                      <div className="flex h-full items-center justify-center text-slate-400">No image</div>
-                    )}
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <p className="text-sm uppercase tracking-[0.25em] text-blue-300">{watch.brand}</p>
-                        <h3 className="mt-2 text-2xl font-semibold text-white">{watch.model}</h3>
-                        {watch.nickname ? <p className="text-sm text-slate-400">“{watch.nickname}”</p> : null}
+            {filteredWatches.map((watch) => (
+              <Link key={watch.id} href={`/collection/${watch.slug}`} className="group block cursor-pointer overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-[0_25px_70px_rgba(0,0,0,0.28)] backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-[#D9A43A]/40 hover:shadow-[0_35px_80px_rgba(217,164,58,0.18)]">
+                {view === "grid" ? (
+                  <div className="flex flex-col">
+                    <div className="h-64 w-full bg-slate-950/90 overflow-hidden">
+                      {watch.image_url ? (
+                        <img src={watch.image_url} alt={`${watch.brand} ${watch.model}`} className="h-full w-full object-cover" />
+                      ) : (
+                        <div className="flex h-full items-center justify-center text-slate-400">No image</div>
+                      )}
+                    </div>
+                    <div className="p-6">
+                      <p className="text-sm uppercase tracking-[0.25em] text-blue-300">{watch.brand}</p>
+                      <h3 className="mt-2 text-2xl font-semibold text-white">{watch.model}</h3>
+                      {watch.reference_number ? <p className="text-sm text-slate-400">Reference: {watch.reference_number}</p> : null}
+                      <div className="mt-4 flex items-center justify-between">
+                        <div className="text-sm text-slate-300">
+                          <div><span className="font-semibold text-white">Estimated:</span> {watch.estimated_value ? `$${watch.estimated_value}` : "—"}</div>
+                          <div><span className="font-semibold text-white">Condition:</span> {watch.condition ?? "—"}</div>
+                        </div>
+                        <div className="rounded-full bg-[#D9A43A] px-4 py-2 text-sm font-semibold uppercase tracking-[0.18em] text-black shadow-[0_12px_30px_rgba(217,164,58,0.18)] transition group-hover:scale-[1.01]">View Details</div>
                       </div>
-                      <span className="rounded-full bg-[#D9A43A]/15 px-3 py-1 text-xs uppercase tracking-[0.2em] text-amber-200">Value</span>
-                    </div>
-                    <div className="mt-5 space-y-3 text-sm text-slate-300">
-                      <p>
-                        <span className="font-semibold text-white">Purchased:</span> {watch.purchase_date || "—"}
-                      </p>
-                      <p>
-                        <span className="font-semibold text-white">Price:</span> {watch.purchase_price ? `$${watch.purchase_price}` : "—"}
-                      </p>
-                      <p>
-                        <span className="font-semibold text-white">Estimated:</span> {watch.estimated_value ? `$${watch.estimated_value}` : "—"}
-                      </p>
-                      <p>{watch.notes || "No additional notes."}</p>
                     </div>
                   </div>
-                </div>
-              </article>
+                ) : (
+                  <div className="grid gap-6 lg:grid-cols-2">
+                    <div className="h-72 bg-slate-950/90">
+                      {watch.image_url ? (
+                        <img src={watch.image_url} alt={`${watch.brand} ${watch.model}`} className="h-full w-full object-cover" />
+                      ) : (
+                        <div className="flex h-full items-center justify-center text-slate-400">No image</div>
+                      )}
+                    </div>
+                    <div className="p-6">
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <p className="text-sm uppercase tracking-[0.25em] text-blue-300">{watch.brand}</p>
+                          <h3 className="mt-2 text-2xl font-semibold text-white">{watch.model}</h3>
+                          {watch.nickname ? <p className="text-sm text-slate-400">“{watch.nickname}”</p> : null}
+                        </div>
+                        <span className="rounded-full bg-[#D9A43A]/15 px-3 py-1 text-xs uppercase tracking-[0.2em] text-amber-200">Value</span>
+                      </div>
+                      <div className="mt-5 space-y-3 text-sm text-slate-300">
+                        <p>
+                          <span className="font-semibold text-white">Purchased:</span> {watch.purchase_date || "—"}
+                        </p>
+                        <p>
+                          <span className="font-semibold text-white">Price:</span> {watch.purchase_price ? `$${watch.purchase_price}` : "—"}
+                        </p>
+                        <p>
+                          <span className="font-semibold text-white">Estimated:</span> {watch.estimated_value ? `$${watch.estimated_value}` : "—"}
+                        </p>
+                        <p>{watch.notes || "No additional notes."}</p>
+                        <div className="mt-4 rounded-full bg-[#D9A43A] px-4 py-2 text-sm font-semibold uppercase tracking-[0.18em] text-black shadow-[0_12px_30px_rgba(217,164,58,0.18)] transition group-hover:scale-[1.01]">View Details</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </Link>
             ))}
           </div>
         ) : (
@@ -299,6 +386,38 @@ export default function CollectionPage() {
             Your collection is empty. Add a watch to begin curating your luxury archive.
           </div>
         )}
+
+        {/* Details modal */}
+        {selectedWatch ? (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <div className="absolute inset-0 bg-black/70" onClick={() => setSelectedWatch(null)} />
+            <div className="relative z-10 w-full max-w-3xl rounded-2xl border border-white/10 bg-white/5 p-6 shadow-[0_40px_120px_rgba(0,0,0,0.6)]">
+              <div className="grid gap-6 lg:grid-cols-2">
+                <div className="h-80 bg-slate-950/90 overflow-hidden rounded-lg">
+                  {selectedWatch.image_url ? (
+                    <img src={selectedWatch.image_url} alt={`${selectedWatch.brand} ${selectedWatch.model}`} className="h-full w-full object-cover" />
+                  ) : (
+                    <div className="flex h-full items-center justify-center text-slate-400">No image</div>
+                  )}
+                </div>
+                <div>
+                  <p className="text-sm uppercase tracking-[0.3em] text-blue-300">{selectedWatch.brand}</p>
+                  <h3 className="mt-2 text-3xl font-bold text-white">{selectedWatch.model}</h3>
+                  {selectedWatch.reference_number ? <p className="mt-2 text-sm text-slate-300">Reference: <span className="font-semibold text-white">{selectedWatch.reference_number}</span></p> : null}
+                  <p className="mt-4 text-sm text-slate-300">{selectedWatch.notes}</p>
+                  <div className="mt-6 space-y-2 text-sm text-slate-300">
+                    <div><span className="font-semibold text-white">Estimated value:</span> {selectedWatch.estimated_value ? `$${selectedWatch.estimated_value}` : "—"}</div>
+                    <div><span className="font-semibold text-white">Condition:</span> {selectedWatch.condition ?? "—"}</div>
+                    <div><span className="font-semibold text-white">Purchased:</span> {selectedWatch.purchase_date || "—"}</div>
+                  </div>
+                  <div className="mt-6 flex gap-3">
+                    <button onClick={() => setSelectedWatch(null)} className="rounded-full px-5 py-3 text-sm font-semibold bg-white/5 text-white">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : null}
       </section>
     </div>
   );
