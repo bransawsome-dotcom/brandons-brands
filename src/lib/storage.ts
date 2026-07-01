@@ -80,6 +80,13 @@ export async function getWatchByIdData(id: string, userId?: string | null): Prom
   return watch;
 }
 
+export async function getWatchByIdOrSlug(identifier: string, userId?: string | null): Promise<Watch | undefined> {
+  // Try by id first, then fallback to slug lookup
+  const byId = await getWatchByIdData(identifier, userId);
+  if (byId) return byId;
+  return await getWatchBySlugData(identifier, userId);
+}
+
 export async function updateWatchData(updated: Watch, userId?: string | null): Promise<Watch[]> {
   if (!userId || !supabase) {
     return updateWatch(updated, userId);
