@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useRequireAuth } from "@/components/AuthProvider";
-import { loadCollectionData, saveCollectionData } from "@/lib/storage";
+import { loadCollectionData, saveCollectionData, deleteCollectionItem } from "@/lib/storage";
 import { type Watch } from "@/lib/localData";
 
 function buildSlug(brand: string, model: string) {
@@ -166,8 +167,10 @@ export default function CollectionPage() {
   };
 
 
+  const router = useRouter();
+
   return (
-    <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-16">
+    <div className="mx-auto w-full max-w-7xl px-3 py-8 sm:px-6 sm:py-14 lg:px-16 overflow-x-hidden">
       <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -378,10 +381,11 @@ export default function CollectionPage() {
         ) : filteredWatches.length ? (
           <div className={view === "grid" ? "grid gap-6 md:grid-cols-2 xl:grid-cols-3" : "space-y-6"}>
             {filteredWatches.map((watch) => (
-              <Link key={watch.id} href={`/collection/${watch.slug}`} className="group block cursor-pointer overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-[0_25px_70px_rgba(0,0,0,0.28)] backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-[#D9A43A]/40 hover:shadow-[0_35px_80px_rgba(217,164,58,0.18)]">
+              <div key={watch.id} className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-[0_25px_70px_rgba(0,0,0,0.28)] backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-[#D9A43A]/40 hover:shadow-[0_35px_80px_rgba(217,164,58,0.18)]">
+                <Link href={`/collection/${watch.slug}`} className="absolute inset-0 z-0" aria-hidden />
                 {view === "grid" ? (
-                  <div className="flex flex-col">
-                    <div className="h-64 w-full bg-slate-950/90 overflow-hidden">
+                  <div className="flex flex-col relative z-10">
+                    <div className="h-[220px] w-full bg-slate-950/90 overflow-hidden md:h-64">
                       {watch.image_url ? (
                         <img src={watch.image_url} alt={`${watch.brand} ${watch.model}`} className="h-full w-full object-cover" />
                       ) : (
@@ -393,17 +397,42 @@ export default function CollectionPage() {
                       <h3 className="mt-2 text-2xl font-semibold text-white">{watch.model}</h3>
                       {watch.reference_number ? <p className="text-sm text-slate-400">Reference: {watch.reference_number}</p> : null}
                       <div className="mt-4 flex items-center justify-between">
-                        <div className="text-sm text-slate-300">
+                        <div className="text-sm text-slate-200 md:text-slate-300">
                           <div><span className="font-semibold text-white">Estimated:</span> {watch.estimated_value ? `$${watch.estimated_value}` : "—"}</div>
                           <div><span className="font-semibold text-white">Condition:</span> {watch.condition ?? "—"}</div>
                         </div>
                         <div className="rounded-full bg-[#D9A43A] px-4 py-2 text-sm font-semibold uppercase tracking-[0.18em] text-black shadow-[0_12px_30px_rgba(217,164,58,0.18)] transition group-hover:scale-[1.01]">View Details</div>
                       </div>
                     </div>
+
+                    {/* Mobile buttons */}
+                    <div className="flex md:hidden border-t border-white/6">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          router.push(`/collection/${watch.slug}`);
+                        }}
+                        className="w-1/2 px-4 py-3 text-sm font-semibold text-white"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        onClick={async (e) => {
+                          e.stopPropagation();
+                          await deleteCollectionItem(watch.id, userId);
+                          await fetchWatches();
+                        }}
+                        className="w-1/2 px-4 py-3 text-sm font-semibold text-white bg-rose-600"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </div>
                 ) : (
-                  <div className="grid gap-6 lg:grid-cols-2">
-                    <div className="h-72 bg-slate-950/90">
+                  <div className="grid gap-6 lg:grid-cols-2 relative z-10">
+                    <div className="h-[220px] bg-slate-950/90 md:h-72">
                       {watch.image_url ? (
                         <img src={watch.image_url} alt={`${watch.brand} ${watch.model}`} className="h-full w-full object-cover" />
                       ) : (
@@ -419,7 +448,7 @@ export default function CollectionPage() {
                         </div>
                         <span className="rounded-full bg-[#D9A43A]/15 px-3 py-1 text-xs uppercase tracking-[0.2em] text-amber-200">Value</span>
                       </div>
-                      <div className="mt-5 space-y-3 text-sm text-slate-300">
+                      <div className="mt-5 space-y-3 text-sm text-slate-200 md:text-slate-300">
                         <p>
                           <span className="font-semibold text-white">Purchased:</span> {watch.purchase_date || "—"}
                         </p>
@@ -432,10 +461,35 @@ export default function CollectionPage() {
                         <p>{watch.notes || "No additional notes."}</p>
                         <div className="mt-4 rounded-full bg-[#D9A43A] px-4 py-2 text-sm font-semibold uppercase tracking-[0.18em] text-black shadow-[0_12px_30px_rgba(217,164,58,0.18)] transition group-hover:scale-[1.01]">View Details</div>
                       </div>
+
+                      {/* Mobile buttons for list view */}
+                      <div className="flex md:hidden border-t border-white/6 mt-4">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            router.push(`/collection/${watch.slug}`);
+                          }}
+                          className="w-1/2 px-4 py-3 text-sm font-semibold text-white"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={async (e) => {
+                            e.stopPropagation();
+                            await deleteCollectionItem(watch.id, userId);
+                            await fetchWatches();
+                          }}
+                          className="w-1/2 px-4 py-3 text-sm font-semibold text-white bg-rose-600"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </div>
                   </div>
                 )}
-              </Link>
+              </div>
             ))}
           </div>
         ) : (
