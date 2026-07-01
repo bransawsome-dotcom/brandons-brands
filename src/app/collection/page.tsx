@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
-import { loadCollection, saveCollection, type Watch } from "@/lib/localData";
 import { useRequireAuth } from "@/components/AuthProvider";
+import { loadCollectionData, saveCollectionData } from "@/lib/storage";
+import { type Watch } from "@/lib/localData";
 
 function buildSlug(brand: string, model: string) {
   return `${brand.trim().toLowerCase()} ${model.trim().toLowerCase()}`
@@ -42,13 +43,15 @@ export default function CollectionPage() {
 
   useEffect(() => {
     if (authLoading) return;
-    const saved = loadCollection(userId);
-    setWatches(saved);
-    setLoading(false);
+
+    loadCollectionData(userId).then((saved) => {
+      setWatches(saved);
+      setLoading(false);
+    });
   }, [authLoading, userId]);
 
-  function fetchWatches() {
-    const saved = loadCollection(userId);
+  async function fetchWatches() {
+    const saved = await loadCollectionData(userId);
     setWatches(saved);
   }
 
@@ -143,20 +146,13 @@ export default function CollectionPage() {
 
     const updated = [newWatch, ...watches];
     setWatches(updated);
-    saveCollection(userId, updated);
+    await saveCollectionData(userId, updated);
     setForm(initialForm);
     setPhotoFile(null);
     setPreview("");
     setMessage("Watch added locally.");
   };
 
-  const signInWithEmail = async () => {
-    setMessage("Local mode active. No authentication needed.");
-  };
-
-  const signOut = async () => {
-    setMessage("Local mode active. No sign out required.");
-  };
 
   return (
     <div className="mx-auto w-full max-w-7xl px-6 py-16 sm:px-10 lg:px-16">

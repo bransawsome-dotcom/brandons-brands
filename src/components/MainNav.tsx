@@ -23,7 +23,7 @@ function isActive(pathname: string | null, href: string) {
 export default function MainNav() {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, signOut } = useAuth();
+  const { user, guestMode, signOut } = useAuth();
 
   const handleSignOut = async () => {
     await signOut();
@@ -44,7 +44,11 @@ export default function MainNav() {
           </Link>
         );
       })}
-      {user ? (
+      {guestMode ? (
+        <span className="rounded-full border border-[#D9A43A]/30 bg-[#D9A43A]/10 px-4 py-2 text-xs uppercase tracking-[0.18em] text-[#D9A43A]">
+          Guest Mode
+        </span>
+      ) : user ? (
         <button
           type="button"
           onClick={handleSignOut}

@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo } from "react";
-import { loadCollection, type Watch } from "@/lib/localData";
+import { useEffect, useMemo, useState } from "react";
+import { loadCollectionData } from "@/lib/storage";
+import { type Watch } from "@/lib/localData";
 import { useRequireAuth } from "@/components/AuthProvider";
 
 function formatCurrency(v?: string | number) {
@@ -54,8 +55,15 @@ function ValueChart({ points }: { points: { label: string; value: number }[] }) 
 }
 
 export default function DashboardPage() {
-  const { user } = useRequireAuth();
-  const watches = useMemo<Watch[]>(() => (user ? loadCollection(user.id) : []), [user?.id]);
+  const { user, loading: authLoading } = useRequireAuth();
+  const [watches, setWatches] = useState<Watch[]>([]);
+  const userId = user?.id ?? null;
+
+  useEffect(() => {
+    if (authLoading) return;
+
+    loadCollectionData(userId).then((loaded) => setWatches(loaded));
+  }, [authLoading, userId]);
 
   const totalEstimatedValue = watches.reduce((sum, watch) => sum + (parseFloat(watch.estimated_value || "0") || 0), 0);
   const totalPurchaseCost = watches.reduce((sum, watch) => sum + (parseFloat(watch.purchase_price || "0") || 0), 0);

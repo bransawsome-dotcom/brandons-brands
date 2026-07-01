@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { loadCollection, loadWishlist } from "@/lib/localData";
+import { loadCollectionData, loadWishlistData } from "@/lib/storage";
 import { useRequireAuth } from "@/components/AuthProvider";
 
 export default function AccountPage() {
@@ -12,9 +12,11 @@ export default function AccountPage() {
 
   useEffect(() => {
     if (loading) return;
-    if (!user) return;
-    setWatchCount(loadCollection(user.id).length);
-    setWishlistCount(loadWishlist(user.id).length);
+
+    const userId = user?.id ?? null;
+
+    loadCollectionData(userId).then((collection) => setWatchCount(collection.length));
+    loadWishlistData(userId).then((wishlist) => setWishlistCount(wishlist.length));
   }, [loading, user?.id]);
 
   return (

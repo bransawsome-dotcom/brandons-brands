@@ -1,8 +1,9 @@
 "use client";
 
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
-import { loadWishlist, saveWishlist, type WishlistItem } from "@/lib/localData";
+import { loadWishlistData, saveWishlistData } from "@/lib/storage";
 import { useRequireAuth } from "@/components/AuthProvider";
+import { type WishlistItem } from "@/lib/localData";
 
 const initialForm = {
   brand: "",
@@ -30,9 +31,11 @@ export default function WishlistPage() {
 
   useEffect(() => {
     if (authLoading) return;
-    const saved = loadWishlist(userId);
-    setWishlist(saved);
-    setLoading(false);
+
+    loadWishlistData(userId).then((saved) => {
+      setWishlist(saved);
+      setLoading(false);
+    });
   }, [authLoading, userId]);
 
   const filteredWishlist = useMemo(() => {
@@ -64,7 +67,7 @@ export default function WishlistPage() {
     setForm((current) => ({ ...current, [name]: value }));
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setMessage(null);
 
@@ -90,19 +93,19 @@ export default function WishlistPage() {
       : [newItem, ...wishlist];
 
     setWishlist(updated);
-    saveWishlist(userId, updated);
+    await saveWishlistData(userId, updated);
     setForm(initialForm);
     setEditingId(null);
     setMessage(editingId ? "Wishlist item saved." : "Wishlist item added.");
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     const shouldDelete = window.confirm("Delete this wishlist item?");
     if (!shouldDelete) return;
 
     const next = wishlist.filter((item) => item.id !== id);
     setWishlist(next);
-    saveWishlist(userId, next);
+    await saveWishlistData(userId, next);
     setMessage("Wishlist item deleted.");
   };
 

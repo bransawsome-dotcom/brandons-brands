@@ -8,7 +8,9 @@ import supabase from "@/lib/supabaseClient";
 type AuthContextValue = {
   user: User | null;
   session: Session | null;
+  guestMode: boolean;
   loading: boolean;
+  signInGuest: () => void;
   signOut: () => Promise<void>;
 };
 
@@ -17,9 +19,13 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [guestMode, setGuestMode] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const storedGuest = typeof window !== "undefined" && window.localStorage.getItem("brandons-brands-guest-mode") === "true";
+    setGuestMode(storedGuest);
+
     if (!supabase) {
       setSession(null);
       setUser(null);
@@ -33,6 +39,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       if (!subscribed) return;
       setSession(data.session);
       setUser(data.session?.user ?? null);
+      setGuestMode(Boolean(data.session?.user) ? false : storedGuest);
       setLoading(false);
     });
 
@@ -40,6 +47,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       if (!subscribed) return;
       setSession(session);
       setUser(session?.user ?? null);
+      setGuestMode(Boolean(session?.user) ? false : storedGuest);
       setLoading(false);
     });
 
@@ -49,16 +57,34 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     };
   }, []);
 
+  const signInGuest = () => {
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("brandons-brands-guest-mode", "true");
+    }
+    setGuestMode(true);
+    setSession(null);
+    setUser(null);
+    setLoading(false);
+  };
+
   const signOut = async () => {
-    if (!supabase) return;
+    if (typeof window !== "undefined") {
+      window.localStorage.removeItem("brandons-brands-guest-mode");
+    }
+    setGuestMode(false);
+    if (!supabase) {
+      setSession(null);
+      setUser(null);
+      return;
+    }
     await supabase.auth.signOut();
     setSession(null);
     setUser(null);
   };
 
   const value = useMemo(
-    () => ({ user, session, loading, signOut }),
-    [user, session, loading, signOut],
+    () => ({ user, session, guestMode, loading, signInGuest, signOut }),
+    [user, session, guestMode, loading, signInGuest, signOut],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -77,10 +103,10 @@ export function useRequireAuth() {
   const router = useRouter();
 
   useEffect(() => {
-    if (!auth.loading && !auth.user) {
+    if (!auth.loading && !auth.user && !auth.guestMode) {
       router.push("/login");
     }
-  }, [auth.loading, auth.user, router]);
+  }, [auth.loading, auth.user, auth.guestMode, router]);
 
   return auth;
 }

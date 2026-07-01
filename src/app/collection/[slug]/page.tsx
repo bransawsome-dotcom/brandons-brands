@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { getWatchBySlug, updateWatch, deleteWatchById, type Watch } from "@/lib/localData";
+import { deleteCollectionItem, getWatchBySlugData, updateWatchData } from "@/lib/storage";
+import { type Watch } from "@/lib/localData";
 import { useRequireAuth } from "@/components/AuthProvider";
 
 export default function WatchDetailsPage() {
@@ -18,16 +19,18 @@ export default function WatchDetailsPage() {
 
   useEffect(() => {
     if (!slug || loading) return;
-    const w = getWatchBySlug(slug, userId) ?? null;
-    setWatch(w);
-    setForm(w ?? {});
+
+    getWatchBySlugData(slug, userId).then((w) => {
+      setWatch(w ?? null);
+      setForm(w ?? {});
+    });
   }, [slug, loading, userId]);
 
   if (!slug) return <div className="p-8">Invalid watch.</div>;
   if (!watch) return <div className="p-8">Watch not found.</div>;
 
-  const handleDelete = () => {
-    deleteWatchById(watch.id, userId);
+  const handleDelete = async () => {
+    await deleteCollectionItem(watch.id, userId);
     router.push("/collection");
   };
 
@@ -38,7 +41,7 @@ export default function WatchDetailsPage() {
     setForm((cur) => ({ ...cur, [name]: value }));
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     const updated: Watch = {
       id: watch.id,
@@ -55,7 +58,7 @@ export default function WatchDetailsPage() {
       notes: (form.notes as string) || watch.notes,
     };
 
-    updateWatch(updated, userId);
+    await updateWatchData(updated, userId);
     setWatch(updated);
     setEditing(false);
   };

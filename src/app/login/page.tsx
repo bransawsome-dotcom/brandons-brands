@@ -7,7 +7,7 @@ import { useAuth } from "@/components/AuthProvider";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { user, loading } = useAuth();
+  const { user, loading, signInGuest } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState<string | null>(null);
@@ -89,6 +89,17 @@ export default function LoginPage() {
               className="rounded-full bg-[#D9A43A] px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-[#e1b54a] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {submitting ? "Signing in…" : "Login"}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                signInGuest();
+                router.push("/dashboard");
+              }}
+              className="rounded-full border border-white/10 bg-white/5 px-6 py-4 text-sm font-semibold text-white uppercase tracking-[0.18em] transition hover:bg-white/10"
+            >
+              Continue as Guest
             </button>
 
             <p className="text-sm text-slate-400">
