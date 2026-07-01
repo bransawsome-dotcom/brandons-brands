@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { deleteCollectionItem, getWatchBySlugData, updateWatchData } from "@/lib/storage";
+import { deleteCollectionItem, getWatchByIdData, updateWatchData } from "@/lib/storage";
 import { type Watch } from "@/lib/localData";
 import { useRequireAuth } from "@/components/AuthProvider";
 
 export default function WatchDetailsPage() {
   const params = useParams();
   const router = useRouter();
-  const slug = params?.slug as string | undefined;
+  const id = params?.slug as string | undefined;
   const { user, loading } = useRequireAuth();
   const userId = user?.id ?? null;
 
@@ -20,16 +20,16 @@ export default function WatchDetailsPage() {
   const [preview, setPreview] = useState<string>("");
 
   useEffect(() => {
-    if (!slug || loading) return;
+    if (!id || loading) return;
 
-    getWatchBySlugData(slug, userId).then((w) => {
+    getWatchByIdData(id, userId).then((w) => {
       setWatch(w ?? null);
       setForm(w ?? {});
       setPreview(w?.image_url ?? "");
     });
-  }, [slug, loading, userId]);
+  }, [id, loading, userId]);
 
-  if (!slug) return <div className="p-6 text-sm">Invalid watch.</div>;
+  if (!id) return <div className="p-6 text-sm">Invalid watch.</div>;
   if (!watch) return <div className="p-6 text-sm">Watch not found.</div>;
 
   const handleDelete = async () => {

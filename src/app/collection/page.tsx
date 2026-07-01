@@ -382,7 +382,7 @@ export default function CollectionPage() {
           <div className={view === "grid" ? "grid gap-6 md:grid-cols-2 xl:grid-cols-3" : "space-y-6"}>
             {filteredWatches.map((watch) => (
               <div key={watch.id} className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-[0_25px_70px_rgba(0,0,0,0.28)] backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-[#D9A43A]/40 hover:shadow-[0_35px_80px_rgba(217,164,58,0.18)]">
-                <Link href={`/collection/${watch.slug}`} className="absolute inset-0 z-0" aria-hidden />
+                <Link href={`/collection/${watch.id}`} className="absolute inset-0 z-0" aria-hidden />
                 {view === "grid" ? (
                   <div className="flex flex-col relative z-10">
                     <div className="h-[220px] w-full bg-slate-950/90 overflow-hidden md:h-64">
@@ -402,12 +402,12 @@ export default function CollectionPage() {
                             <div><span className="font-semibold text-white">Condition:</span> {watch.condition ?? "—"}</div>
                           </div>
                           <div className="flex gap-2">
-                            <Link href={`/collection/${watch.slug}`} className="rounded-full bg-[#D9A43A] px-3 py-1 text-sm font-semibold uppercase tracking-[0.12em] text-black shadow-[0_8px_20px_rgba(217,164,58,0.14)]">View</Link>
+                            <Link href={`/collection/${watch.id}`} className="rounded-full bg-[#D9A43A] px-3 py-1 text-sm font-semibold uppercase tracking-[0.12em] text-black shadow-[0_8px_20px_rgba(217,164,58,0.14)]">View</Link>
                             <button
                               type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                router.push(`/collection/${watch.slug}`);
+                                router.push(`/collection/${watch.id}`);
                               }}
                               className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-sm font-semibold text-white"
                             >
@@ -436,7 +436,7 @@ export default function CollectionPage() {
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation();
-                          router.push(`/collection/${watch.slug}`);
+                          router.push(`/collection/${watch.id}`);
                         }}
                         className="w-1/2 px-4 py-3 text-sm font-semibold text-white"
                       >
@@ -495,7 +495,7 @@ export default function CollectionPage() {
                           type="button"
                           onClick={(e) => {
                             e.stopPropagation();
-                            router.push(`/collection/${watch.slug}`);
+                            router.push(`/collection/${watch.id}`);
                           }}
                           className="w-1/2 px-4 py-3 text-sm font-semibold text-white"
                         >

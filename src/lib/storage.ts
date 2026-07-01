@@ -6,6 +6,8 @@ import {
   loadWishlist,
   saveWishlist,
   getWatchBySlug,
+  getWatchById,
+  deleteWatchById,
   updateWatch,
   type Watch,
   type WishlistItem,
@@ -58,6 +60,20 @@ export async function getWatchBySlugData(slug: string, userId?: string | null): 
   const { data, error } = await supabase.from("watches").select("*").eq("slug", slug).eq("user_id", userId).limit(1).single();
   if (error) {
     console.error("Failed to load watch by slug", error);
+    return undefined;
+  }
+  const { user_id, ...watch } = data;
+  return watch;
+}
+
+export async function getWatchByIdData(id: string, userId?: string | null): Promise<Watch | undefined> {
+  if (!userId || !supabase) {
+    return getWatchById(id, userId);
+  }
+
+  const { data, error } = await supabase.from("watches").select("*").eq("id", id).eq("user_id", userId).limit(1).single();
+  if (error) {
+    console.error("Failed to load watch by id", error);
     return undefined;
   }
   const { user_id, ...watch } = data;
