@@ -18,10 +18,14 @@ export type WishlistItem = {
   id: string;
   brand: string;
   model: string;
+  reference_number?: string;
+  target_price?: string;
+  current_market_price?: string;
   notes: string;
   priority: string;
-  estimated_price: string;
-  purchase_link: string;
+  purchase_link?: string;
+  purchased_at?: string;
+  estimated_price?: string;
 };
 
 const COLLECTION_STORAGE_KEY = "brandons-brands-collection";
@@ -77,18 +81,22 @@ const defaultWishlist: WishlistItem[] = [
     id: "1",
     brand: "Audemars Piguet",
     model: "Royal Oak Offshore",
+    reference_number: "26470ST.OO.A125CR.01",
+    target_price: "42000",
+    current_market_price: "43500",
     notes: "High-impact luxury for the modern collector.",
     priority: "High",
-    estimated_price: "42000",
     purchase_link: "https://www.audemarspiguet.com/royal-oak-offshore",
   },
   {
     id: "2",
     brand: "Omega",
     model: "Speedmaster Professional",
+    reference_number: "310.30.42.50.01.001",
+    target_price: "7800",
+    current_market_price: "7600",
     notes: "A legendary chronograph with space heritage.",
     priority: "Medium",
-    estimated_price: "7800",
     purchase_link: "https://www.omegawatches.com/speedmaster",
   },
 ];
@@ -201,4 +209,9 @@ export function loadWishlist(): WishlistItem[] {
 
 export function saveWishlist(wishlist: WishlistItem[]) {
   saveJson(WISHLIST_STORAGE_KEY, wishlist);
+}
+
+export function addWatchToCollection(watch: Watch) {
+  const collection = loadCollection();
+  saveCollection([watch, ...collection]);
 }
