@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { loadCollectionData, loadWishlistData } from "@/lib/storage";
+import { clearGuestStorageData, loadCollectionData, loadWishlistData } from "@/lib/storage";
 import { useRequireAuth } from "@/components/AuthProvider";
 
 export default function AccountPage() {
   const [watchCount, setWatchCount] = useState<number>(0);
   const [wishlistCount, setWishlistCount] = useState<number>(0);
   const [message, setMessage] = useState<string | null>(null);
-  const { user, loading, signOut } = useRequireAuth();
+  const { user, loading, guestMode, signOut } = useRequireAuth();
 
   useEffect(() => {
     if (loading) return;
@@ -72,6 +72,23 @@ export default function AccountPage() {
                   Logout
                 </button>
               </div>
+              {guestMode ? (
+                <div className="flex items-center justify-between rounded-3xl bg-white/5 px-4 py-3">
+                  <span className="font-medium text-white">Guest Data</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      clearGuestStorageData();
+                      setMessage("Guest collection and wishlist cleared for this device.");
+                      setWatchCount(0);
+                      setWishlistCount(0);
+                    }}
+                    className="rounded-full border border-white/10 bg-slate-900/70 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white transition hover:bg-slate-800"
+                  >
+                    Clear Guest Data
+                  </button>
+                </div>
+              ) : null}
             </div>
           </div>
 

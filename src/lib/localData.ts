@@ -30,13 +30,52 @@ export type WishlistItem = {
 
 const COLLECTION_STORAGE_KEY = "brandons-brands-collection";
 const WISHLIST_STORAGE_KEY = "brandons-brands-wishlist";
+const GUEST_ID_KEY = "brandons_brands_guest_id";
+const GUEST_COLLECTION_KEY_PREFIX = "brandons_brands_guest_watches_";
+const GUEST_WISHLIST_KEY_PREFIX = "brandons_brands_guest_wishlist_";
+
+function createGuestId() {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  return `guest-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+function getOrCreateGuestId(): string | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  let guestId = window.localStorage.getItem(GUEST_ID_KEY);
+  if (!guestId) {
+    guestId = createGuestId();
+    window.localStorage.setItem(GUEST_ID_KEY, guestId);
+  }
+  return guestId;
+}
+
+function getGuestCollectionKey(): string | null {
+  const guestId = getOrCreateGuestId();
+  return guestId ? `${GUEST_COLLECTION_KEY_PREFIX}${guestId}` : null;
+}
+
+function getGuestWishlistKey(): string | null {
+  const guestId = getOrCreateGuestId();
+  return guestId ? `${GUEST_WISHLIST_KEY_PREFIX}${guestId}` : null;
+}
 
 function getCollectionKey(userId?: string | null) {
-  return userId ? `${COLLECTION_STORAGE_KEY}-${userId}` : COLLECTION_STORAGE_KEY;
+  if (userId) {
+    return `${COLLECTION_STORAGE_KEY}-${userId}`;
+  }
+  return getGuestCollectionKey() ?? COLLECTION_STORAGE_KEY;
 }
 
 function getWishlistKey(userId?: string | null) {
-  return userId ? `${WISHLIST_STORAGE_KEY}-${userId}` : WISHLIST_STORAGE_KEY;
+  if (userId) {
+    return `${WISHLIST_STORAGE_KEY}-${userId}`;
+  }
+  return getGuestWishlistKey() ?? WISHLIST_STORAGE_KEY;
 }
 
 const defaultWatches: Watch[] = [
@@ -165,7 +204,7 @@ export function loadCollection(userId?: string | null): Watch[] {
   });
 
   if (mutated) {
-    saveJson(COLLECTION_STORAGE_KEY, normalized);
+    saveCollection(userId, normalized);
   }
 
   return normalized;
@@ -219,6 +258,21 @@ export function loadWishlist(userId?: string | null): WishlistItem[] {
 
 export function saveWishlist(userId: string | null | undefined, wishlist: WishlistItem[]) {
   saveJson(getWishlistKey(userId), wishlist);
+}
+
+export function clearGuestData() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  const guestId = window.localStorage.getItem(GUEST_ID_KEY);
+  if (!guestId) {
+    return;
+  }
+
+  window.localStorage.removeItem(`${GUEST_COLLECTION_KEY_PREFIX}${guestId}`);
+  window.localStorage.removeItem(`${GUEST_WISHLIST_KEY_PREFIX}${guestId}`);
+  window.localStorage.removeItem(GUEST_ID_KEY);
 }
 
 export function addWatchToCollection(watch: Watch, userId?: string | null) {

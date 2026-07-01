@@ -1,5 +1,6 @@
 import supabase from "@/lib/supabaseClient";
 import {
+  clearGuestData,
   loadCollection,
   saveCollection,
   loadWishlist,
@@ -101,4 +102,8 @@ export async function saveWishlistData(userId: string | null | undefined, wishli
     console.error("Failed to save wishlist", error);
   }
   return wishlist;
+}
+
+export function clearGuestStorageData() {
+  clearGuestData();
 }

@@ -14,6 +14,15 @@ type AuthContextValue = {
   signOut: () => Promise<void>;
 };
 
+const GUEST_ID_KEY = "brandons_brands_guest_id";
+
+function createGuestId() {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  return `guest-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -60,6 +69,9 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   const signInGuest = () => {
     if (typeof window !== "undefined") {
       window.localStorage.setItem("brandons-brands-guest-mode", "true");
+      if (!window.localStorage.getItem(GUEST_ID_KEY)) {
+        window.localStorage.setItem(GUEST_ID_KEY, createGuestId());
+      }
     }
     setGuestMode(true);
     setSession(null);
