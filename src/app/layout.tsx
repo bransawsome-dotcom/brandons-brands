@@ -1,6 +1,6 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import MainNav from "@/components/MainNav";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -36,21 +36,7 @@ export default function RootLayout({
               <h1 className="text-2xl font-semibold text-white">Luxury Watch Curation</h1>
             </div>
             <nav className="flex flex-wrap items-center gap-3 text-sm font-medium text-slate-200">
-              <Link href="/" className="rounded-full px-4 py-2 transition hover:bg-white/10 hover:text-white">
-                Home
-              </Link>
-              <Link href="/collection" className="rounded-full px-4 py-2 transition hover:bg-white/10 hover:text-white">
-                Collection
-              </Link>
-              <Link href="/wishlist" className="rounded-full px-4 py-2 transition hover:bg-white/10 hover:text-white">
-                Wishlist
-              </Link>
-              <Link href="/videos" className="rounded-full px-4 py-2 transition hover:bg-white/10 hover:text-white">
-                Videos
-              </Link>
-              <Link href="/account" className="rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-2 transition hover:border-blue-400 hover:bg-blue-500/20 hover:text-white">
-                Account
-              </Link>
+              <MainNav />
             </nav>
           </header>
 

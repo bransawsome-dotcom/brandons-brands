@@ -25,6 +25,8 @@ export default function CollectionPage() {
   const [watches, setWatches] = useState<Watch[]>([]);
   const [search, setSearch] = useState("");
   const [brandFilter, setBrandFilter] = useState("");
+  const [conditionFilter, setConditionFilter] = useState("");
+  const [sortOption, setSortOption] = useState<"highest" | "lowest" | "newest" | "oldest" | "brand">("highest");
   const [priceMin, setPriceMin] = useState("");
   const [priceMax, setPriceMax] = useState("");
   const [selectedWatch, setSelectedWatch] = useState<Watch | null>(null);
@@ -51,15 +53,22 @@ export default function CollectionPage() {
     return brands.sort();
   }, [watches]);
 
+  const uniqueConditions = useMemo(() => {
+    const conditions = Array.from(new Set(watches.map((w) => w.condition).filter(Boolean))).filter(Boolean) as string[];
+    return conditions.sort();
+  }, [watches]);
+
   const filteredWatches = useMemo(() => {
-    return watches.filter((w) => {
-      const q = search.trim().toLowerCase();
-      if (q) {
-        const hay = `${w.brand} ${w.model} ${w.reference_number ?? ""}`.toLowerCase();
-        if (!hay.includes(q)) return false;
+    const query = search.trim().toLowerCase();
+
+    const results = watches.filter((w) => {
+      if (query) {
+        const hay = `${w.brand} ${w.model} ${w.nickname} ${w.reference_number ?? ""}`.toLowerCase();
+        if (!hay.includes(query)) return false;
       }
 
       if (brandFilter && w.brand !== brandFilter) return false;
+      if (conditionFilter && w.condition !== conditionFilter) return false;
 
       const val = parseFloat(w.estimated_value || "0") || 0;
       const min = parseFloat(priceMin || "0") || 0;
@@ -69,7 +78,26 @@ export default function CollectionPage() {
 
       return true;
     });
-  }, [watches, search, brandFilter, priceMin, priceMax]);
+
+    return [...results].sort((left, right) => {
+      if (sortOption === "highest") {
+        return (parseFloat(right.estimated_value || "0") || 0) - (parseFloat(left.estimated_value || "0") || 0);
+      }
+      if (sortOption === "lowest") {
+        return (parseFloat(left.estimated_value || "0") || 0) - (parseFloat(right.estimated_value || "0") || 0);
+      }
+      if (sortOption === "newest") {
+        return new Date(right.purchase_date).getTime() - new Date(left.purchase_date).getTime();
+      }
+      if (sortOption === "oldest") {
+        return new Date(left.purchase_date).getTime() - new Date(right.purchase_date).getTime();
+      }
+      if (sortOption === "brand") {
+        return left.brand.localeCompare(right.brand);
+      }
+      return 0;
+    });
+  }, [watches, search, brandFilter, conditionFilter, sortOption, priceMin, priceMax]);
 
   const uploadImage = async (file: File) => {
     return URL.createObjectURL(file);
@@ -158,16 +186,16 @@ export default function CollectionPage() {
         </div>
 
         {/* Search & Filters */}
-        <div className="mt-6 mb-6 grid gap-4 rounded-[1.25rem] border border-white/6 bg-black/20 p-4 sm:grid-cols-3">
-          <div className="sm:col-span-1">
+        <div className="mt-6 mb-6 grid gap-4 rounded-[1.25rem] border border-white/6 bg-black/20 p-4 sm:grid-cols-4">
+          <div>
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search brand, model, reference..."
+              placeholder="Search brand, model, nickname, reference..."
               className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none"
             />
           </div>
-          <div className="sm:col-span-1">
+          <div>
             <select value={brandFilter} onChange={(e) => setBrandFilter(e.target.value)} className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none">
               <option value="">All Brands</option>
               {uniqueBrands.map((b) => (
@@ -175,10 +203,27 @@ export default function CollectionPage() {
               ))}
             </select>
           </div>
-          <div className="sm:col-span-1 flex gap-3">
-            <input value={priceMin} onChange={(e) => setPriceMin(e.target.value)} placeholder="Min $" className="w-1/2 rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none" />
-            <input value={priceMax} onChange={(e) => setPriceMax(e.target.value)} placeholder="Max $" className="w-1/2 rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none" />
+          <div>
+            <select value={conditionFilter} onChange={(e) => setConditionFilter(e.target.value)} className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none">
+              <option value="">All Conditions</option>
+              {uniqueConditions.map((condition) => (
+                <option key={condition} value={condition}>{condition}</option>
+              ))}
+            </select>
           </div>
+          <div>
+            <select value={sortOption} onChange={(e) => setSortOption(e.target.value as typeof sortOption)} className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none">
+              <option value="highest">Highest Estimated Value</option>
+              <option value="lowest">Lowest Estimated Value</option>
+              <option value="newest">Newest Purchase Date</option>
+              <option value="oldest">Oldest Purchase Date</option>
+              <option value="brand">Brand A-Z</option>
+            </select>
+          </div>
+        </div>
+        <div className="mb-6 grid gap-4 sm:grid-cols-2">
+          <input value={priceMin} onChange={(e) => setPriceMin(e.target.value)} placeholder="Min $" className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none" />
+          <input value={priceMax} onChange={(e) => setPriceMax(e.target.value)} placeholder="Max $" className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none" />
         </div>
 
         <form onSubmit={handleSubmit} className="grid gap-6 rounded-[1.75rem] border border-white/10 bg-black/30 p-6">

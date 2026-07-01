@@ -11,6 +11,7 @@ export type Watch = {
   purchase_price: string;
   estimated_value: string;
   notes: string;
+  edited_at?: string;
 };
 
 export type WishlistItem = {
@@ -169,7 +170,15 @@ export function getWatchBySlug(slug: string): Watch | undefined {
 
 export function updateWatch(updated: Watch) {
   const all = loadCollection();
-  const next = all.map((w) => (w.id === updated.id ? { ...updated, slug: normalizeSlug(updated.brand, updated.model) } : w));
+  const next = all.map((w) =>
+    w.id === updated.id
+      ? {
+          ...updated,
+          slug: normalizeSlug(updated.brand, updated.model),
+          edited_at: new Date().toISOString(),
+        }
+      : w,
+  );
   const uniqueSlugs = new Set<string>();
   const normalized = next.map((watch) => ({
     ...watch,
