@@ -107,7 +107,19 @@ export default function CollectionPage() {
   }, [watches, search, brandFilter, conditionFilter, sortOption, priceMin, priceMax]);
 
   const uploadImage = async (file: File) => {
-    return URL.createObjectURL(file);
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result;
+        if (typeof result === "string") {
+          resolve(result);
+        } else {
+          reject(new Error("Unable to read image file"));
+        }
+      };
+      reader.onerror = () => reject(reader.error);
+      reader.readAsDataURL(file);
+    });
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

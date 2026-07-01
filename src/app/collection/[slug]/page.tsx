@@ -16,6 +16,8 @@ export default function WatchDetailsPage() {
   const [watch, setWatch] = useState<Watch | null>(null);
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState<Partial<Watch>>({});
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string>("");
 
   useEffect(() => {
     if (!slug || loading) return;
@@ -23,6 +25,7 @@ export default function WatchDetailsPage() {
     getWatchBySlugData(slug, userId).then((w) => {
       setWatch(w ?? null);
       setForm(w ?? {});
+      setPreview(w?.image_url ?? "");
     });
   }, [slug, loading, userId]);
 
@@ -41,12 +44,38 @@ export default function WatchDetailsPage() {
     setForm((cur) => ({ ...cur, [name]: value }));
   };
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] ?? null;
+    setPhotoFile(file);
+    setPreview(file ? URL.createObjectURL(file) : watch?.image_url ?? "");
+  };
+
+  const uploadImage = async (file: File) => {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result;
+        if (typeof result === "string") {
+          resolve(result);
+        } else {
+          reject(new Error("Unable to read image file"));
+        }
+      };
+      reader.onerror = () => reject(reader.error);
+      reader.readAsDataURL(file);
+    });
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    const imageUrl = photoFile
+      ? await uploadImage(photoFile)
+      : (form.image_url as string) || watch.image_url;
+
     const updated: Watch = {
       id: watch.id,
       slug: watch.slug,
-      image_url: (form.image_url as string) || watch.image_url,
+      image_url: imageUrl,
       brand: (form.brand as string) || watch.brand,
       model: (form.model as string) || watch.model,
       reference_number: (form.reference_number as string) || watch.reference_number,
@@ -109,8 +138,8 @@ export default function WatchDetailsPage() {
                   <input name="reference_number" value={form.reference_number as string || ""} onChange={handleChange} className="mt-1 w-full rounded-lg border border-white/10 bg-slate-950/90 px-3 py-2 text-white" />
                 </label>
                 <label className="text-sm text-slate-300">
-                  Purchase Price
-                  <input name="purchase_price" value={form.purchase_price as string || ""} onChange={handleChange} className="mt-1 w-full rounded-lg border border-white/10 bg-slate-950/90 px-3 py-2 text-white" />
+                  Upload Photo
+                  <input type="file" accept="image/*" onChange={handleFileChange} className="mt-1 w-full cursor-pointer rounded-lg border border-white/10 bg-slate-950/90 px-3 py-2 text-white" />
                 </label>
                 <label className="text-sm text-slate-300">
                   Estimated Value
@@ -123,6 +152,10 @@ export default function WatchDetailsPage() {
                 <label className="text-sm text-slate-300">
                   Condition
                   <input name="condition" value={form.condition as string || ""} onChange={handleChange} className="mt-1 w-full rounded-lg border border-white/10 bg-slate-950/90 px-3 py-2 text-white" />
+                </label>
+                <label className="text-sm text-slate-300">
+                  Photo URL
+                  <input name="image_url" value={form.image_url as string || ""} onChange={handleChange} className="mt-1 w-full rounded-lg border border-white/10 bg-slate-950/90 px-3 py-2 text-white" />
                 </label>
                 <label className="text-sm text-slate-300">
                   Notes
