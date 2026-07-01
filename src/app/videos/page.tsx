@@ -1,5 +1,3 @@
-import Script from "next/script";
-
 export default function VideosPage() {
   return (
     <div className="mx-auto w-full max-w-7xl px-6 py-16 sm:px-10 lg:px-16">
@@ -61,7 +59,6 @@ export default function VideosPage() {
           </a>
         </div>
 
-        <Script src="https://www.instagram.com/embed.js" strategy="lazyOnload" />
       </div>
     </div>
   );
