@@ -13,44 +13,47 @@ export default function VideosPage() {
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
-          <div className="rounded-[2rem] border border-white/10 bg-slate-950/90 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
-            <div className="mb-5 rounded-3xl bg-black/50 p-4 text-sm text-slate-400">
-              Latest reel preview.
-            </div>
-            <blockquote
-              className="instagram-media"
-              data-instgrm-captioned
-              data-instgrm-permalink="https://www.instagram.com/reel/CxQ8cC8s06Y/"
-              data-instgrm-version="14"
-              style={{ background: "#000", border: "none", margin: "0 auto", maxWidth: "540px", minWidth: "326px", padding: "0", width: "100%" }}
+          <article className="rounded-[2rem] border border-white/10 bg-slate-950/90 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.35)] transition hover:-translate-y-1">
+            <h2 className="text-xl font-semibold text-white">Premium Watch Reels</h2>
+            <p className="mt-4 text-sm leading-7 text-slate-300">
+              Discover the finest reels showcasing luxury watch reveals, styling edits, and classic movement details from Brandon&apos;s Brands.
+            </p>
+            <a
+              href="https://www.instagram.com/brandonsbrands17/"
+              target="_blank"
+              rel="noreferrer"
+              className="mt-6 inline-flex rounded-full bg-[#D9A43A] px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-[#e1b54a]"
             >
-              <a href="https://www.instagram.com/reel/CxQ8cC8s06Y/">Instagram reel</a>
-            </blockquote>
-          </div>
+              Watch on Instagram
+            </a>
+          </article>
 
-          <div className="rounded-[2rem] border border-white/10 bg-slate-950/90 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
-            <div className="mb-5 rounded-3xl bg-black/50 p-4 text-sm text-slate-400">
-              Explore the latest stories and watch drops.
-            </div>
-            <blockquote
-              className="instagram-media"
-              data-instgrm-captioned
-              data-instgrm-permalink="https://www.instagram.com/reel/Cv2RTCGgX5v/"
-              data-instgrm-version="14"
-              style={{ background: "#000", border: "none", margin: "0 auto", maxWidth: "540px", minWidth: "326px", padding: "0", width: "100%" }}
+          <article className="rounded-[2rem] border border-white/10 bg-slate-950/90 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.35)] transition hover:-translate-y-1">
+            <h2 className="text-xl font-semibold text-white">Story Highlights</h2>
+            <p className="mt-4 text-sm leading-7 text-slate-300">
+              Follow curated story content about new drops, collector insights, and the latest watch culture from the brand&apos;s Instagram feed.
+            </p>
+            <a
+              href="https://www.instagram.com/brandonsbrands17/"
+              target="_blank"
+              rel="noreferrer"
+              className="mt-6 inline-flex rounded-full bg-[#D9A43A] px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-[#e1b54a]"
             >
-              <a href="https://www.instagram.com/reel/Cv2RTCGgX5v/">Instagram reel</a>
-            </blockquote>
-          </div>
+              Watch on Instagram
+            </a>
+          </article>
         </div>
 
         <div className="mt-10 rounded-[1.75rem] border border-white/10 bg-black/30 p-6 text-slate-300">
-          <p className="text-sm uppercase tracking-[0.3em] text-blue-300">Keep your content polished</p>
+          <p className="text-sm uppercase tracking-[0.3em] text-blue-300">Stay connected</p>
           <p className="mt-3 text-base leading-7">
-            These embeds surface your latest reel activity for collectors and luxury watch fans. Replace the reel links with your current posts to keep the feed fresh.
+            Follow @brandonsbrands17 on Instagram for the latest reels, stories, and watch content.
+          </p>
+          <p className="mt-4 text-sm leading-7 text-slate-300">
+            These premium cards link directly to the Instagram profile for the most up-to-date lifestyle and watch posts.
           </p>
           <a
-            href="https://www.instagram.com/brandonsbrands17"
+            href="https://www.instagram.com/brandonsbrands17/"
             target="_blank"
             rel="noreferrer"
             className="mt-6 inline-flex rounded-full bg-[#D9A43A] px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-[#e1b54a]"
