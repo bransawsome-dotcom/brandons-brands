@@ -78,75 +78,9 @@ function getWishlistKey(userId?: string | null) {
   return getGuestWishlistKey() ?? WISHLIST_STORAGE_KEY;
 }
 
-const defaultWatches: Watch[] = [
-  {
-    id: "1",
-    slug: "rolex-submariner",
-    image_url: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1200&q=80",
-    brand: "Rolex",
-    model: "Submariner",
-    reference_number: "126610LN",
-    condition: "Mint",
-    nickname: "Deep Sea",
-    purchase_date: "2022-06-15",
-    purchase_price: "12500",
-    estimated_value: "14200",
-    notes: "A timeless diving icon with a polished black ceramic bezel.",
-  },
-  {
-    id: "2",
-    slug: "patek-nautilus",
-    image_url: "https://images.unsplash.com/photo-1519400191923-a6d4decc7f3b?auto=format&fit=crop&w=1200&q=80",
-    brand: "Patek Philippe",
-    model: "Nautilus",
-    reference_number: "5711/1A",
-    condition: "Excellent",
-    nickname: "Blue Oyster",
-    purchase_date: "2023-02-03",
-    purchase_price: "56000",
-    estimated_value: "62000",
-    notes: "Luxury sport elegance with a distinctive steel profile.",
-  },
-  {
-    id: "3",
-    slug: "omega-speedmaster",
-    image_url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80",
-    brand: "Omega",
-    model: "Speedmaster",
-    reference_number: "311.30.42.30.01.005",
-    condition: "Excellent",
-    nickname: "Moonwatch",
-    purchase_date: "2021-11-08",
-    purchase_price: "6800",
-    estimated_value: "7600",
-    notes: "A legendary chronograph born for the moon and every luxury collection.",
-  },
-];
+const defaultWatches: Watch[] = [];
 
-const defaultWishlist: WishlistItem[] = [
-  {
-    id: "1",
-    brand: "Audemars Piguet",
-    model: "Royal Oak Offshore",
-    reference_number: "26470ST.OO.A125CR.01",
-    target_price: "42000",
-    current_market_price: "43500",
-    notes: "High-impact luxury for the modern collector.",
-    priority: "High",
-    purchase_link: "https://www.audemarspiguet.com/royal-oak-offshore",
-  },
-  {
-    id: "2",
-    brand: "Omega",
-    model: "Speedmaster Professional",
-    reference_number: "310.30.42.50.01.001",
-    target_price: "7800",
-    current_market_price: "7600",
-    notes: "A legendary chronograph with space heritage.",
-    priority: "Medium",
-    purchase_link: "https://www.omegawatches.com/speedmaster",
-  },
-];
+const defaultWishlist: WishlistItem[] = [];
 
 function slugify(value: string) {
   return value
@@ -188,7 +122,7 @@ function saveJson<T>(key: string, data: T) {
 }
 
 export function loadCollection(userId?: string | null): Watch[] {
-  const fallback = userId ? [] : defaultWatches;
+  const fallback = [] as Watch[];
   const collection = readJson<Watch[]>(getCollectionKey(userId), fallback);
   const seen = new Set<string>();
   let mutated = false;
@@ -252,7 +186,7 @@ export function deleteWatchById(id: string, userId?: string | null) {
 }
 
 export function loadWishlist(userId?: string | null): WishlistItem[] {
-  const fallback = userId ? [] : defaultWishlist;
+  const fallback = [] as WishlistItem[];
   return readJson<WishlistItem[]>(getWishlistKey(userId), fallback);
 }
 

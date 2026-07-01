@@ -131,6 +131,11 @@ export default function DashboardPage() {
             </Link>
           </div>
         </div>
+        {totalWatches === 0 ? (
+          <div className="mt-6 rounded-[1rem] border border-white/6 bg-white/3 p-4 text-sm text-slate-300">
+            Collection statistics will appear here after you add your first watch.
+          </div>
+        ) : null}
 
         <div className="mt-10 grid gap-6 lg:grid-cols-3">
           <div className="rounded-[1.75rem] border border-white/10 bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.25)] transition hover:-translate-y-0.5 hover:shadow-[0_26px_78px_rgba(0,0,0,0.3)]">

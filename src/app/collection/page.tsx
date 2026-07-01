@@ -143,11 +143,11 @@ export default function CollectionPage() {
       return;
     }
 
-    const imageUrl = photoFile ? await uploadImage(photoFile) : form.image_url;
+    const imageUrl = photoFile ? await uploadImage(photoFile) : form.image_url || "";
     const newWatch: Watch = {
       id: `${Date.now()}`,
       slug: buildSlug(form.brand, form.model),
-      image_url: imageUrl || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1200&q=80",
+      image_url: imageUrl,
       brand: form.brand.trim(),
       model: form.model.trim(),
       nickname: form.nickname.trim(),
@@ -241,7 +241,7 @@ export default function CollectionPage() {
           <input value={priceMax} onChange={(e) => setPriceMax(e.target.value)} placeholder="Max $" className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none text-sm" />
         </div>
 
-        <form onSubmit={handleSubmit} className="grid gap-6 rounded-[1.75rem] border border-white/10 bg-black/30 p-6">
+        <form id="add-watch" onSubmit={handleSubmit} className="grid gap-6 rounded-[1.75rem] border border-white/10 bg-black/30 p-6">
             <div className="grid gap-6 lg:grid-cols-2">
               <label className="space-y-2 text-sm text-slate-300">
                 Brand
@@ -396,13 +396,38 @@ export default function CollectionPage() {
                       <p className="text-sm uppercase tracking-[0.25em] text-blue-300">{watch.brand}</p>
                       <h3 className="mt-2 text-2xl font-semibold text-white">{watch.model}</h3>
                       {watch.reference_number ? <p className="text-sm text-slate-400">Reference: {watch.reference_number}</p> : null}
-                      <div className="mt-4 flex items-center justify-between">
-                        <div className="text-sm text-slate-200 md:text-slate-300">
-                          <div><span className="font-semibold text-white">Estimated:</span> {watch.estimated_value ? `$${watch.estimated_value}` : "—"}</div>
-                          <div><span className="font-semibold text-white">Condition:</span> {watch.condition ?? "—"}</div>
+                        <div className="mt-4 flex items-center justify-between">
+                          <div className="text-sm text-slate-200 md:text-slate-300">
+                            <div><span className="font-semibold text-white">Estimated:</span> {watch.estimated_value ? `$${watch.estimated_value}` : "—"}</div>
+                            <div><span className="font-semibold text-white">Condition:</span> {watch.condition ?? "—"}</div>
+                          </div>
+                          <div className="flex gap-2">
+                            <Link href={`/collection/${watch.slug}`} className="rounded-full bg-[#D9A43A] px-3 py-1 text-sm font-semibold uppercase tracking-[0.12em] text-black shadow-[0_8px_20px_rgba(217,164,58,0.14)]">View</Link>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                router.push(`/collection/${watch.slug}`);
+                              }}
+                              className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-sm font-semibold text-white"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              type="button"
+                              onClick={async (e) => {
+                                e.stopPropagation();
+                                const shouldDelete = window.confirm("Delete this watch?");
+                                if (!shouldDelete) return;
+                                await deleteCollectionItem(watch.id, userId);
+                                await fetchWatches();
+                              }}
+                              className="rounded-full border border-rose-500/80 bg-rose-500/10 px-3 py-1 text-sm font-semibold text-rose-200"
+                            >
+                              Delete
+                            </button>
+                          </div>
                         </div>
-                        <div className="rounded-full bg-[#D9A43A] px-4 py-2 text-sm font-semibold uppercase tracking-[0.18em] text-black shadow-[0_12px_30px_rgba(217,164,58,0.18)] transition group-hover:scale-[1.01]">View Details</div>
-                      </div>
                     </div>
 
                     {/* Mobile buttons */}
@@ -421,6 +446,8 @@ export default function CollectionPage() {
                         type="button"
                         onClick={async (e) => {
                           e.stopPropagation();
+                          const shouldDelete = window.confirm("Delete this watch?");
+                          if (!shouldDelete) return;
                           await deleteCollectionItem(watch.id, userId);
                           await fetchWatches();
                         }}
@@ -494,7 +521,22 @@ export default function CollectionPage() {
           </div>
         ) : (
           <div className="rounded-[2rem] border border-dashed border-white/10 bg-white/5 p-12 text-center text-slate-300">
-            Your collection is empty. Add a watch to begin curating your luxury archive.
+            <div className="text-4xl">📷</div>
+            <h3 className="mt-4 text-lg font-semibold text-white">Your collection is empty.</h3>
+            <p className="mt-2 text-sm text-slate-300">Start building your luxury watch collection today.</p>
+            <div className="mt-6">
+              <button
+                type="button"
+                onClick={() => {
+                  const el = document.getElementById("add-watch");
+                  if (el) el.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="inline-flex items-center gap-2 rounded-full bg-[#D9A43A] px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-black"
+              >
+                <span>➕</span>
+                <span>Add Your First Watch</span>
+              </button>
+            </div>
           </div>
         )}
 

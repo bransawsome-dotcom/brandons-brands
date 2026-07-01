@@ -136,12 +136,10 @@ export default function WishlistPage() {
               Capture your future acquisitions with rich details, smart priority tracking, and elegant wishlist cards.
             </p>
           </div>
-          <div className="rounded-full bg-[#D9A43A] px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-black transition">
-            Local mode active
-          </div>
+          {/* local/demo indicator removed for production readiness */}
         </div>
 
-        <form onSubmit={handleSubmit} className="grid gap-6 rounded-[1.75rem] border border-white/10 bg-black/30 p-6">
+        <form id="add-wishlist" onSubmit={handleSubmit} className="grid gap-6 rounded-[1.75rem] border border-white/10 bg-black/30 p-6">
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="space-y-2 text-sm text-slate-300">
               Brand
@@ -253,6 +251,25 @@ export default function WishlistPage() {
 
         {loading ? (
           <div className="rounded-[2rem] border border-white/10 bg-white/5 p-12 text-center text-slate-300">Loading wishlist…</div>
+        ) : !wishlist.length ? (
+          <div className="rounded-[2rem] border border-dashed border-white/10 bg-white/5 p-12 text-center text-slate-300">
+            <div className="text-4xl">⭐</div>
+            <h3 className="mt-4 text-lg font-semibold text-white">Your wishlist is empty.</h3>
+            <p className="mt-2 text-sm text-slate-300">Save watches you'd like to own in the future.</p>
+            <div className="mt-6">
+              <button
+                type="button"
+                onClick={() => {
+                  const el = document.getElementById("add-wishlist");
+                  if (el) el.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="inline-flex items-center gap-2 rounded-full bg-[#D9A43A] px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-black"
+              >
+                <span>➕</span>
+                <span>Add Your First Wishlist Item</span>
+              </button>
+            </div>
+          </div>
         ) : filteredWishlist.length ? (
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {filteredWishlist.map((item) => {
