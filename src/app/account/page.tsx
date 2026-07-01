@@ -1,0 +1,84 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+export default function AccountPage() {
+  const [watchCount, setWatchCount] = useState<number>(2);
+  const [wishlistCount, setWishlistCount] = useState<number>(2);
+  const [message, setMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    setWatchCount(2);
+    setWishlistCount(2);
+  }, []);
+
+  const signInWithEmail = async () => {
+    setMessage("Local mode active. No authentication required.");
+  };
+
+  const signOut = async () => {
+    setMessage("Local mode active. No sign out required.");
+  };
+
+  return (
+    <div className="mx-auto w-full max-w-7xl px-6 py-16 sm:px-10 lg:px-16">
+      <div className="grid gap-8 lg:grid-cols-[320px_1fr]">
+        <section className="rounded-[2rem] border border-white/10 bg-white/5 p-8 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl">
+          <div className="flex flex-col items-center gap-6 text-center">
+            <div className="flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-blue-500/20 via-slate-800 to-slate-900 shadow-[0_20px_60px_rgba(30,58,138,0.35)]">
+              <span className="text-4xl font-semibold text-white">BB</span>
+            </div>
+            <div>
+              <p className="text-sm uppercase tracking-[0.3em] text-blue-300">Account</p>
+              <h1 className="mt-3 text-3xl font-semibold text-white">Guest Collector</h1>
+            </div>
+            <p className="text-sm leading-6 text-slate-300">
+              Local mode active. Your collection works without Supabase.
+            </p>
+          </div>
+        </section>
+
+        <section className="rounded-[2rem] border border-white/10 bg-white/5 p-8 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl">
+          <div className="grid gap-6 sm:grid-cols-2">
+            <div className="rounded-[1.75rem] border border-white/10 bg-black/30 p-6">
+              <p className="text-sm uppercase tracking-[0.3em] text-blue-300">Total Watches</p>
+              <p className="mt-4 text-5xl font-semibold text-white">{watchCount}</p>
+              <p className="mt-3 text-sm text-slate-400">A refined record of your luxury timepieces.</p>
+            </div>
+            <div className="rounded-[1.75rem] border border-white/10 bg-black/30 p-6">
+              <p className="text-sm uppercase tracking-[0.3em] text-blue-300">Wishlist</p>
+              <p className="mt-4 text-5xl font-semibold text-white">{wishlistCount}</p>
+              <p className="mt-3 text-sm text-slate-400">Dream pieces you plan to acquire next.</p>
+            </div>
+          </div>
+
+          <div className="mt-8 rounded-[1.75rem] border border-white/10 bg-black/30 p-6">
+            <h2 className="text-lg font-semibold text-white">Settings</h2>
+            <div className="mt-4 space-y-4 text-sm text-slate-300">
+              <div className="flex items-center justify-between rounded-3xl bg-white/5 px-4 py-3">
+                <span className="font-medium text-white">Email</span>
+                <span>local@brandonsbrands.com</span>
+              </div>
+              <div className="flex items-center justify-between rounded-3xl bg-white/5 px-4 py-3">
+                <span className="font-medium text-white">User ID</span>
+                <span>local-mode</span>
+              </div>
+              <div className="flex items-center justify-between rounded-3xl bg-white/5 px-4 py-3">
+                <span className="font-medium text-white">Auth</span>
+                <button
+                  type="button"
+                  onClick={signInWithEmail}
+                  className="rounded-full bg-[#D9A43A] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-[#e1b54a]"
+                >
+                  Local Mode
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {message ? <p className="mt-6 rounded-3xl bg-white/5 px-4 py-3 text-sm text-amber-300">{message}</p> : null}
+        </section>
+      </div>
+    </div>
+  );
+}
