@@ -38,7 +38,11 @@ export default function MainNav() {
           <Link
             key={item.href}
             href={item.href}
-            className={`min-w-[110px] rounded-full px-3 py-2 text-center transition ${active ? "bg-white/10 text-white" : "hover:bg-white/10 hover:text-white"}`}
+            className={`min-w-[110px] rounded-full px-3 py-2 text-center transition ${
+  active
+    ? "bg-blue-500/20 text-blue-200 border border-blue-400/30"
+    : "hover:bg-blue-500/10 hover:text-blue-200"
+}`}
           >
             {item.label}
           </Link>

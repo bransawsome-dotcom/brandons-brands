@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-[#07152B] text-white">
       <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-10 sm:px-6 sm:py-14 lg:px-16">
         <section className="relative flex flex-1 flex-col items-center justify-center gap-10 overflow-hidden rounded-[2rem] border border-white/10 p-6 shadow-[0_30px_120px_rgba(0,0,0,0.55)] sm:p-10 lg:p-20">
           <div className="hero-bg absolute inset-0 -z-10 pointer-events-none" />
