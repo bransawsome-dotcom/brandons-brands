@@ -2,15 +2,15 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#0B2452] text-white">
+    <div className="min-h-screen bg-[#07111F] text-white">
       <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-10 sm:px-6 sm:py-14 lg:px-16">
-        <section className="relative flex flex-1 flex-col items-center justify-center gap-10 overflow-hidden rounded-[2rem] border border-white/10 p-6 shadow-[0_30px_120px_rgba(0,0,0,0.55)] sm:p-10 lg:p-20">
+        <section className="relative flex py-24 sm:py-32 flex-col items-center justify-center gap-10 overflow-hidden rounded-[2rem] border border-white/10 p-6 shadow-[0_30px_120px_rgba(0,0,0,0.55)] sm:p-10 lg:p-20">
           <div className="hero-bg absolute inset-0 -z-10 pointer-events-none" />
           <div className="relative z-10 flex w-full max-w-4xl flex-col items-center text-center gap-12 animate-fade-in">
             <p className="rounded-full border border-blue-400/25 bg-white/5 px-4 py-2 text-sm uppercase tracking-[0.3em] text-blue-300 shadow-[0_0_45px_rgba(59,130,246,0.15)]">
               Luxury Watch Curation
             </p>
-            <h1 className="max-w-3xl text-5xl font-extrabold leading-tight tracking-[-0.03em] text-white sm:text-6xl lg:text-[96px]">
+            <h1 className="max-w-3xl text-4xl sm:text-6x1 font-semibold leading-tight tracking-[-0.03em] text-white sm:text-6xl lg:text-[96px]">
               Brandon's Brands
             </h1>
             <p className="max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
