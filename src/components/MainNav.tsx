@@ -10,6 +10,7 @@ const navLinks = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/wishlist", label: "Wishlist" },
   { href: "/videos", label: "Videos" },
+  { href: "/blog", label: "Blog" },
   { href: "/account", label: "Account" },
 ];
 
