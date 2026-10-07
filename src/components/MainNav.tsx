@@ -9,7 +9,7 @@ const navLinks = [
   { href: "/collection", label: "Collection" },
   { href: "/dashboard", label: "Dashboard" },
   { href: "/wishlist", label: "Wishlist" },
-  { href: "/videos", label: "Videos" },
+  { href: "/social", label: "Social Media" },
   { href: "/blog", label: "Blog" },
   { href: "/account", label: "Account" },
 ];

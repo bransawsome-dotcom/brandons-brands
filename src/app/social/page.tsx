@@ -1,6 +1,6 @@
 import { collabEmail, socials } from "@/lib/socials";
 
-export default function VideosPage() {
+export default function SocialMediaPage() {
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-16">
       <div className="rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">

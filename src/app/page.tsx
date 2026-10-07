@@ -24,10 +24,10 @@ export default function Home() {
                 Start My Collection
               </Link>
               <Link
-                href="/videos"
+                href="/social"
                 className="inline-flex w-full items-center justify-center rounded-full border border-white/10 bg-white/5 px-10 py-4 text-base font-semibold text-blue-200 transition-transform duration-300 ease-out hover:-translate-y-1 hover:scale-105 hover:border-white/20 hover:bg-white/6 sm:w-auto sm:px-10 sm:py-5 sm:text-lg"
               >
-                Watch Videos
+                Social Media
               </Link>
             </div>
           </div>
@@ -58,7 +58,7 @@ export default function Home() {
             <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-3xl bg-blue-500/10 text-blue-300 ring-1 ring-blue-400/15">
               <span className="text-lg font-semibold">3</span>
             </div>
-            <h2 className="mb-3 text-2xl font-semibold text-white">Videos</h2>
+            <h2 className="mb-3 text-2xl font-semibold text-white">Social Media</h2>
             <p className="text-sm leading-6 text-slate-300">
               Follow along on Instagram, TikTok, YouTube and Facebook.
             </p>
