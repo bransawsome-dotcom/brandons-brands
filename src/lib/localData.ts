@@ -12,7 +12,17 @@ export type Watch = {
   estimated_value: string;
   notes: string;
   edited_at?: string;
+  // Manufacturer list price on the purchase date. Set once, never refreshed.
+  retail_price?: string;
+  // Today's list price; refreshed with "Refresh value".
+  current_retail_price?: string;
+  value_updated_at?: string;
+  // Specs, value range, summary and price sources from auto-fill.
+  details?: import("@/lib/watchAiClient").WatchDetails | null;
 };
+
+// Columns added for auto-fill. If the database doesn't have them yet, saves retry without them.
+export const AUTO_FILL_FIELDS = ["retail_price", "current_retail_price", "value_updated_at", "details"] as const;
 
 export type WishlistItem = {
   id: string;

@@ -6,6 +6,9 @@ import { useRouter } from "next/navigation";
 import { useRequireAuth } from "@/components/AuthProvider";
 import { loadCollectionData, saveCollectionData, deleteCollectionItem } from "@/lib/storage";
 import { type Watch } from "@/lib/localData";
+import CollectionScanner from "@/components/CollectionScanner";
+import { formatUsd, lookupWatchDetails, type WatchLookupResult } from "@/lib/watchAiClient";
+import { applyLookup, newWatchId } from "@/lib/watchBuild";
 
 function buildSlug(brand: string, model: string) {
   return `${brand.trim().toLowerCase()} ${model.trim().toLowerCase()}`
@@ -17,6 +20,7 @@ const initialForm = {
   image_url: "",
   brand: "",
   model: "",
+  reference_number: "",
   nickname: "",
   purchase_date: "",
   purchase_price: "",
@@ -27,7 +31,10 @@ const initialForm = {
 export default function CollectionPage() {
   const [watches, setWatches] = useState<Watch[]>([]);
   const [search, setSearch] = useState("");
-  const { user, loading: authLoading } = useRequireAuth();
+  const { user, guestMode, loading: authLoading } = useRequireAuth();
+  const canAutoFill = Boolean(user) && !guestMode;
+  const [lookup, setLookup] = useState<WatchLookupResult | null>(null);
+  const [lookingUp, setLookingUp] = useState(false);
   const userId = user?.id ?? null;
   const [brandFilter, setBrandFilter] = useState("");
   const [conditionFilter, setConditionFilter] = useState("");
@@ -126,6 +133,44 @@ export default function CollectionPage() {
   const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
     setForm((current) => ({ ...current, [name]: value }));
+    // A different watch means the earlier lookup no longer applies.
+    if (name === "brand" || name === "model" || name === "reference_number") setLookup(null);
+  };
+
+  const runLookup = async (): Promise<WatchLookupResult | null> => {
+    if (!form.brand.trim() || !form.model.trim()) {
+      setMessage("Enter a brand and model first.");
+      return null;
+    }
+    setLookingUp(true);
+    setMessage("Looking up details and prices… this can take up to a minute.");
+    try {
+      const result = await lookupWatchDetails({
+        brand: form.brand.trim(),
+        model: form.model.trim(),
+        reference_number: form.reference_number.trim() || undefined,
+        purchase_date: form.purchase_date || undefined,
+      });
+      setLookup(result);
+      setForm((current) => ({
+        ...current,
+        reference_number: current.reference_number || result.reference_number || "",
+        estimated_value: current.estimated_value || (result.market_value != null ? String(Math.round(result.market_value)) : ""),
+      }));
+      setMessage(null);
+      return result;
+    } catch (err) {
+      setMessage(err instanceof Error ? err.message : "Couldn't look that watch up.");
+      return null;
+    } finally {
+      setLookingUp(false);
+    }
+  };
+
+  const addScannedWatches = async (scanned: Watch[]) => {
+    const updated = [...scanned, ...watches];
+    setWatches(updated);
+    await saveCollectionData(userId, updated);
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -143,19 +188,24 @@ export default function CollectionPage() {
       return;
     }
 
+    // Fill in details automatically on add, unless already looked up.
+    const details = lookup ?? (canAutoFill ? await runLookup() : null);
+
     const imageUrl = photoFile ? await uploadImage(photoFile) : form.image_url || "";
-    const newWatch: Watch = {
-      id: `${Date.now()}`,
+    const base: Watch = {
+      id: newWatchId(),
       slug: buildSlug(form.brand, form.model),
       image_url: imageUrl,
       brand: form.brand.trim(),
       model: form.model.trim(),
+      reference_number: form.reference_number.trim() || undefined,
       nickname: form.nickname.trim(),
       purchase_date: form.purchase_date,
       purchase_price: form.purchase_price,
       estimated_value: form.estimated_value,
       notes: form.notes.trim(),
     };
+    const newWatch = details ? applyLookup(base, details, { keepTypedValue: true }) : base;
 
     const updated = [newWatch, ...watches];
     setWatches(updated);
@@ -163,7 +213,8 @@ export default function CollectionPage() {
     setForm(initialForm);
     setPhotoFile(null);
     setPreview("");
-    setMessage("Watch added locally.");
+    setLookup(null);
+    setMessage(details ? "Watch added with details and prices." : "Watch added.");
   };
 
 
@@ -241,6 +292,16 @@ export default function CollectionPage() {
           <input value={priceMax} onChange={(e) => setPriceMax(e.target.value)} placeholder="Max $" className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none text-sm" />
         </div>
 
+        {canAutoFill ? (
+          <div className="mb-6">
+            <CollectionScanner onAdd={addScannedWatches} />
+          </div>
+        ) : (
+          <p className="mb-6 rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-slate-300">
+            <a href="/login" className="font-semibold text-[#D9A43A] hover:text-[#e1b54a]">Log in</a> to auto-fill watch details and prices, or scan a photo of your collection list.
+          </p>
+        )}
+
         <form id="add-watch" onSubmit={handleSubmit} className="grid gap-6 rounded-[1.75rem] border border-white/10 bg-black/30 p-6">
             <div className="grid gap-6 lg:grid-cols-2">
               <label className="space-y-2 text-sm text-slate-300">
@@ -266,6 +327,48 @@ export default function CollectionPage() {
                 />
               </label>
             </div>
+
+            <div className="grid gap-6 lg:grid-cols-2 lg:items-end">
+              <label className="space-y-2 text-sm text-slate-300">
+                Reference (optional)
+                <input
+                  name="reference_number"
+                  value={form.reference_number}
+                  onChange={handleChange}
+                  className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-blue-400/70"
+                  placeholder="126610LN"
+                />
+              </label>
+              {canAutoFill ? (
+                <button
+                  type="button"
+                  onClick={runLookup}
+                  disabled={lookingUp}
+                  className="rounded-full border border-[#D9A43A]/50 bg-[#D9A43A]/10 px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-[#D9A43A] transition hover:bg-[#D9A43A]/20 disabled:opacity-60"
+                >
+                  {lookingUp ? "Looking up…" : lookup ? "Look up again" : "Auto-fill details & prices"}
+                </button>
+              ) : null}
+            </div>
+
+            {lookup ? (
+              <div className="rounded-3xl border border-emerald-400/20 bg-emerald-500/5 p-4 text-sm text-slate-200">
+                <p className="font-semibold text-white">
+                  {lookup.brand} {lookup.model}
+                  {lookup.reference_number ? ` · Ref. ${lookup.reference_number}` : ""}
+                </p>
+                <p className="mt-1 text-slate-300">
+                  Retail at purchase: <span className="text-white">{formatUsd(lookup.retail_price_at_purchase)}</span>
+                  {lookup.retail_price_date_note ? ` (${lookup.retail_price_date_note})` : ""} · Retail today:{" "}
+                  <span className="text-white">{formatUsd(lookup.current_retail_price)}</span> · Market value:{" "}
+                  <span className="text-white">{formatUsd(lookup.market_value)}</span>
+                </p>
+                {[lookup.case_size_mm, lookup.case_material, lookup.movement].filter(Boolean).length ? (
+                  <p className="mt-1 text-slate-400">{[lookup.case_size_mm, lookup.case_material, lookup.movement].filter(Boolean).join(" · ")}</p>
+                ) : null}
+                <p className="mt-2 text-xs text-slate-500">Saved with the watch when you click Add Watch. Retail at purchase stays fixed after that.</p>
+              </div>
+            ) : null}
 
             <div className="grid gap-6 lg:grid-cols-2">
               <label className="space-y-2 text-sm text-slate-300">
@@ -360,9 +463,10 @@ export default function CollectionPage() {
 
             <button
               type="submit"
-              className="w-full rounded-full bg-[#D9A43A] px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-black shadow-[0_20px_60px_rgba(217,164,58,0.22)] transition hover:-translate-y-0.5 hover:bg-[#e1b54a] sm:w-auto"
+              disabled={lookingUp}
+              className="w-full disabled:opacity-60 rounded-full bg-[#D9A43A] px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-black shadow-[0_20px_60px_rgba(217,164,58,0.22)] transition hover:-translate-y-0.5 hover:bg-[#e1b54a] sm:w-auto"
             >
-              Add Watch
+              {lookingUp ? "Looking up…" : "Add Watch"}
             </button>
           </form>
       </div>
@@ -398,8 +502,8 @@ export default function CollectionPage() {
                       {watch.reference_number ? <p className="text-sm text-slate-400">Reference: {watch.reference_number}</p> : null}
                         <div className="mt-4 flex items-center justify-between">
                           <div className="text-sm text-slate-200 md:text-slate-300">
-                            <div><span className="font-semibold text-white">Estimated:</span> {watch.estimated_value ? `$${watch.estimated_value}` : "—"}</div>
-                            <div><span className="font-semibold text-white">Condition:</span> {watch.condition ?? "—"}</div>
+                            <div><span className="font-semibold text-white">Market value:</span> {formatUsd(watch.estimated_value)}</div>
+                            <div><span className="font-semibold text-white">Retail at purchase:</span> {formatUsd(watch.retail_price)}</div>
                           </div>
                           <div className="flex gap-2">
                             <Link href={`/collection/${watch.id}`} className="rounded-full bg-[#D9A43A] px-3 py-1 text-sm font-semibold uppercase tracking-[0.12em] text-black shadow-[0_8px_20px_rgba(217,164,58,0.14)]">View</Link>
@@ -483,7 +587,10 @@ export default function CollectionPage() {
                           <span className="font-semibold text-white">Price:</span> {watch.purchase_price ? `$${watch.purchase_price}` : "—"}
                         </p>
                         <p>
-                          <span className="font-semibold text-white">Estimated:</span> {watch.estimated_value ? `$${watch.estimated_value}` : "—"}
+                          <span className="font-semibold text-white">Market value:</span> {formatUsd(watch.estimated_value)}
+                        </p>
+                        <p>
+                          <span className="font-semibold text-white">Retail at purchase:</span> {formatUsd(watch.retail_price)}
                         </p>
                         <p>{watch.notes || "No additional notes."}</p>
                         <div className="mt-4 rounded-full bg-[#D9A43A] px-4 py-2 text-sm font-semibold uppercase tracking-[0.18em] text-black shadow-[0_12px_30px_rgba(217,164,58,0.18)] transition group-hover:scale-[1.01]">View Details</div>

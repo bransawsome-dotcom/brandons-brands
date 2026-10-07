@@ -5,13 +5,19 @@ import { useParams, useRouter } from "next/navigation";
 import { deleteCollectionItem, getWatchByIdData, updateWatchData } from "@/lib/storage";
 import { type Watch } from "@/lib/localData";
 import { useRequireAuth } from "@/components/AuthProvider";
+import WatchValuePanel from "@/components/WatchValuePanel";
+import { lookupWatchDetails } from "@/lib/watchAiClient";
+import { applyLookup } from "@/lib/watchBuild";
 
 export default function WatchDetailsPage() {
   const params = useParams();
   const router = useRouter();
   const id = params?.slug as string | undefined;
-  const { user, loading } = useRequireAuth();
+  const { user, guestMode, loading } = useRequireAuth();
   const userId = user?.id ?? null;
+  const canAutoFill = Boolean(user) && !guestMode;
+  const [refreshing, setRefreshing] = useState(false);
+  const [refreshMessage, setRefreshMessage] = useState<string | null>(null);
 
   const [watch, setWatch] = useState<Watch | null>(null);
   const [editing, setEditing] = useState(false);
@@ -38,6 +44,28 @@ export default function WatchDetailsPage() {
   };
 
   const handleEditToggle = () => setEditing((v) => !v);
+
+  // Refreshes today's retail price and market value. Retail at purchase stays locked.
+  const handleRefreshValue = async () => {
+    setRefreshing(true);
+    setRefreshMessage(null);
+    try {
+      const lookup = await lookupWatchDetails({
+        brand: watch.brand,
+        model: watch.model,
+        reference_number: watch.reference_number,
+        purchase_date: watch.purchase_date || undefined,
+      });
+      const updated = applyLookup(watch, lookup);
+      await updateWatchData(updated, userId);
+      setWatch(updated);
+      setRefreshMessage("Prices updated.");
+    } catch (err) {
+      setRefreshMessage(err instanceof Error ? err.message : "Couldn't refresh prices.");
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -73,6 +101,7 @@ export default function WatchDetailsPage() {
       : (form.image_url as string) || watch.image_url;
 
     const updated: Watch = {
+      ...watch,
       id: watch.id,
       slug: watch.slug,
       image_url: imageUrl,
@@ -111,12 +140,25 @@ export default function WatchDetailsPage() {
             {!editing ? (
               <>
                 <p className="mt-4 text-sm text-slate-300">{watch.notes || "No notes."}</p>
-                <div className="mt-6 space-y-2 text-sm text-slate-300">
-                  <div><span className="font-semibold text-white">Purchase Price:</span> {watch.purchase_price ? `$${watch.purchase_price}` : "—"}</div>
-                  <div><span className="font-semibold text-white">Estimated Value:</span> {watch.estimated_value ? `$${watch.estimated_value}` : "—"}</div>
-                  <div><span className="font-semibold text-white">Purchase Date:</span> {watch.purchase_date || "—"}</div>
-                  <div><span className="font-semibold text-white">Condition:</span> {watch.condition ?? "—"}</div>
+                {watch.condition ? (
+                  <p className="mt-2 text-sm text-slate-300"><span className="font-semibold text-white">Condition:</span> {watch.condition}</p>
+                ) : null}
+                <div className="mt-6">
+                  <WatchValuePanel watch={watch} compact />
                 </div>
+                {canAutoFill ? (
+                  <div className="mt-4 flex flex-wrap items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={handleRefreshValue}
+                      disabled={refreshing}
+                      className="rounded-full border border-[#D9A43A]/50 bg-[#D9A43A]/10 px-5 py-2 text-sm font-semibold text-[#D9A43A] transition hover:bg-[#D9A43A]/20 disabled:opacity-60"
+                    >
+                      {refreshing ? "Checking prices…" : watch.value_updated_at ? "Refresh value" : "Auto-fill details & prices"}
+                    </button>
+                    {refreshMessage ? <span className="text-sm text-slate-300">{refreshMessage}</span> : null}
+                  </div>
+                ) : null}
                 <div className="mt-6 flex gap-3">
                   <button onClick={handleEditToggle} className="rounded-full bg-[#D9A43A] px-5 py-3 text-sm font-semibold">Edit</button>
                   <button onClick={handleDelete} className="rounded-full bg-white/5 px-5 py-3 text-sm font-semibold text-white">Delete</button>
@@ -169,6 +211,12 @@ export default function WatchDetailsPage() {
             )}
           </div>
         </div>
+        {!editing && (watch.details?.summary || watch.details?.movement || watch.details?.sources?.length) ? (
+          <div className="mt-8 border-t border-white/10 pt-6">
+            <p className="mb-4 text-xs uppercase tracking-[0.3em] text-blue-300">Details &amp; prices</p>
+            <WatchValuePanel watch={watch} />
+          </div>
+        ) : null}
       </div>
     </div>
   );

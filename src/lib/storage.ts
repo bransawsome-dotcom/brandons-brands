@@ -11,7 +11,25 @@ import {
   updateWatch,
   type Watch,
   type WishlistItem,
+  AUTO_FILL_FIELDS,
 } from "@/lib/localData";
+
+// Upserts watch rows. If the database doesn't have the auto-fill columns yet,
+// retries without them so saving never breaks.
+async function upsertWatchRows(rows: Record<string, unknown>[]) {
+  if (!supabase) return null;
+  const { error } = await supabase.from("watches").upsert(rows, { onConflict: "id" });
+  if (!error) return null;
+  const missingColumn = error.code === "PGRST204" || /column/i.test(error.message);
+  if (!missingColumn) return error;
+  const stripped = rows.map((row) => {
+    const copy = { ...row };
+    for (const field of AUTO_FILL_FIELDS) delete copy[field];
+    return copy;
+  });
+  const retry = await supabase.from("watches").upsert(stripped, { onConflict: "id" });
+  return retry.error;
+}
 
 export async function loadCollectionData(userId?: string | null): Promise<Watch[]> {
   if (!userId || !supabase) {
@@ -33,7 +51,7 @@ export async function saveCollectionData(userId: string | null | undefined, watc
   }
 
   const rows = watches.map((watch) => ({ ...watch, user_id: userId }));
-  const { error } = await supabase.from("watches").upsert(rows, { onConflict: "id" });
+  const error = await upsertWatchRows(rows);
   if (error) {
     console.error("Failed to save collection", error);
   }
@@ -93,7 +111,7 @@ export async function updateWatchData(updated: Watch, userId?: string | null): P
   }
 
   const row = { ...updated, user_id: userId };
-  const { error } = await supabase.from("watches").upsert(row, { onConflict: "id" });
+  const error = await upsertWatchRows([row]);
   if (error) {
     console.error("Failed to update watch", error);
   }
