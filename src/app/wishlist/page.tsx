@@ -1,7 +1,7 @@
 "use client";
 
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
-import { loadWishlistData, saveWishlistData } from "@/lib/storage";
+import { deleteWishlistItem, loadWishlistData, saveWishlistData } from "@/lib/storage";
 import { useRequireAuth } from "@/components/AuthProvider";
 import { type WishlistItem } from "@/lib/localData";
 
@@ -105,7 +105,7 @@ export default function WishlistPage() {
 
     const next = wishlist.filter((item) => item.id !== id);
     setWishlist(next);
-    await saveWishlistData(userId, next);
+    await deleteWishlistItem(id, userId);
     setMessage("Wishlist item deleted.");
   };
 

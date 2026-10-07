@@ -145,6 +145,18 @@ export async function saveWishlistData(userId: string | null | undefined, wishli
   return wishlist;
 }
 
+export async function deleteWishlistItem(id: string, userId?: string | null): Promise<void> {
+  if (!userId || !supabase) {
+    saveWishlist(userId, loadWishlist(userId).filter((item) => item.id !== id));
+    return;
+  }
+
+  const { error } = await supabase.from("wishlist").delete().match({ id, user_id: userId });
+  if (error) {
+    console.error("Failed to delete wishlist item", error);
+  }
+}
+
 export function clearGuestStorageData() {
   clearGuestData();
 }
