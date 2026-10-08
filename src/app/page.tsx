@@ -37,9 +37,6 @@ export default function Home() {
 
         <section id="collection" className="mt-12 grid gap-6 sm:grid-cols-3">
           <Link href="/collection" className="group block rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl transition hover:-translate-y-1 hover:border-[#D9A43A]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D9A43A]">
-            <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-3xl bg-blue-500/10 text-blue-300 ring-1 ring-blue-400/15">
-              <span className="text-lg font-semibold">1</span>
-            </div>
             <h2 className="mb-3 text-2xl font-semibold text-white">My Collection</h2>
             <p className="text-sm leading-6 text-slate-300">
               Store your watches with photo, brand, model, nickname and purchase date.
@@ -48,9 +45,6 @@ export default function Home() {
           </Link>
 
           <Link href="/wishlist" className="group block rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl transition hover:-translate-y-1 hover:border-[#D9A43A]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D9A43A]">
-            <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-3xl bg-blue-500/10 text-blue-300 ring-1 ring-blue-400/15">
-              <span className="text-lg font-semibold">2</span>
-            </div>
             <h2 className="mb-3 text-2xl font-semibold text-white">Wishlist</h2>
             <p className="text-sm leading-6 text-slate-300">
               Save watches you want to own.
@@ -59,9 +53,6 @@ export default function Home() {
           </Link>
 
           <Link href="/social" className="group block rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl transition hover:-translate-y-1 hover:border-[#D9A43A]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D9A43A]">
-            <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-3xl bg-blue-500/10 text-blue-300 ring-1 ring-blue-400/15">
-              <span className="text-lg font-semibold">3</span>
-            </div>
             <h2 className="mb-3 text-2xl font-semibold text-white">Social Media</h2>
             <p className="text-sm leading-6 text-slate-300">
               Follow along on Instagram, TikTok, YouTube and Facebook.
