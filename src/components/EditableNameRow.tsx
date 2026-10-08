@@ -45,13 +45,13 @@ export default function EditableNameRow({
 
   if (!editing) {
     return (
-      <div className="flex items-center justify-between gap-4 rounded-3xl bg-white/5 px-4 py-3">
+      <div className="flex items-start justify-between gap-3 rounded-3xl bg-white/5 px-4 py-3 sm:items-center sm:gap-4">
         <div className="min-w-0">
           <span className="font-medium text-white">{label}</span>
           {hint ? <span className="block text-xs text-slate-500">{hint}</span> : null}
         </div>
-        <div className="flex min-w-0 items-center gap-3">
-          <span className={`min-w-0 break-all text-right ${value ? "" : "text-slate-500"}`}>{value || emptyText}</span>
+        <div className="flex min-w-0 max-w-[55%] shrink-0 items-center gap-3">
+          <span className={`min-w-0 text-right [overflow-wrap:anywhere] ${value ? "" : "whitespace-nowrap text-slate-500"}`}>{value || emptyText}</span>
           <button type="button" onClick={start} className="shrink-0 text-xs font-semibold text-[#D9A43A] hover:text-[#e1b54a]">
             {value ? "Edit" : "Add"}
           </button>
