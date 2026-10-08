@@ -25,7 +25,7 @@ export default function SiteFooter() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={`${s.name} ${s.handle}`}
-                className="inline-flex rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200 transition hover:border-[#D9A43A]/40 hover:text-[#D9A43A]"
+                className="inline-flex rounded-full border border-[#3FB4EC]/40 bg-gradient-to-b from-[#1A7DBF] to-[#0E5A8F] px-4 py-2 text-sm font-medium text-white shadow-[0_0_18px_rgba(30,155,215,0.25)] transition hover:border-[#5CC4F2]/70 hover:from-[#2290D6] hover:to-[#136AA6] hover:shadow-[0_0_24px_rgba(30,155,215,0.45)]"
               >
                 {s.name}
               </a>
