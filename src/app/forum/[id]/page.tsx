@@ -6,10 +6,10 @@ import { useParams, useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
 import ForumIdentity from "@/components/ForumIdentity";
 import FollowButton from "@/components/FollowButton";
+import { SubjectSelect, useSubjectTree } from "@/components/ForumSubjects";
 import {
   BODY_MAX,
   COMMENT_MAX,
-  FORUM_SUBJECTS,
   TITLE_MAX,
   addComment,
   deleteComment,
@@ -17,7 +17,7 @@ import {
   getPost,
   isModerator,
   listComments,
-  subjectInfo,
+  describeSubject,
   timeAgo,
   updatePost,
   watchComments,
@@ -121,6 +121,7 @@ export default function ForumThreadPage() {
   const { user } = useAuth();
   const userId = user?.id ?? null;
 
+  const { tree } = useSubjectTree();
   const [post, setPost] = useState<ForumPost | null>(null);
   const [comments, setComments] = useState<ForumComment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -189,7 +190,7 @@ export default function ForumThreadPage() {
       </div>
     );
 
-  const s = subjectInfo(post.subject);
+  const { node: s, parent: sParent } = describeSubject(tree, post.subject);
   const canManagePost = userId === post.user_id || moderator;
 
   const handleComment = async (body: string, authorName: string, parentId: string | null) => {
@@ -291,6 +292,14 @@ export default function ForumThreadPage() {
           Forum
         </Link>{" "}
         /{" "}
+        {sParent ? (
+          <>
+            <Link href={`/forum?subject=${sParent.slug}`} className="hover:text-white">
+              {sParent.name}
+            </Link>{" "}
+            /{" "}
+          </>
+        ) : null}
         <Link href={`/forum?subject=${post.subject}`} className="hover:text-white">
           {s.name}
         </Link>
@@ -299,13 +308,7 @@ export default function ForumThreadPage() {
       <article className="rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">
         {editing ? (
           <form onSubmit={saveEdit} className="grid gap-4">
-            <select value={edit.subject} onChange={(e) => setEdit({ ...edit, subject: e.target.value })} className={input}>
-              {FORUM_SUBJECTS.map((x) => (
-                <option key={x.slug} value={x.slug}>
-                  {x.icon} {x.name}
-                </option>
-              ))}
-            </select>
+            <SubjectSelect tree={tree} value={edit.subject} onChange={(slug) => setEdit({ ...edit, subject: slug })} className={input} />
             <input value={edit.title} onChange={(e) => setEdit({ ...edit, title: e.target.value })} maxLength={TITLE_MAX} className={input} required />
             <textarea value={edit.body} onChange={(e) => setEdit({ ...edit, body: e.target.value })} maxLength={BODY_MAX} rows={8} className={input} required />
             <div className="flex gap-3">
@@ -320,7 +323,8 @@ export default function ForumThreadPage() {
         ) : (
           <>
             <p className="text-xs uppercase tracking-[0.25em] text-blue-300">
-              {s.icon} {s.name}
+              {s.icon} {sParent ? `${sParent.name} › ` : ""}
+              {s.name}
             </p>
             <h1 className="mt-2 text-2xl font-semibold text-white sm:text-4xl">{post.title}</h1>
             <div className="mt-4 flex items-center gap-3">

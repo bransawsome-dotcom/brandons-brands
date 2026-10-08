@@ -5,26 +5,40 @@ import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import ForumIdentity from "@/components/ForumIdentity";
 import FollowButton from "@/components/FollowButton";
+import { NEW_SUBJECT, SubjectSelect, useSubjectTree } from "@/components/ForumSubjects";
+import { useAuth } from "@/components/AuthProvider";
 import {
   BODY_MAX,
-  FORUM_SUBJECTS,
+  BRANDS_FOLDER,
+  CLUBS_FOLDER,
   TITLE_MAX,
   createPost,
+  createSubject,
+  deleteSubject,
+  describeSubject,
+  inSubject,
+  isModerator,
   listPosts,
-  subjectInfo,
+  parentOf,
+  subjectLabel,
   timeAgo,
   watchPosts,
   type ForumPost,
+  type SubjectNode,
 } from "@/lib/forum";
 
 const input =
   "w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-blue-400/70";
+
+const BRANDS_PREVIEW = 8;
 
 export default function ForumHome() {
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
   const subject = params.get("subject") ?? "";
+  const { user } = useAuth();
+  const { tree, reload: reloadSubjects } = useSubjectTree();
 
   const [posts, setPosts] = useState<ForumPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,8 +47,11 @@ export default function ForumHome() {
   const [sort, setSort] = useState<"active" | "new" | "popular">("active");
   const [composing, setComposing] = useState(false);
   const [draft, setDraft] = useState({ subject: "general", title: "", body: "" });
+  const [newSubject, setNewSubject] = useState({ name: "", kind: "subject" as "subject" | "club", description: "" });
   const [posting, setPosting] = useState(false);
   const [postError, setPostError] = useState<string | null>(null);
+  const [showAllBrands, setShowAllBrands] = useState(false);
+  const [moderator, setModerator] = useState(false);
 
   // All posts are loaded once; subject filtering and counts happen in the browser.
   const load = useCallback(async () => {
@@ -50,18 +67,22 @@ export default function ForumHome() {
 
   useEffect(() => {
     void load();
-    return watchPosts(() => void load());
-  }, [load]);
+    return watchPosts(() => {
+      void load();
+      void reloadSubjects();
+    });
+  }, [load, reloadSubjects]);
 
-  const counts = useMemo(() => {
-    const map = new Map<string, number>();
-    for (const p of posts) map.set(p.subject, (map.get(p.subject) ?? 0) + 1);
-    return map;
-  }, [posts]);
+  useEffect(() => {
+    void isModerator(user?.id).then(setModerator);
+  }, [user?.id]);
+
+  // Counts include sub-folders: "Watch Brands" counts every brand's posts.
+  const countFor = useCallback((slug: string) => posts.filter((p) => inSubject(p.subject, slug)).length, [posts]);
 
   const visible = useMemo(() => {
     const q = search.trim().toLowerCase();
-    const list = posts.filter((p) => (!subject || p.subject === subject) && (!q || `${p.title} ${p.body} ${p.author_name}`.toLowerCase().includes(q)));
+    const list = posts.filter((p) => (!subject || inSubject(p.subject, subject)) && (!q || `${p.title} ${p.body} ${p.author_name}`.toLowerCase().includes(q)));
     if (sort === "new") list.sort((a, b) => b.created_at.localeCompare(a.created_at));
     else if (sort === "popular") list.sort((a, b) => b.comment_count - a.comment_count || b.last_activity_at.localeCompare(a.last_activity_at));
     else list.sort((a, b) => b.last_activity_at.localeCompare(a.last_activity_at));
@@ -76,10 +97,19 @@ export default function ForumHome() {
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
   };
 
-  const openComposer = () => {
-    setDraft((d) => ({ ...d, subject: subject || d.subject }));
+  // The folder currently open (Watch Brands / Watch Clubs), if any.
+  const openFolder = subject ? (tree.bySlug.get(subject)?.folder ? subject : parentOf(subject)) : null;
+
+  const openComposer = (preset?: { club?: boolean }) => {
+    let start = draft.subject;
+    if (preset?.club) start = NEW_SUBJECT;
+    else if (subject === BRANDS_FOLDER) start = `${BRANDS_FOLDER}/misc`;
+    else if (subject) start = subject;
+    setDraft((d) => ({ ...d, subject: start }));
+    if (preset?.club) setNewSubject((n) => ({ ...n, kind: "club" }));
     setComposing(true);
     setPostError(null);
+    setTimeout(() => document.getElementById("new-post")?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
   };
 
   const handlePost = async (event: FormEvent, authorName: string) => {
@@ -89,8 +119,19 @@ export default function ForumHome() {
     setPosting(true);
     setPostError(null);
     try {
-      const created = await createPost({ ...draft, author_name: authorName });
-      setDraft({ subject: draft.subject, title: "", body: "" });
+      let subjectSlug = draft.subject;
+      if (subjectSlug === NEW_SUBJECT) {
+        const created = await createSubject({
+          name: newSubject.name,
+          parent: newSubject.kind === "club" ? CLUBS_FOLDER : null,
+          description: newSubject.description,
+        });
+        subjectSlug = created.slug;
+        await reloadSubjects();
+      }
+      const created = await createPost({ ...draft, subject: subjectSlug, author_name: authorName });
+      setDraft({ subject: subjectSlug, title: "", body: "" });
+      setNewSubject({ name: "", kind: "subject", description: "" });
       setComposing(false);
       router.push(`/forum/${created.id}`);
     } catch (err) {
@@ -100,7 +141,51 @@ export default function ForumHome() {
     }
   };
 
-  const current = subject ? subjectInfo(subject) : null;
+  const removeSubject = async (node: SubjectNode) => {
+    if (!window.confirm(`Remove "${node.name}"? This only works when it has no posts.`)) return;
+    try {
+      await deleteSubject(node.slug);
+      await reloadSubjects();
+      chooseSubject(node.parent ?? "");
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Couldn't remove that.");
+    }
+  };
+
+  const current = subject ? describeSubject(tree, subject) : null;
+  const folderChildren = openFolder ? tree.children.get(openFolder) ?? [] : [];
+  // Brands with posts first, so the long brand list stays useful.
+  const sortedFolderChildren =
+    openFolder === BRANDS_FOLDER
+      ? [...folderChildren].sort((a, b) => countFor(b.slug) - countFor(a.slug) || (a.slug.endsWith("/misc") ? 1 : 0) - (b.slug.endsWith("/misc") ? 1 : 0) || a.name.localeCompare(b.name))
+      : folderChildren;
+  const shownChildren =
+    openFolder === BRANDS_FOLDER && !showAllBrands
+      ? sortedFolderChildren.filter((c, i) => i < BRANDS_PREVIEW || countFor(c.slug) > 0 || c.slug === subject || c.slug.endsWith("/misc"))
+      : sortedFolderChildren;
+  const canRemove = (n: SubjectNode) => n.community && (moderator || (user?.id && n.created_by === user.id)) && countFor(n.slug) === 0;
+
+  const subjectButton = (s: { slug: string; name: string; icon: string }, opts: { indent?: boolean } = {}) => {
+    const active = subject === s.slug;
+    const count = s.slug ? countFor(s.slug) : posts.length;
+    return (
+      <button
+        key={s.slug || "all"}
+        type="button"
+        onClick={() => chooseSubject(s.slug)}
+        aria-current={active ? "page" : undefined}
+        className={`flex shrink-0 items-center justify-between gap-3 rounded-2xl border px-4 py-2.5 text-left text-sm transition ${opts.indent ? "lg:ml-5 lg:py-2" : ""} ${
+          active ? "border-blue-400/40 bg-blue-500/15 text-blue-100" : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"
+        }`}
+      >
+        <span className="whitespace-nowrap lg:whitespace-normal">
+          <span className="mr-2">{s.icon}</span>
+          {s.name}
+        </span>
+        <span className="shrink-0 rounded-full bg-black/30 px-2 py-0.5 text-xs text-slate-400">{count}</span>
+      </button>
+    );
+  };
 
   return (
     <div className="mx-auto w-full max-w-7xl px-3 py-8 sm:px-6 sm:py-14 lg:px-16">
@@ -115,34 +200,77 @@ export default function ForumHome() {
           </div>
           <button
             type="button"
-            onClick={openComposer}
+            onClick={() => openComposer()}
             className="shrink-0 rounded-full bg-[#D9A43A] px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-black shadow-[0_20px_60px_rgba(217,164,58,0.22)] transition hover:-translate-y-0.5 hover:bg-[#e1b54a]"
           >
             + New post
           </button>
         </div>
 
-        <GettingStarted onNewPost={openComposer} />
+        <GettingStarted onNewPost={() => openComposer()} />
 
         {composing ? (
-          <div id="new-post" className="mt-6">
+          <div id="new-post" className="mt-6 scroll-mt-6">
             <ForumIdentity action="start a discussion">
               {(authorName) => (
                 <form onSubmit={(e) => handlePost(e, authorName)} className="grid gap-4 rounded-[1.5rem] border border-white/10 bg-black/30 p-5">
                   <div className="flex items-center justify-between gap-3">
                     <p className="text-xs uppercase tracking-[0.3em] text-blue-300">New discussion</p>
-                    <p className="text-xs text-slate-400">Posting as <span className="font-semibold text-white">{authorName}</span></p>
+                    <p className="text-xs text-slate-400">
+                      Posting as <span className="font-semibold text-white">{authorName}</span>
+                    </p>
                   </div>
                   <label className="space-y-2 text-sm text-slate-300">
                     Subject
-                    <select value={draft.subject} onChange={(e) => setDraft({ ...draft, subject: e.target.value })} className={input}>
-                      {FORUM_SUBJECTS.map((s) => (
-                        <option key={s.slug} value={s.slug}>
-                          {s.icon} {s.name}
-                        </option>
-                      ))}
-                    </select>
+                    <SubjectSelect tree={tree} value={draft.subject} onChange={(slug) => setDraft({ ...draft, subject: slug })} allowNew className={input} />
                   </label>
+
+                  {draft.subject === NEW_SUBJECT ? (
+                    <div className="grid gap-3 rounded-2xl border border-[#D9A43A]/30 bg-[#D9A43A]/5 p-4">
+                      <p className="text-sm font-semibold text-white">Add a new subject</p>
+                      <div className="flex flex-wrap gap-2">
+                        {[
+                          { key: "subject" as const, label: "New subject" },
+                          { key: "club" as const, label: "New watch club or meetup" },
+                        ].map((o) => (
+                          <button
+                            key={o.key}
+                            type="button"
+                            onClick={() => setNewSubject({ ...newSubject, kind: o.key })}
+                            aria-pressed={newSubject.kind === o.key}
+                            className={`rounded-full border px-4 py-2 text-xs font-semibold transition ${
+                              newSubject.kind === o.key ? "border-[#D9A43A] bg-[#D9A43A] text-black" : "border-white/15 text-slate-200 hover:bg-white/5"
+                            }`}
+                          >
+                            {o.label}
+                          </button>
+                        ))}
+                      </div>
+                      <input
+                        value={newSubject.name}
+                        onChange={(e) => setNewSubject({ ...newSubject, name: e.target.value })}
+                        maxLength={50}
+                        required
+                        placeholder={newSubject.kind === "club" ? "Club name, e.g. NJ Watch Collectors" : "Subject name, e.g. Watch Photography"}
+                        className={input}
+                      />
+                      {newSubject.kind === "club" ? (
+                        <input
+                          value={newSubject.description}
+                          onChange={(e) => setNewSubject({ ...newSubject, description: e.target.value })}
+                          maxLength={300}
+                          placeholder="Optional: where and when you meet, e.g. Hoboken, first Saturday monthly"
+                          className={input}
+                        />
+                      ) : null}
+                      <p className="text-xs text-slate-400">
+                        {newSubject.kind === "club"
+                          ? "Creates a folder for your club under Watch Clubs & Meetups. Your post will be its first discussion."
+                          : "Creates a new subject everyone can post in. Your post will be its first discussion."}
+                      </p>
+                    </div>
+                  ) : null}
+
                   <label className="space-y-2 text-sm text-slate-300">
                     Title
                     <input
@@ -189,47 +317,65 @@ export default function ForumHome() {
         ) : null}
       </div>
 
-      <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[260px_minmax(0,1fr)]">
+      <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
         <aside className="min-w-0 lg:sticky lg:top-6 lg:self-start">
           <p className="mb-3 px-1 text-xs uppercase tracking-[0.3em] text-blue-300">Subjects</p>
-          <nav className="flex gap-2 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0">
-            {[{ slug: "", name: "All discussions", icon: "🗂️" }, ...FORUM_SUBJECTS].map((s) => {
-              const active = subject === s.slug;
-              const count = s.slug ? counts.get(s.slug) ?? 0 : posts.length;
-              return (
-                <button
-                  key={s.slug || "all"}
-                  type="button"
-                  onClick={() => chooseSubject(s.slug)}
-                  className={`flex shrink-0 items-center justify-between gap-3 rounded-2xl border px-4 py-2.5 text-left text-sm transition ${
-                    active ? "border-blue-400/40 bg-blue-500/15 text-blue-100" : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"
-                  }`}
-                >
-                  <span className="whitespace-nowrap lg:whitespace-normal">
-                    <span className="mr-2">{s.icon}</span>
-                    {s.name}
-                  </span>
-                  <span className="shrink-0 rounded-full bg-black/30 px-2 py-0.5 text-xs text-slate-400">{count}</span>
-                </button>
-              );
-            })}
+          <nav className="flex gap-2 overflow-x-auto pb-2 lg:max-h-[calc(100vh-6rem)] lg:flex-col lg:overflow-y-auto lg:overflow-x-visible lg:pb-0" aria-label="Forum subjects">
+            {subjectButton({ slug: "", name: "All discussions", icon: "🗂️" })}
+            {tree.top.map((s) => (
+              <div key={s.slug} className="contents lg:flex lg:flex-col lg:gap-2">
+                {subjectButton({ ...s, icon: s.folder ? `${openFolder === s.slug ? "📂" : "📁"}` : s.icon })}
+                {/* On large screens the open folder shows its sub-folders right under it. */}
+                {s.folder && openFolder === s.slug ? (
+                  <div className="hidden lg:flex lg:flex-col lg:gap-2">
+                    {shownChildren.map((c) => subjectButton(c, { indent: true }))}
+                    {openFolder === BRANDS_FOLDER && shownChildren.length < sortedFolderChildren.length ? (
+                      <button type="button" onClick={() => setShowAllBrands(true)} className="ml-5 text-left text-xs font-semibold text-[#D9A43A] hover:text-[#e1b54a]">
+                        Show all {sortedFolderChildren.length} brands
+                      </button>
+                    ) : null}
+                    {openFolder === CLUBS_FOLDER ? (
+                      <button type="button" onClick={() => openComposer({ club: true })} className="ml-5 text-left text-xs font-semibold text-[#D9A43A] hover:text-[#e1b54a]">
+                        + Start a club
+                      </button>
+                    ) : null}
+                  </div>
+                ) : null}
+              </div>
+            ))}
           </nav>
+          <button type="button" onClick={() => { setDraft((d) => ({ ...d, subject: NEW_SUBJECT })); setNewSubject((n) => ({ ...n, kind: "subject" })); setComposing(true); setTimeout(() => document.getElementById("new-post")?.scrollIntoView({ behavior: "smooth" }), 50); }} className="mt-3 hidden px-1 text-xs font-semibold text-[#D9A43A] hover:text-[#e1b54a] lg:block">
+            + Add a subject
+          </button>
         </aside>
 
         <section className="min-w-0">
           <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex flex-wrap items-center gap-3">
-              <h2 className="text-2xl font-semibold text-white">
-                {current ? (
-                  <>
-                    <span className="mr-2">{current.icon}</span>
-                    {current.name}
-                  </>
-                ) : (
-                  "All discussions"
-                )}
-              </h2>
-              {current ? <FollowButton key={current.slug} subject={current.slug} label="subject" /> : null}
+            <div className="min-w-0">
+              {current?.parent ? (
+                <button type="button" onClick={() => chooseSubject(current.parent!.slug)} className="mb-1 text-xs text-slate-400 hover:text-white">
+                  {current.parent.name} ›
+                </button>
+              ) : null}
+              <div className="flex flex-wrap items-center gap-3">
+                <h2 className="text-2xl font-semibold text-white">
+                  {current ? (
+                    <>
+                      <span className="mr-2">{current.node.icon}</span>
+                      {current.node.name}
+                    </>
+                  ) : (
+                    "All discussions"
+                  )}
+                </h2>
+                {current ? <FollowButton key={current.node.slug} subject={current.node.slug} label={current.node.folder ? "folder" : "subject"} /> : null}
+                {current && canRemove(current.node) ? (
+                  <button type="button" onClick={() => removeSubject(current.node)} className="text-xs text-slate-500 hover:text-rose-300">
+                    Remove
+                  </button>
+                ) : null}
+              </div>
+              {current?.node.description ? <p className="mt-1 text-sm text-slate-400">{current.node.description}</p> : null}
             </div>
             <div className="flex gap-3">
               <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search the forum" className={`${input} sm:w-56`} />
@@ -241,6 +387,44 @@ export default function ForumHome() {
             </div>
           </div>
 
+          {/* Sub-folders of the open folder (always shown on small screens; on large screens they're also in the sidebar). */}
+          {openFolder ? (
+            <div className="mb-4 flex flex-wrap gap-2 lg:hidden">
+              {shownChildren.map((c) => (
+                <button
+                  key={c.slug}
+                  type="button"
+                  onClick={() => chooseSubject(c.slug)}
+                  className={`rounded-full border px-3 py-1.5 text-xs transition ${
+                    subject === c.slug ? "border-blue-400/40 bg-blue-500/15 text-blue-100" : "border-white/10 bg-white/5 text-slate-300"
+                  }`}
+                >
+                  {c.name} <span className="text-slate-500">{countFor(c.slug)}</span>
+                </button>
+              ))}
+              {openFolder === BRANDS_FOLDER && shownChildren.length < sortedFolderChildren.length ? (
+                <button type="button" onClick={() => setShowAllBrands(true)} className="rounded-full px-3 py-1.5 text-xs font-semibold text-[#D9A43A]">
+                  All {sortedFolderChildren.length} brands…
+                </button>
+              ) : null}
+              {openFolder === CLUBS_FOLDER ? (
+                <button type="button" onClick={() => openComposer({ club: true })} className="rounded-full px-3 py-1.5 text-xs font-semibold text-[#D9A43A]">
+                  + Start a club
+                </button>
+              ) : null}
+            </div>
+          ) : null}
+
+          {openFolder === CLUBS_FOLDER && subject === CLUBS_FOLDER && !(tree.children.get(CLUBS_FOLDER) ?? []).length ? (
+            <div className="mb-4 rounded-[1.5rem] border border-[#D9A43A]/30 bg-[#D9A43A]/5 p-5 text-sm text-slate-300">
+              <p className="font-semibold text-white">No clubs yet.</p>
+              <p className="mt-1">Run a watch club or meetup? Give it its own folder here so members can find events and chat.</p>
+              <button type="button" onClick={() => openComposer({ club: true })} className="mt-3 rounded-full bg-[#D9A43A] px-4 py-2 text-xs font-semibold text-black hover:bg-[#e1b54a]">
+                + Start a club
+              </button>
+            </div>
+          ) : null}
+
           {loading ? (
             <div className="rounded-[1.5rem] border border-white/10 bg-white/5 p-10 text-center text-slate-300">Loading discussions…</div>
           ) : error ? (
@@ -250,7 +434,7 @@ export default function ForumHome() {
               <div className="text-4xl">💬</div>
               <p className="mt-3 font-semibold text-white">{search ? "No posts match your search." : "No discussions here yet."}</p>
               {!search ? (
-                <button type="button" onClick={openComposer} className="mt-4 rounded-full bg-[#D9A43A] px-5 py-2.5 text-sm font-semibold text-black hover:bg-[#e1b54a]">
+                <button type="button" onClick={() => openComposer()} className="mt-4 rounded-full bg-[#D9A43A] px-5 py-2.5 text-sm font-semibold text-black hover:bg-[#e1b54a]">
                   Start the first one
                 </button>
               ) : null}
@@ -258,7 +442,7 @@ export default function ForumHome() {
           ) : (
             <ul className="space-y-3">
               {visible.map((post) => {
-                const s = subjectInfo(post.subject);
+                const s = describeSubject(tree, post.subject).node;
                 return (
                   <li key={post.id}>
                     <Link
@@ -267,7 +451,7 @@ export default function ForumHome() {
                     >
                       <div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-black/30 text-xl sm:flex">{s.icon}</div>
                       <div className="min-w-0 flex-1">
-                        <p className="text-xs uppercase tracking-[0.2em] text-blue-300">{s.name}</p>
+                        <p className="text-xs uppercase tracking-[0.2em] text-blue-300">{subjectLabel(tree, post.subject)}</p>
                         <h3 className="mt-1 text-lg font-semibold text-white group-hover:text-[#e1b54a]">{post.title}</h3>
                         <p className="mt-1 line-clamp-2 text-sm text-slate-400">{post.body}</p>
                         <p className="mt-2 text-xs text-slate-500">
@@ -294,7 +478,7 @@ export default function ForumHome() {
 const STEPS = [
   { title: "Log in or join", text: "Reading is open to everyone. To post or reply, log in or create a free account." },
   { title: "Tap + New post", text: "The first time, choose your forum name. It's what everyone sees, and your email stays private." },
-  { title: "Pick a subject and post", text: "Choose a subject, add a title, and share your question, story or wrist shot." },
+  { title: "Pick a subject and post", text: "Choose a subject, brand or club. Not listed? Add a new subject or start a club right from the post form." },
   { title: "Join and follow", text: "Reply to any discussion or comment. Tap Follow on a discussion or subject to get new replies in your inbox." },
 ];
 

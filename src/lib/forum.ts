@@ -2,27 +2,144 @@
 
 import type { User } from "@supabase/supabase-js";
 import supabase from "@/lib/supabaseClient";
+import { watchBrands } from "@/lib/watchCatalog";
 
-// Discussion subjects. Add or rename here; existing posts keep their subject text.
-export const FORUM_SUBJECTS = [
-  { slug: "general", name: "General Discussion", icon: "💬" },
-  { slug: "rolex", name: "Rolex", icon: "👑" },
-  { slug: "omega", name: "Omega", icon: "Ω" },
-  { slug: "holy-trinity", name: "Patek, AP & Vacheron", icon: "🏛️" },
-  { slug: "tudor", name: "Tudor", icon: "🛡️" },
-  { slug: "independents", name: "Independents & Micro Brands", icon: "🔧" },
-  { slug: "vintage", name: "Vintage", icon: "⏳" },
-  { slug: "new-releases", name: "New Releases", icon: "✨" },
-  { slug: "buying-advice", name: "Buying & Selling Advice", icon: "🤝" },
-  { slug: "authentication", name: "Authentication, Box & Papers", icon: "🔍" },
-  { slug: "straps", name: "Straps & Accessories", icon: "🧵" },
-  { slug: "wrist-shots", name: "Wrist Shots", icon: "📸" },
-] as const;
+// --- Subjects ------------------------------------------------------------------
+// Built-in subjects live here. "Watch Brands" and "Watch Clubs & Meetups" are folders:
+// brand sub-folders come from the Add Watch brand list (plus Miscellaneous); club
+// sub-folders, and any extra subjects, are created by members and stored in the database.
 
-export type ForumSubjectSlug = (typeof FORUM_SUBJECTS)[number]["slug"];
+export type SubjectNode = {
+  slug: string;
+  name: string;
+  icon: string;
+  parent: string | null;
+  folder?: boolean;
+  community?: boolean;
+  description?: string | null;
+  created_by?: string | null;
+};
 
-export function subjectInfo(slug: string) {
-  return FORUM_SUBJECTS.find((s) => s.slug === slug) ?? { slug, name: slug, icon: "💬" };
+export const BRANDS_FOLDER = "brands";
+export const CLUBS_FOLDER = "clubs";
+
+const BUILT_IN: SubjectNode[] = [
+  { slug: "general", name: "General Discussion", icon: "💬", parent: null },
+  { slug: BRANDS_FOLDER, name: "Watch Brands", icon: "⌚", parent: null, folder: true },
+  { slug: CLUBS_FOLDER, name: "Watch Clubs & Meetups", icon: "🤝", parent: null, folder: true },
+  { slug: "collaborations", name: "Collaborative Opportunities", icon: "🧩", parent: null },
+  { slug: "suggestions", name: "Suggestions", icon: "💡", parent: null },
+  { slug: "new-releases", name: "New Releases", icon: "✨", parent: null },
+  { slug: "vintage", name: "Vintage", icon: "⏳", parent: null },
+  { slug: "buying-advice", name: "Buying & Selling Advice", icon: "💵", parent: null },
+  { slug: "authentication", name: "Authentication, Box & Papers", icon: "🔍", parent: null },
+  { slug: "straps", name: "Straps & Accessories", icon: "🧵", parent: null },
+  { slug: "wrist-shots", name: "Wrist Shots", icon: "📸", parent: null },
+];
+
+export function slugify(name: string): string {
+  return name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 60);
+}
+
+const BRAND_NODES: SubjectNode[] = [
+  ...watchBrands.map((b) => ({ slug: `${BRANDS_FOLDER}/${slugify(b)}`, name: b, icon: "⌚", parent: BRANDS_FOLDER })),
+  { slug: `${BRANDS_FOLDER}/misc`, name: "Miscellaneous", icon: "🗃️", parent: BRANDS_FOLDER },
+];
+
+export type CustomSubject = {
+  slug: string;
+  name: string;
+  parent: string | null;
+  description: string | null;
+  created_by: string | null;
+  created_at: string;
+};
+
+export type SubjectTree = {
+  top: SubjectNode[];
+  children: Map<string, SubjectNode[]>;
+  bySlug: Map<string, SubjectNode>;
+};
+
+export function buildSubjectTree(custom: CustomSubject[]): SubjectTree {
+  const communityTop = custom
+    .filter((c) => !c.parent)
+    .map((c) => ({ slug: c.slug, name: c.name, icon: "🗨️", parent: null, community: true, description: c.description, created_by: c.created_by }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+  const clubs = custom
+    .filter((c) => c.parent === CLUBS_FOLDER)
+    .map((c) => ({ slug: c.slug, name: c.name, icon: "📍", parent: CLUBS_FOLDER, community: true, description: c.description, created_by: c.created_by }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+  const top = [...BUILT_IN, ...communityTop];
+  const children = new Map<string, SubjectNode[]>([
+    [BRANDS_FOLDER, BRAND_NODES],
+    [CLUBS_FOLDER, clubs],
+  ]);
+  const bySlug = new Map<string, SubjectNode>();
+  for (const n of [...top, ...BRAND_NODES, ...clubs]) bySlug.set(n.slug, n);
+  return { top, children, bySlug };
+}
+
+export function parentOf(slug: string): string | null {
+  return slug.includes("/") ? slug.split("/")[0] : null;
+}
+
+// A post matches a subject when it is in it, or in one of its sub-folders.
+export function inSubject(postSubject: string, selected: string): boolean {
+  return postSubject === selected || postSubject.startsWith(`${selected}/`);
+}
+
+export function describeSubject(tree: SubjectTree, slug: string): { node: SubjectNode; parent: SubjectNode | null } {
+  const node = tree.bySlug.get(slug) ?? { slug, name: slug.split("/").pop()!.replace(/-/g, " "), icon: "💬", parent: parentOf(slug) };
+  const p = node.parent ? tree.bySlug.get(node.parent) ?? null : null;
+  return { node, parent: p };
+}
+
+// Full label like "Watch Brands › Rolex".
+export function subjectLabel(tree: SubjectTree, slug: string): string {
+  const { node, parent } = describeSubject(tree, slug);
+  return parent ? `${parent.name} › ${node.name}` : node.name;
+}
+
+export async function listCustomSubjects(): Promise<CustomSubject[]> {
+  if (!supabase) return [];
+  const { data, error } = await supabase.from("forum_subjects").select("*").order("name");
+  if (error) return [];
+  return (data ?? []) as CustomSubject[];
+}
+
+export async function createSubject(input: { name: string; parent: string | null; description?: string }): Promise<CustomSubject> {
+  const name = input.name.trim().replace(/\s+/g, " ");
+  if (name.length < 2 || name.length > 50) throw new Error("Subject names need 2–50 characters.");
+  const base = slugify(name);
+  if (base.length < 2) throw new Error("Use letters or numbers in the subject name.");
+  const slug = input.parent === CLUBS_FOLDER ? `${CLUBS_FOLDER}/${base}` : `c-${base}`;
+  const builtInNames = [...BUILT_IN, ...BRAND_NODES].map((n) => n.name.toLowerCase());
+  if (!input.parent && builtInNames.includes(name.toLowerCase())) throw new Error(`"${name}" already exists. Pick it from the list.`);
+  const { data, error } = await db()
+    .from("forum_subjects")
+    .insert({ slug, name, parent: input.parent, description: input.description?.trim() || null })
+    .select("*")
+    .single();
+  if (error) {
+    if (error.code === "23505") throw new Error(`"${name}" already exists. Pick it from the list.`);
+    const err = friendly(error);
+    if (err) throw err;
+  }
+  return data as CustomSubject;
+}
+
+export async function deleteSubject(slug: string): Promise<void> {
+  const { error } = await db().from("forum_subjects").delete().eq("slug", slug);
+  const err = friendly(error);
+  if (err) throw err;
 }
 
 export type ForumPost = {
