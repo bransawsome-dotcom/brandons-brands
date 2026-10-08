@@ -54,9 +54,16 @@ language plpgsql security definer set search_path = public as $$
 declare
   nm text := coalesce(nullif(trim(new.raw_user_meta_data ->> 'account_name'), ''), 'Collector');
 begin
-  insert into public.public_profiles (user_id, display_name, handle)
-  values (new.id, left(nm, 40), public.free_handle(nm, new.id))
-  on conflict (user_id) do nothing;
+  begin
+    insert into public.public_profiles (user_id, display_name, handle)
+    values (new.id, left(nm, 40), public.free_handle(nm, new.id))
+    on conflict (user_id) do nothing;
+  exception when unique_violation then
+    -- Two sign-ups with the same name at the same moment: never block the sign-up.
+    insert into public.public_profiles (user_id, display_name, handle)
+    values (new.id, left(nm, 40), left(public.free_handle(nm, new.id), 40) || '-' || left(replace(new.id::text, '-', ''), 6))
+    on conflict (user_id) do nothing;
+  end;
   return new;
 end;
 $$;
@@ -64,14 +71,22 @@ drop trigger if exists on_auth_user_public_profile on auth.users;
 create trigger on_auth_user_public_profile after insert on auth.users
   for each row execute function public.create_public_profile();
 
--- Existing members.
-insert into public.public_profiles (user_id, display_name, handle)
-select u.id,
-       left(coalesce(nullif(trim(u.raw_user_meta_data ->> 'account_name'), ''), 'Collector'), 40),
-       public.free_handle(coalesce(nullif(trim(u.raw_user_meta_data ->> 'account_name'), ''), 'Collector'), u.id)
-from auth.users u
-where not exists (select 1 from public.public_profiles p where p.user_id = u.id)
-order by u.created_at;
+-- Existing members, one at a time so each gets a unique web address.
+do $$
+declare
+  u record;
+  nm text;
+begin
+  for u in
+    select id, raw_user_meta_data from auth.users
+    where id not in (select user_id from public.public_profiles)
+    order by created_at
+  loop
+    nm := coalesce(nullif(trim(u.raw_user_meta_data ->> 'account_name'), ''), 'Collector');
+    insert into public.public_profiles (user_id, display_name, handle) values (u.id, left(nm, 40), public.free_handle(nm, u.id));
+  end loop;
+end;
+$$;
 
 -- Is this name free? (Used at sign-up and when changing the name.)
 create or replace function public.public_name_available(p_name text) returns boolean
