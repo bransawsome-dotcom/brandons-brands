@@ -63,6 +63,12 @@ export default function CollectionPage() {
     setWatches(saved);
   }
 
+  const totals = useMemo(() => {
+    const sum = (key: "purchase_price" | "estimated_value") =>
+      watches.reduce((acc, w) => acc + (parseFloat(w[key] || "") || 0), 0);
+    return { paid: sum("purchase_price"), value: sum("estimated_value") };
+  }, [watches]);
+
   const uniqueBrands = useMemo(() => {
     const brands = Array.from(new Set(watches.map((w) => w.brand))).filter(Boolean) as string[];
     return brands.sort();
@@ -230,68 +236,27 @@ export default function CollectionPage() {
               Build a luxury watch archive.
             </h1>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
-              Add new watches with photo upload, brand, model, price and notes. Switch between grid and list views for a premium management experience.
+              Add watches below, then browse, search and sort them in your collection.
             </p>
           </div>
-          <div className="flex flex-wrap gap-3">
-            <button
-              type="button"
-              onClick={() => setView("grid")}
-              className={`w-full rounded-full px-5 py-3 text-sm font-semibold transition sm:w-auto ${view === "grid" ? "bg-blue-500 text-white" : "bg-white/5 text-blue-200 hover:bg-white/10"}`}
-            >
-              Grid View
-            </button>
-            <button
-              type="button"
-              onClick={() => setView("list")}
-              className={`w-full rounded-full px-5 py-3 text-sm font-semibold transition sm:w-auto ${view === "list" ? "bg-blue-500 text-white" : "bg-white/5 text-blue-200 hover:bg-white/10"}`}
-            >
-              List View
-            </button>
-          </div>
+          <dl className="grid grid-cols-3 gap-3 text-center sm:min-w-[360px]">
+            <div className="rounded-2xl border border-white/10 bg-black/20 px-3 py-3">
+              <dt className="text-[11px] uppercase tracking-[0.18em] text-slate-400">Watches</dt>
+              <dd className="mt-1 text-xl font-semibold text-white">{watches.length}</dd>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-black/20 px-3 py-3">
+              <dt className="text-[11px] uppercase tracking-[0.18em] text-slate-400">Paid</dt>
+              <dd className="mt-1 text-xl font-semibold text-white">{formatUsd(totals.paid)}</dd>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-black/20 px-3 py-3">
+              <dt className="text-[11px] uppercase tracking-[0.18em] text-slate-400">Est. value</dt>
+              <dd className="mt-1 text-xl font-semibold text-[#D9A43A]">{formatUsd(totals.value)}</dd>
+            </div>
+          </dl>
         </div>
 
-        {/* Search & Filters */}
-        <div className="mt-6 mb-6 grid gap-4 rounded-[1.25rem] border border-white/6 bg-black/20 p-4 sm:grid-cols-4">
-          <div>
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search brand, model, nickname, reference..."
-              className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none text-sm"
-            />
-          </div>
-          <div>
-            <select value={brandFilter} onChange={(e) => setBrandFilter(e.target.value)} className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none">
-              <option value="">All Brands</option>
-              {uniqueBrands.map((b) => (
-                <option key={b} value={b}>{b}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <select value={conditionFilter} onChange={(e) => setConditionFilter(e.target.value)} className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none">
-              <option value="">All Conditions</option>
-              {uniqueConditions.map((condition) => (
-                <option key={condition} value={condition}>{condition}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <select value={sortOption} onChange={(e) => setSortOption(e.target.value as typeof sortOption)} className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none">
-              <option value="highest">Highest Estimated Value</option>
-              <option value="lowest">Lowest Estimated Value</option>
-              <option value="newest">Newest Purchase Date</option>
-              <option value="oldest">Oldest Purchase Date</option>
-              <option value="brand">Brand A-Z</option>
-            </select>
-          </div>
-        </div>
-        <div className="mb-6 grid gap-4 sm:grid-cols-2">
-          <input value={priceMin} onChange={(e) => setPriceMin(e.target.value)} placeholder="Min $" className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none text-sm" />
-          <input value={priceMax} onChange={(e) => setPriceMax(e.target.value)} placeholder="Max $" className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none text-sm" />
-        </div>
 
+        <h2 className="mb-4 mt-2 text-xl font-semibold text-white">Add watches</h2>
         {canAutoFill ? (
           <div className="mb-6">
             <CollectionScanner onAdd={addScannedWatches} />
@@ -303,6 +268,10 @@ export default function CollectionPage() {
         )}
 
         <form id="add-watch" onSubmit={handleSubmit} className="grid gap-6 rounded-[1.75rem] border border-white/10 bg-black/30 p-6">
+            <div>
+              <p className="text-xs uppercase tracking-[0.3em] text-blue-300">Add one watch</p>
+              <p className="mt-1 text-sm text-slate-400">Type the brand and model, then auto-fill or enter the details yourself.</p>
+            </div>
             <div className="grid gap-6 lg:grid-cols-2">
               <label className="space-y-2 text-sm text-slate-300">
                 Brand
@@ -472,20 +441,91 @@ export default function CollectionPage() {
       </div>
 
       <section className="mt-12">
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-blue-300">Your luxury archive</p>
-            <h2 className="mt-3 text-3xl font-semibold text-white">{view === "grid" ? "Gallery view" : "List view"}</h2>
+            <p className="text-sm uppercase tracking-[0.3em] text-blue-300">Your collection</p>
+            <h2 className="mt-3 text-3xl font-semibold text-white">
+              {filteredWatches.length} watch{filteredWatches.length === 1 ? "" : "es"}
+              {filteredWatches.length !== watches.length ? <span className="text-lg font-normal text-slate-400"> of {watches.length} (filtered)</span> : null}
+            </h2>
           </div>
-          <div className="text-sm text-slate-400">{filteredWatches.length} watch{filteredWatches.length === 1 ? "" : "s"}</div>
+          <div className="inline-flex rounded-full border border-white/10 bg-black/30 p-1" role="group" aria-label="Layout">
+            <button
+              type="button"
+              onClick={() => setView("grid")}
+              aria-pressed={view === "grid"}
+              className={`rounded-full px-5 py-2 text-sm font-semibold transition ${view === "grid" ? "bg-blue-500 text-white" : "text-blue-200 hover:bg-white/10"}`}
+            >
+              Grid
+            </button>
+            <button
+              type="button"
+              onClick={() => setView("list")}
+              aria-pressed={view === "list"}
+              className={`rounded-full px-5 py-2 text-sm font-semibold transition ${view === "list" ? "bg-blue-500 text-white" : "text-blue-200 hover:bg-white/10"}`}
+            >
+              List
+            </button>
+          </div>
         </div>
+
+        <p className="mb-2 text-xs uppercase tracking-[0.25em] text-slate-400">Search &amp; filter</p>
+        {/* Search & filter your collection */}
+        <div className="mb-4 grid gap-4 rounded-[1.25rem] border border-white/6 bg-black/20 p-4 sm:grid-cols-4">
+          <div>
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search your watches…" aria-label="Search your watches"
+              className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none text-sm"
+            />
+          </div>
+          <div>
+            <select aria-label="Filter by brand" value={brandFilter} onChange={(e) => setBrandFilter(e.target.value)} className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none">
+              <option value="">All brands</option>
+              {uniqueBrands.map((b) => (
+                <option key={b} value={b}>{b}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <select aria-label="Filter by condition" value={conditionFilter} onChange={(e) => setConditionFilter(e.target.value)} className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none">
+              <option value="">All conditions</option>
+              {uniqueConditions.map((condition) => (
+                <option key={condition} value={condition}>{condition}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <select aria-label="Sort" value={sortOption} onChange={(e) => setSortOption(e.target.value as typeof sortOption)} className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none">
+              <option value="highest">Highest Estimated Value</option>
+              <option value="lowest">Lowest Estimated Value</option>
+              <option value="newest">Newest Purchase Date</option>
+              <option value="oldest">Oldest Purchase Date</option>
+              <option value="brand">Brand A-Z</option>
+            </select>
+          </div>
+        </div>
+        <div className="mb-6 grid gap-4 sm:grid-cols-2">
+          <input value={priceMin} onChange={(e) => setPriceMin(e.target.value)} placeholder="Min value $" aria-label="Minimum estimated value" className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none text-sm" />
+          <input value={priceMax} onChange={(e) => setPriceMax(e.target.value)} placeholder="Max value $" aria-label="Maximum estimated value" className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none text-sm" />
+        </div>
+        {brandFilter || conditionFilter || search || priceMin || priceMax ? (
+          <button
+            type="button"
+            onClick={() => { setSearch(""); setBrandFilter(""); setConditionFilter(""); setPriceMin(""); setPriceMax(""); }}
+            className="mb-6 text-sm font-semibold text-[#D9A43A] hover:text-[#e1b54a]"
+          >
+            Clear filters
+          </button>
+        ) : null}
 
         {loading ? (
           <div className="rounded-[2rem] border border-white/10 bg-white/5 p-12 text-center text-slate-300">Loading your collection…</div>
         ) : filteredWatches.length ? (
-          <div className={view === "grid" ? "grid gap-6 md:grid-cols-2 xl:grid-cols-3" : "space-y-6"}>
+          <div className={view === "grid" ? "grid gap-6 md:grid-cols-2 xl:grid-cols-3" : "space-y-3"}>
             {filteredWatches.map((watch) => (
-              <div key={watch.id} className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-[0_25px_70px_rgba(0,0,0,0.28)] backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-[#D9A43A]/40 hover:shadow-[0_35px_80px_rgba(217,164,58,0.18)]">
+              <div key={watch.id} className={`group relative overflow-hidden border border-white/10 bg-white/5 backdrop-blur-xl transition hover:border-[#D9A43A]/40 ${view === "grid" ? "rounded-[2rem] shadow-[0_25px_70px_rgba(0,0,0,0.28)] hover:-translate-y-0.5 hover:shadow-[0_35px_80px_rgba(217,164,58,0.18)]" : "rounded-2xl"}`}>
                 <Link href={`/collection/${watch.id}`} className="absolute inset-0 z-0" aria-hidden />
                 {view === "grid" ? (
                   <div className="flex flex-col relative z-10">
@@ -562,65 +602,40 @@ export default function CollectionPage() {
                     </div>
                   </div>
                 ) : (
-                  <div className="grid gap-6 lg:grid-cols-2 relative z-10">
-                    <div className="h-[220px] bg-slate-950/90 md:h-72">
+                  <div className="relative z-10 flex items-center gap-4 p-3 sm:p-4 pointer-events-none">
+                    <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-slate-950/90 sm:h-20 sm:w-20">
                       {watch.image_url ? (
                         <img src={watch.image_url} alt={`${watch.brand} ${watch.model}`} className="h-full w-full object-cover" />
                       ) : (
-                        <div className="flex h-full items-center justify-center text-slate-400">No image</div>
+                        <div className="flex h-full items-center justify-center text-[10px] text-slate-500">No image</div>
                       )}
                     </div>
-                    <div className="p-6">
-                      <div className="flex items-start justify-between gap-4">
-                        <div>
-                          <p className="text-sm uppercase tracking-[0.25em] text-blue-300">{watch.brand}</p>
-                          <h3 className="mt-2 text-2xl font-semibold text-white">{watch.model}</h3>
-                          {watch.nickname ? <p className="text-sm text-slate-400">“{watch.nickname}”</p> : null}
-                        </div>
-                        <span className="rounded-full bg-[#D9A43A]/15 px-3 py-1 text-xs uppercase tracking-[0.2em] text-amber-200">Value</span>
-                      </div>
-                      <div className="mt-5 space-y-3 text-sm text-slate-200 md:text-slate-300">
-                        <p>
-                          <span className="font-semibold text-white">Purchased:</span> {watch.purchase_date || "—"}
-                        </p>
-                        <p>
-                          <span className="font-semibold text-white">Price:</span> {watch.purchase_price ? `$${watch.purchase_price}` : "—"}
-                        </p>
-                        <p>
-                          <span className="font-semibold text-white">Market value:</span> {formatUsd(watch.estimated_value)}
-                        </p>
-                        <p>
-                          <span className="font-semibold text-white">Retail at purchase:</span> {formatUsd(watch.retail_price)}
-                        </p>
-                        <p>{watch.notes || "No additional notes."}</p>
-                        <div className="mt-4 rounded-full bg-[#D9A43A] px-4 py-2 text-sm font-semibold uppercase tracking-[0.18em] text-black shadow-[0_12px_30px_rgba(217,164,58,0.18)] transition group-hover:scale-[1.01]">View Details</div>
-                      </div>
-
-                      {/* Mobile buttons for list view */}
-                      <div className="flex md:hidden border-t border-white/6 mt-4">
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            router.push(`/collection/${watch.id}`);
-                          }}
-                          className="w-1/2 px-4 py-3 text-sm font-semibold text-white"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          type="button"
-                          onClick={async (e) => {
-                            e.stopPropagation();
-                            await deleteCollectionItem(watch.id, userId);
-                            await fetchWatches();
-                          }}
-                          className="w-1/2 px-4 py-3 text-sm font-semibold text-white bg-rose-600"
-                        >
-                          Delete
-                        </button>
-                      </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs uppercase tracking-[0.2em] text-blue-300">{watch.brand}</p>
+                      <h3 className="truncate text-lg font-semibold text-white">{watch.model}</h3>
+                      <p className="truncate text-xs text-slate-400">
+                        {[watch.reference_number ? `Ref. ${watch.reference_number}` : "", watch.nickname ? `“${watch.nickname}”` : "", watch.purchase_date ? `Bought ${watch.purchase_date}` : ""].filter(Boolean).join(" · ") || "No details yet"}
+                      </p>
                     </div>
+                    <dl className="hidden shrink-0 grid-cols-3 gap-6 text-right text-sm md:grid">
+                      <div>
+                        <dt className="text-[11px] uppercase tracking-[0.15em] text-slate-400">Paid</dt>
+                        <dd className="font-semibold text-white">{formatUsd(watch.purchase_price)}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-[11px] uppercase tracking-[0.15em] text-slate-400">Retail at purchase</dt>
+                        <dd className="font-semibold text-white">{formatUsd(watch.retail_price)}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-[11px] uppercase tracking-[0.15em] text-slate-400">Market value</dt>
+                        <dd className="font-semibold text-[#D9A43A]">{formatUsd(watch.estimated_value)}</dd>
+                      </div>
+                    </dl>
+                    <div className="shrink-0 text-right text-sm md:hidden">
+                      <p className="text-[11px] uppercase tracking-[0.15em] text-slate-400">Value</p>
+                      <p className="font-semibold text-[#D9A43A]">{formatUsd(watch.estimated_value)}</p>
+                    </div>
+                    <span aria-hidden className="hidden text-slate-500 transition group-hover:translate-x-1 group-hover:text-[#D9A43A] sm:block">→</span>
                   </div>
                 )}
               </div>
