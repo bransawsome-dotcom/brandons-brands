@@ -36,28 +36,28 @@ export default function Home() {
         </section>
 
         <section id="collection" className="mt-12 grid gap-6 sm:grid-cols-3">
-          <Link href="/collection" className="group block rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl transition hover:-translate-y-1 hover:border-[#D9A43A]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D9A43A]">
+          <Link href="/collection" className="group flex h-full flex-col rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl transition hover:-translate-y-1 hover:border-[#D9A43A]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D9A43A]">
             <h2 className="mb-3 text-2xl font-semibold text-white">My Collection</h2>
-            <p className="text-sm leading-6 text-slate-300">
+            <p className="flex-1 text-sm leading-6 text-slate-300">
               Store your watches with photo, brand, model, nickname and purchase date.
             </p>
-            <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold uppercase tracking-[0.15em] text-[#D9A43A]">Open collection <span aria-hidden className="transition group-hover:translate-x-1">→</span></span>
+            <span className="mt-5 inline-flex items-center gap-1 self-start text-sm font-semibold uppercase tracking-[0.15em] text-[#D9A43A]">Open collection <span aria-hidden className="transition group-hover:translate-x-1">→</span></span>
           </Link>
 
-          <Link href="/wishlist" className="group block rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl transition hover:-translate-y-1 hover:border-[#D9A43A]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D9A43A]">
+          <Link href="/wishlist" className="group flex h-full flex-col rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl transition hover:-translate-y-1 hover:border-[#D9A43A]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D9A43A]">
             <h2 className="mb-3 text-2xl font-semibold text-white">Wishlist</h2>
-            <p className="text-sm leading-6 text-slate-300">
+            <p className="flex-1 text-sm leading-6 text-slate-300">
               Save watches you want to own.
             </p>
-            <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold uppercase tracking-[0.15em] text-[#D9A43A]">Open wishlist <span aria-hidden className="transition group-hover:translate-x-1">→</span></span>
+            <span className="mt-5 inline-flex items-center gap-1 self-start text-sm font-semibold uppercase tracking-[0.15em] text-[#D9A43A]">Open wishlist <span aria-hidden className="transition group-hover:translate-x-1">→</span></span>
           </Link>
 
-          <Link href="/social" className="group block rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl transition hover:-translate-y-1 hover:border-[#D9A43A]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D9A43A]">
+          <Link href="/social" className="group flex h-full flex-col rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl transition hover:-translate-y-1 hover:border-[#D9A43A]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D9A43A]">
             <h2 className="mb-3 text-2xl font-semibold text-white">Social Media</h2>
-            <p className="text-sm leading-6 text-slate-300">
+            <p className="flex-1 text-sm leading-6 text-slate-300">
               Follow along on Instagram, TikTok, YouTube and Facebook.
             </p>
-            <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold uppercase tracking-[0.15em] text-[#D9A43A]">Follow along <span aria-hidden className="transition group-hover:translate-x-1">→</span></span>
+            <span className="mt-5 inline-flex items-center gap-1 self-start text-sm font-semibold uppercase tracking-[0.15em] text-[#D9A43A]">Follow along <span aria-hidden className="transition group-hover:translate-x-1">→</span></span>
           </Link>
         </section>
       </main>
