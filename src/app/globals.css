@@ -76,17 +76,20 @@ body {
   pointer-events: none;
 }
 
-/* Home page logo behind "Brandon's Brands": sized per screen so the heading sits inside the logo's inner dial. */
-.logo-watermark {
+/* Home page logo square: sized per screen so "Brandon's Brands" sits inside the logo's inner dial. */
+.logo-stage {
   width: 400px;
+  height: 400px;
 }
 @media (min-width: 640px) {
-  .logo-watermark {
+  .logo-stage {
     width: 660px;
+    height: 660px;
   }
 }
 @media (min-width: 1024px) {
-  .logo-watermark {
+  .logo-stage {
     width: 920px;
+    height: 920px;
   }
 }
