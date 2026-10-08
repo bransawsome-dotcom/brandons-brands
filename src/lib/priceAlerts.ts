@@ -119,7 +119,7 @@ export async function findListings(item: AlertItem, target: number, signal?: Abo
 }
 
 const GONE_TEXT =
-  /\bENDED\b|This listing (has|was) ended|listing (has )?ended|no longer available|item (is|has been) sold|\bSOLD OUT\b|out of stock|this item is unavailable|watch (has been|was) sold/i;
+  /\bENDED\b|This (listing|item) (sold|has sold|has ended|was ended|ended|is no longer available)|listing (has )?ended|no longer available|item (is|has been) sold|\bSOLD OUT\b|out of stock|this item is unavailable|watch (has been|was) sold|sold on (Mon|Tue|Wed|Thu|Fri|Sat|Sun)/i;
 
 // Is this listing page still up? true = looks live, false = ended/sold/redirected, null = couldn't tell.
 export async function stillListed(url: string): Promise<boolean | null> {
