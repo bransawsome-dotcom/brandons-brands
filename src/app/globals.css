@@ -93,3 +93,9 @@ body {
     height: 920px;
   }
 }
+
+/* The QR-code "Connect with Brandon" page is a simple standalone page: no site header or footer. */
+body:has(.connect-page) .site-header,
+body:has(.connect-page) .site-footer {
+  display: none;
+}

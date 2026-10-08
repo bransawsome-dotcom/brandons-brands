@@ -43,7 +43,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-[var(--background)] text-white">
         <AuthProvider>
           <div className="mx-auto flex min-h-screen w-full max-w-[1320px] flex-col px-3 py-3 sm:px-5 sm:py-5 lg:px-8">
-            <header className="relative z-30 mb-8 flex flex-col gap-4 rounded-[2rem] border border-white/10 bg-white/5 px-4 py-5 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-6">
+            <header className="site-header relative z-30 mb-8 flex flex-col gap-4 rounded-[2rem] border border-white/10 bg-white/5 px-4 py-5 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-6">
               <Link href="/" className="flex items-center gap-3 sm:gap-4" aria-label="Brandon's Brands home">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="/logo-256.webp" alt="" width={64} height={64} className="h-12 w-12 shrink-0 drop-shadow-[0_6px_18px_rgba(59,130,246,0.35)] sm:h-16 sm:w-16" />
