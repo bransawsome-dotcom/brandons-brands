@@ -146,6 +146,15 @@ export default function WatchDetailsPage() {
                 <div className="mt-6">
                   <WatchValuePanel watch={watch} compact />
                 </div>
+                {!watch.purchase_price ? (
+                  <button
+                    type="button"
+                    onClick={handleEditToggle}
+                    className="mt-3 text-sm font-semibold text-[#D9A43A] hover:text-[#e1b54a]"
+                  >
+                    + Add what you paid
+                  </button>
+                ) : null}
                 {canAutoFill ? (
                   <div className="mt-4 flex flex-wrap items-center gap-3">
                     <button
@@ -182,6 +191,10 @@ export default function WatchDetailsPage() {
                 <label className="text-sm text-slate-300">
                   Upload Photo
                   <input type="file" accept="image/*" onChange={handleFileChange} className="mt-1 w-full cursor-pointer rounded-lg border border-white/10 bg-slate-950/90 px-3 py-2 text-white" />
+                </label>
+                <label className="text-sm text-slate-300">
+                  Purchase Price (what you paid)
+                  <input name="purchase_price" inputMode="decimal" value={form.purchase_price as string || ""} onChange={handleChange} placeholder="e.g. 10500" className="mt-1 w-full rounded-lg border border-white/10 bg-slate-950/90 px-3 py-2 text-white" />
                 </label>
                 <label className="text-sm text-slate-300">
                   Estimated Value

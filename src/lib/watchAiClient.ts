@@ -90,8 +90,15 @@ export async function scanCollectionPhoto(file: File): Promise<ScannedWatch[]> {
   return result.watches;
 }
 
+// Reads amounts typed any way: "10500", "$10,500", "10,500.00".
+export function parseMoney(value?: string | number | null): number {
+  if (typeof value === "number") return value;
+  const n = parseFloat(String(value ?? "").replace(/[^0-9.\-]/g, ""));
+  return Number.isFinite(n) ? n : NaN;
+}
+
 export function formatUsd(value?: string | number | null): string {
-  const n = typeof value === "number" ? value : parseFloat(value ?? "");
+  const n = parseMoney(value);
   if (!Number.isFinite(n)) return "—";
   return n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 }

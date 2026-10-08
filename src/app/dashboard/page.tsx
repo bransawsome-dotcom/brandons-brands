@@ -1,5 +1,7 @@
 "use client";
 
+import { parseMoney } from "@/lib/watchAiClient";
+
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { loadCollectionData } from "@/lib/storage";
@@ -7,7 +9,7 @@ import { type Watch } from "@/lib/localData";
 import { useRequireAuth } from "@/components/AuthProvider";
 
 function formatCurrency(v?: string | number) {
-  const n = typeof v === "number" ? v : parseFloat(String(v || "0"));
+  const n = typeof v === "number" ? v : parseMoney(v as string | number);
   if (isNaN(n)) return "—";
   return n.toLocaleString(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 }
@@ -65,17 +67,17 @@ export default function DashboardPage() {
     loadCollectionData(userId).then((loaded) => setWatches(loaded));
   }, [authLoading, userId]);
 
-  const totalEstimatedValue = watches.reduce((sum, watch) => sum + (parseFloat(watch.estimated_value || "0") || 0), 0);
-  const totalPurchaseCost = watches.reduce((sum, watch) => sum + (parseFloat(watch.purchase_price || "0") || 0), 0);
+  const totalEstimatedValue = watches.reduce((sum, watch) => sum + (parseMoney(watch.estimated_value) || 0), 0);
+  const totalPurchaseCost = watches.reduce((sum, watch) => sum + (parseMoney(watch.purchase_price) || 0), 0);
   const totalProfit = totalEstimatedValue - totalPurchaseCost;
   const totalWatches = watches.length;
   const avgWatchValue = totalWatches ? Math.round(totalEstimatedValue / totalWatches) : 0;
-  const mostValuable = watches.slice().sort((a, b) => (parseFloat(b.estimated_value || "0") || 0) - (parseFloat(a.estimated_value || "0") || 0))[0];
+  const mostValuable = watches.slice().sort((a, b) => (parseMoney(b.estimated_value) || 0) - (parseMoney(a.estimated_value) || 0))[0];
 
   const valueByBrand = useMemo(() => {
     const map: Record<string, number> = {};
     watches.forEach((watch) => {
-      map[watch.brand] = (map[watch.brand] || 0) + (parseFloat(watch.estimated_value || "0") || 0);
+      map[watch.brand] = (map[watch.brand] || 0) + (parseMoney(watch.estimated_value) || 0);
     });
     return Object.entries(map)
       .map(([label, value]) => ({ label, value }))
@@ -87,7 +89,7 @@ export default function DashboardPage() {
     watches.forEach((watch) => {
       const date = watch.purchase_date ? new Date(watch.purchase_date) : new Date();
       const month = `${date.toLocaleString(undefined, { month: "short" })} ${date.getFullYear()}`;
-      points[month] = (points[month] || 0) + (parseFloat(watch.purchase_price || "0") || 0);
+      points[month] = (points[month] || 0) + (parseMoney(watch.purchase_price) || 0);
     });
     return Object.entries(points)
       .map(([label, value]) => ({ label, value }))
@@ -98,7 +100,7 @@ export default function DashboardPage() {
     return watches
       .map((watch) => ({
         label: `${watch.brand} ${watch.model}`,
-        value: parseFloat(watch.estimated_value || "0") || 0,
+        value: parseMoney(watch.estimated_value) || 0,
       }))
       .sort((a, b) => b.value - a.value)
       .slice(0, 5);

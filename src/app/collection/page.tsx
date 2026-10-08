@@ -9,7 +9,7 @@ import { type Watch } from "@/lib/localData";
 import CollectionScanner from "@/components/CollectionScanner";
 import Combobox from "@/components/Combobox";
 import { canonicalBrand, modelsForBrand, watchBrands } from "@/lib/watchCatalog";
-import { formatUsd, lookupWatchDetails, type WatchLookupResult } from "@/lib/watchAiClient";
+import { formatUsd, parseMoney, lookupWatchDetails, type WatchLookupResult } from "@/lib/watchAiClient";
 import { applyLookup, newWatchId } from "@/lib/watchBuild";
 
 function buildSlug(brand: string, model: string) {
@@ -67,7 +67,7 @@ export default function CollectionPage() {
 
   const totals = useMemo(() => {
     const sum = (key: "purchase_price" | "estimated_value") =>
-      watches.reduce((acc, w) => acc + (parseFloat(w[key] || "") || 0), 0);
+      watches.reduce((acc, w) => acc + (parseMoney(w[key]) || 0), 0);
     return { paid: sum("purchase_price"), value: sum("estimated_value") };
   }, [watches]);
 
@@ -93,9 +93,9 @@ export default function CollectionPage() {
       if (brandFilter && w.brand !== brandFilter) return false;
       if (conditionFilter && w.condition !== conditionFilter) return false;
 
-      const val = parseFloat(w.estimated_value || "0") || 0;
-      const min = parseFloat(priceMin || "0") || 0;
-      const max = priceMax ? parseFloat(priceMax) : Infinity;
+      const val = parseMoney(w.estimated_value) || 0;
+      const min = parseMoney(priceMin) || 0;
+      const max = priceMax && Number.isFinite(parseMoney(priceMax)) ? parseMoney(priceMax) : Infinity;
       if (val < min) return false;
       if (val > max) return false;
 
@@ -104,10 +104,10 @@ export default function CollectionPage() {
 
     return [...results].sort((left, right) => {
       if (sortOption === "highest") {
-        return (parseFloat(right.estimated_value || "0") || 0) - (parseFloat(left.estimated_value || "0") || 0);
+        return (parseMoney(right.estimated_value) || 0) - (parseMoney(left.estimated_value) || 0);
       }
       if (sortOption === "lowest") {
-        return (parseFloat(left.estimated_value || "0") || 0) - (parseFloat(right.estimated_value || "0") || 0);
+        return (parseMoney(left.estimated_value) || 0) - (parseMoney(right.estimated_value) || 0);
       }
       if (sortOption === "newest") {
         return new Date(right.purchase_date).getTime() - new Date(left.purchase_date).getTime();

@@ -1,10 +1,10 @@
 "use client";
 
 import type { Watch } from "@/lib/localData";
-import { formatUsd } from "@/lib/watchAiClient";
+import { formatUsd, parseMoney } from "@/lib/watchAiClient";
 
 function toNumber(value?: string | null) {
-  const n = parseFloat(value ?? "");
+  const n = parseMoney(value);
   return Number.isFinite(n) ? n : null;
 }
 
