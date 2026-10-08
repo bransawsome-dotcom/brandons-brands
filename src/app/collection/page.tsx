@@ -5,7 +5,8 @@ import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useRequireAuth } from "@/components/AuthProvider";
 import { loadCollectionData, saveCollectionData, deleteCollectionItem } from "@/lib/storage";
-import { type Watch } from "@/lib/localData";
+import { provenanceLabels, type Watch } from "@/lib/localData";
+import ProvenanceFields, { emptyProvenance, type Provenance } from "@/components/ProvenanceFields";
 import CollectionScanner from "@/components/CollectionScanner";
 import Combobox from "@/components/Combobox";
 import { canonicalBrand, modelsForBrand, watchBrands } from "@/lib/watchCatalog";
@@ -27,6 +28,7 @@ const initialForm = {
   purchase_date: "",
   purchase_price: "",
   estimated_value: "",
+  condition: "",
   notes: "",
 };
 
@@ -45,6 +47,7 @@ export default function CollectionPage() {
   const [priceMax, setPriceMax] = useState("");
   const [selectedWatch, setSelectedWatch] = useState<Watch | null>(null);
   const [form, setForm] = useState(initialForm);
+  const [provenance, setProvenance] = useState<Provenance>(emptyProvenance);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<"grid" | "list">("grid");
   const [message, setMessage] = useState<string | null>(null);
@@ -213,6 +216,11 @@ export default function CollectionPage() {
       purchase_date: form.purchase_date,
       purchase_price: form.purchase_price,
       estimated_value: form.estimated_value,
+      condition: form.condition.trim() || undefined,
+      has_box: provenance.has_box,
+      has_papers: provenance.has_papers,
+      authenticated: provenance.authenticated,
+      authenticated_by: provenance.authenticated ? provenance.authenticated_by.trim() || null : null,
       notes: form.notes.trim(),
     };
     const newWatch = details ? applyLookup(base, details, { keepTypedValue: true }) : base;
@@ -221,6 +229,7 @@ export default function CollectionPage() {
     setWatches(updated);
     await saveCollectionData(userId, updated);
     setForm(initialForm);
+    setProvenance(emptyProvenance);
     setPhotoFile(null);
     setPreview("");
     setLookup(null);
@@ -416,6 +425,25 @@ export default function CollectionPage() {
             </div>
 
             <label className="space-y-2 text-sm text-slate-300">
+              Condition
+              <input
+                name="condition"
+                value={form.condition}
+                onChange={handleChange}
+                list="condition-options"
+                className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-blue-400/70"
+                placeholder="Unworn, Excellent, Very good…"
+              />
+              <datalist id="condition-options">
+                {["Unworn", "Excellent", "Very good", "Good", "Fair"].map((c) => (
+                  <option key={c} value={c} />
+                ))}
+              </datalist>
+            </label>
+
+            <ProvenanceFields value={provenance} onChange={setProvenance} />
+
+            <label className="space-y-2 text-sm text-slate-300">
               Upload Photo
               <input
                 type="file"
@@ -566,6 +594,13 @@ export default function CollectionPage() {
                       <p className="text-sm uppercase tracking-[0.25em] text-blue-300">{watch.brand}</p>
                       <h3 className="mt-2 text-2xl font-semibold text-white">{watch.model}</h3>
                       {watch.reference_number ? <p className="text-sm text-slate-400">Reference: {watch.reference_number}</p> : null}
+                      {provenanceLabels(watch).length ? (
+                        <div className="mt-2 flex flex-wrap gap-1.5">
+                          {provenanceLabels(watch).map((label) => (
+                            <span key={label} className="rounded-full border border-emerald-400/30 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-200">✓ {label}</span>
+                          ))}
+                        </div>
+                      ) : null}
                         <div className="mt-4 flex items-center justify-between">
                           <div className="text-sm text-slate-200 md:text-slate-300">
                             <div><span className="font-semibold text-white">Market value:</span> {formatUsd(watch.estimated_value)}</div>
@@ -640,7 +675,7 @@ export default function CollectionPage() {
                       <p className="text-xs uppercase tracking-[0.2em] text-blue-300">{watch.brand}</p>
                       <h3 className="truncate text-lg font-semibold text-white">{watch.model}</h3>
                       <p className="truncate text-xs text-slate-400">
-                        {[watch.reference_number ? `Ref. ${watch.reference_number}` : "", watch.nickname ? `“${watch.nickname}”` : "", watch.purchase_date ? `Bought ${watch.purchase_date}` : ""].filter(Boolean).join(" · ") || "No details yet"}
+                        {[watch.reference_number ? `Ref. ${watch.reference_number}` : "", ...provenanceLabels(watch), watch.nickname ? `“${watch.nickname}”` : "", watch.purchase_date ? `Bought ${watch.purchase_date}` : ""].filter(Boolean).join(" · ") || "No details yet"}
                       </p>
                     </div>
                     <dl className="hidden shrink-0 grid-cols-3 gap-6 text-right text-sm md:grid">
@@ -709,6 +744,7 @@ export default function CollectionPage() {
                   <div className="mt-6 space-y-2 text-sm text-slate-300">
                     <div><span className="font-semibold text-white">Estimated value:</span> {selectedWatch.estimated_value ? `$${selectedWatch.estimated_value}` : "—"}</div>
                     <div><span className="font-semibold text-white">Condition:</span> {selectedWatch.condition ?? "—"}</div>
+                    <div><span className="font-semibold text-white">Box &amp; papers:</span> {provenanceLabels(selectedWatch).join(" · ") || "—"}</div>
                     <div><span className="font-semibold text-white">Purchased:</span> {selectedWatch.purchase_date || "—"}</div>
                   </div>
                   <div className="mt-6 flex gap-3">

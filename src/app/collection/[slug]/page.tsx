@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { deleteCollectionItem, getWatchByIdData, updateWatchData } from "@/lib/storage";
-import { type Watch } from "@/lib/localData";
+import { provenanceLabels, type Watch } from "@/lib/localData";
+import ProvenanceFields, { emptyProvenance, provenanceFrom, type Provenance } from "@/components/ProvenanceFields";
 import { useRequireAuth } from "@/components/AuthProvider";
 import WatchValuePanel from "@/components/WatchValuePanel";
 import { lookupWatchDetails } from "@/lib/watchAiClient";
@@ -24,6 +25,7 @@ export default function WatchDetailsPage() {
   const [form, setForm] = useState<Partial<Watch>>({});
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>("");
+  const [provenance, setProvenance] = useState<Provenance>(emptyProvenance);
 
   useEffect(() => {
     if (!id || loading) return;
@@ -32,6 +34,7 @@ export default function WatchDetailsPage() {
       setWatch(w ?? null);
       setForm(w ?? {});
       setPreview(w?.image_url ?? "");
+      setProvenance(provenanceFrom(w ?? {}));
     });
   }, [id, loading, userId]);
 
@@ -43,7 +46,10 @@ export default function WatchDetailsPage() {
     router.push("/collection");
   };
 
-  const handleEditToggle = () => setEditing((v) => !v);
+  const handleEditToggle = () => {
+    setProvenance(provenanceFrom(watch));
+    setEditing((v) => !v);
+  };
 
   // Refreshes today's retail price and market value. Retail at purchase stays locked.
   const handleRefreshValue = async () => {
@@ -114,6 +120,10 @@ export default function WatchDetailsPage() {
       purchase_price: (form.purchase_price as string) || watch.purchase_price,
       estimated_value: (form.estimated_value as string) || watch.estimated_value,
       notes: (form.notes as string) || watch.notes,
+      has_box: provenance.has_box,
+      has_papers: provenance.has_papers,
+      authenticated: provenance.authenticated,
+      authenticated_by: provenance.authenticated ? provenance.authenticated_by.trim() || null : null,
     };
 
     await updateWatchData(updated, userId);
@@ -143,6 +153,17 @@ export default function WatchDetailsPage() {
                 {watch.condition ? (
                   <p className="mt-2 text-sm text-slate-300"><span className="font-semibold text-white">Condition:</span> {watch.condition}</p>
                 ) : null}
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {provenanceLabels(watch).length ? (
+                    provenanceLabels(watch).map((label) => (
+                      <span key={label} className="rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-200">
+                        ✓ {label}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-400">No box or papers recorded</span>
+                  )}
+                </div>
                 <div className="mt-6">
                   <WatchValuePanel watch={watch} compact />
                 </div>
@@ -208,6 +229,7 @@ export default function WatchDetailsPage() {
                   Condition
                   <input name="condition" value={form.condition as string || ""} onChange={handleChange} className="mt-1 w-full rounded-lg border border-white/10 bg-slate-950/90 px-3 py-2 text-white" />
                 </label>
+                <ProvenanceFields value={provenance} onChange={setProvenance} />
                 <label className="text-sm text-slate-300">
                   Photo URL
                   <input name="image_url" value={form.image_url as string || ""} onChange={handleChange} className="mt-1 w-full rounded-lg border border-white/10 bg-slate-950/90 px-3 py-2 text-white" />

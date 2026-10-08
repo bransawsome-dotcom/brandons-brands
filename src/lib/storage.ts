@@ -13,6 +13,7 @@ import {
   type WishlistItem,
   AUTO_FILL_FIELDS,
   WISHLIST_AUTO_FILL_FIELDS,
+  PROVENANCE_FIELDS,
 } from "@/lib/localData";
 
 // Upserts watch rows. If the database doesn't have the auto-fill columns yet,
@@ -21,15 +22,21 @@ async function upsertWatchRows(rows: Record<string, unknown>[]) {
   if (!supabase) return null;
   const { error } = await supabase.from("watches").upsert(rows, { onConflict: "id" });
   if (!error) return null;
-  const missingColumn = error.code === "PGRST204" || /column/i.test(error.message);
-  if (!missingColumn) return error;
-  const stripped = rows.map((row) => {
-    const copy = { ...row };
-    for (const field of AUTO_FILL_FIELDS) delete copy[field];
-    return copy;
-  });
-  const retry = await supabase.from("watches").upsert(stripped, { onConflict: "id" });
-  return retry.error;
+  let lastError = error;
+  // Drop newer optional columns step by step until the save goes through.
+  for (const fields of [PROVENANCE_FIELDS, [...PROVENANCE_FIELDS, ...AUTO_FILL_FIELDS]] as readonly (readonly string[])[]) {
+    const missingColumn = lastError.code === "PGRST204" || /column/i.test(lastError.message);
+    if (!missingColumn) return lastError;
+    const stripped = rows.map((row) => {
+      const copy = { ...row };
+      for (const field of fields) delete copy[field];
+      return copy;
+    });
+    const retry = await supabase.from("watches").upsert(stripped, { onConflict: "id" });
+    if (!retry.error) return null;
+    lastError = retry.error;
+  }
+  return lastError;
 }
 
 export async function loadCollectionData(userId?: string | null): Promise<Watch[]> {

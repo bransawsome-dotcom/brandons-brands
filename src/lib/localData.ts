@@ -19,7 +19,41 @@ export type Watch = {
   value_updated_at?: string;
   // Specs, value range, summary and price sources from auto-fill.
   details?: import("@/lib/watchAiClient").WatchDetails | null;
+  // Box & papers / third-party authentication.
+  has_box?: boolean | null;
+  has_papers?: boolean | null;
+  authenticated?: boolean | null;
+  authenticated_by?: string | null;
 };
+
+// Box & papers columns. If the database doesn't have them yet, saves retry without them.
+export const PROVENANCE_FIELDS = ["has_box", "has_papers", "authenticated", "authenticated_by"] as const;
+
+// Who commonly authenticates pre-owned watches. Free typing is allowed for anyone else.
+export const AUTHENTICATORS = [
+  "Chrono24 Certified",
+  "eBay Authenticity Guarantee",
+  "WatchBox / The 1916 Company",
+  "Bob's Watches",
+  "Crown & Caliber",
+  "Watchfinder & Co.",
+  "WatchCSA",
+  "Analog/Shift",
+  "Brand service center",
+  "Independent watchmaker",
+];
+
+// Short label like "Box & papers", "Papers only", "Authenticated by Chrono24 Certified".
+export function provenanceLabels(w: Pick<Watch, "has_box" | "has_papers" | "authenticated" | "authenticated_by">): string[] {
+  const labels: string[] = [];
+  if (w.has_box && w.has_papers) labels.push("Box & papers");
+  else if (w.has_box) labels.push("Box only");
+  else if (w.has_papers) labels.push("Papers only");
+  if (w.authenticated || w.authenticated_by) {
+    labels.push(w.authenticated_by ? `Authenticated by ${w.authenticated_by}` : "Third-party authenticated");
+  }
+  return labels;
+}
 
 // Columns added for auto-fill. If the database doesn't have them yet, saves retry without them.
 export const AUTO_FILL_FIELDS = ["retail_price", "current_retail_price", "value_updated_at", "details"] as const;
