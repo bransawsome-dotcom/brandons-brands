@@ -73,17 +73,31 @@ export function buildSubjectTree(custom: CustomSubject[]): SubjectTree {
     .filter((c) => !c.parent)
     .map((c) => ({ slug: c.slug, name: c.name, icon: "🗨️", parent: null, community: true, description: c.description, created_by: c.created_by }))
     .sort((a, b) => a.name.localeCompare(b.name));
-  const clubs = custom
-    .filter((c) => c.parent === CLUBS_FOLDER)
-    .map((c) => ({ slug: c.slug, name: c.name, icon: "📍", parent: CLUBS_FOLDER, community: true, description: c.description, created_by: c.created_by }))
-    .sort((a, b) => a.name.localeCompare(b.name));
+  // Member-added sub-folders can sit under any subject (clubs under Watch Clubs & Meetups,
+  // extra brands under Watch Brands, topics under Suggestions, and so on).
+  const subs: SubjectNode[] = custom
+    .filter((c) => c.parent)
+    .map((c) => ({
+      slug: c.slug,
+      name: c.name,
+      icon: c.parent === CLUBS_FOLDER ? "📍" : c.parent === BRANDS_FOLDER ? "⌚" : "📁",
+      parent: c.parent,
+      community: true,
+      description: c.description,
+      created_by: c.created_by,
+    }));
   const top = [...BUILT_IN, ...communityTop];
-  const children = new Map<string, SubjectNode[]>([
-    [BRANDS_FOLDER, BRAND_NODES],
-    [CLUBS_FOLDER, clubs],
-  ]);
+  const children = new Map<string, SubjectNode[]>([[BRANDS_FOLDER, [...BRAND_NODES]]]);
+  for (const sub of subs) children.set(sub.parent!, [...(children.get(sub.parent!) ?? []), sub]);
+  for (const [parent, list] of children) {
+    // Keep the brand list alphabetical with Miscellaneous last; everything else alphabetical.
+    children.set(
+      parent,
+      [...list].sort((a, b) => (a.slug.endsWith("/misc") ? 1 : 0) - (b.slug.endsWith("/misc") ? 1 : 0) || a.name.localeCompare(b.name)),
+    );
+  }
   const bySlug = new Map<string, SubjectNode>();
-  for (const n of [...top, ...BRAND_NODES, ...clubs]) bySlug.set(n.slug, n);
+  for (const n of [...top, ...BRAND_NODES, ...subs]) bySlug.set(n.slug, n);
   return { top, children, bySlug };
 }
 
@@ -120,9 +134,12 @@ export async function createSubject(input: { name: string; parent: string | null
   if (name.length < 2 || name.length > 50) throw new Error("Subject names need 2–50 characters.");
   const base = slugify(name);
   if (base.length < 2) throw new Error("Use letters or numbers in the subject name.");
-  const slug = input.parent === CLUBS_FOLDER ? `${CLUBS_FOLDER}/${base}` : `c-${base}`;
-  const builtInNames = [...BUILT_IN, ...BRAND_NODES].map((n) => n.name.toLowerCase());
-  if (!input.parent && builtInNames.includes(name.toLowerCase())) throw new Error(`"${name}" already exists. Pick it from the list.`);
+  if (input.parent && input.parent.includes("/")) throw new Error("Sub-folders can only be added to a main subject.");
+  const slug = input.parent ? `${input.parent}/${base}` : `c-${base}`;
+  const builtInNames = (input.parent ? BRAND_NODES.filter((n) => n.parent === input.parent) : BUILT_IN).map((n) => n.name.toLowerCase());
+  if (builtInNames.includes(name.toLowerCase()) || BRAND_NODES.some((n) => n.slug === slug)) {
+    throw new Error(`"${name}" already exists. Pick it from the list.`);
+  }
   const { data, error } = await db()
     .from("forum_subjects")
     .insert({ slug, name, parent: input.parent, description: input.description?.trim() || null })

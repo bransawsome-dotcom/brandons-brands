@@ -47,12 +47,13 @@ export default function ForumHome() {
   const [sort, setSort] = useState<"active" | "new" | "popular">("active");
   const [composing, setComposing] = useState(false);
   const [draft, setDraft] = useState({ subject: "general", title: "", body: "" });
-  const [newSubject, setNewSubject] = useState({ name: "", kind: "subject" as "subject" | "club", description: "" });
+  const [newSubject, setNewSubject] = useState({ name: "", kind: "subject" as "subject" | "sub", parent: CLUBS_FOLDER as string, description: "" });
   const [posting, setPosting] = useState(false);
   const [postError, setPostError] = useState<string | null>(null);
   const [showAllBrands, setShowAllBrands] = useState(false);
   const [moderator, setModerator] = useState(false);
-  const [addingClub, setAddingClub] = useState(false);
+  // Which main subject the "+ Add a sub-folder" form is adding to (null = closed).
+  const [addingTo, setAddingTo] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<Favorite[]>([]);
   const [favBusy, setFavBusy] = useState(false);
 
@@ -139,16 +140,16 @@ export default function ForumHome() {
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
   };
 
-  // The folder currently open (Watch Brands / Watch Clubs), if any.
-  const openFolder = subject ? (tree.bySlug.get(subject)?.folder ? subject : parentOf(subject)) : null;
+  // The main subject currently open (its sub-folders are shown), if any.
+  const openFolder = subject ? parentOf(subject) ?? subject : null;
+  const openFolderName = openFolder ? describeSubject(tree, openFolder).node.name : "";
 
-  const openComposer = (preset?: { club?: boolean }) => {
+  const openComposer = () => {
     let start = draft.subject;
-    if (preset?.club) start = NEW_SUBJECT;
-    else if (subject === BRANDS_FOLDER) start = `${BRANDS_FOLDER}/misc`;
+    if (subject === BRANDS_FOLDER) start = `${BRANDS_FOLDER}/misc`;
     else if (subject) start = subject;
     setDraft((d) => ({ ...d, subject: start }));
-    if (preset?.club) setNewSubject((n) => ({ ...n, kind: "club" }));
+    if (openFolder) setNewSubject((n) => ({ ...n, parent: openFolder }));
     setComposing(true);
     setPostError(null);
     setTimeout(() => document.getElementById("new-post")?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
@@ -165,7 +166,7 @@ export default function ForumHome() {
       if (subjectSlug === NEW_SUBJECT) {
         const created = await createSubject({
           name: newSubject.name,
-          parent: newSubject.kind === "club" ? CLUBS_FOLDER : null,
+          parent: newSubject.kind === "sub" ? newSubject.parent : null,
           description: newSubject.description,
         });
         subjectSlug = created.slug;
@@ -173,7 +174,7 @@ export default function ForumHome() {
       }
       const created = await createPost({ ...draft, subject: subjectSlug, author_name: authorName });
       setDraft({ subject: subjectSlug, title: "", body: "" });
-      setNewSubject({ name: "", kind: "subject", description: "" });
+      setNewSubject({ name: "", kind: "subject", parent: CLUBS_FOLDER, description: "" });
       setComposing(false);
       router.push(`/forum/${created.id}`);
     } catch (err) {
@@ -183,12 +184,13 @@ export default function ForumHome() {
     }
   };
 
-  // "+ Add a club" opens a small form that creates the club's sub-folder right away (no post needed).
-  const startAddClub = () => {
-    if (openFolder !== CLUBS_FOLDER) chooseSubject(CLUBS_FOLDER);
-    setAddingClub(true);
-    setTimeout(() => document.getElementById("add-club")?.scrollIntoView({ behavior: "smooth", block: "center" }), 50);
+  // "+ Add a sub-folder" (or "+ Add a club") opens a small form that creates the sub-folder right away.
+  const startAddSubfolder = (parent: string) => {
+    if (openFolder !== parent) chooseSubject(parent);
+    setAddingTo(parent);
+    setTimeout(() => document.getElementById("add-subfolder")?.scrollIntoView({ behavior: "smooth", block: "center" }), 50);
   };
+  const addLabel = (parent: string) => (parent === CLUBS_FOLDER ? "+ Add a club" : parent === BRANDS_FOLDER ? "+ Add a brand" : "+ Add a sub-folder");
 
   const removeSubject = async (node: SubjectNode) => {
     if (!window.confirm(`Remove "${node.name}"? This only works when it has no posts.`)) return;
@@ -276,11 +278,11 @@ export default function ForumHome() {
 
                   {draft.subject === NEW_SUBJECT ? (
                     <div className="grid gap-3 rounded-2xl border border-[#D9A43A]/30 bg-[#D9A43A]/5 p-4">
-                      <p className="text-sm font-semibold text-white">Add a new subject</p>
+                      <p className="text-sm font-semibold text-white">Add a new subject or sub-folder</p>
                       <div className="flex flex-wrap gap-2">
                         {[
-                          { key: "subject" as const, label: "New subject" },
-                          { key: "club" as const, label: "New club (sub-folder of Watch Clubs & Meetups)" },
+                          { key: "subject" as const, label: "New main subject" },
+                          { key: "sub" as const, label: "New sub-folder inside a subject" },
                         ].map((o) => (
                           <button
                             key={o.key}
@@ -295,15 +297,33 @@ export default function ForumHome() {
                           </button>
                         ))}
                       </div>
+                      {newSubject.kind === "sub" ? (
+                        <label className="space-y-1 text-xs text-slate-300">
+                          Put it inside
+                          <select value={newSubject.parent} onChange={(e) => setNewSubject({ ...newSubject, parent: e.target.value })} className={input}>
+                            {tree.top.map((t) => (
+                              <option key={t.slug} value={t.slug}>
+                                {t.icon} {t.name}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                      ) : null}
                       <input
                         value={newSubject.name}
                         onChange={(e) => setNewSubject({ ...newSubject, name: e.target.value })}
                         maxLength={50}
                         required
-                        placeholder={newSubject.kind === "club" ? "Club name, e.g. NJ Watch Collectors" : "Subject name, e.g. Watch Photography"}
+                        placeholder={
+                          newSubject.kind === "sub"
+                            ? newSubject.parent === CLUBS_FOLDER
+                              ? "Club name, e.g. NJ Watch Collectors"
+                              : "Sub-folder name, e.g. Dive Watches"
+                            : "Subject name, e.g. Watch Photography"
+                        }
                         className={input}
                       />
-                      {newSubject.kind === "club" ? (
+                      {newSubject.kind === "sub" && newSubject.parent === CLUBS_FOLDER ? (
                         <input
                           value={newSubject.description}
                           onChange={(e) => setNewSubject({ ...newSubject, description: e.target.value })}
@@ -313,9 +333,9 @@ export default function ForumHome() {
                         />
                       ) : null}
                       <p className="text-xs text-slate-400">
-                        {newSubject.kind === "club"
-                          ? "Creates a folder for your club under Watch Clubs & Meetups. Your post will be its first discussion."
-                          : "Creates a new subject everyone can post in. Your post will be its first discussion."}
+                        {newSubject.kind === "sub"
+                          ? `Creates a new sub-folder inside ${describeSubject(tree, newSubject.parent).node.name}. Your post will be its first discussion.`
+                          : "Creates a new main subject everyone can post in. Your post will be its first discussion."}
                       </p>
                     </div>
                   ) : null}
@@ -400,9 +420,9 @@ export default function ForumHome() {
             {subjectButton({ slug: "", name: "All discussions", icon: "🗂️" })}
             {tree.top.map((s) => (
               <div key={s.slug} className="contents lg:flex lg:flex-col lg:gap-2">
-                {subjectButton({ ...s, icon: s.folder ? `${openFolder === s.slug ? "📂" : "📁"}` : s.icon })}
-                {/* On large screens the open folder shows its sub-folders right under it. */}
-                {s.folder && openFolder === s.slug ? (
+                {subjectButton({ ...s, icon: s.folder || tree.children.get(s.slug)?.length ? `${openFolder === s.slug ? "📂" : "📁"}` : s.icon })}
+                {/* On large screens the open subject shows its sub-folders right under it. */}
+                {openFolder === s.slug ? (
                   <div className="hidden lg:flex lg:flex-col lg:gap-2">
                     {shownChildren.map((c) => subjectButton(c, { indent: true }))}
                     {openFolder === BRANDS_FOLDER && shownChildren.length < sortedFolderChildren.length ? (
@@ -410,11 +430,9 @@ export default function ForumHome() {
                         Show all {sortedFolderChildren.length} brands
                       </button>
                     ) : null}
-                    {openFolder === CLUBS_FOLDER ? (
-                      <button type="button" onClick={() => startAddClub()} className="ml-5 text-left text-xs font-semibold text-[#D9A43A] hover:text-[#e1b54a]">
-                        + Add a club
-                      </button>
-                    ) : null}
+                    <button type="button" onClick={() => startAddSubfolder(s.slug)} className="ml-5 text-left text-xs font-semibold text-[#D9A43A] hover:text-[#e1b54a]">
+                      {addLabel(s.slug)}
+                    </button>
                   </div>
                 ) : null}
               </div>
@@ -490,31 +508,31 @@ export default function ForumHome() {
                   All {sortedFolderChildren.length} brands…
                 </button>
               ) : null}
-              {openFolder === CLUBS_FOLDER ? (
-                <button type="button" onClick={() => startAddClub()} className="rounded-full px-3 py-1.5 text-xs font-semibold text-[#D9A43A]">
-                  + Add a club
-                </button>
-              ) : null}
+              <button type="button" onClick={() => startAddSubfolder(openFolder)} className="rounded-full px-3 py-1.5 text-xs font-semibold text-[#D9A43A]">
+                {addLabel(openFolder)}
+              </button>
             </div>
           ) : null}
 
-          {addingClub ? (
-            <AddClubForm
+          {addingTo ? (
+            <AddSubfolderForm
+              parent={addingTo}
+              parentName={describeSubject(tree, addingTo).node.name}
               signedIn={Boolean(user)}
-              onCancel={() => setAddingClub(false)}
+              onCancel={() => setAddingTo(null)}
               onAdded={async (slug) => {
                 await reloadSubjects();
-                setAddingClub(false);
+                setAddingTo(null);
                 chooseSubject(slug);
               }}
             />
           ) : null}
 
-          {!addingClub && openFolder === CLUBS_FOLDER && subject === CLUBS_FOLDER && !(tree.children.get(CLUBS_FOLDER) ?? []).length ? (
+          {!addingTo && openFolder === CLUBS_FOLDER && subject === CLUBS_FOLDER && !(tree.children.get(CLUBS_FOLDER) ?? []).length ? (
             <div className="mb-4 rounded-[1.5rem] border border-[#D9A43A]/30 bg-[#D9A43A]/5 p-5 text-sm text-slate-300">
               <p className="font-semibold text-white">No clubs yet.</p>
               <p className="mt-1">Belong to a watch club or meetup group? Add it as its own folder here so members can find events and chat.</p>
-              <button type="button" onClick={() => startAddClub()} className="mt-3 rounded-full bg-[#D9A43A] px-4 py-2 text-xs font-semibold text-black hover:bg-[#e1b54a]">
+              <button type="button" onClick={() => startAddSubfolder(CLUBS_FOLDER)} className="mt-3 rounded-full bg-[#D9A43A] px-4 py-2 text-xs font-semibold text-black hover:bg-[#e1b54a]">
                 + Add a club
               </button>
             </div>
@@ -573,7 +591,7 @@ export default function ForumHome() {
 const STEPS = [
   { title: "Log in or join", text: "Reading is open to everyone. To post or reply, log in or create a free account." },
   { title: "Tap + New post", text: "The first time, choose your forum name. It's what everyone sees, and your email stays private." },
-  { title: "Pick a subject and post", text: "Choose a subject, brand or club. Not listed? Add a new subject, or tap + Add a club under Watch Clubs & Meetups." },
+  { title: "Pick a subject and post", text: "Choose a subject, brand or club. Not listed? Add a new subject, or open any subject and tap + Add a sub-folder (or + Add a club)." },
   { title: "Favorite and follow", text: "Tap ☆ Add to favorites on any folder to pin it and get inbox alerts for new posts, replies and clubs. Follow single discussions too." },
 ];
 
@@ -637,8 +655,22 @@ function GettingStarted({ onNewPost }: { onNewPost: () => void }) {
   );
 }
 
-// Adds a club as a new sub-folder under Watch Clubs & Meetups.
-function AddClubForm({ signedIn, onCancel, onAdded }: { signedIn: boolean; onCancel: () => void; onAdded: (slug: string) => Promise<void> }) {
+// Adds a new sub-folder inside a main subject (a club under Watch Clubs & Meetups, a brand under Watch Brands, etc.).
+function AddSubfolderForm({
+  parent,
+  parentName,
+  signedIn,
+  onCancel,
+  onAdded,
+}: {
+  parent: string;
+  parentName: string;
+  signedIn: boolean;
+  onCancel: () => void;
+  onAdded: (slug: string) => Promise<void>;
+}) {
+  const isClub = parent === CLUBS_FOLDER;
+  const thing = isClub ? "club" : parent === BRANDS_FOLDER ? "brand" : "sub-folder";
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [busy, setBusy] = useState(false);
@@ -649,19 +681,22 @@ function AddClubForm({ signedIn, onCancel, onAdded }: { signedIn: boolean; onCan
     setBusy(true);
     setError(null);
     try {
-      const created = await createSubject({ name, parent: CLUBS_FOLDER, description });
+      const created = await createSubject({ name, parent, description });
       await onAdded(created.slug);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Couldn't add that club.");
+      setError(err instanceof Error ? err.message : `Couldn't add that ${thing}.`);
     } finally {
       setBusy(false);
     }
   };
 
   return (
-    <div id="add-club" className="mb-4 rounded-[1.5rem] border border-[#D9A43A]/30 bg-[#D9A43A]/5 p-5 text-sm">
-      <p className="font-semibold text-white">Add a club</p>
-      <p className="mt-1 text-slate-400">Creates a new sub-folder under Watch Clubs &amp; Meetups for your club&apos;s events and chat.</p>
+    <div id="add-subfolder" className="mb-4 rounded-[1.5rem] border border-[#D9A43A]/30 bg-[#D9A43A]/5 p-5 text-sm">
+      <p className="font-semibold text-white">Add a {thing}</p>
+      <p className="mt-1 text-slate-400">
+        Creates a new sub-folder inside {parentName}
+        {isClub ? " for your club's events and chat." : " that everyone can post in."}
+      </p>
       {!signedIn ? (
         <p className="mt-3 text-slate-300">
           <Link href="/login" className="font-semibold text-[#D9A43A]">
@@ -671,7 +706,7 @@ function AddClubForm({ signedIn, onCancel, onAdded }: { signedIn: boolean; onCan
           <Link href="/signup" className="font-semibold text-[#D9A43A]">
             create a free account
           </Link>{" "}
-          to add a club.
+          to add a {thing}.
         </p>
       ) : (
         <form onSubmit={submit} className="mt-3 grid gap-3">
@@ -681,20 +716,20 @@ function AddClubForm({ signedIn, onCancel, onAdded }: { signedIn: boolean; onCan
             maxLength={50}
             required
             autoFocus
-            placeholder="Club name, e.g. NJ Watch Collectors"
+            placeholder={isClub ? "Club name, e.g. NJ Watch Collectors" : parent === BRANDS_FOLDER ? "Brand name" : "Sub-folder name, e.g. Dive Watches"}
             className={input}
           />
           <input
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             maxLength={300}
-            placeholder="Optional: where and when you meet, e.g. Hoboken, first Saturday monthly"
+            placeholder={isClub ? "Optional: where and when you meet, e.g. Hoboken, first Saturday monthly" : "Optional: a short description"}
             className={input}
           />
           {error ? <p className="text-rose-300">{error}</p> : null}
           <div className="flex gap-3">
             <button type="submit" disabled={busy} className="rounded-full bg-[#D9A43A] px-5 py-2.5 text-sm font-semibold text-black hover:bg-[#e1b54a] disabled:opacity-60">
-              {busy ? "Adding…" : "Add club"}
+              {busy ? "Adding…" : `Add ${thing}`}
             </button>
             <button type="button" onClick={onCancel} className="rounded-full border border-white/15 px-5 py-2.5 text-sm text-slate-200 hover:bg-white/5">
               Cancel

@@ -18,7 +18,7 @@ export function useSubjectTree(): { tree: SubjectTree; reload: () => Promise<voi
 
 export const NEW_SUBJECT = "__new";
 
-// Grouped subject picker: plain subjects, then Watch Brands and Watch Clubs sub-folders.
+// Subject picker: each main subject, with its sub-folders listed underneath it.
 export function SubjectSelect({
   tree,
   value,
@@ -32,36 +32,38 @@ export function SubjectSelect({
   allowNew?: boolean;
   className?: string;
 }) {
-  const plain = tree.top.filter((n) => !n.folder);
-  const brands = tree.children.get(BRANDS_FOLDER) ?? [];
-  const clubs = tree.children.get(CLUBS_FOLDER) ?? [];
   return (
     <select value={value} onChange={(e) => onChange(e.target.value)} className={className}>
-      <optgroup label="Subjects">
-        {plain.map((s) => (
-          <option key={s.slug} value={s.slug}>
-            {s.icon} {s.name}
-          </option>
-        ))}
-      </optgroup>
-      <optgroup label="Watch Brands">
-        {brands.map((s) => (
-          <option key={s.slug} value={s.slug}>
-            {s.name}
-          </option>
-        ))}
-      </optgroup>
-      <optgroup label="Watch Clubs & Meetups">
-        <option value={CLUBS_FOLDER}>General clubs &amp; meetups</option>
-        {clubs.map((s) => (
-          <option key={s.slug} value={s.slug}>
-            {s.name}
-          </option>
-        ))}
-      </optgroup>
+      {tree.top.map((s) => {
+        const kids = tree.children.get(s.slug) ?? [];
+        if (!kids.length) {
+          return (
+            <option key={s.slug} value={s.slug}>
+              {s.icon} {s.name}
+            </option>
+          );
+        }
+        return (
+          <optgroup key={s.slug} label={s.name}>
+            {/* Watch Brands posts go into a brand (or Miscellaneous); other subjects can also take posts directly. */}
+            {s.slug !== BRANDS_FOLDER ? (
+              <option value={s.slug}>
+                {s.icon} {s.name}
+                {s.slug === CLUBS_FOLDER ? " (general)" : ""}
+              </option>
+            ) : null}
+            {kids.map((k) => (
+              <option key={k.slug} value={k.slug}>
+                {"\u00A0\u00A0\u21B3 "}
+                {k.name}
+              </option>
+            ))}
+          </optgroup>
+        );
+      })}
       {allowNew ? (
         <optgroup label="Not listed?">
-          <option value={NEW_SUBJECT}>+ Add a new subject or club…</option>
+          <option value={NEW_SUBJECT}>+ Add a new subject or sub-folder…</option>
         </optgroup>
       ) : null}
     </select>
