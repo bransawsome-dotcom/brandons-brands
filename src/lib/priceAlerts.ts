@@ -66,8 +66,12 @@ const listingSchema = {
           location: { type: "string", description: "Where the watch/seller is located (city, state/region, country) as shown, else empty string" },
           condition: { type: "string", description: "e.g. New/unworn, Pre-owned excellent; empty if not shown" },
           box_papers: { type: "string", description: "e.g. 'Box & papers', 'Papers only', 'Watch only'; empty if not shown" },
+          verified_active: {
+            type: "boolean",
+            description: "true only if you opened this listing page with web_fetch just now and it is still for sale at this price (not ended, sold, out of stock or redirected to another item)",
+          },
         },
-        required: ["title", "url", "price", "currency", "price_usd", "seller", "marketplace", "location", "condition", "box_papers"],
+        required: ["title", "url", "price", "currency", "price_usd", "seller", "marketplace", "location", "condition", "box_papers", "verified_active"],
       },
     },
   },
@@ -84,22 +88,27 @@ export async function findListings(item: AlertItem, target: number, signal?: Abo
     `Search marketplaces and dealers (for example Chrono24, eBay, WatchBox, Bob's Watches, Crown & Caliber, Jomashop, authorized and reputable pre-owned dealers).`,
     `Only include listings that are available right now, are this exact watch${item.reference_number ? " and reference" : ""}, show a real asking price, and cost ${target} USD or less after converting to USD.`,
     `Exclude sold or ended listings, "price on request", auctions without a buy-now price, parts, replicas, straps or accessories.`,
-    `Report at most 5 of the cheapest matching listings with the record_listings tool, giving each listing's own page URL exactly as found. If nothing matches, call record_listings with an empty list.`,
+    `Search results are often out of date: listings that ended or sold months ago still appear. Before reporting a listing, open its page with web_fetch and keep it only if the page shows it is still for sale (not "Ended", "Sold", "no longer available", out of stock, or redirected to a different item). Use the price and details shown on the page itself.`,
+    `Report at most 5 of the cheapest verified listings with the record_listings tool, giving each listing's own page URL. If nothing matches, call record_listings with an empty list.`,
   ].join("\n");
 
   const tools = [
     { type: "web_search_20250305" as const, name: "web_search" as const, max_uses: 5 },
+    { type: "web_fetch_20250910" as const, name: "web_fetch" as const, max_uses: 8, max_content_tokens: 6000 },
     { name: "record_listings", description: "Record matching listings for sale.", input_schema: listingSchema },
   ];
   const messages: Anthropic.MessageParam[] = [{ role: "user", content: prompt }];
-  for (let turn = 0; turn < 4; turn++) {
-    const response = await anthropic.messages.create({ model: MODEL, max_tokens: 3000, tools, messages }, { signal });
+  for (let turn = 0; turn < 5; turn++) {
+    const response = await anthropic.messages.create({ model: MODEL, max_tokens: 4000, tools, messages }, { signal });
     const recorded = response.content.find(
       (b): b is Anthropic.ToolUseBlock => b.type === "tool_use" && b.name === "record_listings",
     );
     if (recorded) {
-      const raw = (recorded.input as { listings?: Listing[] }).listings ?? [];
-      return cleanListings(raw, target);
+      const raw = (recorded.input as { listings?: (Listing & { verified_active?: boolean })[] }).listings ?? [];
+      const cleaned = cleanListings(raw.filter((l) => l.verified_active !== false), target);
+      // Double-check each link ourselves; drop anything that has ended, sold or redirected.
+      const live = await Promise.all(cleaned.map((l) => stillListed(l.url)));
+      return cleaned.filter((_, i) => live[i] !== false);
     }
     messages.push({ role: "assistant", content: response.content });
     if (response.stop_reason !== "pause_turn") {
@@ -107,6 +116,50 @@ export async function findListings(item: AlertItem, target: number, signal?: Abo
     }
   }
   return [];
+}
+
+const GONE_TEXT =
+  /\bENDED\b|This listing (has|was) ended|listing (has )?ended|no longer available|item (is|has been) sold|\bSOLD OUT\b|out of stock|this item is unavailable|watch (has been|was) sold/i;
+
+// Is this listing page still up? true = looks live, false = ended/sold/redirected, null = couldn't tell.
+export async function stillListed(url: string): Promise<boolean | null> {
+  try {
+    const res = await fetch(url, {
+      redirect: "manual",
+      signal: AbortSignal.timeout(8000),
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0 Safari/537.36",
+        Accept: "text/html",
+      },
+    });
+    if (res.status === 404 || res.status === 410) return false;
+    if (res.status >= 300 && res.status < 400) {
+      const to = res.headers.get("location") ?? "";
+      try {
+        const a = new URL(url);
+        const b = new URL(to, url);
+        // Same page (e.g. adding "www." or a trailing slash) is fine; anywhere else means it's gone.
+        const norm = (u: URL) => u.hostname.replace(/^www\./, "") + u.pathname.replace(/\/$/, "");
+        if (norm(a) === norm(b)) return null;
+      } catch {
+        /* fall through */
+      }
+      return false;
+    }
+    if (!res.ok) return null; // blocked or rate-limited: can't tell
+    const html = (await res.text()).slice(0, 400_000);
+    // eBay ended/sold pages are explicit; for other sites only trust strong phrases.
+    // Only the visible text: drop scripts/styles first so hidden page data can't trigger a false "ended".
+    const visible = html
+      .replace(/<(script|style|noscript)[\s\S]*?<\/\1>/gi, " ")
+      .replace(/<[^>]+>/g, " ")
+      .replace(/\s+/g, " ")
+      .slice(0, 20_000);
+    if (GONE_TEXT.test(visible)) return false;
+    return true;
+  } catch {
+    return null;
+  }
 }
 
 function cleanListings(raw: Listing[], target: number): Listing[] {
@@ -150,6 +203,7 @@ export async function checkItem(db: SupabaseClient, item: AlertItem, signal?: Ab
   const target = targetOf(item);
   if (!target) return { id: item.id, found: 0, added: 0, error: "No target price" };
   try {
+    await pruneEnded(db, item);
     const listings = await findListings(item, target, signal);
     let added: Listing[] = [];
     if (listings.length) {
@@ -170,6 +224,16 @@ export async function checkItem(db: SupabaseClient, item: AlertItem, signal?: Ab
     await db.from("wishlist").update({ alert_checked_at: new Date().toISOString() }).eq("id", item.id).eq("user_id", item.user_id);
     return { id: item.id, found: 0, added: 0, error: err instanceof Error ? err.message.slice(0, 200) : "error" };
   }
+}
+
+// Remove saved listings that have since ended, sold or disappeared.
+async function pruneEnded(db: SupabaseClient, item: AlertItem) {
+  const { data } = await db.from("price_alert_matches").select("id,url").eq("wishlist_id", String(item.id)).eq("user_id", item.user_id);
+  const rows = (data ?? []) as { id: string; url: string }[];
+  if (!rows.length) return;
+  const checks = await Promise.all(rows.map((r) => stillListed(r.url)));
+  const gone = rows.filter((_, i) => checks[i] === false).map((r) => r.id);
+  if (gone.length) await db.from("price_alert_matches").delete().in("id", gone);
 }
 
 function describe(l: Listing): string {
