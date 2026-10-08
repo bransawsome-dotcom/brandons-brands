@@ -339,6 +339,7 @@ export default function CollectionPage() {
                     src={lookup.image_url}
                     alt={`${lookup.brand} ${lookup.model}`}
                     referrerPolicy="no-referrer"
+                    onError={(e) => { e.currentTarget.style.display = "none"; }}
                     className="h-24 w-24 shrink-0 rounded-2xl bg-white object-contain p-1 sm:h-28 sm:w-28"
                   />
                 ) : null}
@@ -556,7 +557,7 @@ export default function CollectionPage() {
                   <div className="flex flex-col relative z-10">
                     <div className="h-[220px] w-full bg-slate-950/90 overflow-hidden md:h-64">
                       {watch.image_url ? (
-                        <img src={watch.image_url} referrerPolicy="no-referrer" alt={`${watch.brand} ${watch.model}`} className="h-full w-full object-cover" />
+                        <img src={watch.image_url} referrerPolicy="no-referrer" onError={(e) => { e.currentTarget.style.visibility = "hidden"; }} alt={`${watch.brand} ${watch.model}`} className="h-full w-full object-cover" />
                       ) : (
                         <div className="flex h-full items-center justify-center text-slate-400">No image</div>
                       )}
@@ -630,7 +631,7 @@ export default function CollectionPage() {
                   <div className="relative z-10 flex items-center gap-4 p-3 sm:p-4 pointer-events-none">
                     <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-slate-950/90 sm:h-20 sm:w-20">
                       {watch.image_url ? (
-                        <img src={watch.image_url} referrerPolicy="no-referrer" alt={`${watch.brand} ${watch.model}`} className="h-full w-full object-cover" />
+                        <img src={watch.image_url} referrerPolicy="no-referrer" onError={(e) => { e.currentTarget.style.visibility = "hidden"; }} alt={`${watch.brand} ${watch.model}`} className="h-full w-full object-cover" />
                       ) : (
                         <div className="flex h-full items-center justify-center text-[10px] text-slate-500">No image</div>
                       )}
@@ -695,7 +696,7 @@ export default function CollectionPage() {
               <div className="grid gap-6 lg:grid-cols-2">
                 <div className="h-80 bg-slate-950/90 overflow-hidden rounded-lg">
                   {selectedWatch.image_url ? (
-                    <img src={selectedWatch.image_url} referrerPolicy="no-referrer" alt={`${selectedWatch.brand} ${selectedWatch.model}`} className="h-full w-full object-cover" />
+                    <img src={selectedWatch.image_url} referrerPolicy="no-referrer" onError={(e) => { e.currentTarget.style.visibility = "hidden"; }} alt={`${selectedWatch.brand} ${selectedWatch.model}`} className="h-full w-full object-cover" />
                   ) : (
                     <div className="flex h-full items-center justify-center text-slate-400">No image</div>
                   )}

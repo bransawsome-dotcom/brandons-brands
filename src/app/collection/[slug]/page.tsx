@@ -127,7 +127,7 @@ export default function WatchDetailsPage() {
         <div className="grid gap-6 lg:grid-cols-2">
           <div className="h-96 w-full overflow-hidden rounded-lg bg-slate-950/90">
             {watch.image_url ? (
-              <img src={watch.image_url} referrerPolicy="no-referrer" alt={`${watch.brand} ${watch.model}`} className="h-full w-full object-cover" />
+              <img src={watch.image_url} referrerPolicy="no-referrer" onError={(e) => { e.currentTarget.style.visibility = "hidden"; }} alt={`${watch.brand} ${watch.model}`} className="h-full w-full object-cover" />
             ) : (
               <div className="flex h-full items-center justify-center text-slate-400">No image</div>
             )}

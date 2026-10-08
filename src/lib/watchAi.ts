@@ -63,6 +63,7 @@ export type WatchLookup = {
   summary: string;
   sources: string[];
   official_page_url: string;
+  image_candidate?: string;
   // Filled in on the server from the official page (not by the model).
   image_url: string | null;
 };
@@ -93,11 +94,15 @@ const lookupSchema = {
       type: "string",
       description: "URL of the manufacturer's own product page for this exact model/reference (current version), found via search. Empty string if none.",
     },
+    image_candidate: {
+      type: "string",
+      description: "Direct URL of the main product photo from the official product page (its og:image, or the first product gallery image), as seen with web_fetch. Empty string if not found. Never invent one.",
+    },
   },
   required: [
     "brand", "model", "reference_number", "year_introduced", "case_size_mm", "case_material", "movement",
     "water_resistance", "retail_price_at_purchase", "retail_price_date_note", "current_retail_price",
-    "market_value", "market_value_low", "market_value_high", "summary", "sources", "official_page_url",
+    "market_value", "market_value_low", "market_value_high", "summary", "sources", "official_page_url", "image_candidate",
   ],
 };
 
@@ -116,11 +121,12 @@ export async function lookupWatch(input: {
     input.reference_number ? `Reference: ${input.reference_number}` : "",
     input.purchase_date ? `Purchased on: ${input.purchase_date}` : "Purchase date: unknown (use today's list price as the retail price).",
     `Today is ${today}.`,
-    `Use web search for prices: the manufacturer's list (retail) price at the purchase date, today's list price, and current pre-owned market prices (e.g. Chrono24, WatchCharts, recent sales). All prices in USD. Use null for anything you cannot find rather than guessing. Never invent a reference number. Also find the manufacturer's official product page for the current version of this model.`,
+    `Use web search for prices: the manufacturer's list (retail) price at the purchase date, today's list price, and current pre-owned market prices (e.g. Chrono24, WatchCharts, recent sales). All prices in USD. Use null for anything you cannot find rather than guessing. Never invent a reference number. Also find the manufacturer's official product page for the current version of this model, open it once with web_fetch, and report its main product photo URL as image_candidate.`,
   ].filter(Boolean).join("\n");
 
   const tools = [
     { type: "web_search_20250305" as const, name: "web_search" as const, max_uses: 5 },
+    { type: "web_fetch_20250910" as const, name: "web_fetch" as const, max_uses: 2, max_content_tokens: 12000 },
     { name: "record_watch", description: "Record the looked-up watch details and prices.", input_schema: lookupSchema },
   ];
 
@@ -133,7 +139,7 @@ export async function lookupWatch(input: {
     if (recorded) {
       const result = recorded.input as WatchLookup;
       const pages = [result.official_page_url, ...(result.sources ?? [])].filter(Boolean);
-      result.image_url = await findProductImage(pages);
+      result.image_url = (await findProductImage(pages)) ?? (await checkCandidateImage(result.image_candidate, result.official_page_url));
       return result;
     }
     // Long web searches can pause; continue the same turn. Otherwise ask it to record.
@@ -278,4 +284,21 @@ async function findProductImage(pages: string[]): Promise<string | null> {
     }
   }
   return null;
+}
+
+function registrableDomain(host: string): string {
+  return host.split(".").slice(-2).join(".");
+}
+
+// The model's reported photo URL. Accepted if the server can load it, or — when the
+// brand's site blocks servers — if it's hosted on the brand's own domain.
+async function checkCandidateImage(candidate: string | undefined, officialPage: string): Promise<string | null> {
+  if (!candidate || !candidate.startsWith("https://") || !isHttpUrl(candidate)) return null;
+  if (await isReachableImage(candidate)) return candidate;
+  try {
+    const sameBrand = registrableDomain(new URL(candidate).hostname) === registrableDomain(new URL(officialPage).hostname);
+    return sameBrand ? candidate : null;
+  } catch {
+    return null;
+  }
 }
