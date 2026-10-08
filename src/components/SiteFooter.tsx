@@ -4,7 +4,10 @@ export default function SiteFooter() {
   return (
     <footer className="mt-12 rounded-[2rem] border border-white/10 bg-white/5 px-5 py-6 backdrop-blur-xl sm:px-8">
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-        <div>
+        <div className="flex items-center gap-4">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo-256.webp" alt="Brandon's Brands logo" width={56} height={56} className="h-12 w-12 shrink-0 sm:h-14 sm:w-14" />
+          <div>
           <p className="text-xs uppercase tracking-[0.3em] text-blue-300">Follow Brandon&apos;s Brands</p>
           <p className="mt-2 text-sm text-slate-300">
             Collabs:{" "}
@@ -12,6 +15,7 @@ export default function SiteFooter() {
               {collabEmail}
             </a>
           </p>
+          </div>
         </div>
         <ul className="flex flex-wrap gap-2">
           {socials.map((s) => (
