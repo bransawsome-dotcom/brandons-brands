@@ -214,8 +214,9 @@ export async function scanCollectionImage(base64: string, mediaType: string): Pr
 // Reads the main product image (og:image / twitter:image) from the official page,
 // falling back to the price-source pages. Returns null if none can be verified.
 
-const PAGE_TIMEOUT_MS = 6000;
-const UA = "Mozilla/5.0 (compatible; BrandonsBrandsBot/1.0; +https://brandonsbrands17.com)";
+const PAGE_TIMEOUT_MS = 9000;
+// Many brand sites refuse requests that don't look like a normal browser.
+const UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0 Safari/537.36";
 
 function isHttpUrl(value: string): boolean {
   try {
@@ -230,7 +231,7 @@ async function fetchWithTimeout(url: string, init: RequestInit = {}): Promise<Re
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), PAGE_TIMEOUT_MS);
   try {
-    return await fetch(url, { ...init, signal: controller.signal, redirect: "follow", headers: { "User-Agent": UA, ...(init.headers ?? {}) } });
+    return await fetch(url, { ...init, signal: controller.signal, redirect: "follow", headers: { "User-Agent": UA, "Accept-Language": "en-US,en;q=0.9", ...(init.headers ?? {}) } });
   } catch {
     return null;
   } finally {
@@ -267,8 +268,8 @@ async function isReachableImage(url: string): Promise<boolean> {
 }
 
 async function findProductImage(pages: string[]): Promise<string | null> {
-  for (const page of pages.filter(isHttpUrl).slice(0, 4)) {
-    const res = await fetchWithTimeout(page, { headers: { Accept: "text/html" } });
+  for (const page of [...new Set(pages.filter(isHttpUrl))].slice(0, 5)) {
+    const res = await fetchWithTimeout(page, { headers: { Accept: "text/html,application/xhtml+xml" } });
     if (!res || !res.ok || !(res.headers.get("content-type") ?? "").includes("html")) continue;
     const html = (await res.text()).slice(0, 400_000);
     const image = extractImageUrl(html, res.url || page);
