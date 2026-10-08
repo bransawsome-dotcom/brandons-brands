@@ -5,6 +5,7 @@ import { clearGuestStorageData, loadCollectionData, loadWishlistData } from "@/l
 import { useRequireAuth } from "@/components/AuthProvider";
 import TextMessageSettings from "@/components/TextMessageSettings";
 import PriceAlertEmailSetting from "@/components/PriceAlertEmailSetting";
+import ChangePassword from "@/components/ChangePassword";
 import { forumName, saveForumName } from "@/lib/forum";
 import { accountName, saveAccountName } from "@/lib/account";
 import EditableNameRow from "@/components/EditableNameRow";
@@ -83,7 +84,7 @@ export default function AccountPage() {
                 <>
                   <EditableNameRow
                     label="Name or customer number"
-                    hint="Shown on your account"
+                    hint="Shown on your account and in public searches"
                     value={accountName(user)}
                     emptyText="Not set"
                     placeholder="e.g. Jane Smith or customer #1042"
@@ -109,6 +110,7 @@ export default function AccountPage() {
                 <span className="font-medium text-white">User ID</span>
                 <span className="min-w-0 break-all text-xs sm:text-right">{user?.id ?? "—"}</span>
               </div>
+              <ChangePassword />
               <div className="flex items-center justify-between rounded-3xl bg-white/5 px-4 py-3">
                 <span className="font-medium text-white">Auth</span>
                 <button

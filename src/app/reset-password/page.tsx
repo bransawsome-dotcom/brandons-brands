@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import supabase from "@/lib/supabaseClient";
+import PasswordInput from "@/components/PasswordInput";
 
 // The emailed reset link signs the person in for this one purpose; the Supabase
 // client picks the token up from the URL automatically (detectSessionInUrl).
@@ -92,8 +93,7 @@ export default function ResetPasswordPage() {
             <form onSubmit={handleSubmit} className="grid gap-6">
               <label className="space-y-2 text-sm text-slate-300">
                 New password
-                <input
-                  type="password"
+                <PasswordInput
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
                   required
@@ -104,8 +104,7 @@ export default function ResetPasswordPage() {
               </label>
               <label className="space-y-2 text-sm text-slate-300">
                 Confirm new password
-                <input
-                  type="password"
+                <PasswordInput
                   value={confirm}
                   onChange={(event) => setConfirm(event.target.value)}
                   required
