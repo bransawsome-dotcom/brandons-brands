@@ -74,12 +74,22 @@ const listingSchema = {
         required: ["title", "url", "price", "currency", "price_usd", "seller", "marketplace", "location", "condition", "box_papers", "verified_active"],
       },
     },
+    ended_previous: {
+      type: "array",
+      items: { type: "string" },
+      description: "URLs from the previously found listings that are no longer for sale (ended, sold, removed, or now redirect to a different page). Empty list if all are still for sale or none were given.",
+    },
   },
-  required: ["listings"],
+  required: ["listings", "ended_previous"],
 };
 
 // Search the web for current listings of this watch at or below the target price.
-export async function findListings(item: AlertItem, target: number, signal?: AbortSignal): Promise<Listing[]> {
+export async function findListings(
+  item: AlertItem,
+  target: number,
+  signal?: AbortSignal,
+  previous: string[] = [],
+): Promise<{ listings: Listing[]; ended: string[] }> {
   const anthropic = getAnthropic();
   const watch = `${item.brand} ${item.model}${item.reference_number ? ` (reference ${item.reference_number})` : ""}`;
   const prompt = [
@@ -90,11 +100,14 @@ export async function findListings(item: AlertItem, target: number, signal?: Abo
     `Exclude sold or ended listings, "price on request", auctions without a buy-now price, parts, replicas, straps or accessories.`,
     `Search results are often out of date: listings that ended or sold months ago still appear. Before reporting a listing, open its page with web_fetch and keep it only if the page shows it is still for sale (not "Ended", "Sold", "no longer available", out of stock, or redirected to a different item). Use the price and details shown on the page itself.`,
     `Report at most 5 of the cheapest verified listings with the record_listings tool, giving each listing's own page URL. If nothing matches, call record_listings with an empty list.`,
-  ].join("\n");
+    previous.length
+      ? `These listings were found earlier. Open each with web_fetch and put any that are no longer for sale (ended, sold, removed, or redirecting to a search or different page) in ended_previous:\n${previous.map((u) => `- ${u}`).join("\n")}`
+      : "",
+  ].filter(Boolean).join("\n");
 
   const tools = [
     { type: "web_search_20250305" as const, name: "web_search" as const, max_uses: 5 },
-    { type: "web_fetch_20250910" as const, name: "web_fetch" as const, max_uses: 8, max_content_tokens: 6000 },
+    { type: "web_fetch_20250910" as const, name: "web_fetch" as const, max_uses: 8 + previous.length, max_content_tokens: 6000 },
     { name: "record_listings", description: "Record matching listings for sale.", input_schema: listingSchema },
   ];
   const messages: Anthropic.MessageParam[] = [{ role: "user", content: prompt }];
@@ -104,18 +117,20 @@ export async function findListings(item: AlertItem, target: number, signal?: Abo
       (b): b is Anthropic.ToolUseBlock => b.type === "tool_use" && b.name === "record_listings",
     );
     if (recorded) {
-      const raw = (recorded.input as { listings?: (Listing & { verified_active?: boolean })[] }).listings ?? [];
-      const cleaned = cleanListings(raw.filter((l) => l.verified_active !== false), target);
+      const input = recorded.input as { listings?: (Listing & { verified_active?: boolean })[]; ended_previous?: string[] };
+      const cleaned = cleanListings((input.listings ?? []).filter((l) => l.verified_active !== false), target);
       // Double-check each link ourselves; drop anything that has ended, sold or redirected.
       const live = await Promise.all(cleaned.map((l) => stillListed(l.url)));
-      return cleaned.filter((_, i) => live[i] !== false);
+      const prevSet = new Set(previous);
+      const ended = (input.ended_previous ?? []).filter((u) => prevSet.has(u));
+      return { listings: cleaned.filter((_, i) => live[i] !== false), ended };
     }
     messages.push({ role: "assistant", content: response.content });
     if (response.stop_reason !== "pause_turn") {
       messages.push({ role: "user", content: "Now call record_listings with what you found (an empty list if nothing matches)." });
     }
   }
-  return [];
+  return { listings: [], ended: [] };
 }
 
 const GONE_TEXT =
@@ -203,8 +218,14 @@ export async function checkItem(db: SupabaseClient, item: AlertItem, signal?: Ab
   const target = targetOf(item);
   if (!target) return { id: item.id, found: 0, added: 0, error: "No target price" };
   try {
-    await pruneEnded(db, item);
-    const listings = await findListings(item, target, signal);
+    const previous = await pruneEnded(db, item);
+    const { listings: found, ended } = await findListings(item, target, signal, previous.map((r) => r.url));
+    if (ended.length) {
+      const endedSet = new Set(ended);
+      await db.from("price_alert_matches").delete().in("id", previous.filter((r) => endedSet.has(r.url)).map((r) => r.id));
+    }
+    // A listing reported as ended can't also be new.
+    const listings = found.filter((l) => !ended.includes(l.url));
     let added: Listing[] = [];
     if (listings.length) {
       const rows = listings.map((l) => ({ ...l, user_id: item.user_id, wishlist_id: String(item.id), target_usd: target }));
@@ -227,13 +248,20 @@ export async function checkItem(db: SupabaseClient, item: AlertItem, signal?: Ab
 }
 
 // Remove saved listings that have since ended, sold or disappeared.
-async function pruneEnded(db: SupabaseClient, item: AlertItem) {
-  const { data } = await db.from("price_alert_matches").select("id,url").eq("wishlist_id", String(item.id)).eq("user_id", item.user_id);
+// Returns the saved listings that still need re-checking by the search (up to 8, newest first).
+async function pruneEnded(db: SupabaseClient, item: AlertItem): Promise<{ id: string; url: string }[]> {
+  const { data } = await db
+    .from("price_alert_matches")
+    .select("id,url")
+    .eq("wishlist_id", String(item.id))
+    .eq("user_id", item.user_id)
+    .order("found_at", { ascending: false });
   const rows = (data ?? []) as { id: string; url: string }[];
-  if (!rows.length) return;
+  if (!rows.length) return [];
   const checks = await Promise.all(rows.map((r) => stillListed(r.url)));
   const gone = rows.filter((_, i) => checks[i] === false).map((r) => r.id);
   if (gone.length) await db.from("price_alert_matches").delete().in("id", gone);
+  return rows.filter((_, i) => checks[i] !== false).slice(0, 8);
 }
 
 function describe(l: Listing): string {
