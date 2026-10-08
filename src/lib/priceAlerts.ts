@@ -74,13 +74,13 @@ const listingSchema = {
         required: ["title", "url", "price", "currency", "price_usd", "seller", "marketplace", "location", "condition", "box_papers", "verified_active"],
       },
     },
-    ended_previous: {
+    still_for_sale_previous: {
       type: "array",
       items: { type: "string" },
-      description: "URLs from the previously found listings that are no longer for sale (ended, sold, removed, or now redirect to a different page). Empty list if all are still for sale or none were given.",
+      description: "URLs from the previously found listings that you opened just now and confirmed are still for sale. Leave out any that ended, sold, redirect elsewhere, or could not be opened.",
     },
   },
-  required: ["listings", "ended_previous"],
+  required: ["listings", "still_for_sale_previous"],
 };
 
 // Search the web for current listings of this watch at or below the target price.
@@ -101,7 +101,7 @@ export async function findListings(
     `Search results are often out of date: listings that ended or sold months ago still appear. Before reporting a listing, open its page with web_fetch and keep it only if the page shows it is still for sale (not "Ended", "Sold", "no longer available", out of stock, or redirected to a different item). Use the price and details shown on the page itself.`,
     `Report at most 5 of the cheapest verified listings with the record_listings tool, giving each listing's own page URL. If nothing matches, call record_listings with an empty list.`,
     previous.length
-      ? `These listings were found earlier. Open each with web_fetch and put any that are no longer for sale (ended, sold, removed, or redirecting to a search or different page) in ended_previous:\n${previous.map((u) => `- ${u}`).join("\n")}`
+      ? `These listings were found earlier. Open each with web_fetch and list in still_for_sale_previous only the ones still for sale (leave out any that ended, sold, redirect to a search or different page, or can't be opened):\n${previous.map((u) => `- ${u}`).join("\n")}`
       : "",
   ].filter(Boolean).join("\n");
 
@@ -117,12 +117,13 @@ export async function findListings(
       (b): b is Anthropic.ToolUseBlock => b.type === "tool_use" && b.name === "record_listings",
     );
     if (recorded) {
-      const input = recorded.input as { listings?: (Listing & { verified_active?: boolean })[]; ended_previous?: string[] };
+      const input = recorded.input as { listings?: (Listing & { verified_active?: boolean })[]; still_for_sale_previous?: string[] };
       const cleaned = cleanListings((input.listings ?? []).filter((l) => l.verified_active !== false), target);
       // Double-check each link ourselves; drop anything that has ended, sold or redirected.
       const live = await Promise.all(cleaned.map((l) => stillListed(l.url)));
-      const prevSet = new Set(previous);
-      const ended = (input.ended_previous ?? []).filter((u) => prevSet.has(u));
+      // Saved listings stay only while the search can confirm they're still for sale.
+      const confirmed = new Set(input.still_for_sale_previous ?? []);
+      const ended = previous.filter((u) => !confirmed.has(u));
       return { listings: cleaned.filter((_, i) => live[i] !== false), ended };
     }
     messages.push({ role: "assistant", content: response.content });
