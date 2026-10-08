@@ -119,7 +119,7 @@ export default function DashboardPage() {
           <div className="space-y-2">
             <p className="text-sm uppercase tracking-[0.35em] text-[#D9A43A]">Dashboard</p>
             <h1 className="text-4xl font-semibold text-white">Collection Intelligence</h1>
-            <p className="max-w-2xl text-sm text-slate-300">A premium overview of the archive, performance, and activity across Brandon’s curated timepieces.</p>
+            <p className="max-w-2xl text-sm text-slate-300">A premium overview of the archive, performance, and activity across your Brandon&apos;s Brands collection.</p>
           </div>
           <div className="grid gap-3 sm:grid-cols-3">
             <Link href="/collection" className="rounded-full border border-[#D9A43A]/25 bg-[#0f172a] px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:border-[#D9A43A] hover:bg-[#111827]">
