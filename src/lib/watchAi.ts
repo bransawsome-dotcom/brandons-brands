@@ -187,7 +187,16 @@ const scanSchema = {
 const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"] as const;
 type ImageType = (typeof IMAGE_TYPES)[number];
 
-export async function scanCollectionImage(base64: string, mediaType: string): Promise<ScannedWatch[]> {
+const SCAN_PROMPTS = {
+  collection:
+    "This is a photo of a watch collection list (handwritten, printed or a screenshot), or of watches themselves. Record every watch you can identify. Copy brand, model and reference exactly as written; fix obvious spelling of brand names. Leave fields empty rather than guessing.",
+  wishlist:
+    "This is a photo of a watch wishlist: a list of watches someone wants to buy (handwritten, printed, a notes-app or social media screenshot, a dealer listing or ad), or of the watches themselves. Record every watch you can identify. Copy brand, model and reference exactly as written; fix obvious spelling of brand names. If a price is written next to a watch, put it in purchase_price (it is the price they hope to pay). Put any priority or ranking (e.g. 'top pick', '#1', 'must have') and other comments in notes. Leave purchase_date and nickname empty. Leave fields empty rather than guessing.",
+} as const;
+
+export type ScanKind = keyof typeof SCAN_PROMPTS;
+
+export async function scanCollectionImage(base64: string, mediaType: string, kind: ScanKind = "collection"): Promise<ScannedWatch[]> {
   if (!IMAGE_TYPES.includes(mediaType as ImageType)) {
     throw new AiError("Please upload a JPG, PNG or WebP photo.", 400);
   }
@@ -204,7 +213,7 @@ export async function scanCollectionImage(base64: string, mediaType: string): Pr
           { type: "image", source: { type: "base64", media_type: mediaType as ImageType, data: base64 } },
           {
             type: "text",
-            text: "This is a photo of a watch collection list (handwritten, printed or a screenshot), or of watches themselves. Record every watch you can identify. Copy brand, model and reference exactly as written; fix obvious spelling of brand names. Leave fields empty rather than guessing.",
+            text: SCAN_PROMPTS[kind] ?? SCAN_PROMPTS.collection,
           },
         ],
       },

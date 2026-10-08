@@ -84,9 +84,9 @@ async function toJpegBase64(file: File): Promise<string> {
   }
 }
 
-export async function scanCollectionPhoto(file: File): Promise<ScannedWatch[]> {
+export async function scanCollectionPhoto(file: File, kind: "collection" | "wishlist" = "collection"): Promise<ScannedWatch[]> {
   const image = await toJpegBase64(file);
-  const result = await post<{ watches: ScannedWatch[] }>("/api/watch-scan", { image, media_type: "image/jpeg" });
+  const result = await post<{ watches: ScannedWatch[] }>("/api/watch-scan", { image, media_type: "image/jpeg", kind });
   return result.watches;
 }
 

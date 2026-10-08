@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { deleteWishlistItem, loadWishlistData, saveWishlistData } from "@/lib/storage";
 import { useRequireAuth } from "@/components/AuthProvider";
 import { type WishlistItem } from "@/lib/localData";
@@ -8,6 +8,7 @@ import Combobox from "@/components/Combobox";
 import { canonicalBrand, modelsForBrand, watchBrands } from "@/lib/watchCatalog";
 import { formatUsd, lookupWatchDetails, type WatchLookupResult } from "@/lib/watchAiClient";
 import { applyWishlistLookup } from "@/lib/watchBuild";
+import WishlistScanner from "@/components/WishlistScanner";
 
 const initialForm = {
   brand: "",
@@ -46,6 +47,18 @@ export default function WishlistPage() {
   const [lookup, setLookup] = useState<WatchLookupResult | null>(null);
   const [lookingUp, setLookingUp] = useState(false);
   const [refreshingId, setRefreshingId] = useState<string | null>(null);
+  // Latest list, so a long photo scan doesn't overwrite changes made while it ran.
+  const wishlistRef = useRef<WishlistItem[]>([]);
+  useEffect(() => {
+    wishlistRef.current = wishlist;
+  }, [wishlist]);
+
+  const addScannedItems = async (items: WishlistItem[]) => {
+    const next = [...items, ...wishlistRef.current];
+    wishlistRef.current = next;
+    setWishlist(next);
+    await saveWishlistData(userId, next);
+  };
 
   useEffect(() => {
     if (authLoading) return;
@@ -229,11 +242,15 @@ export default function WishlistPage() {
           </dl>
         </div>
 
-        {!canAutoFill ? (
+        {canAutoFill ? (
+          <div className="mb-6">
+            <WishlistScanner onAdd={addScannedItems} />
+          </div>
+        ) : (
           <p className="mb-6 rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-slate-300">
-            <a href="/login" className="font-semibold text-[#D9A43A] hover:text-[#e1b54a]">Log in</a> to auto-fill photos, details and prices.
+            <a href="/login" className="font-semibold text-[#D9A43A] hover:text-[#e1b54a]">Log in</a> to auto-fill photos, details and prices, or scan a photo of your wishlist.
           </p>
-        ) : null}
+        )}
 
         <form id="add-wishlist" onSubmit={handleSubmit} className="grid gap-6 rounded-[1.75rem] border border-white/10 bg-black/30 p-5 sm:p-6">
           <div>
