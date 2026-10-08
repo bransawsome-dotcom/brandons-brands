@@ -187,6 +187,8 @@ const KIND_FOLDER: Record<string, FolderKey> = {
   comment_reply: "forum",
   followed_reply: "forum",
   subject_post: "forum",
+  folder_reply: "forum",
+  folder_new: "forum",
   site_update: "updates",
   group_event: "events",
 };
@@ -200,6 +202,8 @@ export const KIND_ICON: Record<string, string> = {
   comment_reply: "↩️",
   followed_reply: "👀",
   subject_post: "🆕",
+  folder_reply: "⭐",
+  folder_new: "📁",
   site_update: "📢",
   group_event: "📅",
 };
@@ -249,4 +253,27 @@ export async function sendAnnouncement(input: { kind: "site_update" | "group_eve
   if (err) throw err;
   announceInboxChange();
   return (data as number) ?? 0;
+}
+
+// --- Favorite forum folders -------------------------------------------------------
+// A favorite is a followed subject/folder. notify = whether new discussions, replies and
+// sub-folders in it (and everything inside it) send inbox alerts.
+
+export type Favorite = { subject: string; notify: boolean; created_at: string };
+
+export async function listFavorites(userId: string): Promise<Favorite[]> {
+  if (!supabase) return [];
+  const { data, error } = await supabase.from("forum_subject_follows").select("*").eq("user_id", userId).order("created_at");
+  if (error) return [];
+  return (data ?? []).map((r: { subject: string; notify?: boolean | null; created_at: string }) => ({
+    subject: r.subject,
+    notify: r.notify !== false,
+    created_at: r.created_at,
+  }));
+}
+
+export async function setFavoriteNotify(subject: string, notify: boolean): Promise<void> {
+  const { error } = await db().from("forum_subject_follows").update({ notify }).eq("subject", subject);
+  const err = friendly(error);
+  if (err) throw err;
 }

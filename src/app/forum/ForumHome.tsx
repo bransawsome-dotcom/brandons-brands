@@ -4,7 +4,7 @@ import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import ForumIdentity from "@/components/ForumIdentity";
-import FollowButton from "@/components/FollowButton";
+import { listFavorites, setFavoriteNotify, setFollowSubject, type Favorite } from "@/lib/inbox";
 import { NEW_SUBJECT, SubjectSelect, useSubjectTree } from "@/components/ForumSubjects";
 import { useAuth } from "@/components/AuthProvider";
 import {
@@ -53,6 +53,8 @@ export default function ForumHome() {
   const [showAllBrands, setShowAllBrands] = useState(false);
   const [moderator, setModerator] = useState(false);
   const [addingClub, setAddingClub] = useState(false);
+  const [favorites, setFavorites] = useState<Favorite[]>([]);
+  const [favBusy, setFavBusy] = useState(false);
 
   // All posts are loaded once; subject filtering and counts happen in the browser.
   const load = useCallback(async () => {
@@ -77,6 +79,45 @@ export default function ForumHome() {
   useEffect(() => {
     void isModerator(user?.id).then(setModerator);
   }, [user?.id]);
+
+  const loadFavorites = useCallback(async () => {
+    setFavorites(user?.id ? await listFavorites(user.id) : []);
+  }, [user?.id]);
+
+  useEffect(() => {
+    void loadFavorites();
+  }, [loadFavorites]);
+
+  const favoriteOf = (slug: string) => favorites.find((f) => f.subject === slug);
+
+  const toggleFavorite = async (slug: string) => {
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+    setFavBusy(true);
+    try {
+      const on = !favoriteOf(slug);
+      await setFollowSubject(slug, on);
+      await loadFavorites();
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Couldn't update favorites.");
+    } finally {
+      setFavBusy(false);
+    }
+  };
+
+  const toggleNotify = async (fav: Favorite) => {
+    setFavBusy(true);
+    try {
+      await setFavoriteNotify(fav.subject, !fav.notify);
+      await loadFavorites();
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Couldn't update alerts.");
+    } finally {
+      setFavBusy(false);
+    }
+  };
 
   // Counts include sub-folders: "Watch Brands" counts every brand's posts.
   const countFor = useCallback((slug: string) => posts.filter((p) => inSubject(p.subject, slug)).length, [posts]);
@@ -327,6 +368,33 @@ export default function ForumHome() {
 
       <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
         <aside className="min-w-0 lg:sticky lg:top-6 lg:self-start">
+          {favorites.length ? (
+            <div className="mb-5">
+              <p className="mb-3 px-1 text-xs uppercase tracking-[0.3em] text-[#D9A43A]">★ Favorites</p>
+              <nav className="flex gap-2 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0" aria-label="Favorite forum folders">
+                {favorites.map((f) => {
+                  const d = describeSubject(tree, f.subject);
+                  return (
+                    <div key={f.subject} className="flex shrink-0 items-center gap-1 lg:w-full">
+                      <div className="min-w-0 flex-1 [&>button]:w-full">
+                        {subjectButton({ slug: f.subject, name: d.node.name, icon: d.node.folder ? "📁" : d.node.icon })}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => toggleNotify(f)}
+                        disabled={favBusy}
+                        title={f.notify ? "Alerts on: tap to turn off" : "Alerts off: tap to turn on"}
+                        aria-label={`${f.notify ? "Turn off" : "Turn on"} alerts for ${d.node.name}`}
+                        className={`shrink-0 rounded-full px-2 py-2 text-sm transition ${f.notify ? "text-[#D9A43A]" : "text-slate-600"} hover:bg-white/10`}
+                      >
+                        {f.notify ? "🔔" : "🔕"}
+                      </button>
+                    </div>
+                  );
+                })}
+              </nav>
+            </div>
+          ) : null}
           <p className="mb-3 px-1 text-xs uppercase tracking-[0.3em] text-blue-300">Subjects</p>
           <nav className="flex gap-2 overflow-x-auto pb-2 lg:max-h-[calc(100vh-6rem)] lg:flex-col lg:overflow-y-auto lg:overflow-x-visible lg:pb-0" aria-label="Forum subjects">
             {subjectButton({ slug: "", name: "All discussions", icon: "🗂️" })}
@@ -376,7 +444,14 @@ export default function ForumHome() {
                     "All discussions"
                   )}
                 </h2>
-                {current ? <FollowButton key={current.node.slug} subject={current.node.slug} label={current.node.folder ? "folder" : "subject"} /> : null}
+                {current ? (
+                  <FavoriteControls
+                    favorite={favoriteOf(current.node.slug)}
+                    busy={favBusy}
+                    onToggle={() => toggleFavorite(current.node.slug)}
+                    onToggleNotify={(fav) => toggleNotify(fav)}
+                  />
+                ) : null}
                 {current && canRemove(current.node) ? (
                   <button type="button" onClick={() => removeSubject(current.node)} className="text-xs text-slate-500 hover:text-rose-300">
                     Remove
@@ -499,7 +574,7 @@ const STEPS = [
   { title: "Log in or join", text: "Reading is open to everyone. To post or reply, log in or create a free account." },
   { title: "Tap + New post", text: "The first time, choose your forum name. It's what everyone sees, and your email stays private." },
   { title: "Pick a subject and post", text: "Choose a subject, brand or club. Not listed? Add a new subject, or tap + Add a club under Watch Clubs & Meetups." },
-  { title: "Join and follow", text: "Reply to any discussion or comment. Tap Follow on a discussion or subject to get new replies in your inbox." },
+  { title: "Favorite and follow", text: "Tap ☆ Add to favorites on any folder to pin it and get inbox alerts for new posts, replies and clubs. Follow single discussions too." },
 ];
 
 const HIDE_KEY = "bb-forum-getting-started-hidden";
@@ -627,6 +702,50 @@ function AddClubForm({ signedIn, onCancel, onAdded }: { signedIn: boolean; onCan
           </div>
         </form>
       )}
+    </div>
+  );
+}
+
+// ☆ Favorite / ★ Favorite button with an alerts switch for the open folder.
+function FavoriteControls({
+  favorite,
+  busy,
+  onToggle,
+  onToggleNotify,
+}: {
+  favorite: Favorite | undefined;
+  busy: boolean;
+  onToggle: () => void;
+  onToggleNotify: (fav: Favorite) => void;
+}) {
+  return (
+    <div className="flex items-center gap-2">
+      <button
+        type="button"
+        onClick={onToggle}
+        disabled={busy}
+        aria-pressed={Boolean(favorite)}
+        title={favorite ? "Remove from your favorites" : "Add to your favorites and get alerts for new activity"}
+        className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] transition disabled:opacity-60 ${
+          favorite ? "border-[#D9A43A]/60 bg-[#D9A43A]/15 text-[#D9A43A]" : "border-white/15 bg-white/5 text-slate-200 hover:bg-white/10"
+        }`}
+      >
+        {favorite ? "★ Favorite" : "☆ Add to favorites"}
+      </button>
+      {favorite ? (
+        <button
+          type="button"
+          onClick={() => onToggleNotify(favorite)}
+          disabled={busy}
+          aria-pressed={favorite.notify}
+          title="New discussions, replies and sub-folders here go to your inbox"
+          className={`rounded-full border px-3 py-2 text-xs font-semibold transition disabled:opacity-60 ${
+            favorite.notify ? "border-emerald-400/40 bg-emerald-500/10 text-emerald-200" : "border-white/15 bg-white/5 text-slate-400"
+          }`}
+        >
+          {favorite.notify ? "🔔 Alerts on" : "🔕 Alerts off"}
+        </button>
+      ) : null}
     </div>
   );
 }
