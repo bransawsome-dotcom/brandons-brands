@@ -122,6 +122,11 @@ export default function AccountPage() {
                 </button>
               </div>
               <PriceAlertEmailSetting />
+              <PriceAlertEmailSetting
+                metaKey="offer_email"
+                title="💰 Offer emails"
+                description="When someone makes an offer on a watch in your public collection, it always shows in your Inbox. Also email me at"
+              />
               <TextMessageSettings />
               {guestMode ? (
                 <div className="flex items-center justify-between rounded-3xl bg-white/5 px-4 py-3">

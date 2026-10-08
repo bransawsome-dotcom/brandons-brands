@@ -12,6 +12,7 @@ import PriceAlertPanel from "@/components/PriceAlertPanel";
 import { applyWishlistLookup } from "@/lib/watchBuild";
 import WishlistScanner from "@/components/WishlistScanner";
 import ShareButton from "@/components/ShareButton";
+import PublicListToggle from "@/components/PublicListToggle";
 
 const initialForm = {
   brand: "",
@@ -277,6 +278,7 @@ export default function WishlistPage() {
           </div>
           <div className="flex flex-col items-stretch gap-3 sm:items-end">
           <ShareButton kind="wishlist" />
+          <PublicListToggle kind="wishlist" />
           <dl className="grid grid-cols-2 gap-3 text-center sm:min-w-[260px]">
             <div className="rounded-2xl border border-white/10 bg-black/20 px-3 py-3">
               <dt className="text-[11px] uppercase tracking-[0.18em] text-slate-400">Watches</dt>

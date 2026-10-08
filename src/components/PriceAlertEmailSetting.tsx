@@ -5,9 +5,13 @@ import { useAuth } from "@/components/AuthProvider";
 import supabase from "@/lib/supabaseClient";
 
 // Account setting: email me when a wishlist price alert finds a match (on by default).
-export default function PriceAlertEmailSetting() {
+export default function PriceAlertEmailSetting({
+  metaKey = "price_alert_email",
+  title = "🏷️ Price alert emails",
+  description = "When a wishlist watch is listed at or below your target price, it always shows in your Inbox. Also email me at",
+}: { metaKey?: string; title?: string; description?: string } = {}) {
   const { user, guestMode } = useAuth();
-  const savedOn = (user?.user_metadata as Record<string, unknown> | undefined)?.price_alert_email !== false;
+  const savedOn = (user?.user_metadata as Record<string, unknown> | undefined)?.[metaKey] !== false;
   const [override, setOverride] = useState<boolean | null>(null);
   const on = override ?? savedOn;
   const [saving, setSaving] = useState(false);
@@ -20,7 +24,7 @@ export default function PriceAlertEmailSetting() {
     const next = !on;
     setSaving(true);
     setError(null);
-    const { error: err } = await supabase.auth.updateUser({ data: { price_alert_email: next } });
+    const { error: err } = await supabase.auth.updateUser({ data: { [metaKey]: next } });
     setSaving(false);
     if (err) setError(err.message);
     else setOverride(next);
@@ -30,9 +34,9 @@ export default function PriceAlertEmailSetting() {
     <div className="rounded-3xl border border-white/10 bg-black/20 p-4">
       <div className="flex items-center justify-between gap-4">
         <div className="min-w-0">
-          <p className="font-medium text-white">🏷️ Price alert emails</p>
+          <p className="font-medium text-white">{title}</p>
           <p className="mt-1 text-xs leading-5 text-slate-400">
-            When a wishlist watch is listed at or below your target price, it always shows in your Inbox. Also email me at{" "}
+            {description}{" "}
             <span className="text-slate-300">{user.email}</span>.
           </p>
         </div>
@@ -40,7 +44,7 @@ export default function PriceAlertEmailSetting() {
           type="button"
           role="switch"
           aria-checked={on}
-          aria-label="Price alert emails"
+          aria-label={title.replace(/^\S+\s/, "")}
           disabled={saving}
           onClick={toggle}
           className={`relative h-7 w-12 shrink-0 rounded-full transition disabled:opacity-50 ${on ? "bg-[#1A7DBF]" : "bg-white/15"}`}

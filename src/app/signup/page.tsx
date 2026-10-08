@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import supabase from "@/lib/supabaseClient";
 import { useAuth } from "@/components/AuthProvider";
 import PasswordInput from "@/components/PasswordInput";
+import { isNameAvailable } from "@/lib/account";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -30,6 +31,13 @@ export default function SignupPage() {
       return;
     }
     setSubmitting(true);
+
+    // Names are public and must be unique.
+    if (!(await isNameAvailable(cleanName))) {
+      setSubmitting(false);
+      setMessage("That name or customer number is already taken. Try another one.");
+      return;
+    }
 
     if (!supabase) {
       setSubmitting(false);
