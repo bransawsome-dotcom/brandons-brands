@@ -8,6 +8,7 @@ import { useAuth } from "@/components/AuthProvider";
 export default function SignupPage() {
   const router = useRouter();
   const { user, loading } = useAuth();
+  const [accountName, setAccountName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState<string | null>(null);
@@ -22,6 +23,11 @@ export default function SignupPage() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setMessage(null);
+    const cleanName = accountName.trim().replace(/\s+/g, " ");
+    if (cleanName.length < 2 || cleanName.length > 40) {
+      setMessage("Enter a name or customer number (2–40 characters).");
+      return;
+    }
     setSubmitting(true);
 
     if (!supabase) {
@@ -34,8 +40,10 @@ export default function SignupPage() {
       email,
       password,
       options: {
-  emailRedirectTo: `${window.location.origin}/auth/callback`,
-},
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        // Shown on the Account page. Separate from the forum name.
+        data: { account_name: cleanName },
+      },
     });
 
     setSubmitting(false);
@@ -65,6 +73,20 @@ export default function SignupPage() {
           </div>
 
           <form onSubmit={handleSubmit} className="grid gap-6">
+            <label className="space-y-2 text-sm text-slate-300">
+              Name or customer number
+              <input
+                type="text"
+                value={accountName}
+                onChange={(event) => setAccountName(event.target.value)}
+                required
+                maxLength={40}
+                autoComplete="name"
+                className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-blue-400/70"
+                placeholder="e.g. Jane Smith or customer #1042"
+              />
+              <span className="block text-xs text-slate-500">This is shown on your account. You can change it later.</span>
+            </label>
             <label className="space-y-2 text-sm text-slate-300">
               Email
               <input

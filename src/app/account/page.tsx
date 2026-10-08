@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import { clearGuestStorageData, loadCollectionData, loadWishlistData } from "@/lib/storage";
 import { useRequireAuth } from "@/components/AuthProvider";
 import TextMessageSettings from "@/components/TextMessageSettings";
-import { forumName } from "@/lib/forum";
+import { forumName, saveForumName } from "@/lib/forum";
+import { accountName, saveAccountName } from "@/lib/account";
+import EditableNameRow from "@/components/EditableNameRow";
 
 export default function AccountPage() {
   const [watchCount, setWatchCount] = useState<number>(0);
@@ -12,8 +14,8 @@ export default function AccountPage() {
   const [message, setMessage] = useState<string | null>(null);
   const { user, loading, guestMode, signOut } = useRequireAuth();
   const registered = Boolean(user) && !guestMode;
-  // Registered members see their forum name (or the start of their email); guests see "Guest Collector".
-  const displayName = registered ? forumName(user) || (user?.email ?? "").split("@")[0] || "Member" : "Guest Collector";
+  // Registered members see the name or customer number they chose (or the start of their email); guests see "Guest Collector".
+  const displayName = registered ? accountName(user) || (user?.email ?? "").split("@")[0] || "Member" : "Guest Collector";
   const initials = registered
     ? displayName
         .split(/[\s._-]+/)
@@ -76,6 +78,28 @@ export default function AccountPage() {
           <div className="mt-8 rounded-[1.75rem] border border-white/10 bg-black/30 p-6">
             <h2 className="text-lg font-semibold text-white">Settings</h2>
             <div className="mt-4 space-y-4 text-sm text-slate-300">
+              {registered ? (
+                <>
+                  <EditableNameRow
+                    label="Name or customer number"
+                    hint="Shown on your account"
+                    value={accountName(user)}
+                    emptyText="Not set"
+                    placeholder="e.g. Jane Smith or customer #1042"
+                    onSave={saveAccountName}
+                  />
+                  <EditableNameRow
+                    label="Forum name"
+                    hint="Shown on your forum posts"
+                    value={forumName(user)}
+                    emptyText="Not set"
+                    placeholder="e.g. SubmarinerSteve"
+                    onSave={async (name) => {
+                      await saveForumName(name);
+                    }}
+                  />
+                </>
+              ) : null}
               <div className="flex items-center justify-between gap-4 rounded-3xl bg-white/5 px-4 py-3">
                 <span className="font-medium text-white">Email</span>
                 <span className="min-w-0 break-all text-right">{user?.email ?? "—"}</span>
