@@ -122,9 +122,10 @@ export async function findListings(
       // Double-check each link ourselves; drop anything that has ended, sold or redirected.
       const live = await Promise.all(cleaned.map((l) => stillListed(l.url)));
       // Saved listings stay only while the search can confirm they're still for sale.
-      const confirmed = new Set(input.still_for_sale_previous ?? []);
+      const listings = cleaned.filter((_, i) => live[i] !== false);
+      const confirmed = new Set([...(input.still_for_sale_previous ?? []), ...listings.map((l) => l.url)]);
       const ended = previous.filter((u) => !confirmed.has(u));
-      return { listings: cleaned.filter((_, i) => live[i] !== false), ended };
+      return { listings, ended };
     }
     messages.push({ role: "assistant", content: response.content });
     if (response.stop_reason !== "pause_turn") {
