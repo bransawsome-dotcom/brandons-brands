@@ -121,6 +121,8 @@ export default function ForumHome() {
           </button>
         </div>
 
+        <GettingStarted onNewPost={openComposer} />
+
         {composing ? (
           <div id="new-post" className="mt-6">
             <ForumIdentity action="start a discussion">
@@ -282,5 +284,72 @@ export default function ForumHome() {
         </section>
       </div>
     </div>
+  );
+}
+
+const STEPS = [
+  { title: "Log in or join", text: "Reading is open to everyone. To post or reply, log in or create a free account." },
+  { title: "Tap + New post", text: "The first time, choose your forum name. It's what everyone sees, and your email stays private." },
+  { title: "Pick a subject and post", text: "Choose a subject, add a title, and share your question, story or wrist shot." },
+  { title: "Join the conversation", text: "Reply to any discussion or comment. New replies show up live, no refresh needed." },
+];
+
+const HIDE_KEY = "bb-forum-getting-started-hidden";
+
+// Directions box at the top of the forum. Members can collapse it; the choice is remembered on this device.
+function GettingStarted({ onNewPost }: { onNewPost: () => void }) {
+  const [hidden, setHidden] = useState(false);
+
+  useEffect(() => {
+    try {
+      setHidden(window.localStorage.getItem(HIDE_KEY) === "1");
+    } catch {
+      // storage unavailable: keep it open
+    }
+  }, []);
+
+  const toggle = () => {
+    const next = !hidden;
+    setHidden(next);
+    try {
+      window.localStorage.setItem(HIDE_KEY, next ? "1" : "0");
+    } catch {
+      // ignore
+    }
+  };
+
+  return (
+    <section className="mt-6 rounded-[1.5rem] border border-[#D9A43A]/30 bg-[#D9A43A]/5 p-5" aria-labelledby="forum-getting-started">
+      <div className="flex items-center justify-between gap-3">
+        <h2 id="forum-getting-started" className="text-xs uppercase tracking-[0.3em] text-[#D9A43A]">
+          Getting started
+        </h2>
+        <button type="button" onClick={toggle} className="text-xs font-semibold text-slate-400 hover:text-white" aria-expanded={!hidden}>
+          {hidden ? "Show" : "Hide"}
+        </button>
+      </div>
+      {!hidden ? (
+        <>
+          <ol className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {STEPS.map((step, i) => (
+              <li key={step.title} className="flex gap-3">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#D9A43A] text-sm font-bold text-black">{i + 1}</span>
+                <div>
+                  <p className="text-sm font-semibold text-white">{step.title}</p>
+                  <p className="mt-1 text-sm leading-6 text-slate-300">{step.text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-4 text-xs leading-5 text-slate-400">
+            Not sure where to start? Say hello in <span className="text-slate-200">General Discussion</span> or post a &ldquo;Friday wrist check&rdquo; in{" "}
+            <span className="text-slate-200">Wrist Shots</span>. You can edit or delete your own posts any time. Please keep it friendly and respectful; moderators may remove posts that aren&apos;t.{" "}
+            <button type="button" onClick={onNewPost} className="font-semibold text-[#D9A43A] hover:text-[#e1b54a]">
+              Start a post →
+            </button>
+          </p>
+        </>
+      ) : null}
+    </section>
   );
 }
