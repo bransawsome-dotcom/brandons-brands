@@ -8,6 +8,7 @@ import { loadCollectionData, saveCollectionData, deleteCollectionItem } from "@/
 import { provenanceLabels, type Watch } from "@/lib/localData";
 import ProvenanceFields, { emptyProvenance, type Provenance } from "@/components/ProvenanceFields";
 import CollectionScanner from "@/components/CollectionScanner";
+import ShareButton from "@/components/ShareButton";
 import Combobox from "@/components/Combobox";
 import { canonicalBrand, modelsForBrand, watchBrands } from "@/lib/watchCatalog";
 import { formatUsd, parseMoney, lookupWatchDetails, type WatchLookupResult } from "@/lib/watchAiClient";
@@ -252,6 +253,8 @@ export default function CollectionPage() {
               Add watches below, then browse, search and sort them in your collection.
             </p>
           </div>
+          <div className="flex flex-col items-stretch gap-3 sm:items-end">
+          <ShareButton kind="collection" />
           <dl className="grid grid-cols-3 gap-3 text-center sm:min-w-[360px]">
             <div className="rounded-2xl border border-white/10 bg-black/20 px-3 py-3">
               <dt className="text-[11px] uppercase tracking-[0.18em] text-slate-400">Watches</dt>
@@ -266,6 +269,7 @@ export default function CollectionPage() {
               <dd className="mt-1 text-xl font-semibold text-[#D9A43A]">{formatUsd(totals.value)}</dd>
             </div>
           </dl>
+          </div>
         </div>
 
 

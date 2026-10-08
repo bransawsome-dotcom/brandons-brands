@@ -9,6 +9,7 @@ import { canonicalBrand, modelsForBrand, watchBrands } from "@/lib/watchCatalog"
 import { formatUsd, lookupWatchDetails, type WatchLookupResult } from "@/lib/watchAiClient";
 import { applyWishlistLookup } from "@/lib/watchBuild";
 import WishlistScanner from "@/components/WishlistScanner";
+import ShareButton from "@/components/ShareButton";
 
 const initialForm = {
   brand: "",
@@ -230,6 +231,8 @@ export default function WishlistPage() {
               Pick a brand and model. The photo, specs, today&apos;s retail price and market value fill in automatically.
             </p>
           </div>
+          <div className="flex flex-col items-stretch gap-3 sm:items-end">
+          <ShareButton kind="wishlist" />
           <dl className="grid grid-cols-2 gap-3 text-center sm:min-w-[260px]">
             <div className="rounded-2xl border border-white/10 bg-black/20 px-3 py-3">
               <dt className="text-[11px] uppercase tracking-[0.18em] text-slate-400">Watches</dt>
@@ -240,6 +243,7 @@ export default function WishlistPage() {
               <dd className="mt-1 text-xl font-semibold text-[#D9A43A]">{totalValue ? formatUsd(totalValue) : "—"}</dd>
             </div>
           </dl>
+          </div>
         </div>
 
         {canAutoFill ? (
