@@ -75,3 +75,18 @@ body {
   mix-blend-mode: overlay;
   pointer-events: none;
 }
+
+/* Home page logo behind "Brandon's Brands": sized per screen so the heading sits inside the logo's inner dial. */
+.logo-watermark {
+  width: 400px;
+}
+@media (min-width: 640px) {
+  .logo-watermark {
+    width: 660px;
+  }
+}
+@media (min-width: 1024px) {
+  .logo-watermark {
+    width: 920px;
+  }
+}
