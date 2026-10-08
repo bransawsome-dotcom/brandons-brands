@@ -62,6 +62,9 @@ export type WatchLookup = {
   market_value_high: number | null;
   summary: string;
   sources: string[];
+  official_page_url: string;
+  // Filled in on the server from the official page (not by the model).
+  image_url: string | null;
 };
 
 const lookupSchema = {
@@ -86,11 +89,15 @@ const lookupSchema = {
     market_value_high: { type: ["number", "null"] },
     summary: { type: "string", description: "One or two plain sentences about this watch for a collector" },
     sources: { type: "array", items: { type: "string" }, description: "URLs of the pages the prices came from" },
+    official_page_url: {
+      type: "string",
+      description: "URL of the manufacturer's own product page for this exact model/reference (current version), found via search. Empty string if none.",
+    },
   },
   required: [
     "brand", "model", "reference_number", "year_introduced", "case_size_mm", "case_material", "movement",
     "water_resistance", "retail_price_at_purchase", "retail_price_date_note", "current_retail_price",
-    "market_value", "market_value_low", "market_value_high", "summary", "sources",
+    "market_value", "market_value_low", "market_value_high", "summary", "sources", "official_page_url",
   ],
 };
 
@@ -109,7 +116,7 @@ export async function lookupWatch(input: {
     input.reference_number ? `Reference: ${input.reference_number}` : "",
     input.purchase_date ? `Purchased on: ${input.purchase_date}` : "Purchase date: unknown (use today's list price as the retail price).",
     `Today is ${today}.`,
-    `Use web search for prices: the manufacturer's list (retail) price at the purchase date, today's list price, and current pre-owned market prices (e.g. Chrono24, WatchCharts, recent sales). All prices in USD. Use null for anything you cannot find rather than guessing. Never invent a reference number.`,
+    `Use web search for prices: the manufacturer's list (retail) price at the purchase date, today's list price, and current pre-owned market prices (e.g. Chrono24, WatchCharts, recent sales). All prices in USD. Use null for anything you cannot find rather than guessing. Never invent a reference number. Also find the manufacturer's official product page for the current version of this model.`,
   ].filter(Boolean).join("\n");
 
   const tools = [
@@ -124,7 +131,10 @@ export async function lookupWatch(input: {
       (block): block is Anthropic.ToolUseBlock => block.type === "tool_use" && block.name === "record_watch",
     );
     if (recorded) {
-      return recorded.input as WatchLookup;
+      const result = recorded.input as WatchLookup;
+      const pages = [result.official_page_url, ...(result.sources ?? [])].filter(Boolean);
+      result.image_url = await findProductImage(pages);
+      return result;
     }
     // Long web searches can pause; continue the same turn. Otherwise ask it to record.
     messages.push({ role: "assistant", content: response.content });
@@ -197,4 +207,74 @@ export async function scanCollectionImage(base64: string, mediaType: string): Pr
   const block = response.content.find((b): b is Anthropic.ToolUseBlock => b.type === "tool_use");
   const watches = (block?.input as { watches?: ScannedWatch[] } | undefined)?.watches ?? [];
   return watches.filter((w) => w.brand || w.model);
+}
+
+
+// --- Product photo -----------------------------------------------------------
+// Reads the main product image (og:image / twitter:image) from the official page,
+// falling back to the price-source pages. Returns null if none can be verified.
+
+const PAGE_TIMEOUT_MS = 6000;
+const UA = "Mozilla/5.0 (compatible; BrandonsBrandsBot/1.0; +https://brandonsbrands17.com)";
+
+function isHttpUrl(value: string): boolean {
+  try {
+    const u = new URL(value);
+    return u.protocol === "https:" || u.protocol === "http:";
+  } catch {
+    return false;
+  }
+}
+
+async function fetchWithTimeout(url: string, init: RequestInit = {}): Promise<Response | null> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), PAGE_TIMEOUT_MS);
+  try {
+    return await fetch(url, { ...init, signal: controller.signal, redirect: "follow", headers: { "User-Agent": UA, ...(init.headers ?? {}) } });
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function extractImageUrl(html: string, pageUrl: string): string | null {
+  const patterns = [
+    /<meta[^>]+property=["']og:image(?::secure_url)?["'][^>]+content=["']([^"']+)["']/i,
+    /<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image(?::secure_url)?["']/i,
+    /<meta[^>]+name=["']twitter:image(?::src)?["'][^>]+content=["']([^"']+)["']/i,
+    /<meta[^>]+content=["']([^"']+)["'][^>]+name=["']twitter:image(?::src)?["']/i,
+  ];
+  for (const re of patterns) {
+    const match = html.match(re);
+    if (match?.[1]) {
+      try {
+        return new URL(match[1].replace(/&amp;/g, "&"), pageUrl).toString();
+      } catch {
+        // ignore malformed URL
+      }
+    }
+  }
+  return null;
+}
+
+async function isReachableImage(url: string): Promise<boolean> {
+  const res = await fetchWithTimeout(url, { headers: { Accept: "image/*" } });
+  if (!res || !res.ok) return false;
+  const type = res.headers.get("content-type") ?? "";
+  res.body?.cancel().catch(() => {});
+  return type.startsWith("image/");
+}
+
+async function findProductImage(pages: string[]): Promise<string | null> {
+  for (const page of pages.filter(isHttpUrl).slice(0, 4)) {
+    const res = await fetchWithTimeout(page, { headers: { Accept: "text/html" } });
+    if (!res || !res.ok || !(res.headers.get("content-type") ?? "").includes("html")) continue;
+    const html = (await res.text()).slice(0, 400_000);
+    const image = extractImageUrl(html, res.url || page);
+    if (image && image.startsWith("https://") && (await isReachableImage(image))) {
+      return image;
+    }
+  }
+  return null;
 }

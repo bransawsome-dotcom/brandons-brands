@@ -22,6 +22,7 @@ export type WatchLookupResult = WatchDetails & {
   retail_price_at_purchase: number | null;
   current_retail_price: number | null;
   market_value: number | null;
+  image_url?: string | null;
 };
 
 export type ScannedWatch = {

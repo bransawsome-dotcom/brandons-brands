@@ -7,6 +7,8 @@ import { useRequireAuth } from "@/components/AuthProvider";
 import { loadCollectionData, saveCollectionData, deleteCollectionItem } from "@/lib/storage";
 import { type Watch } from "@/lib/localData";
 import CollectionScanner from "@/components/CollectionScanner";
+import Combobox from "@/components/Combobox";
+import { canonicalBrand, modelsForBrand, watchBrands } from "@/lib/watchCatalog";
 import { formatUsd, lookupWatchDetails, type WatchLookupResult } from "@/lib/watchAiClient";
 import { applyLookup, newWatchId } from "@/lib/watchBuild";
 
@@ -143,8 +145,10 @@ export default function CollectionPage() {
     if (name === "brand" || name === "model" || name === "reference_number") setLookup(null);
   };
 
-  const runLookup = async (): Promise<WatchLookupResult | null> => {
-    if (!form.brand.trim() || !form.model.trim()) {
+  const runLookup = async (override?: { brand?: string; model?: string }): Promise<WatchLookupResult | null> => {
+    const brand = (override?.brand ?? form.brand).trim();
+    const model = (override?.model ?? form.model).trim();
+    if (!brand || !model) {
       setMessage("Enter a brand and model first.");
       return null;
     }
@@ -152,8 +156,8 @@ export default function CollectionPage() {
     setMessage("Looking up details and prices… this can take up to a minute.");
     try {
       const result = await lookupWatchDetails({
-        brand: form.brand.trim(),
-        model: form.model.trim(),
+        brand,
+        model,
         reference_number: form.reference_number.trim() || undefined,
         purchase_date: form.purchase_date || undefined,
       });
@@ -270,31 +274,39 @@ export default function CollectionPage() {
         <form id="add-watch" onSubmit={handleSubmit} className="grid gap-6 rounded-[1.75rem] border border-white/10 bg-black/30 p-6">
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-blue-300">Add one watch</p>
-              <p className="mt-1 text-sm text-slate-400">Type the brand and model, then auto-fill or enter the details yourself.</p>
+              <p className="mt-1 text-sm text-slate-400">Choose a brand and model from the lists. Details, prices and a photo fill in automatically. Not listed? Just type it.</p>
             </div>
             <div className="grid gap-6 lg:grid-cols-2">
-              <label className="space-y-2 text-sm text-slate-300">
-                Brand
-                <input
-                  name="brand"
-                  value={form.brand}
-                  onChange={handleChange}
-                  className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-blue-400/70"
-                  placeholder="Rolex, Omega, Patek Philippe"
-                  required
-                />
-              </label>
-              <label className="space-y-2 text-sm text-slate-300">
-                Model
-                <input
-                  name="model"
-                  value={form.model}
-                  onChange={handleChange}
-                  className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-blue-400/70"
-                  placeholder="Submariner, Speedmaster"
-                  required
-                />
-              </label>
+              <Combobox
+                label="Brand"
+                name="brand"
+                value={form.brand}
+                options={watchBrands}
+                placeholder="Choose or type a brand"
+                required
+                onChange={(value) => {
+                  setForm((current) => ({ ...current, brand: value, model: current.brand === value ? current.model : "" }));
+                  setLookup(null);
+                }}
+                onSelect={(value) => setForm((current) => ({ ...current, brand: canonicalBrand(value) }))}
+              />
+              <Combobox
+                label="Model"
+                name="model"
+                value={form.model}
+                options={modelsForBrand(form.brand)}
+                placeholder={form.brand ? "Choose or type a model" : "Choose a brand first"}
+                emptyHint="Pick a brand to see its models, or type a model."
+                required
+                onChange={(value) => {
+                  setForm((current) => ({ ...current, model: value }));
+                  setLookup(null);
+                }}
+                onSelect={(value) => {
+                  // Picking a model from the list fills in details, prices and a photo automatically.
+                  if (canAutoFill) void runLookup({ brand: form.brand, model: value });
+                }}
+              />
             </div>
 
             <div className="grid gap-6 lg:grid-cols-2 lg:items-end">
@@ -311,7 +323,7 @@ export default function CollectionPage() {
               {canAutoFill ? (
                 <button
                   type="button"
-                  onClick={runLookup}
+                  onClick={() => runLookup()}
                   disabled={lookingUp}
                   className="rounded-full border border-[#D9A43A]/50 bg-[#D9A43A]/10 px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-[#D9A43A] transition hover:bg-[#D9A43A]/20 disabled:opacity-60"
                 >
@@ -321,7 +333,16 @@ export default function CollectionPage() {
             </div>
 
             {lookup ? (
-              <div className="rounded-3xl border border-emerald-400/20 bg-emerald-500/5 p-4 text-sm text-slate-200">
+              <div className="flex gap-4 rounded-3xl border border-emerald-400/20 bg-emerald-500/5 p-4 text-sm text-slate-200">
+                {lookup.image_url && !preview && !form.image_url ? (
+                  <img
+                    src={lookup.image_url}
+                    alt={`${lookup.brand} ${lookup.model}`}
+                    referrerPolicy="no-referrer"
+                    className="h-24 w-24 shrink-0 rounded-2xl bg-white object-contain p-1 sm:h-28 sm:w-28"
+                  />
+                ) : null}
+                <div className="min-w-0">
                 <p className="font-semibold text-white">
                   {lookup.brand} {lookup.model}
                   {lookup.reference_number ? ` · Ref. ${lookup.reference_number}` : ""}
@@ -335,7 +356,11 @@ export default function CollectionPage() {
                 {[lookup.case_size_mm, lookup.case_material, lookup.movement].filter(Boolean).length ? (
                   <p className="mt-1 text-slate-400">{[lookup.case_size_mm, lookup.case_material, lookup.movement].filter(Boolean).join(" · ")}</p>
                 ) : null}
-                <p className="mt-2 text-xs text-slate-500">Saved with the watch when you click Add Watch. Retail at purchase stays fixed after that.</p>
+                <p className="mt-2 text-xs text-slate-500">
+                  Saved with the watch when you click Add Watch. Retail at purchase stays fixed after that.
+                  {lookup.image_url ? " The official photo is used unless you upload your own." : ""}
+                </p>
+                </div>
               </div>
             ) : null}
 
@@ -531,7 +556,7 @@ export default function CollectionPage() {
                   <div className="flex flex-col relative z-10">
                     <div className="h-[220px] w-full bg-slate-950/90 overflow-hidden md:h-64">
                       {watch.image_url ? (
-                        <img src={watch.image_url} alt={`${watch.brand} ${watch.model}`} className="h-full w-full object-cover" />
+                        <img src={watch.image_url} referrerPolicy="no-referrer" alt={`${watch.brand} ${watch.model}`} className="h-full w-full object-cover" />
                       ) : (
                         <div className="flex h-full items-center justify-center text-slate-400">No image</div>
                       )}
@@ -605,7 +630,7 @@ export default function CollectionPage() {
                   <div className="relative z-10 flex items-center gap-4 p-3 sm:p-4 pointer-events-none">
                     <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-slate-950/90 sm:h-20 sm:w-20">
                       {watch.image_url ? (
-                        <img src={watch.image_url} alt={`${watch.brand} ${watch.model}`} className="h-full w-full object-cover" />
+                        <img src={watch.image_url} referrerPolicy="no-referrer" alt={`${watch.brand} ${watch.model}`} className="h-full w-full object-cover" />
                       ) : (
                         <div className="flex h-full items-center justify-center text-[10px] text-slate-500">No image</div>
                       )}
@@ -670,7 +695,7 @@ export default function CollectionPage() {
               <div className="grid gap-6 lg:grid-cols-2">
                 <div className="h-80 bg-slate-950/90 overflow-hidden rounded-lg">
                   {selectedWatch.image_url ? (
-                    <img src={selectedWatch.image_url} alt={`${selectedWatch.brand} ${selectedWatch.model}`} className="h-full w-full object-cover" />
+                    <img src={selectedWatch.image_url} referrerPolicy="no-referrer" alt={`${selectedWatch.brand} ${selectedWatch.model}`} className="h-full w-full object-cover" />
                   ) : (
                     <div className="flex h-full items-center justify-center text-slate-400">No image</div>
                   )}

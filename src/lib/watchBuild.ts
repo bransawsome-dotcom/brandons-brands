@@ -22,6 +22,8 @@ export function applyLookup(watch: Watch, lookup: WatchLookupResult, opts: { kee
     brand: watch.brand || lookup.brand,
     model: watch.model || lookup.model,
     reference_number: watch.reference_number || lookup.reference_number || undefined,
+    // Use the official product photo only when the owner hasn't added their own.
+    image_url: watch.image_url || lookup.image_url || "",
     retail_price: watch.retail_price || numToString(lookup.retail_price_at_purchase),
     current_retail_price: numToString(lookup.current_retail_price) || watch.current_retail_price || "",
     estimated_value: typedValue || numToString(lookup.market_value) || watch.estimated_value,
