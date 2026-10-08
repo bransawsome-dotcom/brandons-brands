@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import ForumIdentity from "@/components/ForumIdentity";
+import FollowButton from "@/components/FollowButton";
 import {
   BODY_MAX,
   FORUM_SUBJECTS,
@@ -188,8 +189,8 @@ export default function ForumHome() {
         ) : null}
       </div>
 
-      <div className="mt-8 grid gap-6 lg:grid-cols-[260px_1fr]">
-        <aside className="lg:sticky lg:top-6 lg:self-start">
+      <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[260px_minmax(0,1fr)]">
+        <aside className="min-w-0 lg:sticky lg:top-6 lg:self-start">
           <p className="mb-3 px-1 text-xs uppercase tracking-[0.3em] text-blue-300">Subjects</p>
           <nav className="flex gap-2 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0">
             {[{ slug: "", name: "All discussions", icon: "🗂️" }, ...FORUM_SUBJECTS].map((s) => {
@@ -215,18 +216,21 @@ export default function ForumHome() {
           </nav>
         </aside>
 
-        <section>
+        <section className="min-w-0">
           <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <h2 className="text-2xl font-semibold text-white">
-              {current ? (
-                <>
-                  <span className="mr-2">{current.icon}</span>
-                  {current.name}
-                </>
-              ) : (
-                "All discussions"
-              )}
-            </h2>
+            <div className="flex flex-wrap items-center gap-3">
+              <h2 className="text-2xl font-semibold text-white">
+                {current ? (
+                  <>
+                    <span className="mr-2">{current.icon}</span>
+                    {current.name}
+                  </>
+                ) : (
+                  "All discussions"
+                )}
+              </h2>
+              {current ? <FollowButton key={current.slug} subject={current.slug} label="subject" /> : null}
+            </div>
             <div className="flex gap-3">
               <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search the forum" className={`${input} sm:w-56`} />
               <select value={sort} onChange={(e) => setSort(e.target.value as typeof sort)} className={`${input} w-auto`} aria-label="Sort">
@@ -291,7 +295,7 @@ const STEPS = [
   { title: "Log in or join", text: "Reading is open to everyone. To post or reply, log in or create a free account." },
   { title: "Tap + New post", text: "The first time, choose your forum name. It's what everyone sees, and your email stays private." },
   { title: "Pick a subject and post", text: "Choose a subject, add a title, and share your question, story or wrist shot." },
-  { title: "Join the conversation", text: "Reply to any discussion or comment. New replies show up live, no refresh needed." },
+  { title: "Join and follow", text: "Reply to any discussion or comment. Tap Follow on a discussion or subject to get new replies in your inbox." },
 ];
 
 const HIDE_KEY = "bb-forum-getting-started-hidden";

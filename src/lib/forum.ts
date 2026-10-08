@@ -181,7 +181,7 @@ export function watchComments(postId: string, onChange: () => void): () => void 
   if (!supabase) return () => {};
   const client = supabase;
   const channel = client
-    .channel(`forum-comments-${postId}`)
+    .channel(`forum-comments-${postId}-${Math.random().toString(36).slice(2, 8)}`)
     .on("postgres_changes", { event: "*", schema: "public", table: "forum_comments", filter: `post_id=eq.${postId}` }, onChange)
     .subscribe();
   return () => {
@@ -194,7 +194,7 @@ export function watchPosts(onChange: () => void): () => void {
   if (!supabase) return () => {};
   const client = supabase;
   const channel = client
-    .channel("forum-posts")
+    .channel(`forum-posts-${Math.random().toString(36).slice(2, 8)}`)
     .on("postgres_changes", { event: "*", schema: "public", table: "forum_posts" }, onChange)
     .subscribe();
   return () => {

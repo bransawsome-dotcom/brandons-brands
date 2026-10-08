@@ -5,6 +5,7 @@ import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
 import ForumIdentity from "@/components/ForumIdentity";
+import FollowButton from "@/components/FollowButton";
 import {
   BODY_MAX,
   COMMENT_MAX,
@@ -28,6 +29,10 @@ const input =
   "w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-blue-400/70";
 
 const MAX_INDENT = 4;
+
+function messageHref(userId: string, name: string) {
+  return `/inbox?to=${encodeURIComponent(userId)}&name=${encodeURIComponent(name)}`;
+}
 
 function Avatar({ name }: { name: string }) {
   const initials = name
@@ -153,6 +158,16 @@ export default function ForumThreadPage() {
     void isModerator(userId).then(setModerator);
   }, [userId]);
 
+  // Notification links point at a reply (#c-…); scroll to it once replies have loaded.
+  useEffect(() => {
+    if (!comments.length || typeof window === "undefined" || !window.location.hash.startsWith("#c-")) return;
+    const el = document.getElementById(window.location.hash.slice(1));
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+      el.classList.add("bg-[#D9A43A]/10", "rounded-xl");
+    }
+  }, [comments.length]);
+
   const children = useMemo(() => {
     const map = new Map<string | null, ForumComment[]>();
     for (const c of comments) {
@@ -223,7 +238,7 @@ export default function ForumThreadPage() {
     const replies = children.get(c.id) ?? [];
     const canDelete = userId === c.user_id || moderator;
     return (
-      <li key={c.id} className={depth > 0 && depth <= MAX_INDENT ? "border-l border-white/10 pl-4 sm:pl-5" : ""}>
+      <li key={c.id} id={`c-${c.id}`} className={`scroll-mt-24 ${depth > 0 && depth <= MAX_INDENT ? "border-l border-white/10 pl-4 sm:pl-5" : ""}`}>
         <div className="flex gap-3 py-3">
           <Avatar name={c.author_name} />
           <div className="min-w-0 flex-1">
@@ -239,6 +254,11 @@ export default function ForumThreadPage() {
               <button type="button" onClick={() => setReplyTo(replyTo === c.id ? null : c.id)} className="font-semibold text-[#D9A43A] hover:text-[#e1b54a]">
                 Reply
               </button>
+              {userId && c.user_id !== userId ? (
+                <Link href={messageHref(c.user_id, c.author_name)} className="text-slate-400 hover:text-white">
+                  Message
+                </Link>
+              ) : null}
               {canDelete ? (
                 <button type="button" onClick={() => handleDeleteComment(c.id)} className="text-slate-500 hover:text-rose-300">
                   Delete
@@ -308,11 +328,21 @@ export default function ForumThreadPage() {
               <p className="text-sm text-slate-400">
                 <span className="font-semibold text-white">{post.author_name}</span> · {timeAgo(post.created_at)}
                 {post.updated_at ? " · edited" : ""}
+                {userId && post.user_id !== userId ? (
+                  <>
+                    {" · "}
+                    <Link href={messageHref(post.user_id, post.author_name)} className="text-[#D9A43A] hover:text-[#e1b54a]">
+                      Message
+                    </Link>
+                  </>
+                ) : null}
               </p>
             </div>
             <p className="mt-5 whitespace-pre-wrap break-words text-base leading-7 text-slate-200">{post.body}</p>
+            <div className="mt-6 flex flex-wrap items-center gap-3 text-sm">
+              <FollowButton postId={post.id} label="discussion" />
             {canManagePost ? (
-              <div className="mt-6 flex gap-3 text-sm">
+              <>
                 {userId === post.user_id ? (
                   <button type="button" onClick={startEdit} className="rounded-full border border-white/15 px-4 py-2 text-slate-200 hover:bg-white/5">
                     Edit
@@ -321,8 +351,9 @@ export default function ForumThreadPage() {
                 <button type="button" onClick={handleDeletePost} className="rounded-full border border-rose-500/60 px-4 py-2 text-rose-200 hover:bg-rose-500/10">
                   Delete{moderator && userId !== post.user_id ? " (moderator)" : ""}
                 </button>
-              </div>
+              </>
             ) : null}
+            </div>
           </>
         )}
       </article>

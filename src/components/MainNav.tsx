@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
+import InboxBell from "@/components/InboxBell";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -55,6 +56,8 @@ export default function MainNav() {
           Guest Mode
         </span>
       ) : user ? (
+        <>
+        <InboxBell />
         <button
           type="button"
           onClick={handleSignOut}
@@ -62,6 +65,7 @@ export default function MainNav() {
         >
           Logout
         </button>
+        </>
       ) : (
         <Link
           href="/login"
