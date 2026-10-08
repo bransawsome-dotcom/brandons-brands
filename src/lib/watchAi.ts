@@ -42,6 +42,14 @@ export function errorResponse(err: unknown): Response {
     return Response.json({ error: err.message }, { status: err.status });
   }
   console.error("watch AI error", err);
+  // Show the AI service's short reason (never includes the key) so problems can be diagnosed.
+  if (err instanceof Anthropic.APIError) {
+    const detail = (err.error as { error?: { message?: string } } | undefined)?.error?.message ?? err.message;
+    return Response.json(
+      { error: `Something went wrong looking that up. Please try again. (${err.status ?? "error"}: ${String(detail).slice(0, 200)})` },
+      { status: 500 },
+    );
+  }
   return Response.json({ error: "Something went wrong looking that up. Please try again." }, { status: 500 });
 }
 
