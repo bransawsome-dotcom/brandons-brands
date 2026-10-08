@@ -27,7 +27,7 @@ export default function WishlistScanner({ onAdd }: { onAdd: (items: WishlistItem
     setStatus("Reading your wishlist…");
     try {
       const found = await scanCollectionPhoto(file, "wishlist");
-      setRows(found.map((w) => ({ ...w, selected: true, priority: "Medium" })));
+      setRows(found.map((w) => ({ ...w, selected: true, priority: /top pick|#\s*1\b|must[- ]have|grail|high/i.test(w.notes) ? "High" : "Medium" })));
       setStatus(found.length ? `Found ${found.length} watch${found.length === 1 ? "" : "es"}. Check them, then add.` : null);
       if (!found.length) setError("No watches found in that photo. Try a clearer, closer shot.");
     } catch (err) {
