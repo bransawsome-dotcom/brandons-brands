@@ -3,15 +3,19 @@ import Link from "next/link";
 import { collabEmail, socials } from "@/lib/socials";
 import { SITE_URL } from "@/lib/site";
 
-const TITLE = "About Brandon's Brands | Luxury Watch Reviews & Community";
+const TITLE = "About Brandon's Brands | Brandon Volosov & Watch Microbrands";
 const DESCRIPTION =
-  "Brandon's Brands is a luxury watch brand and collector community. Watch reviews, unboxings and new-release first looks, free tools to track your watch collection and wishlist, and a forum for watch enthusiasts.";
+  "Meet Brandon Volosov, founder of Brandon's Brands: a passion for horology, luxury watchmakers and independent microbrands, and a welcoming community for watch enthusiasts. Beyond the brand. Behind the craftsmanship.";
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   keywords: [
     "Brandon's Brands",
+    "Brandon Volosov",
+    "horology",
+    "watch microbrands",
+    "independent watchmakers",
     "luxury watches",
     "watch reviews",
     "watch collecting",
@@ -69,12 +73,6 @@ const offerings = [
   },
 ];
 
-const values = [
-  { title: "Honest opinions", text: "We say what we like and what we don't, so you can buy with confidence." },
-  { title: "Every budget welcome", text: "From a first automatic to a grail piece, every collector belongs here." },
-  { title: "Craft first", text: "Movements, finishing and history matter as much as the name on the dial." },
-];
-
 const faqs = [
   {
     q: "What is Brandon's Brands?",
@@ -86,7 +84,7 @@ const faqs = [
   },
   {
     q: "Which watch brands do you cover?",
-    a: "We cover dozens of brands, including Rolex, Omega, Patek Philippe, Audemars Piguet, Cartier, Tudor, TAG Heuer, Grand Seiko and many more, plus vintage and independent watchmakers.",
+    a: "We cover dozens of brands, including Rolex, Omega, Patek Philippe, Audemars Piguet, Cartier, Tudor, TAG Heuer, Grand Seiko and many more, plus vintage pieces and independent microbrands that deserve a closer look.",
   },
   {
     q: "How can I work with Brandon's Brands?",
@@ -108,7 +106,17 @@ export default function AboutPage() {
         slogan: "Discover. Collect. Showcase the world's finest watches.",
         email: collabEmail,
         sameAs: socials.map((s) => s.url),
+        founder: { "@id": `${SITE_URL}/about#brandon` },
         contactPoint: [{ "@type": "ContactPoint", contactType: "customer support", email: collabEmail, availableLanguage: "English" }],
+      },
+      {
+        "@type": "Person",
+        "@id": `${SITE_URL}/about#brandon`,
+        name: "Brandon Volosov",
+        jobTitle: "Founder",
+        worksFor: { "@id": `${SITE_URL}/#organization` },
+        knowsAbout: ["Horology", "Luxury watches", "Watch microbrands", "Independent watchmakers", "Watch collecting"],
+        sameAs: socials.map((s) => s.url),
       },
       {
         "@type": "AboutPage",
@@ -155,13 +163,7 @@ export default function AboutPage() {
             <h1 className="mt-3 text-4xl font-semibold tracking-[-0.03em] text-white sm:text-5xl">
               About Brandon&apos;s Brands
             </h1>
-            <p className="mt-3 text-lg text-[#D9A43A] sm:text-xl">Luxury watch reviews, collecting tools and a community for watch lovers.</p>
-            <p className="mt-5 max-w-2xl text-base leading-7 text-slate-300">
-              Brandon&apos;s Brands is built around one idea: a great watch is better when it&apos;s shared. We review and celebrate the
-              world&apos;s finest timepieces, from iconic names like Rolex, Omega and Patek Philippe to vintage finds and independent
-              makers. We also give collectors simple tools to catalog what they own, plan what&apos;s next and connect with people who
-              love watches as much as they do.
-            </p>
+            <p className="mt-4 text-xl font-medium text-[#D9A43A] sm:text-2xl">Beyond the Brand. Behind the Craftsmanship.</p>
           </div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -173,20 +175,81 @@ export default function AboutPage() {
           />
         </header>
 
-        {/* Mission */}
-        <section aria-labelledby="mission" className="mt-12 rounded-[1.75rem] border border-blue-400/20 bg-gradient-to-br from-[#0E3A63]/60 to-black/30 p-6 sm:p-8">
-          <h2 id="mission" className="text-2xl font-semibold text-white sm:text-3xl">Our mission</h2>
-          <p className="mt-4 max-w-3xl text-base leading-7 text-slate-200">
-            To help every watch enthusiast <strong className="font-semibold text-white">discover</strong> pieces worth knowing,{" "}
-            <strong className="font-semibold text-white">collect</strong> with confidence and{" "}
-            <strong className="font-semibold text-white">showcase</strong>{" "}the watches they love, whether it&apos;s a first automatic
-            or a lifelong grail.
+        {/* Meet Brandon */}
+        <section aria-labelledby="meet-brandon" className="mt-10 max-w-3xl">
+          <h2 id="meet-brandon" className="text-2xl font-semibold text-white sm:text-3xl">Meet Brandon Volosov</h2>
+          <div className="mt-5 space-y-5 text-base leading-8 text-slate-300">
+            <p>
+              For Brandon Volosov, a watch is more than an accessory—it&apos;s an expression of craftsmanship, creativity, and personal
+              style. His passion for{" "}
+              <strong className="font-semibold text-white">horology—the art and science of timekeeping—</strong>is rooted in an
+              appreciation for the details: the movement inside the case, the finish of a dial, the balance of a design, and the
+              inspiration behind it.
+            </p>
+            <p>
+              Brandon created Brandon&apos;s Brands to share that curiosity and enthusiasm with others. His interests span both
+              established luxury watchmakers and independent microbrands, with a particular appreciation for discovering names that
+              deserve a closer look.
+            </p>
+            <p>
+              What draws Brandon to a timepiece isn&apos;t simply the logo on the dial. It&apos;s the thought behind its design, the care
+              in its execution, and the connection it creates with the person wearing it. To him, exploring an unfamiliar watchmaker
+              can be just as exciting as admiring an iconic luxury watch.
+            </p>
+          </div>
+        </section>
+
+        {/* Microbrands */}
+        <section
+          aria-labelledby="microbrands"
+          className="mt-12 rounded-[1.75rem] border border-blue-400/20 bg-gradient-to-br from-[#0E3A63]/60 to-black/30 p-6 sm:p-8 lg:p-10"
+        >
+          <h2 id="microbrands" className="text-2xl font-semibold text-white sm:text-3xl">Why Microbrands Matter</h2>
+          <blockquote className="mt-5 border-l-4 border-[#D9A43A] pl-4 text-lg font-medium italic leading-8 text-white sm:text-xl">
+            Exceptional watches deserve attention—not just recognizable names.
+          </blockquote>
+          <div className="mt-6 max-w-3xl space-y-5 text-base leading-8 text-slate-200">
+            <p>
+              Brandon believes smaller independent watchmakers deserve the same thoughtful attention and appreciation as established
+              luxury houses. His interest in microbrands comes from a desire to look beyond familiar labels and explore different
+              approaches to design, craftsmanship, and self-expression.
+            </p>
+            <p>
+              At Brandon&apos;s Brands, that means making room for discovery: introducing lesser-known names, exploring what makes their
+              watches distinctive, and looking at the people and ideas behind them. The goal isn&apos;t to choose independent brands over
+              established watchmakers. It&apos;s to appreciate both with an open mind and an eye for detail.
+            </p>
+            <p>
+              Brandon&apos;s commitment is to help enthusiasts discover watches they might otherwise overlook—and develop their own
+              understanding of what makes a timepiece meaningful.
+            </p>
+          </div>
+          <p className="mt-6 text-lg font-semibold text-[#D9A43A]">Because the name on the dial is only the beginning of the story.</p>
+        </section>
+
+        {/* Shared passion */}
+        <section aria-labelledby="shared-passion" className="mt-12 max-w-3xl">
+          <h2 id="shared-passion" className="text-2xl font-semibold text-white sm:text-3xl">A Shared Passion for Watches</h2>
+          <div className="mt-5 space-y-5 text-base leading-8 text-slate-300">
+            <p>
+              Brandon&apos;s Brands is about more than showcasing timepieces. It&apos;s about creating a welcoming place to learn, ask
+              questions, exchange perspectives, and enjoy the discovery process.
+            </p>
+            <p>
+              Whether you&apos;re exploring your first mechanical watch, building a collection, or searching for something outside the
+              familiar luxury names, you belong in the conversation. You don&apos;t need an expensive collection or an encyclopedic
+              knowledge of movements—just curiosity and an appreciation for watches.
+            </p>
+          </div>
+          <p className="mt-6 text-xl font-semibold leading-8 text-white">
+            Welcome to Brandon&apos;s Brands.{" "}
+            <span className="text-blue-200">Discover the makers. Explore the details. Find what speaks to you.</span>
           </p>
         </section>
 
         {/* What we do */}
         <section aria-labelledby="what-we-do" className="mt-12">
-          <h2 id="what-we-do" className="text-2xl font-semibold text-white sm:text-3xl">What we do</h2>
+          <h2 id="what-we-do" className="text-2xl font-semibold text-white sm:text-3xl">What you&apos;ll find here</h2>
           <div className="mt-6 grid gap-5 sm:grid-cols-2">
             {offerings.map((o) => (
               <div key={o.title} className="flex flex-col rounded-[1.75rem] border border-white/10 bg-slate-950/80 p-6">
@@ -198,19 +261,6 @@ export default function AboutPage() {
               </div>
             ))}
           </div>
-        </section>
-
-        {/* Values */}
-        <section aria-labelledby="values" className="mt-12">
-          <h2 id="values" className="text-2xl font-semibold text-white sm:text-3xl">What we stand for</h2>
-          <ul className="mt-6 grid gap-5 sm:grid-cols-3">
-            {values.map((v) => (
-              <li key={v.title} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
-                <h3 className="text-lg font-semibold text-blue-200">{v.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-slate-300">{v.text}</p>
-              </li>
-            ))}
-          </ul>
         </section>
 
         {/* Follow */}
