@@ -13,6 +13,7 @@ const navLinks = [
   { href: "/social", label: "Social Media" },
   { href: "/blog", label: "Blog" },
   { href: "/forum", label: "Forum" },
+  { href: "/about", label: "About" },
   { href: "/account", label: "Account" },
 ];
 
@@ -36,7 +37,7 @@ export default function MainNav() {
   return (
     <div className="flex w-full flex-col gap-2 text-sm font-medium text-slate-200 lg:items-end">
       {/* Page links: one line on large screens (wraps on phones). */}
-      <div className="flex flex-wrap gap-1.5 sm:justify-end lg:flex-nowrap">
+      <div className="flex flex-wrap gap-1 sm:justify-end xl:flex-nowrap xl:gap-1.5">
         {navLinks.map((item) => {
           const active = isActive(pathname, item.href);
           return (
@@ -44,7 +45,7 @@ export default function MainNav() {
               key={item.href}
               href={item.href}
               aria-current={active ? "page" : undefined}
-              className={`min-w-[96px] whitespace-nowrap rounded-full border px-3 py-2 text-center transition lg:min-w-0 lg:px-3.5 ${
+              className={`min-w-[96px] whitespace-nowrap rounded-full border px-3 py-2 text-center transition lg:min-w-0 lg:px-2.5 xl:px-3.5 ${
                 active ? "border-blue-400/30 bg-blue-500/20 text-blue-200" : "border-transparent hover:bg-blue-500/10 hover:text-blue-200"
               }`}
             >
