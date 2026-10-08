@@ -1,5 +1,7 @@
 "use client";
 
+import { createPortal } from "react-dom";
+
 import { FormEvent, useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import supabase from "@/lib/supabaseClient";
@@ -71,7 +73,8 @@ export default function MakeOfferButton({ handle, watchId, watchLabel }: { handl
         Make an offer
       </button>
 
-      {open ? (
+      {open && typeof document !== "undefined"
+        ? createPortal(
         <div
           className="fixed inset-0 z-[60] flex items-end justify-center bg-black/70 p-3 backdrop-blur-sm sm:items-center"
           role="dialog"
@@ -159,8 +162,10 @@ export default function MakeOfferButton({ handle, watchId, watchLabel }: { handl
               </form>
             )}
           </div>
-        </div>
-      ) : null}
+        </div>,
+            document.body,
+          )
+        : null}
     </>
   );
 }

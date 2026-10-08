@@ -1,5 +1,7 @@
 "use client";
 
+import { createPortal } from "react-dom";
+
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
@@ -17,6 +19,7 @@ export default function PublicListToggle({ kind }: { kind: "collection" | "wishl
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [confirming, setConfirming] = useState(false);
 
   useEffect(() => {
     if (!userId || !supabase) return;
@@ -42,6 +45,7 @@ export default function PublicListToggle({ kind }: { kind: "collection" | "wishl
 
   const toggle = async () => {
     if (!supabase) return;
+    setConfirming(false);
     setBusy(true);
     setError(null);
     const { error: err } = await supabase.rpc("set_list_public", { p_kind: kind, p_public: !on });
@@ -77,7 +81,7 @@ export default function PublicListToggle({ kind }: { kind: "collection" | "wishl
           aria-checked={on}
           aria-label={`Make ${kind} public`}
           disabled={busy}
-          onClick={toggle}
+          onClick={() => (on ? toggle() : setConfirming(true))}
           className={`relative h-7 w-12 shrink-0 rounded-full transition disabled:opacity-50 ${on ? "bg-emerald-500" : "bg-white/15"}`}
         >
           <span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all ${on ? "left-6" : "left-1"}`} />
@@ -99,6 +103,56 @@ export default function PublicListToggle({ kind }: { kind: "collection" | "wishl
         email are never public.
       </p>
       {error ? <p className="mt-2 text-xs text-rose-300">{error}</p> : null}
+
+      {confirming && typeof document !== "undefined"
+        ? createPortal(
+        <div
+          className="fixed inset-0 z-[60] flex items-end justify-center bg-black/70 p-3 backdrop-blur-sm sm:items-center"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="go-public-title"
+          onClick={(e) => e.target === e.currentTarget && setConfirming(false)}
+        >
+          <div className="w-full max-w-md rounded-[1.75rem] border border-white/10 bg-[#0B1626] p-6 text-left shadow-[0_30px_90px_rgba(0,0,0,0.6)]">
+            <p className="text-xs uppercase tracking-[0.25em] text-blue-300">Make it public?</p>
+            <h2 id="go-public-title" className="mt-2 text-xl font-semibold text-white">
+              Your {kind} will be visible to everyone
+            </h2>
+            <ul className="mt-4 space-y-2.5 text-sm leading-6 text-slate-300">
+              <li>🌐 Anyone can see it at <span className="break-all font-semibold text-emerald-200">brandonsbrands17.com{path}</span>.</li>
+              <li>
+                🔎 Search engines like Google can list it. They usually take <span className="text-white">a few days to a few weeks</span> to
+                pick up new pages, so share your link to get it seen sooner.
+              </li>
+              {kind === "collection" ? <li>💰 Anyone can make an offer on your watches. Offers come to your Inbox and email.</li> : null}
+              <li>
+                🔒 It shows as <span className="text-white">{profile.display_name}</span>. Prices you paid, dates, notes and your email stay
+                private.
+              </li>
+              <li>↩️ You can switch it back to private at any time.</li>
+            </ul>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <button
+                type="button"
+                onClick={toggle}
+                disabled={busy}
+                className="rounded-full bg-emerald-500 px-5 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-black transition hover:bg-emerald-400 disabled:opacity-60"
+              >
+                Make it public
+              </button>
+              <button
+                type="button"
+                onClick={() => setConfirming(false)}
+                className="rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-slate-200 hover:bg-white/5"
+              >
+                Keep private
+              </button>
+            </div>
+          </div>
+        </div>,
+            document.body,
+          )
+        : null}
     </div>
   );
 }
