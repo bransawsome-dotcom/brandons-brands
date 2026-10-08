@@ -52,6 +52,7 @@ export default function ForumHome() {
   const [postError, setPostError] = useState<string | null>(null);
   const [showAllBrands, setShowAllBrands] = useState(false);
   const [moderator, setModerator] = useState(false);
+  const [addingClub, setAddingClub] = useState(false);
 
   // All posts are loaded once; subject filtering and counts happen in the browser.
   const load = useCallback(async () => {
@@ -139,6 +140,13 @@ export default function ForumHome() {
     } finally {
       setPosting(false);
     }
+  };
+
+  // "+ Add a club" opens a small form that creates the club's sub-folder right away (no post needed).
+  const startAddClub = () => {
+    if (openFolder !== CLUBS_FOLDER) chooseSubject(CLUBS_FOLDER);
+    setAddingClub(true);
+    setTimeout(() => document.getElementById("add-club")?.scrollIntoView({ behavior: "smooth", block: "center" }), 50);
   };
 
   const removeSubject = async (node: SubjectNode) => {
@@ -231,7 +239,7 @@ export default function ForumHome() {
                       <div className="flex flex-wrap gap-2">
                         {[
                           { key: "subject" as const, label: "New subject" },
-                          { key: "club" as const, label: "New watch club or meetup" },
+                          { key: "club" as const, label: "New club (sub-folder of Watch Clubs & Meetups)" },
                         ].map((o) => (
                           <button
                             key={o.key}
@@ -335,8 +343,8 @@ export default function ForumHome() {
                       </button>
                     ) : null}
                     {openFolder === CLUBS_FOLDER ? (
-                      <button type="button" onClick={() => openComposer({ club: true })} className="ml-5 text-left text-xs font-semibold text-[#D9A43A] hover:text-[#e1b54a]">
-                        + Start a club
+                      <button type="button" onClick={() => startAddClub()} className="ml-5 text-left text-xs font-semibold text-[#D9A43A] hover:text-[#e1b54a]">
+                        + Add a club
                       </button>
                     ) : null}
                   </div>
@@ -408,19 +416,31 @@ export default function ForumHome() {
                 </button>
               ) : null}
               {openFolder === CLUBS_FOLDER ? (
-                <button type="button" onClick={() => openComposer({ club: true })} className="rounded-full px-3 py-1.5 text-xs font-semibold text-[#D9A43A]">
-                  + Start a club
+                <button type="button" onClick={() => startAddClub()} className="rounded-full px-3 py-1.5 text-xs font-semibold text-[#D9A43A]">
+                  + Add a club
                 </button>
               ) : null}
             </div>
           ) : null}
 
-          {openFolder === CLUBS_FOLDER && subject === CLUBS_FOLDER && !(tree.children.get(CLUBS_FOLDER) ?? []).length ? (
+          {addingClub ? (
+            <AddClubForm
+              signedIn={Boolean(user)}
+              onCancel={() => setAddingClub(false)}
+              onAdded={async (slug) => {
+                await reloadSubjects();
+                setAddingClub(false);
+                chooseSubject(slug);
+              }}
+            />
+          ) : null}
+
+          {!addingClub && openFolder === CLUBS_FOLDER && subject === CLUBS_FOLDER && !(tree.children.get(CLUBS_FOLDER) ?? []).length ? (
             <div className="mb-4 rounded-[1.5rem] border border-[#D9A43A]/30 bg-[#D9A43A]/5 p-5 text-sm text-slate-300">
               <p className="font-semibold text-white">No clubs yet.</p>
-              <p className="mt-1">Run a watch club or meetup? Give it its own folder here so members can find events and chat.</p>
-              <button type="button" onClick={() => openComposer({ club: true })} className="mt-3 rounded-full bg-[#D9A43A] px-4 py-2 text-xs font-semibold text-black hover:bg-[#e1b54a]">
-                + Start a club
+              <p className="mt-1">Belong to a watch club or meetup group? Add it as its own folder here so members can find events and chat.</p>
+              <button type="button" onClick={() => startAddClub()} className="mt-3 rounded-full bg-[#D9A43A] px-4 py-2 text-xs font-semibold text-black hover:bg-[#e1b54a]">
+                + Add a club
               </button>
             </div>
           ) : null}
@@ -478,7 +498,7 @@ export default function ForumHome() {
 const STEPS = [
   { title: "Log in or join", text: "Reading is open to everyone. To post or reply, log in or create a free account." },
   { title: "Tap + New post", text: "The first time, choose your forum name. It's what everyone sees, and your email stays private." },
-  { title: "Pick a subject and post", text: "Choose a subject, brand or club. Not listed? Add a new subject or start a club right from the post form." },
+  { title: "Pick a subject and post", text: "Choose a subject, brand or club. Not listed? Add a new subject, or tap + Add a club under Watch Clubs & Meetups." },
   { title: "Join and follow", text: "Reply to any discussion or comment. Tap Follow on a discussion or subject to get new replies in your inbox." },
 ];
 
@@ -539,5 +559,74 @@ function GettingStarted({ onNewPost }: { onNewPost: () => void }) {
         </>
       ) : null}
     </section>
+  );
+}
+
+// Adds a club as a new sub-folder under Watch Clubs & Meetups.
+function AddClubForm({ signedIn, onCancel, onAdded }: { signedIn: boolean; onCancel: () => void; onAdded: (slug: string) => Promise<void> }) {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const submit = async (event: FormEvent) => {
+    event.preventDefault();
+    setBusy(true);
+    setError(null);
+    try {
+      const created = await createSubject({ name, parent: CLUBS_FOLDER, description });
+      await onAdded(created.slug);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Couldn't add that club.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div id="add-club" className="mb-4 rounded-[1.5rem] border border-[#D9A43A]/30 bg-[#D9A43A]/5 p-5 text-sm">
+      <p className="font-semibold text-white">Add a club</p>
+      <p className="mt-1 text-slate-400">Creates a new sub-folder under Watch Clubs &amp; Meetups for your club&apos;s events and chat.</p>
+      {!signedIn ? (
+        <p className="mt-3 text-slate-300">
+          <Link href="/login" className="font-semibold text-[#D9A43A]">
+            Log in
+          </Link>{" "}
+          or{" "}
+          <Link href="/signup" className="font-semibold text-[#D9A43A]">
+            create a free account
+          </Link>{" "}
+          to add a club.
+        </p>
+      ) : (
+        <form onSubmit={submit} className="mt-3 grid gap-3">
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            maxLength={50}
+            required
+            autoFocus
+            placeholder="Club name, e.g. NJ Watch Collectors"
+            className={input}
+          />
+          <input
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            maxLength={300}
+            placeholder="Optional: where and when you meet, e.g. Hoboken, first Saturday monthly"
+            className={input}
+          />
+          {error ? <p className="text-rose-300">{error}</p> : null}
+          <div className="flex gap-3">
+            <button type="submit" disabled={busy} className="rounded-full bg-[#D9A43A] px-5 py-2.5 text-sm font-semibold text-black hover:bg-[#e1b54a] disabled:opacity-60">
+              {busy ? "Adding…" : "Add club"}
+            </button>
+            <button type="button" onClick={onCancel} className="rounded-full border border-white/15 px-5 py-2.5 text-sm text-slate-200 hover:bg-white/5">
+              Cancel
+            </button>
+          </div>
+        </form>
+      )}
+    </div>
   );
 }
