@@ -12,7 +12,8 @@ export class AiError extends Error {
 }
 
 export function getAnthropic(): Anthropic {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  // Accept either spelling; Vercel variable names are case-sensitive.
+  const apiKey = process.env.ANTHROPIC_API_KEY || process.env.anthropic_api_key;
   if (!apiKey) {
     throw new AiError("Auto-fill isn't set up yet: the ANTHROPIC_API_KEY is missing in Vercel.", 503);
   }
