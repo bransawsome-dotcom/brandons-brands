@@ -11,6 +11,7 @@ const navLinks = [
   { href: "/wishlist", label: "Wishlist" },
   { href: "/social", label: "Social Media" },
   { href: "/blog", label: "Blog" },
+  { href: "/forum", label: "Forum" },
   { href: "/account", label: "Account" },
 ];
 
