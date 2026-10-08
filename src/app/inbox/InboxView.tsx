@@ -40,6 +40,19 @@ function senderName(user: User | null, moderator: boolean): string {
 const EMPTY_TEXT: Record<FolderKey, { icon: string; title: string; text: React.ReactNode }> = {
   all: { icon: "📥", title: "You're all caught up.", text: "Messages, forum replies, website updates and group events all land here." },
   messages: { icon: "✉️", title: "No messages yet.", text: "" },
+  alerts: {
+    icon: "🏷️",
+    title: "No price alerts yet.",
+    text: (
+      <>
+        Turn on <span className="text-slate-200">🔔 Price alert</span> for a watch on your{" "}
+        <Link href="/wishlist" className="text-[#D9A43A]">
+          wishlist
+        </Link>{" "}
+        and we&apos;ll tell you when it&apos;s listed at or below your target price.
+      </>
+    ),
+  },
   forum: {
     icon: "💬",
     title: "No forum alerts yet.",
@@ -111,7 +124,7 @@ export default function InboxView() {
   const thread = useMemo(() => messages.filter((m) => m.sender_id === activeId || m.recipient_id === activeId), [messages, activeId]);
 
   const unreadByFolder = useMemo(() => {
-    const counts: Record<FolderKey, number> = { all: 0, messages: 0, forum: 0, updates: 0, events: 0 };
+    const counts: Record<FolderKey, number> = { all: 0, messages: 0, alerts: 0, forum: 0, updates: 0, events: 0 };
     for (const n of notifications) if (!n.read_at) counts[folderOf(n.kind)] += 1;
     counts.messages = conversations.reduce((sum, c) => sum + c.unread, 0);
     counts.all = counts.messages + counts.forum + counts.updates + counts.events;

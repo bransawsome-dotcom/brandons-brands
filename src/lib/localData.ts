@@ -76,10 +76,13 @@ export type WishlistItem = {
   retail_price?: string;
   details?: import("@/lib/watchAiClient").WatchDetails | null;
   value_updated_at?: string;
+  // Price alert: search daily for listings at or below target_price. alert_checked_at is set by the server.
+  price_alert?: boolean;
+  alert_checked_at?: string | null;
 };
 
-// Wishlist columns added for auto-fill. If the database doesn't have them yet, saves retry without them.
-export const WISHLIST_AUTO_FILL_FIELDS = ["image_url", "retail_price", "details", "value_updated_at"] as const;
+// Wishlist columns added after launch. If the database doesn't have them yet, saves retry without them.
+export const WISHLIST_AUTO_FILL_FIELDS = ["image_url", "retail_price", "details", "value_updated_at", "price_alert"] as const;
 
 const COLLECTION_STORAGE_KEY = "brandons-brands-collection";
 const WISHLIST_STORAGE_KEY = "brandons-brands-wishlist";

@@ -145,7 +145,8 @@ export async function saveWishlistData(userId: string | null | undefined, wishli
     return wishlist;
   }
 
-  const rows: Record<string, unknown>[] = wishlist.map((item) => ({ ...item, user_id: userId }));
+  // alert_checked_at is owned by the server's daily price check; never write a stale copy back.
+  const rows: Record<string, unknown>[] = wishlist.map(({ alert_checked_at: _checked, ...item }) => ({ ...item, user_id: userId }));
   let { error } = await supabase.from("wishlist").upsert(rows, { onConflict: "id" });
   if (error && (error.code === "PGRST204" || /column/i.test(error.message))) {
     // Database doesn't have the auto-fill columns yet: save the basics anyway.

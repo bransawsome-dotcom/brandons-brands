@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { clearGuestStorageData, loadCollectionData, loadWishlistData } from "@/lib/storage";
 import { useRequireAuth } from "@/components/AuthProvider";
 import TextMessageSettings from "@/components/TextMessageSettings";
+import PriceAlertEmailSetting from "@/components/PriceAlertEmailSetting";
 import { forumName, saveForumName } from "@/lib/forum";
 import { accountName, saveAccountName } from "@/lib/account";
 import EditableNameRow from "@/components/EditableNameRow";
@@ -118,6 +119,7 @@ export default function AccountPage() {
                   Logout
                 </button>
               </div>
+              <PriceAlertEmailSetting />
               <TextMessageSettings />
               {guestMode ? (
                 <div className="flex items-center justify-between rounded-3xl bg-white/5 px-4 py-3">

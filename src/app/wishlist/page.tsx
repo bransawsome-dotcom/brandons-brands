@@ -6,7 +6,9 @@ import { useRequireAuth } from "@/components/AuthProvider";
 import { type WishlistItem } from "@/lib/localData";
 import Combobox from "@/components/Combobox";
 import { canonicalBrand, modelsForBrand, watchBrands } from "@/lib/watchCatalog";
-import { formatUsd, lookupWatchDetails, type WatchLookupResult } from "@/lib/watchAiClient";
+import { checkPriceNow, formatUsd, lookupWatchDetails, type WatchLookupResult } from "@/lib/watchAiClient";
+import { dismissPriceMatch, listPriceMatches, setPriceAlert, type PriceMatch } from "@/lib/priceAlertsClient";
+import PriceAlertPanel from "@/components/PriceAlertPanel";
 import { applyWishlistLookup } from "@/lib/watchBuild";
 import WishlistScanner from "@/components/WishlistScanner";
 import ShareButton from "@/components/ShareButton";
@@ -48,6 +50,9 @@ export default function WishlistPage() {
   const [lookup, setLookup] = useState<WatchLookupResult | null>(null);
   const [lookingUp, setLookingUp] = useState(false);
   const [refreshingId, setRefreshingId] = useState<string | null>(null);
+  const [matches, setMatches] = useState<Record<string, PriceMatch[]>>({});
+  const [checkingId, setCheckingId] = useState<string | null>(null);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
   // Latest list, so a long photo scan doesn't overwrite changes made while it ran.
   const wishlistRef = useRef<WishlistItem[]>([]);
   useEffect(() => {
@@ -68,7 +73,46 @@ export default function WishlistPage() {
       setWishlist(saved);
       setLoading(false);
     });
-  }, [authLoading, userId]);
+    if (userId && !guestMode) void listPriceMatches(userId).then(setMatches);
+  }, [authLoading, userId, guestMode]);
+
+  // Coming from a price-alert notification: scroll to that watch once the list is loaded.
+  useEffect(() => {
+    if (loading || typeof window === "undefined" || !window.location.hash.startsWith("#w-")) return;
+    document.getElementById(window.location.hash.slice(1))?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [loading]);
+
+  const togglePriceAlert = async (item: WishlistItem, on: boolean) => {
+    if (!userId) return;
+    setAlertMessage(null);
+    try {
+      await setPriceAlert(userId, item.id, on);
+      setWishlist((current) => current.map((w) => (w.id === item.id ? { ...w, price_alert: on } : w)));
+    } catch (err) {
+      setAlertMessage(err instanceof Error ? err.message : "Couldn't change the price alert.");
+    }
+  };
+
+  const runPriceCheck = async (item: WishlistItem) => {
+    if (!userId) return;
+    setCheckingId(item.id);
+    setAlertMessage(null);
+    try {
+      const result = await checkPriceNow(item.id);
+      setWishlist((current) => current.map((w) => (w.id === item.id ? { ...w, alert_checked_at: new Date().toISOString() } : w)));
+      setMatches(await listPriceMatches(userId));
+      if (!result.found) setAlertMessage(`No listings at or below your target for the ${item.brand} ${item.model} right now. We'll keep checking daily.`);
+    } catch (err) {
+      setAlertMessage(err instanceof Error ? err.message : "Couldn't check prices right now.");
+    } finally {
+      setCheckingId(null);
+    }
+  };
+
+  const dismissMatch = async (wishlistId: string, matchId: string) => {
+    await dismissPriceMatch(matchId);
+    setMatches((current) => ({ ...current, [wishlistId]: (current[wishlistId] ?? []).filter((m) => m.id !== matchId) }));
+  };
 
   const filteredWishlist = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -354,6 +398,7 @@ export default function WishlistPage() {
             <label className="space-y-2 text-sm text-slate-300">
               Target price (what you&apos;d pay)
               <input name="target_price" value={form.target_price} onChange={handleChange} type="number" step="0.01" className={inputClass} placeholder="42000" />
+              <span className="block text-xs text-slate-500">Turn on 🔔 Price alert on the watch to get notified when it&apos;s listed at or below this price.</span>
             </label>
           </div>
 
@@ -407,6 +452,7 @@ export default function WishlistPage() {
           </div>
         </div>
 
+        {alertMessage ? <div className="mb-6 rounded-3xl bg-white/5 px-4 py-3 text-sm text-amber-300">{alertMessage}</div> : null}
         {loading ? (
           <div className="rounded-[2rem] border border-white/10 bg-white/5 p-12 text-center text-slate-300">Loading wishlist…</div>
         ) : !wishlist.length ? (
@@ -438,7 +484,8 @@ export default function WishlistPage() {
               return (
                 <article
                   key={item.id}
-                  className="flex flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-[0_25px_70px_rgba(0,0,0,0.28)] backdrop-blur-xl"
+                  id={`w-${item.id}`}
+                  className="scroll-mt-6 flex flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-[0_25px_70px_rgba(0,0,0,0.28)] backdrop-blur-xl"
                 >
                   {item.image_url ? (
                     <div className="flex h-56 items-center justify-center bg-white p-4">
@@ -487,6 +534,17 @@ export default function WishlistPage() {
                     {d.year_introduced ? <p className="mt-1 text-xs text-slate-400">Introduced {d.year_introduced}</p> : null}
                     {d.summary ? <p className="mt-3 text-sm leading-6 text-slate-300">{d.summary}</p> : null}
                     {item.notes ? <p className="mt-3 text-sm leading-6 text-slate-200">📝 {item.notes}</p> : null}
+
+                    {canAutoFill ? (
+                      <PriceAlertPanel
+                        item={item}
+                        matches={matches[String(item.id)] ?? []}
+                        checking={checkingId === item.id}
+                        onToggle={(on) => togglePriceAlert(item, on)}
+                        onCheck={() => runPriceCheck(item)}
+                        onDismiss={(matchId) => dismissMatch(String(item.id), matchId)}
+                      />
+                    ) : null}
 
                     {item.value_updated_at || d.sources?.length ? (
                       <p className="mt-3 text-xs leading-5 text-slate-500">

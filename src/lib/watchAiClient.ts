@@ -102,3 +102,8 @@ export function formatUsd(value?: string | number | null): string {
   if (!Number.isFinite(n)) return "—";
   return n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 }
+
+// Price alerts: search now for listings of one wishlist watch at or below its target price.
+export function checkPriceNow(id: string): Promise<{ id: string; found: number; added: number }> {
+  return post("/api/price-alerts/check", { id });
+}
