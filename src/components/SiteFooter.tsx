@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { collabEmail, socials } from "@/lib/socials";
 
 export default function SiteFooter() {
@@ -14,6 +15,11 @@ export default function SiteFooter() {
             <a href={`mailto:${collabEmail}`} className="text-[#D9A43A] transition hover:text-[#e1b54a]">
               {collabEmail}
             </a>
+          </p>
+          <p className="mt-1 text-sm">
+            <Link href="/about" className="text-blue-300 transition hover:text-blue-200">About us</Link>
+            <span className="mx-2 text-slate-500">·</span>
+            <Link href="/about#contact" className="text-blue-300 transition hover:text-blue-200">Contact us</Link>
           </p>
           </div>
         </div>

@@ -4,6 +4,7 @@ import AuthProvider from "@/components/AuthProvider";
 import MainNav from "@/components/MainNav";
 import SiteFooter from "@/components/SiteFooter";
 import Link from "next/link";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -17,8 +18,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Brandon's Brands",
   description: "Luxury watch collection and wishlist for Brandon's Brands.",
+  openGraph: {
+    type: "website",
+    siteName: "Brandon's Brands",
+    locale: "en_US",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Brandon's Brands – Luxury Watch Curation" }],
+  },
+  twitter: { card: "summary_large_image", images: ["/og-image.png"] },
 };
 
 export default function RootLayout({
