@@ -1,4 +1,4 @@
-import type { Watch } from "@/lib/localData";
+import type { Watch, WishlistItem } from "@/lib/localData";
 import type { WatchLookupResult } from "@/lib/watchAiClient";
 
 function numToString(value: number | null | undefined): string {
@@ -37,6 +37,31 @@ export function applyLookup(watch: Watch, lookup: WatchLookupResult, opts: { kee
       market_value_low: lookup.market_value_low,
       market_value_high: lookup.market_value_high,
       retail_price_date_note: watch.details?.retail_price_date_note || lookup.retail_price_date_note,
+      summary: lookup.summary,
+      sources: lookup.sources,
+    },
+  };
+}
+
+// Merges an auto-fill lookup into a wishlist item. Uses today's prices (no purchase date).
+export function applyWishlistLookup(item: WishlistItem, lookup: WatchLookupResult): WishlistItem {
+  return {
+    ...item,
+    brand: item.brand || lookup.brand,
+    model: item.model || lookup.model,
+    reference_number: item.reference_number || lookup.reference_number || undefined,
+    image_url: lookup.image_url || item.image_url || "",
+    retail_price: numToString(lookup.current_retail_price) || item.retail_price || "",
+    current_market_price: numToString(lookup.market_value) || item.current_market_price || "",
+    value_updated_at: new Date().toISOString(),
+    details: {
+      year_introduced: lookup.year_introduced,
+      case_size_mm: lookup.case_size_mm,
+      case_material: lookup.case_material,
+      movement: lookup.movement,
+      water_resistance: lookup.water_resistance,
+      market_value_low: lookup.market_value_low,
+      market_value_high: lookup.market_value_high,
       summary: lookup.summary,
       sources: lookup.sources,
     },

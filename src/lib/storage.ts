@@ -12,6 +12,7 @@ import {
   type Watch,
   type WishlistItem,
   AUTO_FILL_FIELDS,
+  WISHLIST_AUTO_FILL_FIELDS,
 } from "@/lib/localData";
 
 // Upserts watch rows. If the database doesn't have the auto-fill columns yet,
@@ -137,8 +138,17 @@ export async function saveWishlistData(userId: string | null | undefined, wishli
     return wishlist;
   }
 
-  const rows = wishlist.map((item) => ({ ...item, user_id: userId }));
-  const { error } = await supabase.from("wishlist").upsert(rows, { onConflict: "id" });
+  const rows: Record<string, unknown>[] = wishlist.map((item) => ({ ...item, user_id: userId }));
+  let { error } = await supabase.from("wishlist").upsert(rows, { onConflict: "id" });
+  if (error && (error.code === "PGRST204" || /column/i.test(error.message))) {
+    // Database doesn't have the auto-fill columns yet: save the basics anyway.
+    const stripped = rows.map((row) => {
+      const copy = { ...row };
+      for (const field of WISHLIST_AUTO_FILL_FIELDS) delete copy[field];
+      return copy;
+    });
+    ({ error } = await supabase.from("wishlist").upsert(stripped, { onConflict: "id" }));
+  }
   if (error) {
     console.error("Failed to save wishlist", error);
   }

@@ -36,7 +36,16 @@ export type WishlistItem = {
   purchase_link?: string;
   purchased_at?: string;
   estimated_price?: string;
+  // Auto-fill: official photo, today's list price, specs/summary/sources, and when prices were checked.
+  // current_market_price holds the estimated market value.
+  image_url?: string;
+  retail_price?: string;
+  details?: import("@/lib/watchAiClient").WatchDetails | null;
+  value_updated_at?: string;
 };
+
+// Wishlist columns added for auto-fill. If the database doesn't have them yet, saves retry without them.
+export const WISHLIST_AUTO_FILL_FIELDS = ["image_url", "retail_price", "details", "value_updated_at"] as const;
 
 const COLLECTION_STORAGE_KEY = "brandons-brands-collection";
 const WISHLIST_STORAGE_KEY = "brandons-brands-wishlist";
