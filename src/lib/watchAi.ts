@@ -213,7 +213,6 @@ export async function scanCollectionImage(base64: string, mediaType: string, kin
     model: MODEL,
     max_tokens: 4000,
     tools: [{ name: "record_watches", description: "Record every watch listed in the image.", input_schema: scanSchema }],
-    tool_choice: { type: "tool", name: "record_watches" },
     messages: [
       {
         role: "user",
@@ -221,15 +220,36 @@ export async function scanCollectionImage(base64: string, mediaType: string, kin
           { type: "image", source: { type: "base64", media_type: mediaType as ImageType, data: base64 } },
           {
             type: "text",
-            text: SCAN_PROMPTS[kind] ?? SCAN_PROMPTS.collection,
+            text: `${SCAN_PROMPTS[kind] ?? SCAN_PROMPTS.collection} Call the record_watches tool exactly once with everything you found (an empty list if there are no watches).`,
           },
         ],
       },
     ],
   });
   const block = response.content.find((b): b is Anthropic.ToolUseBlock => b.type === "tool_use");
-  const watches = (block?.input as { watches?: ScannedWatch[] } | undefined)?.watches ?? [];
-  return watches.filter((w) => w.brand || w.model);
+  let watches = (block?.input as { watches?: ScannedWatch[] } | undefined)?.watches;
+  if (!watches) {
+    // Backup: the model answered in text instead of calling the tool. Read any JSON it wrote.
+    const text = response.content.map((b) => (b.type === "text" ? b.text : "")).join("\n");
+    const json = text.match(/\{[\s\S]*\}/)?.[0];
+    try {
+      watches = json ? (JSON.parse(json) as { watches?: ScannedWatch[] }).watches : undefined;
+    } catch {
+      watches = undefined;
+    }
+  }
+  // Fill any missing fields so the review table always has strings to edit.
+  return (watches ?? [])
+    .map((w) => ({
+      brand: w.brand ?? "",
+      model: w.model ?? "",
+      reference_number: w.reference_number ?? "",
+      nickname: w.nickname ?? "",
+      purchase_date: w.purchase_date ?? "",
+      purchase_price: typeof w.purchase_price === "number" ? w.purchase_price : null,
+      notes: w.notes ?? "",
+    }))
+    .filter((w) => w.brand || w.model);
 }
 
 
