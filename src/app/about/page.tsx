@@ -270,17 +270,17 @@ export default function AboutPage() {
             Catch new reviews and watch culture on your favorite platform, or read longer stories on the{" "}
             <Link href="/blog" className="text-[#D9A43A] hover:text-[#e1b54a]">Brandon&apos;s Brands blog</Link>.
           </p>
-          <ul className="mt-5 flex flex-wrap gap-3">
+          <ul className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {socials.map((s) => (
               <li key={s.name}>
                 <a
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex flex-col rounded-2xl border border-[#3FB4EC]/40 bg-gradient-to-b from-[#1A7DBF] to-[#0E5A8F] px-5 py-3 text-white transition hover:from-[#2290D6] hover:to-[#136AA6]"
+                  className="flex h-full w-full min-w-0 flex-col rounded-2xl border border-[#3FB4EC]/40 bg-gradient-to-b from-[#1A7DBF] to-[#0E5A8F] px-3 py-3 text-white sm:px-5 transition hover:from-[#2290D6] hover:to-[#136AA6]"
                 >
                   <span className="text-sm font-semibold">{s.name}</span>
-                  <span className="text-xs text-blue-100">{s.handle}</span>
+                  <span className="truncate text-[11px] text-blue-100 sm:text-xs">{s.handle}</span>
                 </a>
               </li>
             ))}
