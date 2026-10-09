@@ -13,8 +13,8 @@ import { isAllowedLink, linkInfo, type Favorite } from "@/lib/favorites";
 const input =
   "w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-blue-400/70";
 
-type Draft = { id?: string; watch_id: string | null; brand: string; model: string; reference_number: string; image_url: string; link_url: string; note: string };
-const EMPTY: Draft = { watch_id: null, brand: "", model: "", reference_number: "", image_url: "", link_url: "", note: "" };
+type Draft = { id?: string; watch_id: string | null; brand: string; model: string; reference_number: string; image_url: string; link_url: string; note: string; features: string };
+const EMPTY: Draft = { watch_id: null, brand: "", model: "", reference_number: "", image_url: "", link_url: "", note: "", features: "" };
 
 function db() {
   if (!supabase) throw new Error("Favorites aren't available right now.");
@@ -107,6 +107,7 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
       image_url: image || null,
       link_url: link || null,
       note: editing.note.trim() || null,
+      features: editing.features.trim() || null,
     };
     const res = editing.id
       ? await db().from("brand_favorites").update(row).eq("id", editing.id)
@@ -184,6 +185,15 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
                   <h2 className="mt-1 text-xl font-semibold text-white">{f.model}</h2>
                   {f.reference_number ? <p className="text-sm text-slate-400">Ref. {f.reference_number}</p> : null}
                   {f.note ? <p className="mt-3 text-sm leading-6 text-slate-300">{f.note}</p> : null}
+                  {f.features ? (
+                    <details className="group mt-3 rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm">
+                      <summary className="cursor-pointer list-none font-semibold text-blue-200 marker:hidden">
+                        <span className="group-open:hidden">What I love about it ▾</span>
+                        <span className="hidden group-open:inline">What I love about it ▴</span>
+                      </summary>
+                      <p className="mt-2 whitespace-pre-line leading-6 text-slate-300">{f.features.replace(/^What I love about it:\s*/i, "")}</p>
+                    </details>
+                  ) : null}
                   <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 pt-5">
                     {info && f.link_url ? (
                       <a
@@ -226,6 +236,7 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
                             image_url: f.image_url ?? "",
                             link_url: f.link_url ?? "",
                             note: f.note ?? "",
+                            features: f.features ?? "",
                           });
                         }}
                         className="rounded-full border border-white/15 px-3 py-1 text-slate-200"
@@ -380,6 +391,20 @@ function FavoriteForm({
             rows={3}
             placeholder="e.g. One of Brandon's favorites: …"
             className={`${input} mt-1 resize-none`}
+          />
+        </label>
+        <label className="mt-3 block text-sm text-slate-300">
+          What I love about it (optional)
+          <span className="mt-0.5 block text-xs text-slate-500">
+            The watch&apos;s unique features from the brand&apos;s website, written in Brandon&apos;s voice. Shown on the card and in the forum discussion.
+          </span>
+          <textarea
+            value={draft.features}
+            onChange={(e) => setDraft({ ...draft, features: e.target.value })}
+            maxLength={1500}
+            rows={5}
+            placeholder="What I love about it: …"
+            className={`${input} mt-1`}
           />
         </label>
         {error ? <p className="mt-3 text-sm text-rose-300">{error}</p> : null}

@@ -10,6 +10,8 @@ export type Favorite = {
   image_url: string | null;
   link_url: string | null;
   note: string | null;
+  // "What I love about it": the watch's unique features, in Brandon's voice.
+  features?: string | null;
   sort: number;
   created_at: string;
   // The forum discussion made for this favorite (in the Brandon's Favorites folder).
