@@ -9,6 +9,7 @@ import ChangePassword from "@/components/ChangePassword";
 import { forumName, saveForumName } from "@/lib/forum";
 import { accountName, saveAccountName } from "@/lib/account";
 import EditableNameRow from "@/components/EditableNameRow";
+import ListPrivacyStatus from "@/components/ListPrivacyStatus";
 
 export default function AccountPage() {
   const [watchCount, setWatchCount] = useState<number>(0);
@@ -56,8 +57,8 @@ export default function AccountPage() {
               ) : null}
             </div>
             <p className="text-sm leading-6 text-slate-300">
-              {registered
-                ? "Your collection and wishlist are private to your account."
+              {registered && user
+                ? <ListPrivacyStatus userId={user.id} />
                 : "You're browsing as a guest. Create an account to keep your collection and wishlist safe across devices."}
             </p>
           </div>
