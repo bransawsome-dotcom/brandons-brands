@@ -63,7 +63,7 @@ export function SubjectSelect({
       })}
       {allowNew ? (
         <optgroup label="Not listed?">
-          <option value={NEW_SUBJECT}>+ Add a new subject or sub-folder…</option>
+          <option value={NEW_SUBJECT}>+ Add a new topic or sub-folder…</option>
         </optgroup>
       ) : null}
     </select>

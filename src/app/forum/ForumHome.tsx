@@ -51,6 +51,8 @@ export default function ForumHome() {
   const [posting, setPosting] = useState(false);
   const [postError, setPostError] = useState<string | null>(null);
   const [showAllBrands, setShowAllBrands] = useState(false);
+  // Phones: the Topics drop-down menu.
+  const [menuOpen, setMenuOpen] = useState(false);
   const [moderator, setModerator] = useState(false);
   // Which main subject the "+ Add a sub-folder" form is adding to (null = closed).
   const [addingTo, setAddingTo] = useState<string | null>(null);
@@ -138,6 +140,9 @@ export default function ForumHome() {
     else next.delete("subject");
     const qs = next.toString();
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+    // Keep the phone menu open on a folder so its sub-folders can be picked; close it otherwise.
+    const isFolder = Boolean(slug) && !slug.includes("/") && (tree.children.get(slug)?.length ?? 0) > 0;
+    if (!isFolder) setMenuOpen(false);
   };
 
   // The main subject currently open (its sub-folders are shown), if any.
@@ -225,11 +230,11 @@ export default function ForumHome() {
         type="button"
         onClick={() => chooseSubject(s.slug)}
         aria-current={active ? "page" : undefined}
-        className={`flex shrink-0 items-center justify-between gap-3 rounded-2xl border px-4 py-2.5 text-left text-sm transition ${opts.indent ? "lg:ml-5 lg:py-2" : ""} ${
+        className={`flex items-center justify-between gap-3 rounded-2xl border px-4 py-2.5 text-left text-sm transition ${opts.indent ? "ml-5 self-stretch py-2" : "w-full"} ${
           active ? "border-blue-400/40 bg-blue-500/15 text-blue-100" : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"
         }`}
       >
-        <span className="whitespace-nowrap lg:whitespace-normal">
+        <span className="min-w-0">
           <span className="mr-2">{s.icon}</span>
           {s.name}
         </span>
@@ -246,7 +251,7 @@ export default function ForumHome() {
             <p className="text-sm uppercase tracking-[0.3em] text-blue-300">Community Forum</p>
             <h1 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-white sm:text-5xl">Talk watches.</h1>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
-              Ask questions, share wrist shots, and swap buying advice with fellow collectors. Pick a subject or start a new discussion.
+              Ask questions, share wrist shots, and swap buying advice with fellow collectors. Pick a topic or start a new discussion.
             </p>
           </div>
           <button
@@ -272,17 +277,17 @@ export default function ForumHome() {
                     </p>
                   </div>
                   <label className="space-y-2 text-sm text-slate-300">
-                    Subject
+                    Topic
                     <SubjectSelect tree={tree} value={draft.subject} onChange={(slug) => setDraft({ ...draft, subject: slug })} allowNew className={input} />
                   </label>
 
                   {draft.subject === NEW_SUBJECT ? (
                     <div className="grid gap-3 rounded-2xl border border-[#D9A43A]/30 bg-[#D9A43A]/5 p-4">
-                      <p className="text-sm font-semibold text-white">Add a new subject or sub-folder</p>
+                      <p className="text-sm font-semibold text-white">Add a new topic or sub-folder</p>
                       <div className="flex flex-wrap gap-2">
                         {[
-                          { key: "subject" as const, label: "New main subject" },
-                          { key: "sub" as const, label: "New sub-folder inside a subject" },
+                          { key: "subject" as const, label: "New main topic" },
+                          { key: "sub" as const, label: "New sub-folder inside a topic" },
                         ].map((o) => (
                           <button
                             key={o.key}
@@ -319,7 +324,7 @@ export default function ForumHome() {
                             ? newSubject.parent === CLUBS_FOLDER
                               ? "Club name, e.g. NJ Watch Collectors"
                               : "Sub-folder name, e.g. Dive Watches"
-                            : "Subject name, e.g. Watch Photography"
+                            : "Topic name, e.g. Watch Photography"
                         }
                         className={input}
                       />
@@ -335,7 +340,7 @@ export default function ForumHome() {
                       <p className="text-xs text-slate-400">
                         {newSubject.kind === "sub"
                           ? `Creates a new sub-folder inside ${describeSubject(tree, newSubject.parent).node.name}. Your post will be its first discussion.`
-                          : "Creates a new main subject everyone can post in. Your post will be its first discussion."}
+                          : "Creates a new main topic everyone can post in. Your post will be its first discussion."}
                       </p>
                     </div>
                   ) : null}
@@ -388,59 +393,98 @@ export default function ForumHome() {
 
       <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
         <aside className="min-w-0 lg:sticky lg:top-6 lg:self-start">
-          {favorites.length ? (
-            <div className="mb-5">
-              <p className="mb-3 px-1 text-xs uppercase tracking-[0.3em] text-[#D9A43A]">★ Favorites</p>
-              <nav className="flex gap-2 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0" aria-label="Favorite forum folders">
-                {favorites.map((f) => {
-                  const d = describeSubject(tree, f.subject);
-                  return (
-                    <div key={f.subject} className="flex shrink-0 items-center gap-1 lg:w-full">
-                      <div className="min-w-0 flex-1 [&>button]:w-full">
-                        {subjectButton({ slug: f.subject, name: d.node.name, icon: d.node.folder ? "📁" : d.node.icon })}
+          {/* On phones the topics live in a drop-down menu that scrolls up and down. */}
+          <button
+            type="button"
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-expanded={menuOpen}
+            aria-controls="forum-topics"
+            className="flex w-full items-center justify-between gap-3 rounded-2xl border border-blue-400/30 bg-blue-500/10 px-4 py-3 text-left lg:hidden"
+          >
+            <span className="min-w-0">
+              <span className="block text-[11px] uppercase tracking-[0.25em] text-blue-300">Topics</span>
+              <span className="block truncate text-base font-semibold text-white">
+                {current ? `${current.parent ? `${current.parent.name} › ` : ""}${current.node.name}` : "All discussions"}
+              </span>
+            </span>
+            <span aria-hidden className={`shrink-0 text-lg text-blue-200 transition ${menuOpen ? "rotate-180" : ""}`}>▾</span>
+          </button>
+
+          <div
+            id="forum-topics"
+            className={`${menuOpen ? "block" : "hidden"} mt-2 max-h-[65vh] overflow-y-auto overscroll-contain rounded-2xl border border-white/10 bg-slate-950/70 p-2 lg:mt-0 lg:block lg:max-h-[calc(100vh-6rem)] lg:rounded-none lg:border-0 lg:bg-transparent lg:p-0`}
+          >
+            {favorites.length ? (
+              <div className="mb-5">
+                <p className="mb-3 px-1 text-xs uppercase tracking-[0.3em] text-[#D9A43A]">★ Favorites</p>
+                <nav className="flex flex-col gap-2" aria-label="Favorite forum folders">
+                  {favorites.map((f) => {
+                    const d = describeSubject(tree, f.subject);
+                    return (
+                      <div key={f.subject} className="flex w-full items-center gap-1">
+                        <div className="min-w-0 flex-1 [&>button]:w-full">
+                          {subjectButton({ slug: f.subject, name: d.node.name, icon: d.node.folder ? "📁" : d.node.icon })}
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => toggleNotify(f)}
+                          disabled={favBusy}
+                          title={f.notify ? "Alerts on: tap to turn off" : "Alerts off: tap to turn on"}
+                          aria-label={`${f.notify ? "Turn off" : "Turn on"} alerts for ${d.node.name}`}
+                          className={`shrink-0 rounded-full px-2 py-2 text-sm transition ${f.notify ? "text-[#D9A43A]" : "text-slate-600"} hover:bg-white/10`}
+                        >
+                          {f.notify ? "🔔" : "🔕"}
+                        </button>
                       </div>
+                    );
+                  })}
+                </nav>
+              </div>
+            ) : null}
+            <p className="mb-3 px-1 text-xs uppercase tracking-[0.3em] text-blue-300">Topics</p>
+            <nav className="flex flex-col gap-2" aria-label="Forum topics">
+              {subjectButton({ slug: "", name: "All discussions", icon: "🗂️" })}
+              {tree.top.map((s) => (
+                <div key={s.slug} className="flex flex-col gap-2">
+                  {subjectButton({ ...s, icon: s.folder || tree.children.get(s.slug)?.length ? `${openFolder === s.slug ? "📂" : "📁"}` : s.icon })}
+                  {/* The open topic shows its sub-folders right under it. */}
+                  {openFolder === s.slug ? (
+                    <div className="flex flex-col gap-2">
+                      {shownChildren.map((c) => subjectButton(c, { indent: true }))}
+                      {openFolder === BRANDS_FOLDER && shownChildren.length < sortedFolderChildren.length ? (
+                        <button type="button" onClick={() => setShowAllBrands(true)} className="ml-5 py-1 text-left text-xs font-semibold text-[#D9A43A] hover:text-[#e1b54a]">
+                          Show all {sortedFolderChildren.length} brands
+                        </button>
+                      ) : null}
                       <button
                         type="button"
-                        onClick={() => toggleNotify(f)}
-                        disabled={favBusy}
-                        title={f.notify ? "Alerts on: tap to turn off" : "Alerts off: tap to turn on"}
-                        aria-label={`${f.notify ? "Turn off" : "Turn on"} alerts for ${d.node.name}`}
-                        className={`shrink-0 rounded-full px-2 py-2 text-sm transition ${f.notify ? "text-[#D9A43A]" : "text-slate-600"} hover:bg-white/10`}
+                        onClick={() => {
+                          setMenuOpen(false);
+                          startAddSubfolder(s.slug);
+                        }}
+                        className="ml-5 py-1 text-left text-xs font-semibold text-[#D9A43A] hover:text-[#e1b54a]"
                       >
-                        {f.notify ? "🔔" : "🔕"}
+                        {addLabel(s.slug)}
                       </button>
                     </div>
-                  );
-                })}
-              </nav>
-            </div>
-          ) : null}
-          <p className="mb-3 px-1 text-xs uppercase tracking-[0.3em] text-blue-300">Subjects</p>
-          <nav className="flex gap-2 overflow-x-auto pb-2 lg:max-h-[calc(100vh-6rem)] lg:flex-col lg:overflow-y-auto lg:overflow-x-visible lg:pb-0" aria-label="Forum subjects">
-            {subjectButton({ slug: "", name: "All discussions", icon: "🗂️" })}
-            {tree.top.map((s) => (
-              <div key={s.slug} className="contents lg:flex lg:flex-col lg:gap-2">
-                {subjectButton({ ...s, icon: s.folder || tree.children.get(s.slug)?.length ? `${openFolder === s.slug ? "📂" : "📁"}` : s.icon })}
-                {/* On large screens the open subject shows its sub-folders right under it. */}
-                {openFolder === s.slug ? (
-                  <div className="hidden lg:flex lg:flex-col lg:gap-2">
-                    {shownChildren.map((c) => subjectButton(c, { indent: true }))}
-                    {openFolder === BRANDS_FOLDER && shownChildren.length < sortedFolderChildren.length ? (
-                      <button type="button" onClick={() => setShowAllBrands(true)} className="ml-5 text-left text-xs font-semibold text-[#D9A43A] hover:text-[#e1b54a]">
-                        Show all {sortedFolderChildren.length} brands
-                      </button>
-                    ) : null}
-                    <button type="button" onClick={() => startAddSubfolder(s.slug)} className="ml-5 text-left text-xs font-semibold text-[#D9A43A] hover:text-[#e1b54a]">
-                      {addLabel(s.slug)}
-                    </button>
-                  </div>
-                ) : null}
-              </div>
-            ))}
-          </nav>
-          <button type="button" onClick={() => { setDraft((d) => ({ ...d, subject: NEW_SUBJECT })); setNewSubject((n) => ({ ...n, kind: "subject" })); setComposing(true); setTimeout(() => document.getElementById("new-post")?.scrollIntoView({ behavior: "smooth" }), 50); }} className="mt-3 hidden px-1 text-xs font-semibold text-[#D9A43A] hover:text-[#e1b54a] lg:block">
-            + Add a subject
-          </button>
+                  ) : null}
+                </div>
+              ))}
+            </nav>
+            <button
+              type="button"
+              onClick={() => {
+                setMenuOpen(false);
+                setDraft((d) => ({ ...d, subject: NEW_SUBJECT }));
+                setNewSubject((n) => ({ ...n, kind: "subject" }));
+                setComposing(true);
+                setTimeout(() => document.getElementById("new-post")?.scrollIntoView({ behavior: "smooth" }), 50);
+              }}
+              className="mt-3 block px-1 py-1 text-xs font-semibold text-[#D9A43A] hover:text-[#e1b54a]"
+            >
+              + Add a topic
+            </button>
+          </div>
         </aside>
 
         <section className="min-w-0">
@@ -488,31 +532,6 @@ export default function ForumHome() {
             </div>
           </div>
 
-          {/* Sub-folders of the open folder (always shown on small screens; on large screens they're also in the sidebar). */}
-          {openFolder ? (
-            <div className="mb-4 flex flex-wrap gap-2 lg:hidden">
-              {shownChildren.map((c) => (
-                <button
-                  key={c.slug}
-                  type="button"
-                  onClick={() => chooseSubject(c.slug)}
-                  className={`rounded-full border px-3 py-1.5 text-xs transition ${
-                    subject === c.slug ? "border-blue-400/40 bg-blue-500/15 text-blue-100" : "border-white/10 bg-white/5 text-slate-300"
-                  }`}
-                >
-                  {c.name} <span className="text-slate-500">{countFor(c.slug)}</span>
-                </button>
-              ))}
-              {openFolder === BRANDS_FOLDER && shownChildren.length < sortedFolderChildren.length ? (
-                <button type="button" onClick={() => setShowAllBrands(true)} className="rounded-full px-3 py-1.5 text-xs font-semibold text-[#D9A43A]">
-                  All {sortedFolderChildren.length} brands…
-                </button>
-              ) : null}
-              <button type="button" onClick={() => startAddSubfolder(openFolder)} className="rounded-full px-3 py-1.5 text-xs font-semibold text-[#D9A43A]">
-                {addLabel(openFolder)}
-              </button>
-            </div>
-          ) : null}
 
           {addingTo ? (
             <AddSubfolderForm
@@ -591,7 +610,7 @@ export default function ForumHome() {
 const STEPS = [
   { title: "Log in or join", text: "Reading is open to everyone. To post or reply, log in or create a free account." },
   { title: "Tap + New post", text: "The first time, choose your forum name. It's what everyone sees, and your email stays private." },
-  { title: "Pick a subject and post", text: "Choose a subject, brand or club. Not listed? Add a new subject, or open any subject and tap + Add a sub-folder (or + Add a club)." },
+  { title: "Pick a topic and post", text: "Choose a topic, brand or club. Not listed? Add a new topic, or open any topic and tap + Add a sub-folder (or + Add a club)." },
   { title: "Favorite and follow", text: "Tap ☆ Add to favorites on any folder to pin it and get inbox alerts for new posts, replies and clubs. Follow single discussions too." },
 ];
 

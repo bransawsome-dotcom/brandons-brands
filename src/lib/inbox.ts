@@ -179,7 +179,7 @@ export const FOLDERS: { key: FolderKey; name: string; icon: string; hint: string
   { key: "messages", name: "Messages", icon: "✉️", hint: "Private messages with members and Brandon's Brands" },
   { key: "offers", name: "Offers", icon: "💰", hint: "Offers people made on watches in your public collection" },
   { key: "alerts", name: "Price alerts", icon: "🏷️", hint: "Wishlist watches listed at or below your target price" },
-  { key: "forum", name: "Forum", icon: "💬", hint: "Replies to your posts and discussions or subjects you follow" },
+  { key: "forum", name: "Forum", icon: "💬", hint: "Replies to your posts and discussions or topics you follow" },
   { key: "updates", name: "Website updates", icon: "📢", hint: "News and new features from Brandon's Brands" },
   { key: "events", name: "Watch group events", icon: "📅", hint: "Meetups, group events and updates" },
 ];

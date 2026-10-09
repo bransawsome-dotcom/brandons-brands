@@ -131,10 +131,10 @@ export async function listCustomSubjects(): Promise<CustomSubject[]> {
 
 export async function createSubject(input: { name: string; parent: string | null; description?: string }): Promise<CustomSubject> {
   const name = input.name.trim().replace(/\s+/g, " ");
-  if (name.length < 2 || name.length > 50) throw new Error("Subject names need 2–50 characters.");
+  if (name.length < 2 || name.length > 50) throw new Error("Topic names need 2–50 characters.");
   const base = slugify(name);
-  if (base.length < 2) throw new Error("Use letters or numbers in the subject name.");
-  if (input.parent && input.parent.includes("/")) throw new Error("Sub-folders can only be added to a main subject.");
+  if (base.length < 2) throw new Error("Use letters or numbers in the topic name.");
+  if (input.parent && input.parent.includes("/")) throw new Error("Sub-folders can only be added to a main topic.");
   const slug = input.parent ? `${input.parent}/${base}` : `c-${base}`;
   const builtInNames = (input.parent ? BRAND_NODES.filter((n) => n.parent === input.parent) : BUILT_IN).map((n) => n.name.toLowerCase());
   if (builtInNames.includes(name.toLowerCase()) || BRAND_NODES.some((n) => n.slug === slug)) {
