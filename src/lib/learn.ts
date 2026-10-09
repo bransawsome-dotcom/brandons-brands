@@ -217,7 +217,7 @@ export const learnGuides: LearnGuide[] = [
         paragraphs: [],
       },
       {
-        heading: "Why it matters to us",
+        heading: "Why microbrands matter to Brandon",
         paragraphs: [
           "Microbrands are at the heart of Brandon's Brands. Brandon Volosov reviews microbrand and independent watches alongside the big names, and many of them appear in Brandon's Favorites. Follow along for hands-on reviews and founder interviews.",
         ],
