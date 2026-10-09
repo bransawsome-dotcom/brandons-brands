@@ -550,7 +550,7 @@ export default function WishlistPage() {
 
                     {item.value_updated_at || d.sources?.length ? (
                       <p className="mt-3 text-xs leading-5 text-slate-500">
-                        {item.value_updated_at ? `Prices checked ${new Date(item.value_updated_at).toLocaleDateString("en-US")}. ` : ""}
+                        {item.value_updated_at ? `Prices checked ${new Date(item.value_updated_at).toLocaleDateString("en-US")} · updated daily. ` : ""}
                         Estimates from public listings.
                         {d.sources?.length ? " Sources: " : ""}
                         {d.sources?.slice(0, 3).map((url, i) => (

@@ -70,7 +70,7 @@ export default function WatchValuePanel({ watch, compact = false }: { watch: Wat
 
       {!compact && (d.sources?.length || watch.value_updated_at) ? (
         <p className="text-xs leading-5 text-slate-500">
-          {watch.value_updated_at ? `Prices checked ${new Date(watch.value_updated_at).toLocaleDateString("en-US")}. ` : ""}
+          {watch.value_updated_at ? `Prices checked ${new Date(watch.value_updated_at).toLocaleDateString("en-US")} · updated daily. ` : ""}
           Estimates from public listings, not an appraisal.
           {d.sources?.length ? " Sources: " : ""}
           {d.sources?.slice(0, 4).map((url, i) => {
