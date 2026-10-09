@@ -31,7 +31,8 @@ export default function Home() {
               </div>
             </div>
             <p className="-mt-2 max-w-2xl text-base leading-7 text-slate-300 sm:-mt-4 sm:text-lg lg:-mt-6">
-              Discover. Collect. Showcase the world&apos;s finest watches.
+              <span className="block">Discover. Collect.</span>
+              <span className="block">Showcase the world&apos;s finest watches.</span>
             </p>
           </div>
         </section>
