@@ -25,6 +25,13 @@ function isActive(pathname: string | null, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
+// Gold outline so "Explore Other Collectors" stands out from the plain page links.
+function exploreClass(active: boolean) {
+  return active
+    ? "border-[#D9A43A]/70 bg-[#D9A43A]/20 text-[#f0c766]"
+    : "border-[#D9A43A]/40 bg-[#D9A43A]/5 text-[#D9A43A] hover:bg-[#D9A43A]/15";
+}
+
 export default function MainNav() {
   const pathname = usePathname();
   const router = useRouter();
@@ -54,9 +61,25 @@ export default function MainNav() {
             </Link>
           );
         })}
+        {/* Phones and tablets: its own full-width row under the page links. */}
+        <Link
+          href="/collectors"
+          aria-current={isActive(pathname, "/collectors") ? "page" : undefined}
+          className={`col-span-3 rounded-full border px-3 py-2 text-center font-semibold transition sm:basis-full lg:hidden ${exploreClass(isActive(pathname, "/collectors"))}`}
+        >
+          ⌚ Explore Other Collectors
+        </Link>
       </div>
       {/* Inbox and Logout (or Login / Guest Mode) on the row below. */}
       <div className="flex items-center gap-2 sm:justify-end">
+        {/* Laptops and up: next to search. */}
+        <Link
+          href="/collectors"
+          aria-current={isActive(pathname, "/collectors") ? "page" : undefined}
+          className={`hidden whitespace-nowrap rounded-full border px-4 py-2 text-center font-semibold transition lg:block ${exploreClass(isActive(pathname, "/collectors"))}`}
+        >
+          ⌚ Explore Other Collectors
+        </Link>
         <Link
           href="/search"
           aria-label="Search the site"
