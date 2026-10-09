@@ -19,6 +19,7 @@ export type Message = {
   recipient_id: string;
   sender_name: string;
   recipient_name: string;
+  subject?: string | null;
   body: string;
   created_at: string;
   read_at: string | null;
@@ -33,6 +34,24 @@ export type Conversation = {
 
 export const MESSAGE_MAX = 3000;
 export const BRAND_NAME = "Brandon's Brands";
+export const SUBJECT_MAX = 100;
+
+// What a message is about. "Other" lets the sender type their own subject.
+export const MESSAGE_SUBJECTS = [
+  "Interested in buying a watch",
+  "Selling a watch",
+  "Trade proposal",
+  "Question about a watch",
+  "Your collection or wishlist",
+  "Forum follow-up",
+  "Meetup or watch group event",
+  "Collaboration or business",
+  "Feedback or suggestion",
+] as const;
+export const OTHER_SUBJECT = "Other";
+
+// Subjects where we add a short safety reminder about buying and selling.
+export const SALE_SUBJECTS = new Set<string>(["Interested in buying a watch", "Selling a watch", "Trade proposal"]);
 
 // Fired after anything is marked read, so the header count updates right away.
 export const INBOX_CHANGED = "bb-inbox-changed";
@@ -49,6 +68,10 @@ function friendly(error: { message: string; code?: string } | null): Error | nul
   if (!error) return null;
   if (error.code === "42P01" || /does not exist|Could not find the table/i.test(error.message)) {
     return new Error("The inbox is being set up. Please check back soon.");
+  }
+  if (/rate_limited:/.test(error.message)) return new Error(error.message.replace(/^.*rate_limited:\s*/, ""));
+  if (/subject/i.test(error.message) && /column/i.test(error.message)) {
+    return new Error("Message subjects are being set up. Please try again soon.");
   }
   if (error.code === "42501" || /row-level security/i.test(error.message)) {
     return new Error("Please log in with a member account to do that.");
@@ -123,10 +146,17 @@ export function groupConversations(messages: Message[], userId: string): Convers
   return [...map.values()].sort((a, b) => b.last.created_at.localeCompare(a.last.created_at));
 }
 
-export async function sendMessage(input: { recipient_id: string; recipient_name: string; sender_name: string; body: string }): Promise<Message> {
+export async function sendMessage(input: {
+  recipient_id: string;
+  recipient_name: string;
+  sender_name: string;
+  subject?: string | null;
+  body: string;
+}): Promise<Message> {
+  const subject = input.subject?.trim().slice(0, SUBJECT_MAX) || null;
   const { data, error } = await db()
     .from("messages")
-    .insert({ ...input, body: input.body.trim().slice(0, MESSAGE_MAX) })
+    .insert({ ...input, ...(subject ? { subject } : { subject: undefined }), body: input.body.trim().slice(0, MESSAGE_MAX) })
     .select("*")
     .single();
   const err = friendly(error);
@@ -151,6 +181,18 @@ export async function brandContactId(): Promise<string | null> {
   const { data, error } = await supabase.rpc("brand_contact_id");
   if (error) return null;
   return (data as string | null) ?? null;
+}
+
+// A member found on the Collectors pages, looked up by their public handle.
+export async function messageRecipient(handle: string): Promise<{ user_id: string; display_name: string } | null> {
+  if (!supabase) return null;
+  const { data, error } = await supabase.rpc("message_recipient", { p_handle: handle });
+  if (error) {
+    if (/Could not find the function|does not exist/i.test(error.message)) throw new Error("Messaging members is being set up. Please check back soon.");
+    throw new Error(error.message);
+  }
+  const row = (Array.isArray(data) ? data[0] : data) as { user_id: string; display_name: string } | undefined;
+  return row ?? null;
 }
 
 // Live updates for this member's notifications and messages.
