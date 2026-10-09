@@ -1,6 +1,7 @@
 "use client";
 
 import { createPortal } from "react-dom";
+import SalesDisclaimer from "@/components/SalesDisclaimer";
 
 import { FormEvent, useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
@@ -198,9 +199,10 @@ export default function MakeOfferButton({
                 />
                 <p className="text-xs leading-5 text-slate-400">
                   {sell
-                    ? "They'll see your name, email and message so they can reply. Brandon's Brands doesn't take part in sales: share photos, verify the buyer, and use a secure payment method or escrow."
-                    : "The owner sees your name, email and message so they can reply. Brandon's Brands doesn't take part in sales: verify the seller and the watch, and use a secure payment method."}
+                    ? "By sending, you agree that they'll see your name, email and message so they can reply."
+                    : "By sending, you agree that the owner sees your name, email and message so they can reply."}
                 </p>
+                <SalesDisclaimer />
                 {error ? <p className="rounded-2xl bg-rose-500/10 px-3 py-2 text-sm text-rose-200">{error}</p> : null}
                 <button
                   type="submit"

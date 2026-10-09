@@ -38,6 +38,7 @@ const PAGES: (PageHit & { keywords: string })[] = [
   { href: "/wishlist", title: "Your wishlist", text: "Watches you want, with price alerts.", keywords: "wishlist want price alerts target" },
   { href: "/dashboard", title: "Dashboard", text: "Your collection at a glance.", keywords: "dashboard stats value" },
   { href: "/learn", title: "Learn about watches", text: "Buying guides, watch types, how watches work and watch history.", keywords: "learn education guides buying guide watch types history how watches work glossary" },
+  { href: "/terms", title: "Terms & Disclaimers", text: "Sales between members, offers, email sharing and site terms.", keywords: "terms disclaimer disclaimers legal privacy email sharing sales responsibility" },
   { href: "/about#contact", title: "Contact us", text: "Collaborations and questions.", keywords: "contact email collab collaboration help" },
 ];
 

@@ -578,7 +578,7 @@ export default function InboxView() {
                       </div>
                       {saleTip ? (
                         <p className="mb-2 rounded-xl border border-amber-300/25 bg-amber-400/10 px-3 py-2 text-[11px] leading-5 text-amber-100">
-                          Buying or selling? Brandon&apos;s Brands doesn&apos;t take part in sales between members and can&apos;t verify watches or payments.
+                          Buying or selling? Brandon&apos;s Brands isn&apos;t a party to sales between members, isn&apos;t responsible for them and doesn&apos;t hold or guarantee funds or verify watches.
                           Use a trusted escrow or authentication service, or meet in a safe public place, and never send money by gift card or wire to
                           someone you haven&apos;t verified.
                         </p>

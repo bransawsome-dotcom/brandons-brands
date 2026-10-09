@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { collabEmail, socials } from "@/lib/socials";
+import { SALES_DISCLAIMER } from "@/lib/legal";
 
 export default function SiteFooter() {
   return (
@@ -24,6 +25,8 @@ export default function SiteFooter() {
             <Link href="/collectors" className="text-blue-300 transition hover:text-blue-200">Collectors</Link>
             <span className="mx-2 text-slate-500">·</span>
             <Link href="/learn" className="text-blue-300 transition hover:text-blue-200">Learn</Link>
+            <span className="mx-2 text-slate-500">·</span>
+            <Link href="/terms" className="text-blue-300 transition hover:text-blue-200">Terms</Link>
           </p>
           </div>
         </div>
@@ -44,6 +47,13 @@ export default function SiteFooter() {
           ))}
         </ul>
       </div>
+      <p className="mt-5 border-t border-white/10 pt-4 text-[11px] leading-5 text-slate-500">
+        <span className="font-semibold text-slate-400">Disclaimer:</span> {SALES_DISCLAIMER} Any deal made through connections on this site is
+        solely between the people involved.{" "}
+        <Link href="/terms" className="underline hover:text-slate-300">
+          Terms & Disclaimers
+        </Link>
+      </p>
     </footer>
   );
 }

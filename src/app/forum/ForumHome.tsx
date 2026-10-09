@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import ForumIdentity from "@/components/ForumIdentity";
+import SalesDisclaimer from "@/components/SalesDisclaimer";
 import { listFavorites, setFavoriteNotify, setFollowSubject, type Favorite } from "@/lib/inbox";
 import { NEW_SUBJECT, SubjectSelect, useSubjectTree } from "@/components/ForumSubjects";
 import { useAuth } from "@/components/AuthProvider";
@@ -549,6 +550,7 @@ export default function ForumHome() {
                 ) : null}
               </div>
               {current?.node.description ? <p className="mt-1 text-sm text-slate-400">{current.node.description}</p> : null}
+              {subject === "for-sale" || subject === "seeking-to-buy" ? <SalesDisclaimer className="mt-3" /> : null}
               {subject === FAVORITES_SUBJECT ? (
                 <Link href="/favorites" className="mt-1 inline-block text-sm font-semibold text-[#D9A43A] hover:text-[#e1b54a]">
                   ⭐ See the Brandon&apos;s Favorites gallery →

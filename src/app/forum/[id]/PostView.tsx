@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
 import FollowBrandon from "@/components/FollowBrandon";
 import ForumIdentity from "@/components/ForumIdentity";
+import SalesDisclaimer from "@/components/SalesDisclaimer";
 import FollowButton from "@/components/FollowButton";
 import { SubjectSelect, useSubjectTree } from "@/components/ForumSubjects";
 import {
@@ -395,6 +396,7 @@ export default function PostView() {
           </>
         )}
       </article>
+      {post.subject === "for-sale" || post.subject === "seeking-to-buy" ? <SalesDisclaimer className="mt-4" /> : null}
 
       <section className="mt-8 rounded-[2rem] border border-white/10 bg-white/5 p-5 sm:p-8">
         <h2 className="text-lg font-semibold text-white">

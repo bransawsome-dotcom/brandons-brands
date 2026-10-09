@@ -6,6 +6,7 @@ import supabase from "@/lib/supabaseClient";
 import { useAuth } from "@/components/AuthProvider";
 import PasswordInput from "@/components/PasswordInput";
 import { isNameAvailable } from "@/lib/account";
+import { EMAIL_SHARE_CONSENT, TERMS_CONSENT, TERMS_UPDATED } from "@/lib/legal";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -15,6 +16,8 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [agreeTerms, setAgreeTerms] = useState(false);
+  const [agreeEmail, setAgreeEmail] = useState(false);
 
   useEffect(() => {
     if (!loading && user) {
@@ -28,6 +31,10 @@ export default function SignupPage() {
     const cleanName = accountName.trim().replace(/\s+/g, " ");
     if (cleanName.length < 2 || cleanName.length > 40) {
       setMessage("Enter a name or customer number (2–40 characters).");
+      return;
+    }
+    if (!agreeTerms || !agreeEmail) {
+      setMessage("Please tick both boxes to agree to the Terms & Disclaimers and email sharing.");
       return;
     }
     setSubmitting(true);
@@ -51,7 +58,13 @@ export default function SignupPage() {
       options: {
         emailRedirectTo: `${window.location.origin}/auth/callback`,
         // Shown on the Account page. Separate from the forum name.
-        data: { account_name: cleanName },
+        // Consent is recorded with the account (date and the Terms version agreed to).
+        data: {
+          account_name: cleanName,
+          terms_accepted_at: new Date().toISOString(),
+          terms_version: TERMS_UPDATED,
+          email_share_consent_at: new Date().toISOString(),
+        },
       },
     });
 
@@ -117,6 +130,35 @@ export default function SignupPage() {
                 placeholder="Create a password"
               />
             </label>
+
+            <fieldset className="space-y-3 rounded-3xl border border-white/10 bg-slate-950/50 p-4">
+              <legend className="px-2 text-xs uppercase tracking-[0.2em] text-blue-300">Disclaimer & consent</legend>
+              <label className="flex items-start gap-3 text-sm leading-6 text-slate-300">
+                <input
+                  type="checkbox"
+                  checked={agreeTerms}
+                  onChange={(e) => setAgreeTerms(e.target.checked)}
+                  required
+                  className="mt-1 h-5 w-5 shrink-0 accent-[#D9A43A]"
+                />
+                <span>
+                  {TERMS_CONSENT}{" "}
+                  <a href="/terms" target="_blank" className="font-semibold text-blue-200 underline hover:text-white">
+                    Read the Terms
+                  </a>
+                </span>
+              </label>
+              <label className="flex items-start gap-3 text-sm leading-6 text-slate-300">
+                <input
+                  type="checkbox"
+                  checked={agreeEmail}
+                  onChange={(e) => setAgreeEmail(e.target.checked)}
+                  required
+                  className="mt-1 h-5 w-5 shrink-0 accent-[#D9A43A]"
+                />
+                <span>{EMAIL_SHARE_CONSENT} Your email is never shown on your public collection, wishlist or forum posts.</span>
+              </label>
+            </fieldset>
 
             {message ? <div className="rounded-3xl bg-white/5 px-4 py-3 text-sm text-amber-300">{message}</div> : null}
 
