@@ -22,6 +22,8 @@ export default function SiteFooter() {
             <Link href="/about#contact" className="text-blue-300 transition hover:text-blue-200">Contact us</Link>
             <span className="mx-2 text-slate-500">·</span>
             <Link href="/collectors" className="text-blue-300 transition hover:text-blue-200">Collectors</Link>
+            <span className="mx-2 text-slate-500">·</span>
+            <Link href="/learn" className="text-blue-300 transition hover:text-blue-200">Learn</Link>
           </p>
           </div>
         </div>

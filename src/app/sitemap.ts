@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { blogPosts } from "@/lib/blogPosts";
+import { learnGuides } from "@/lib/learn";
 import { SITE_URL } from "@/lib/site";
 import { listPublicCollectors } from "@/lib/publicLists";
 import { FAVORITES_SUBJECT } from "@/lib/favorites";
@@ -16,6 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
     { url: `${SITE_URL}/forum`, lastModified: now, changeFrequency: "daily", priority: 0.7 },
     { url: `${SITE_URL}/social`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${SITE_URL}/learn`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
     { url: `${SITE_URL}/favorites`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
     { url: `${SITE_URL}/connect`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
     { url: `${SITE_URL}/collectors`, lastModified: now, changeFrequency: "daily", priority: 0.7 },
@@ -36,7 +38,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "monthly",
     priority: 0.7,
   }));
-  return [...pages, ...posts, ...lists, ...(await forumDiscussions())];
+  const guides: MetadataRoute.Sitemap = learnGuides.map((g) => ({
+    url: `${SITE_URL}/learn/${g.slug}`,
+    lastModified: new Date(`${g.updated}T12:00:00Z`),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+  return [...pages, ...guides, ...posts, ...lists, ...(await forumDiscussions())];
 }
 
 // Every forum discussion (Brandon's Favorites discussions rank highest).

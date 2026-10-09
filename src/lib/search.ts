@@ -2,6 +2,7 @@
 // Brandon's Favorites, the blog and the site's own pages. Uses only public data (the public key).
 
 import { blogPosts } from "@/lib/blogPosts";
+import { learnGuides } from "@/lib/learn";
 import { FAVORITES_SUBJECT } from "@/lib/favorites";
 
 export type WatchHit = { id: string; brand: string; model: string; reference_number: string | null; image_url: string | null; handle: string; display_name: string };
@@ -36,6 +37,7 @@ const PAGES: (PageHit & { keywords: string })[] = [
   { href: "/collection", title: "Your collection", text: "Track your watches, values and box & papers.", keywords: "collection my watches track value" },
   { href: "/wishlist", title: "Your wishlist", text: "Watches you want, with price alerts.", keywords: "wishlist want price alerts target" },
   { href: "/dashboard", title: "Dashboard", text: "Your collection at a glance.", keywords: "dashboard stats value" },
+  { href: "/learn", title: "Learn about watches", text: "Buying guides, watch types, how watches work and watch history.", keywords: "learn education guides buying guide watch types history how watches work glossary" },
   { href: "/about#contact", title: "Contact us", text: "Collaborations and questions.", keywords: "contact email collab collaboration help" },
 ];
 
@@ -116,9 +118,14 @@ export async function siteSearch(query: string): Promise<SearchResults> {
     posts: posts ?? [],
     authors: [...authorMap.values()].sort((a, b) => b.posts - a.posts).slice(0, 12),
     favorites: favorites ?? [],
-    blog: blogPosts
-      .filter((p) => matchesAll(`${p.title} ${p.category} ${p.excerpt} ${p.body.join(" ")}`, terms))
-      .map((p) => ({ href: `/blog/${p.slug}`, title: p.title, text: p.excerpt })),
+    blog: [
+      ...learnGuides
+        .filter((g) => matchesAll(`${g.title} ${g.category} ${g.description} ${g.sections.map((s) => `${s.heading} ${s.paragraphs.join(" ")} ${(s.bullets ?? []).join(" ")}`).join(" ")}`, terms))
+        .map((g) => ({ href: `/learn/${g.slug}`, title: g.title, text: g.description })),
+      ...blogPosts
+        .filter((p) => matchesAll(`${p.title} ${p.category} ${p.excerpt} ${p.body.join(" ")}`, terms))
+        .map((p) => ({ href: `/blog/${p.slug}`, title: p.title, text: p.excerpt })),
+    ],
     pages: PAGES.filter((p) => matchesAll(`${p.title} ${p.text} ${p.keywords}`, terms)).map(({ href, title, text }) => ({ href, title, text })),
   };
 }

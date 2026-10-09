@@ -224,7 +224,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
             </ul>
           </Section>
 
-          <Section title="Blog" count={r.blog.length}>
+          <Section title="Guides & blog" count={r.blog.length}>
             <ul className="space-y-2">
               {r.blog.map((b) => (
                 <li key={b.href}>

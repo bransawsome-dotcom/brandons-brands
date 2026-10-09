@@ -13,6 +13,7 @@ const navLinks = [
   { href: "/social", label: "Social Media" },
   { href: "/blog", label: "Blog" },
   { href: "/forum", label: "Forum" },
+  { href: "/learn", label: "Learn" },
   { href: "/about", label: "About" },
   { href: "/account", label: "Account" },
 ];
@@ -45,7 +46,7 @@ export default function MainNav() {
               key={item.href}
               href={item.href}
               aria-current={active ? "page" : undefined}
-              className={`whitespace-nowrap rounded-full border px-2 py-2 sm:min-w-[96px] sm:px-3 text-center transition lg:min-w-0 lg:px-2.5 xl:px-3.5 ${
+              className={`${item.href === "/" ? "hidden sm:block " : ""}whitespace-nowrap rounded-full border px-2 py-2 sm:min-w-[96px] sm:px-3 text-center transition lg:min-w-0 lg:px-2.5 xl:px-3 ${
                 active ? "border-blue-400/30 bg-blue-500/20 text-blue-200" : "border-transparent hover:bg-blue-500/10 hover:text-blue-200"
               }`}
             >
