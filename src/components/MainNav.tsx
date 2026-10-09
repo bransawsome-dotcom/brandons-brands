@@ -101,9 +101,14 @@ export default function MainNav() {
             {/* Leave guest mode and go to the login page. */}
             <button
               type="button"
-              onClick={async () => {
-                await signOut();
-                router.push("/login");
+              onClick={() => {
+                try {
+                  window.localStorage.removeItem("brandons-brands-guest-mode");
+                } catch {
+                  /* ignore */
+                }
+                // Full page load so the site forgets guest mode everywhere.
+                window.location.assign("/login");
               }}
               className="min-w-[100px] rounded-full bg-white/5 px-3 py-2 text-center text-slate-200 transition hover:bg-white/10"
             >
