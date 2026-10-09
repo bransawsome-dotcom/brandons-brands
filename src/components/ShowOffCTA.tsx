@@ -10,7 +10,7 @@ export default function ShowOffCTA({ className = "" }: { className?: string }) {
   return (
     <div className={`rounded-[2rem] border border-[#D9A43A]/30 bg-[#D9A43A]/5 p-6 text-center ${className}`}>
       <p className="text-lg font-semibold text-white">Show off your own watches</p>
-      <p className="mt-1 text-sm text-slate-300">Build your collection and wishlist with photos, values and box &amp; papers, then make them public.</p>
+      <p className="mt-1 text-sm text-slate-300">Build your collection and wishlist with photos, values and box &amp; papers. Keep them private, or choose to make them public and share them with other collectors.</p>
       <div className="mt-4 flex flex-wrap justify-center gap-3">
         <Link
           href={user ? "/collection" : "/signup"}
