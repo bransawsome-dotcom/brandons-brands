@@ -71,8 +71,8 @@ export default function PublicListToggle({ kind }: { kind: "collection" | "wishl
           <p className="text-sm font-semibold text-white">{on ? "🌐 Public" : "🔒 Private"} {kind}</p>
           <p className="mt-0.5 text-xs leading-5 text-slate-400">
             {on
-              ? `Anyone can see it and search engines can find it${kind === "collection" ? ". People can make offers on your watches" : ""}.`
-              : `Only you can see it. Make it public to show it off${kind === "collection" ? " and get offers" : ""}.`}
+              ? `Anyone can see it and search engines can find it. ${kind === "collection" ? "Each watch shows a Make an offer button" : "Each watch shows an Offer to sell button"} for visitors.`
+              : `Only you can see it. Make it public to show it off and ${kind === "collection" ? "get offers to buy your watches" : "get offers from people selling the watches you want"}.`}
           </p>
         </div>
         <button
@@ -95,6 +95,9 @@ export default function PublicListToggle({ kind }: { kind: "collection" | "wishl
           <button type="button" onClick={copy} className="rounded-full border border-white/15 px-2.5 py-1 text-slate-200 hover:bg-white/10">
             {copied ? "Copied" : "Copy link"}
           </button>
+          <Link href={path} className="rounded-full border border-white/15 px-2.5 py-1 text-slate-200 hover:bg-white/10">
+            See what visitors see →
+          </Link>
         </div>
       ) : null}
       <p className="mt-2 text-[11px] leading-4 text-slate-500">
@@ -124,7 +127,11 @@ export default function PublicListToggle({ kind }: { kind: "collection" | "wishl
                 🔎 Search engines like Google can list it. They usually take <span className="text-white">a few days to a few weeks</span> to
                 pick up new pages, so share your link to get it seen sooner.
               </li>
-              {kind === "collection" ? <li>💰 Anyone can make an offer on your watches. Offers come to your Inbox and email.</li> : null}
+              {kind === "collection" ? (
+                <li>💰 Each watch gets a Make an offer button. Offers come to your Inbox and email.</li>
+              ) : (
+                <li>🤝 Each watch gets an Offer to sell button, so people who have one can offer it to you. Offers come to your Inbox and email.</li>
+              )}
               <li>
                 🔒 It shows as <span className="text-white">{profile.display_name}</span>. Prices you paid, dates, notes and your email stay
                 private.

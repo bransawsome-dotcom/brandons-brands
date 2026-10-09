@@ -219,7 +219,7 @@ export type FolderKey = "all" | "messages" | "offers" | "alerts" | "forum" | "up
 export const FOLDERS: { key: FolderKey; name: string; icon: string; hint: string }[] = [
   { key: "all", name: "All", icon: "📥", hint: "Everything in your inbox" },
   { key: "messages", name: "Messages", icon: "✉️", hint: "Private messages with members and Brandon's Brands" },
-  { key: "offers", name: "Offers", icon: "💰", hint: "Offers people made on watches in your public collection" },
+  { key: "offers", name: "Offers", icon: "💰", hint: "Offers to buy watches in your public collection, and offers to sell you watches on your public wishlist" },
   { key: "alerts", name: "Price alerts", icon: "🏷️", hint: "Wishlist watches listed at or below your target price" },
   { key: "forum", name: "Forum", icon: "💬", hint: "Replies to your posts and discussions or topics you follow" },
   { key: "updates", name: "Website updates", icon: "📢", hint: "News and new features from Brandon's Brands" },
@@ -228,6 +228,7 @@ export const FOLDERS: { key: FolderKey; name: string; icon: string; hint: string
 
 const KIND_FOLDER: Record<string, FolderKey> = {
   offer: "offers",
+  sell_offer: "offers",
   price_alert: "alerts",
   forum_reply: "forum",
   comment_reply: "forum",
@@ -245,6 +246,7 @@ export function folderOf(kind: string): FolderKey {
 
 export const KIND_ICON: Record<string, string> = {
   offer: "💰",
+  sell_offer: "🤝",
   price_alert: "🏷️",
   forum_reply: "💬",
   comment_reply: "↩️",

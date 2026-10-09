@@ -58,7 +58,11 @@ const EMPTY_TEXT: Record<FolderKey, { icon: string; title: string; text: React.R
         <Link href="/collection" className="text-[#D9A43A]">
           collection
         </Link>{" "}
-        public and anyone can make an offer on your watches. Offers land here and in your email.
+        public and anyone can make an offer on your watches. Make your{" "}
+        <Link href="/wishlist" className="text-[#D9A43A]">
+          wishlist
+        </Link>{" "}
+        public and people can offer to sell you the watches on it. Offers land here and in your email.
       </>
     ),
   },

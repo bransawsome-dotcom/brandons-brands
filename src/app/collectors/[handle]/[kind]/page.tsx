@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: { params: Promise<{ handle: s
   const description = `${list.items.length} watch${list.items.length === 1 ? "" : "es"}${
     brands.length ? ` including ${brands.join(", ")}` : ""
   } in ${possessive(list.display_name)} ${isCollection ? "collection" : "wishlist"} on Brandon's Brands.${
-    isCollection ? " Make an offer on any watch." : ""
+    isCollection ? " Make an offer on any watch." : " Have one to sell? Make an offer."
   }`;
   const firstImage = list.items.find((i) => i.image_url && /^https?:/.test(i.image_url))?.image_url;
   const path = `/collectors/${list.handle}/${list.kind}`;
@@ -147,8 +147,12 @@ export default async function PublicListPage({ params }: { params: Promise<{ han
             </div>
           </dl>
         </div>
-        {isCollection && list.items.length ? (
-          <p className="mt-5 text-sm text-slate-300">Interested in one of these watches? Use <span className="font-semibold text-[#D9A43A]">Make an offer</span> and the owner will get it right away, or send them a message.</p>
+        {list.items.length ? (
+          isCollection ? (
+            <p className="mt-5 text-sm text-slate-300">Interested in one of these watches? Use <span className="font-semibold text-[#D9A43A]">Make an offer</span> and the owner will get it right away, or send them a message.</p>
+          ) : (
+            <p className="mt-5 text-sm text-slate-300">Have one of these watches? Use <span className="font-semibold text-blue-200">Offer to sell</span> and {list.display_name} will get it right away, or send them a message.</p>
+          )
         ) : null}
       </section>
 
@@ -218,11 +222,9 @@ export default async function PublicListPage({ params }: { params: Promise<{ han
                   {specs ? <p className="mt-3 text-sm text-slate-300">{specs}</p> : null}
                   {d?.summary ? <p className="mt-2 text-sm leading-6 text-slate-400">{d.summary}</p> : null}
 
-                  {isCollection ? (
-                    <div className="mt-auto pt-5">
-                      <MakeOfferButton handle={list.handle} watchId={item.id} watchLabel={label} />
-                    </div>
-                  ) : null}
+                  <div className="mt-auto pt-5">
+                    <MakeOfferButton handle={list.handle} watchId={item.id} watchLabel={label} kind={isCollection ? "buy" : "sell"} />
+                  </div>
                 </div>
               </li>
             );
