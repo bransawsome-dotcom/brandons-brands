@@ -196,7 +196,7 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
                     ) : (
                       <span className="text-sm text-slate-500">Review coming soon</span>
                     )}
-                    <Link href={`/forum?subject=${FAVORITES_SUBJECT}`} className="text-sm text-[#D9A43A] hover:text-[#e1b54a]">
+                    <Link href={f.post_id ? `/forum/${f.post_id}` : `/forum?subject=${FAVORITES_SUBJECT}`} className="text-sm text-[#D9A43A] hover:text-[#e1b54a]">
                       Discuss →
                     </Link>
                   </div>

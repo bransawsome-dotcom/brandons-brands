@@ -12,6 +12,8 @@ export type Favorite = {
   note: string | null;
   sort: number;
   created_at: string;
+  // The forum discussion made for this favorite (in the Brandon's Favorites folder).
+  post_id?: string | null;
 };
 
 export const FAVORITES_PATH = "/favorites";

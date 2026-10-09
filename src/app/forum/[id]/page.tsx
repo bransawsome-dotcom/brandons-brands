@@ -33,6 +33,28 @@ const input =
 
 const MAX_INDENT = 4;
 
+// Turn web addresses in a post into links (e.g. the video link in a Brandon's Favorites discussion).
+function linkify(text: string): React.ReactNode[] {
+  return text.split(/(https?:\/\/[^\s]+)/g).map((part, i) => {
+    if (!/^https?:\/\//.test(part)) return part;
+    const url = part.replace(/[.,!?)]+$/, "");
+    const rest = part.slice(url.length);
+    const internal = url.startsWith("https://brandonsbrands17.com");
+    return (
+      <span key={i}>
+        <a
+          href={internal ? url.replace("https://brandonsbrands17.com", "") || "/" : url}
+          {...(internal ? {} : { target: "_blank", rel: "noopener noreferrer nofollow" })}
+          className="break-all font-semibold text-[#5CC4F2] underline-offset-2 hover:underline"
+        >
+          {url}
+        </a>
+        {rest}
+      </span>
+    );
+  });
+}
+
 function messageHref(userId: string, name: string) {
   return `/inbox?to=${encodeURIComponent(userId)}&name=${encodeURIComponent(name)}`;
 }
@@ -353,7 +375,7 @@ export default function ForumThreadPage() {
                 ) : null}
               </p>
             </div>
-            <p className="mt-5 whitespace-pre-wrap break-words text-base leading-7 text-slate-200">{post.body}</p>
+            <p className="mt-5 whitespace-pre-wrap break-words text-base leading-7 text-slate-200">{linkify(post.body)}</p>
             <div className="mt-6 flex flex-wrap items-center gap-3 text-sm">
               <FollowButton postId={post.id} label="discussion" />
             {canManagePost ? (
