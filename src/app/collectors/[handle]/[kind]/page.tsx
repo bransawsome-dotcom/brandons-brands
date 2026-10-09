@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { cache } from "react";
 import MakeOfferButton from "@/components/MakeOfferButton";
 import MessageMemberButton from "@/components/MessageMemberButton";
+import ShowOffCTA from "@/components/ShowOffCTA";
 import { SITE_URL } from "@/lib/site";
 import { loadPublicList, money, possessive, type ListKind, type PublicWatch, type PublicWish } from "@/lib/publicLists";
 
@@ -232,18 +233,7 @@ export default async function PublicListPage({ params }: { params: Promise<{ han
         </ul>
       )}
 
-      <div className="mt-10 rounded-[2rem] border border-[#D9A43A]/30 bg-[#D9A43A]/5 p-6 text-center">
-        <p className="text-lg font-semibold text-white">Show off your own watches</p>
-        <p className="mt-1 text-sm text-slate-300">Build your collection and wishlist with photos, values and box &amp; papers, then make them public.</p>
-        <div className="mt-4 flex flex-wrap justify-center gap-3">
-          <Link href="/signup" className="inline-flex rounded-full bg-[#D9A43A] px-6 py-3 text-sm font-semibold uppercase tracking-[0.15em] text-black hover:bg-[#e1b54a]">
-            Create a free account
-          </Link>
-          <Link href="/collectors" className="inline-flex rounded-full border border-white/15 px-6 py-3 text-sm font-semibold uppercase tracking-[0.15em] text-slate-200 hover:bg-white/5">
-            Browse collectors
-          </Link>
-        </div>
-      </div>
+      <ShowOffCTA className="mt-10" />
       <p className="mt-4 text-center text-xs text-slate-500">
         Values are estimates from public listings, not appraisals. Brandon&apos;s Brands doesn&apos;t take part in sales between members.
       </p>

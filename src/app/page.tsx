@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ShowOffCTA from "@/components/ShowOffCTA";
 
 export default function Home() {
   return (
@@ -60,6 +61,8 @@ export default function Home() {
             <span className="mt-5 inline-flex items-center gap-1 self-start text-sm font-semibold uppercase tracking-[0.15em] text-[#D9A43A]">Follow along <span aria-hidden className="transition group-hover:translate-x-1">→</span></span>
           </Link>
         </section>
+
+        <ShowOffCTA className="mt-12" />
       </main>
     </div>
   );
