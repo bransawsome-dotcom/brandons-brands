@@ -30,10 +30,25 @@ function inline(text: string, keyBase: string): ReactNode[] {
 }
 
 export default function BlogBody({ paragraphs }: { paragraphs: string[] }) {
+  // Consecutive "- " lines become one bulleted list.
+  const blocks: (string | string[])[] = [];
+  for (const p of paragraphs) {
+    if (/^[-•] /.test(p)) {
+      const last = blocks[blocks.length - 1];
+      if (Array.isArray(last)) last.push(p.slice(2));
+      else blocks.push([p.slice(2)]);
+    } else blocks.push(p);
+  }
   return (
     <div className="mt-8 space-y-6 text-base leading-8 text-slate-300">
-      {paragraphs.map((p, i) =>
-        p.startsWith("## ") ? (
+      {blocks.map((p, i) =>
+        Array.isArray(p) ? (
+          <ul key={i} className="list-disc space-y-2 pl-6 marker:text-[#D9A43A]">
+            {p.map((item, j) => (
+              <li key={j}>{inline(item, `${i}-${j}`)}</li>
+            ))}
+          </ul>
+        ) : p.startsWith("## ") ? (
           <h2 key={i} className="pt-4 text-2xl font-semibold tracking-[-0.02em] text-white">
             {p.slice(3)}
           </h2>
@@ -47,5 +62,5 @@ export default function BlogBody({ paragraphs }: { paragraphs: string[] }) {
 
 // Plain text version (for search and descriptions).
 export function plainText(p: string): string {
-  return p.replace(/^## /, "").replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
+  return p.replace(/^(## |[-•] )/, "").replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
 }
