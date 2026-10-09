@@ -166,7 +166,7 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
                   <p className="text-xs uppercase tracking-[0.25em] text-blue-300">{f.brand}</p>
                   <h2 className="mt-1 text-xl font-semibold text-white">{f.model}</h2>
                   {f.reference_number ? <p className="text-sm text-slate-400">Ref. {f.reference_number}</p> : null}
-                  {f.note ? <p className="mt-3 text-sm leading-6 text-slate-300">“{f.note}”</p> : null}
+                  {f.note ? <p className="mt-3 text-sm leading-6 text-slate-300">{f.note}</p> : null}
                   <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 pt-5">
                     {info && f.link_url ? (
                       <a
@@ -354,13 +354,14 @@ function FavoriteForm({
           />
         </label>
         <label className="mt-3 block text-sm text-slate-300">
-          Why it&apos;s a favorite (optional)
+          Short note (optional)
+          <span className="mt-0.5 block text-xs text-slate-500">Say &quot;one of Brandon&apos;s favorites&quot;, never &quot;his favorite&quot;, so no brand feels left out.</span>
           <textarea
             value={draft.note}
             onChange={(e) => setDraft({ ...draft, note: e.target.value })}
             maxLength={300}
             rows={3}
-            placeholder="One or two sentences in Brandon's words"
+            placeholder="e.g. One of Brandon's favorites: …"
             className={`${input} mt-1 resize-none`}
           />
         </label>
