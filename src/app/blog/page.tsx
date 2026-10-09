@@ -1,13 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { blogPosts, formatPostDate } from "@/lib/blogPosts";
+import { formatPostDate } from "@/lib/blogPosts";
+import { loadAllPosts } from "@/lib/blogDb";
+import DraftsLink from "@/components/DraftsLink";
+
+// New posts published from the Drafts page show up within 5 minutes.
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Blog | Brandon's Brands",
-  description: "Watch stories, collecting tips, and news from Brandon's Brands.",
+  description: "Watch stories, collecting tips, new releases and microbrand spotlights from Brandon Volosov of Brandon's Brands.",
+  alternates: { canonical: "/blog" },
 };
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const blogPosts = await loadAllPosts();
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-16">
       <div className="rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">
@@ -19,6 +26,7 @@ export default function BlogPage() {
           <p className="mt-4 max-w-2xl text-base leading-7 text-slate-300">
             Watch stories, collecting tips, and behind-the-scenes looks at the collection.
           </p>
+          <DraftsLink />
         </div>
 
         {blogPosts.length === 0 ? (

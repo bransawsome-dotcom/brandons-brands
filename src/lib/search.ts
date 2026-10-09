@@ -1,7 +1,7 @@
 // Server-side site search: public watches and wishlists, members' public names, forum discussions and authors,
 // Brandon's Favorites, the blog and the site's own pages. Uses only public data (the public key).
 
-import { blogPosts } from "@/lib/blogPosts";
+import { loadAllPosts } from "@/lib/blogDb";
 import { learnGuides } from "@/lib/learn";
 import { FAVORITES_SUBJECT } from "@/lib/favorites";
 
@@ -87,7 +87,7 @@ export async function siteSearch(query: string): Promise<SearchResults> {
   const empty: SearchResults = { query: q, watches: [], wishes: [], people: [], posts: [], authors: [], favorites: [], blog: [], pages: [] };
   if (!terms.length) return empty;
 
-  const [publicHits, posts, authorRows, favorites] = await Promise.all([
+  const [publicHits, posts, authorRows, favorites, blogPosts] = await Promise.all([
     rest<{ watches: WatchHit[]; wishes: WatchHit[]; people: PersonHit[] }>("rpc/search_public", {
       method: "POST",
       body: JSON.stringify({ p_q: terms.join(" ") }),
@@ -101,6 +101,7 @@ export async function siteSearch(query: string): Promise<SearchResults> {
     rest<FavoriteHit[]>(
       `brand_favorites?select=id,brand,model,image_url,post_id,link_url&${allTermsFilter(terms, ["brand", "model", "note", "features"])}&order=sort.asc&limit=12`,
     ),
+    loadAllPosts(),
   ]);
 
   const authorMap = new Map<string, AuthorHit>();
@@ -124,7 +125,7 @@ export async function siteSearch(query: string): Promise<SearchResults> {
         .filter((g) => matchesAll(`${g.title} ${g.category} ${g.description} ${g.sections.map((s) => `${s.heading} ${s.paragraphs.join(" ")} ${(s.bullets ?? []).join(" ")}`).join(" ")}`, terms))
         .map((g) => ({ href: `/learn/${g.slug}`, title: g.title, text: g.description })),
       ...blogPosts
-        .filter((p) => matchesAll(`${p.title} ${p.category} ${p.excerpt} ${p.body.join(" ")}`, terms))
+        .filter((p) => matchesAll(`${p.title} ${p.category} ${p.excerpt} ${(p.keywords ?? []).join(" ")} ${p.body.join(" ")}`, terms))
         .map((p) => ({ href: `/blog/${p.slug}`, title: p.title, text: p.excerpt })),
     ],
     pages: PAGES.filter((p) => matchesAll(`${p.title} ${p.text} ${p.keywords}`, terms)).map(({ href, title, text }) => ({ href, title, text })),
