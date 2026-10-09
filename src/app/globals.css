@@ -24,6 +24,23 @@ html, body, #__next {
   background: var(--background);
 }
 
+/* Never let a page pan sideways on phones (e.g. the 400px home logo on a 375–393px iPhone).
+   "clip" doesn't create a scroll container, so sticky headers keep working. */
+html, body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+/* iPhone Safari zooms in (and leaves the page zoomed, cutting off the left edge) when you tap a
+   text box smaller than 16px. Keep form fields at 16px on phones so that never happens. */
+@media (max-width: 639px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
 body {
   margin: 0;
   background: var(--background);
