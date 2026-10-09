@@ -75,6 +75,16 @@ export default function SignupPage() {
       return;
     }
 
+    // Let the site team know someone joined (sent once; the server checks the account is brand new).
+    if (data.user?.id) {
+      fetch("/api/new-member", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id: data.user.id }),
+        keepalive: true,
+      }).catch(() => {});
+    }
+
     if (data.session) {
       router.push("/dashboard");
     } else {
