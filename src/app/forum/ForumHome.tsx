@@ -19,6 +19,9 @@ import {
   describeSubject,
   inSubject,
   isModerator,
+  loadFolderOwners,
+  lockedSubjects,
+  type FolderOwners,
   listPosts,
   parentOf,
   subjectLabel,
@@ -55,6 +58,7 @@ export default function ForumHome() {
   // Phones: the Topics drop-down menu.
   const [menuOpen, setMenuOpen] = useState(false);
   const [moderator, setModerator] = useState(false);
+  const [owners, setOwners] = useState<FolderOwners | null>(null);
   // Which main subject the "+ Add a sub-folder" form is adding to (null = closed).
   const [addingTo, setAddingTo] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<Favorite[]>([]);
@@ -82,6 +86,7 @@ export default function ForumHome() {
 
   useEffect(() => {
     void isModerator(user?.id).then(setModerator);
+    void loadFolderOwners().then(setOwners);
   }, [user?.id]);
 
   const loadFavorites = useCallback(async () => {
@@ -150,10 +155,12 @@ export default function ForumHome() {
   const openFolder = subject ? parentOf(subject) ?? subject : null;
   const openFolderName = openFolder ? describeSubject(tree, openFolder).node.name : "";
 
+  const locked = lockedSubjects(owners, user?.id, moderator);
+
   const openComposer = () => {
     let start = draft.subject;
     if (subject === BRANDS_FOLDER) start = `${BRANDS_FOLDER}/misc`;
-    else if (subject === FAVORITES_SUBJECT && !moderator) start = "general";
+    else if (subject && locked.includes(subject)) start = "general";
     else if (subject) start = subject;
     setDraft((d) => ({ ...d, subject: start }));
     if (openFolder) setNewSubject((n) => ({ ...n, parent: openFolder }));
@@ -285,7 +292,7 @@ export default function ForumHome() {
                       value={draft.subject}
                       onChange={(slug) => setDraft({ ...draft, subject: slug })}
                       allowNew
-                      exclude={moderator ? [] : [FAVORITES_SUBJECT]}
+                      exclude={locked}
                       className={input}
                     />
                   </label>

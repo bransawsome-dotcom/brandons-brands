@@ -5,7 +5,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useAuth } from "@/components/AuthProvider";
 import supabase from "@/lib/supabaseClient";
-import { FAVORITES_SUBJECT, isModerator } from "@/lib/forum";
+import { FAVORITES_SUBJECT, isModerator, loadFolderOwners } from "@/lib/forum";
 import { loadCollectionData } from "@/lib/storage";
 import type { Watch } from "@/lib/localData";
 import { isAllowedLink, linkInfo, type Favorite } from "@/lib/favorites";
@@ -23,7 +23,7 @@ function db() {
 
 function friendly(message: string): string {
   if (/brand_favorites/.test(message) && /(does not exist|Could not find)/i.test(message)) return "Favorites are being set up. Please try again soon.";
-  if (/row-level security/i.test(message)) return "Only Brandon's Brands can change the favorites.";
+  if (/row-level security/i.test(message)) return "Only Brandon can change the favorites.";
   if (/image_url/.test(message)) return "The photo must be a web address starting with https://";
   if (/link_url/.test(message)) return "The link must start with https:// (or /blog/… for a review on this site).";
   return message;
@@ -39,7 +39,10 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
 
   useEffect(() => {
     let live = true;
-    void isModerator(user?.id).then((m) => live && setModerator(m));
+    // Moderators and Brandon (owner of the Brandon's Favorites folder) can edit the gallery.
+    void Promise.all([isModerator(user?.id), loadFolderOwners()]).then(([m, owners]) => {
+      if (live) setModerator(m || Boolean(user?.id && owners?.[FAVORITES_SUBJECT]?.includes(user.id)));
+    });
     return () => {
       live = false;
     };
@@ -101,7 +104,7 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
     <>
       {moderator ? (
         <div className="mt-6 flex flex-wrap items-center gap-3 rounded-2xl border border-[#D9A43A]/30 bg-[#D9A43A]/5 px-4 py-3 text-sm">
-          <span className="text-[#D9A43A]">Only you see this · moderators</span>
+          <span className="text-[#D9A43A]">Only you see this · editing the gallery</span>
           <button
             type="button"
             onClick={() => {

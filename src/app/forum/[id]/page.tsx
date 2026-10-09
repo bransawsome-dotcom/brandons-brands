@@ -15,8 +15,10 @@ import {
   deleteComment,
   deletePost,
   getPost,
-  FAVORITES_SUBJECT,
   isModerator,
+  loadFolderOwners,
+  lockedSubjects,
+  type FolderOwners,
   listComments,
   describeSubject,
   timeAgo,
@@ -128,6 +130,7 @@ export default function ForumThreadPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [moderator, setModerator] = useState(false);
+  const [owners, setOwners] = useState<FolderOwners | null>(null);
   const [replyTo, setReplyTo] = useState<string | null>(null);
   const [editing, setEditing] = useState(false);
   const [edit, setEdit] = useState({ title: "", body: "", subject: "general" });
@@ -158,6 +161,7 @@ export default function ForumThreadPage() {
 
   useEffect(() => {
     void isModerator(userId).then(setModerator);
+    void loadFolderOwners().then(setOwners);
   }, [userId]);
 
   // Notification links point at a reply (#c-…); scroll to it once replies have loaded.
@@ -313,7 +317,7 @@ export default function ForumThreadPage() {
               tree={tree}
               value={edit.subject}
               onChange={(slug) => setEdit({ ...edit, subject: slug })}
-              exclude={moderator || edit.subject === FAVORITES_SUBJECT ? [] : [FAVORITES_SUBJECT]}
+              exclude={lockedSubjects(owners, userId, moderator).filter((x) => x !== edit.subject)}
               className={input}
             />
             <input value={edit.title} onChange={(e) => setEdit({ ...edit, title: e.target.value })} maxLength={TITLE_MAX} className={input} required />

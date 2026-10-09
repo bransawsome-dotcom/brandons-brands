@@ -33,7 +33,7 @@ const BUILT_IN: SubjectNode[] = [
     name: "Brandon's Favorites",
     icon: "⭐",
     parent: null,
-    description: "Brandon's favorite watches, with his reviews and reels. Brandon starts the discussions here; everyone can reply.",
+    description: "Brandon's favorite watches, with his reviews and reels. Only Brandon starts discussions here; everyone can reply.",
   },
   { slug: BRANDS_FOLDER, name: "Watch Brands", icon: "⌚", parent: null, folder: true },
   { slug: CLUBS_FOLDER, name: "Watch Clubs & Meetups", icon: "🤝", parent: null, folder: true },
@@ -231,6 +231,28 @@ export async function isModerator(userId: string | null | undefined): Promise<bo
   if (!userId || !supabase) return false;
   const { data } = await supabase.from("forum_moderators").select("user_id").eq("user_id", userId).maybeSingle();
   return Boolean(data);
+}
+
+// Folders with owners (e.g. Brandon's Favorites): only the owners start discussions there; anyone can reply.
+// Returns null if that isn't set up yet.
+export type FolderOwners = Record<string, string[]>;
+
+export async function loadFolderOwners(): Promise<FolderOwners | null> {
+  if (!supabase) return null;
+  const { data, error } = await supabase.from("forum_folder_owners").select("subject,user_id");
+  if (error) return null;
+  const out: FolderOwners = {};
+  for (const r of (data ?? []) as { subject: string; user_id: string }[]) (out[r.subject] ??= []).push(r.user_id);
+  return out;
+}
+
+// Topics this member can't start discussions in.
+export function lockedSubjects(owners: FolderOwners | null, userId: string | null | undefined, moderator: boolean): string[] {
+  // Until folder owners are set up, Brandon's Favorites is limited to moderators.
+  if (!owners) return moderator ? [] : [FAVORITES_SUBJECT];
+  return Object.entries(owners)
+    .filter(([, ids]) => ids.length && !(userId && ids.includes(userId)))
+    .map(([subject]) => subject);
 }
 
 type PostRow = Omit<ForumPost, "comment_count"> & { forum_comments?: { count: number }[] };
