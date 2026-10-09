@@ -7,6 +7,8 @@ import ForumIdentity from "@/components/ForumIdentity";
 import { listFavorites, setFavoriteNotify, setFollowSubject, type Favorite } from "@/lib/inbox";
 import { NEW_SUBJECT, SubjectSelect, useSubjectTree } from "@/components/ForumSubjects";
 import { useAuth } from "@/components/AuthProvider";
+import supabase from "@/lib/supabaseClient";
+import { linkInfo, type Favorite as FavoriteWatch } from "@/lib/favorites";
 import {
   BODY_MAX,
   BRANDS_FOLDER,
@@ -59,6 +61,7 @@ export default function ForumHome() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [moderator, setModerator] = useState(false);
   const [owners, setOwners] = useState<FolderOwners | null>(null);
+  const [favWatches, setFavWatches] = useState<FavoriteWatch[]>([]);
   // Which main subject the "+ Add a sub-folder" form is adding to (null = closed).
   const [addingTo, setAddingTo] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<Favorite[]>([]);
@@ -87,6 +90,13 @@ export default function ForumHome() {
   useEffect(() => {
     void isModerator(user?.id).then(setModerator);
     void loadFolderOwners().then(setOwners);
+    // Brandon's Favorites folder shows the gallery watches at the top.
+    supabase
+      ?.from("brand_favorites")
+      .select("*")
+      .order("sort")
+      .order("created_at")
+      .then(({ data }) => setFavWatches((data ?? []) as FavoriteWatch[]));
   }, [user?.id]);
 
   const loadFavorites = useCallback(async () => {
@@ -472,16 +482,18 @@ export default function ForumHome() {
                           Show all {sortedFolderChildren.length} brands
                         </button>
                       ) : null}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setMenuOpen(false);
-                          startAddSubfolder(s.slug);
-                        }}
-                        className="ml-5 py-1 text-left text-xs font-semibold text-[#D9A43A] hover:text-[#e1b54a]"
-                      >
-                        {addLabel(s.slug)}
-                      </button>
+                      {!locked.includes(s.slug) ? (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setMenuOpen(false);
+                            startAddSubfolder(s.slug);
+                          }}
+                          className="ml-5 py-1 text-left text-xs font-semibold text-[#D9A43A] hover:text-[#e1b54a]"
+                        >
+                          {addLabel(s.slug)}
+                        </button>
+                      ) : null}
                     </div>
                   ) : null}
                 </div>
@@ -578,6 +590,52 @@ export default function ForumHome() {
             </div>
           ) : null}
 
+          {subject === FAVORITES_SUBJECT && favWatches.length ? (
+            <div className="mb-5 rounded-[1.5rem] border border-[#3FB4EC]/25 bg-[#0E5A8F]/10 p-4 sm:p-5">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <p className="text-xs uppercase tracking-[0.25em] text-blue-300">From the favorites gallery</p>
+                <Link href="/favorites" className="shrink-0 text-xs font-semibold text-[#D9A43A] hover:text-[#e1b54a]">
+                  See all →
+                </Link>
+              </div>
+              <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-5">
+                {favWatches.map((f) => {
+                  const info = linkInfo(f.link_url);
+                  const inner = (
+                    <>
+                      <div className={`flex aspect-[4/3] items-center justify-center overflow-hidden ${f.image_url ? "bg-white" : "bg-slate-950/80"}`}>
+                        {f.image_url ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={f.image_url} alt={`${f.brand} ${f.model}`} referrerPolicy="no-referrer" loading="lazy" className="h-full w-full object-cover" />
+                        ) : (
+                          <span className="text-3xl" aria-hidden>
+                            ⌚
+                          </span>
+                        )}
+                      </div>
+                      <div className="p-3">
+                        <p className="text-[10px] uppercase tracking-[0.2em] text-blue-300">{f.brand}</p>
+                        <p className="mt-0.5 line-clamp-2 text-sm font-semibold leading-5 text-white">{f.model}</p>
+                        {info ? <p className="mt-1 text-xs font-semibold text-[#5CC4F2]">{info.icon} {info.label}</p> : null}
+                      </div>
+                    </>
+                  );
+                  return (
+                    <li key={f.id} className="overflow-hidden rounded-2xl border border-white/10 bg-slate-950/70 transition hover:border-[#3FB4EC]/50">
+                      {f.link_url && info ? (
+                        <a href={f.link_url} {...(info.external ? { target: "_blank", rel: "noopener noreferrer" } : {})} className="block">
+                          {inner}
+                        </a>
+                      ) : (
+                        inner
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ) : null}
+
           {loading ? (
             <div className="rounded-[1.5rem] border border-white/10 bg-white/5 p-10 text-center text-slate-300">Loading discussions…</div>
           ) : error ? (
@@ -586,7 +644,9 @@ export default function ForumHome() {
             <div className="rounded-[1.5rem] border border-dashed border-white/15 bg-white/5 p-10 text-center text-slate-300">
               <div className="text-4xl">💬</div>
               <p className="mt-3 font-semibold text-white">{search ? "No posts match your search." : "No discussions here yet."}</p>
-              {!search ? (
+              {!search && subject && locked.includes(subject) ? (
+                <p className="mt-2 text-sm text-slate-400">Only Brandon starts discussions here. When he does, you can reply and join in.</p>
+              ) : !search ? (
                 <button type="button" onClick={() => openComposer()} className="mt-4 rounded-full bg-[#D9A43A] px-5 py-2.5 text-sm font-semibold text-black hover:bg-[#e1b54a]">
                   Start the first one
                 </button>
