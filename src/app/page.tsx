@@ -70,7 +70,7 @@ export default async function Home() {
           <Link href="/collection" className="group flex h-full flex-col rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl transition hover:-translate-y-1 hover:border-[#D9A43A]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D9A43A]">
             <h2 className="mb-3 text-2xl font-semibold text-white">My Collection</h2>
             <p className="flex-1 text-sm leading-6 text-slate-300">
-              Store your watches with photo, brand, model, nickname and purchase date.
+              Store your watches with photo, brand, model and purchase date, and track what each one is worth with daily estimated values.
             </p>
             <span className="mt-5 inline-flex items-center gap-1 self-start text-sm font-semibold uppercase tracking-[0.15em] text-[#D9A43A]">Open collection <span aria-hidden className="transition group-hover:translate-x-1">→</span></span>
           </Link>

@@ -224,6 +224,7 @@ export const learnGuides: LearnGuide[] = [
       },
     ],
     related: [
+      { label: "Best microbrand watches under $1,000", href: "/learn/best-microbrand-watches-under-1000" },
       { label: "Brandon's Favorites", href: "/favorites" },
       { label: "Why microbrands matter", href: "/about" },
     ],
@@ -540,9 +541,9 @@ export const learnGuides: LearnGuide[] = [
   },
   {
     slug: "best-watches-by-budget",
-    title: "Best Watches Under $500, $1,000 and $5,000",
+    title: "Best Watches Under $200, $500, $1,000 and $5,000",
     category: "Buying Guides",
-    description: "Great watches at every budget, from tough everyday watches under $500 to Swiss icons under $5,000, mixing big names with independent microbrands.",
+    description: "Great watches at every budget, from the best watches under $200 and $500 to Swiss icons under $5,000, mixing big names with independent microbrands.",
     minutes: 7,
     updated: "2026-10-09",
     sections: [
@@ -551,6 +552,17 @@ export const learnGuides: LearnGuide[] = [
         paragraphs: [
           "Prices change often and vary by retailer, strap and version, so treat these as starting points and check the brand's site before you buy. Each tier mixes well-known names with microbrands, because some of the best value in watches today comes from small independent makers.",
         ],
+      },
+      {
+        heading: "Best watches under $200",
+        bullets: [
+          "Casio Duro MDV106: a 200m dive watch that costs about $60 and has a cult following",
+          "Timex Weekender: a simple 38mm quartz watch with easy-to-swap fabric straps, $77",
+          "Timex Expedition Scout: a 40mm field watch with 50m water resistance, $95",
+          "Casio G-Shock GA-2100: the slim octagonal G-Shock with 200m water resistance, about $110",
+          "Q Timex 1975 Digital Reissue: a retro digital watch from Timex's Q line, $169",
+        ],
+        paragraphs: [],
       },
       {
         heading: "Under $500: everyday heroes",
@@ -595,8 +607,143 @@ export const learnGuides: LearnGuide[] = [
     ],
     related: [
       { label: "How to buy your first luxury watch", href: "/learn/buying-your-first-luxury-watch" },
-      { label: "Microbrand watches: a beginner's guide", href: "/learn/microbrand-watches-guide" },
+      { label: "Affordable mechanical watches", href: "/learn/affordable-mechanical-watches" },
+      { label: "Best microbrand watches under $1,000", href: "/learn/best-microbrand-watches-under-1000" },
       { label: "Brandon's Favorites", href: "/favorites" },
+    ],
+  },
+  {
+    slug: "affordable-mechanical-watches",
+    title: "Affordable Mechanical Watches: Great Automatics Under $600",
+    category: "Buying Guides",
+    description:
+      "The best inexpensive mechanical watches: Seiko, Orient, Timex, Citizen and microbrand automatics under $600, with movements, sizes and current prices.",
+    minutes: 7,
+    updated: "2026-10-09",
+    sections: [
+      {
+        heading: "Why buy an inexpensive mechanical watch?",
+        paragraphs: [
+          "A mechanical watch runs on a spring, gears and a balance wheel instead of a battery. An automatic winds itself as you wear it, and a hand-wound watch is wound with the crown. You don't need to spend thousands to own a good one: brands like Seiko, Orient and Citizen, and a wave of independent microbrands, make dependable automatics for a few hundred dollars.",
+          "Prices below are the brands' US list prices when we checked in October 2026. They change often, and some brands run sales, so check before you buy.",
+        ],
+      },
+      {
+        heading: "Japanese classics under $500",
+        bullets: [
+          "Seiko 5 Sports SRPD55: the modern classic, with Seiko's 4R36 automatic, 42.5mm case and 100m water resistance, $350. The SRPK29 puts the same movement in a 38mm case for smaller wrists, also $350",
+          "Orient Bambino Version 7: a domed-crystal dress watch with an automatic movement you can also wind by hand, 38.4mm, $430 list (on sale for $295 when we checked)",
+          "Orient Kamasu: a 41.88mm diver with 200m water resistance and the F6922 automatic, $580 list (on sale for $375 when we checked)",
+          "Citizen Tsuyosa: a colorful integrated-bracelet automatic (calibre 8210), 40mm, $495 list",
+          "Seiko Presage Cocktail Time SRPB43: one of the most beautiful dials at the price, 40.5mm with the 4R35 automatic, $450",
+          "Timex Marlin Automatic: a 1960s-inspired 40mm dress watch with a Miyota 8215 automatic, $299",
+        ],
+        paragraphs: [],
+      },
+      {
+        heading: "Microbrand automatics under $600",
+        bullets: [
+          "Boldr Venture: a 38mm titanium field watch from Singapore with 200m water resistance, $299 to $459 depending on the version",
+          "Zelos Swordfish: a 40mm or 42mm diver with an NH35 automatic and 200m water resistance, $399 to $449",
+          "Brew Metric Lite: a compact 30mm automatic with 1970s style, $375",
+          "Nodus Sector II Dive GMT: a 38mm travel-and-dive watch from Los Angeles with an NH34 GMT automatic, from $525",
+          "Vaer A5 Field Auto: a 40mm automatic field watch from Venice, California, $599",
+        ],
+        paragraphs: [],
+      },
+      {
+        heading: "Worth stretching for",
+        bullets: [
+          "Hamilton Khaki Field Mechanical 38mm: a hand-wound field watch with an 80-hour power reserve, $675",
+          "Tissot PRX Powermatic 80: the integrated-bracelet favorite with an 80-hour automatic and 100m water resistance, $850",
+        ],
+        paragraphs: [],
+      },
+      {
+        heading: "What to look for in an affordable automatic",
+        bullets: [
+          "Hacking and hand-winding: many modern movements stop the seconds hand when you set the time and can be wound by hand, which makes them easier to live with",
+          "Water resistance: 100m or more if you swim with it, 30m to 50m for a desk-to-dinner watch",
+          "Size: try on a similar case size first; our watch size guide shows how to measure your wrist",
+          "Accuracy: affordable automatics can gain or lose several seconds a day; that's normal, and a watchmaker can regulate it",
+        ],
+        paragraphs: [
+          "Once you buy one, add it to your free watch value tracker on Brandon's Brands to keep its box, papers and estimated value in one place.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Best microbrand watches under $1,000", href: "/learn/best-microbrand-watches-under-1000" },
+      { label: "Mechanical vs automatic vs quartz", href: "/learn/mechanical-automatic-quartz-explained" },
+      { label: "Best watches by budget", href: "/learn/best-watches-by-budget" },
+      { label: "Free watch value tracker", href: "/watch-value-tracker" },
+    ],
+  },
+  {
+    slug: "best-microbrand-watches-under-1000",
+    title: "Best Microbrand Watches Under $1,000",
+    category: "Buying Guides",
+    description:
+      "The best microbrand watches under $1,000: divers, GMTs and field watches from Lorier, Traska, Nodus, Vaer, Halios, Zelos, Henry Archer, Boldr and more, with movements and prices.",
+    minutes: 7,
+    updated: "2026-10-09",
+    sections: [
+      {
+        heading: "Why microbrands are the best value under $1,000",
+        paragraphs: [
+          "Microbrands are small independent watch companies, often started by enthusiasts, that sell mostly online. Without big advertising budgets or retail markups, many offer sapphire crystals, proven Japanese or Swiss movements and thoughtful designs for well under $1,000.",
+          "Prices are each brand's US price when we checked in October 2026. Microbrands often release in small batches, so popular models sell out and come back; join a brand's mailing list if your pick is sold out.",
+        ],
+      },
+      {
+        heading: "Divers",
+        bullets: [
+          "Lorier Neptune: a vintage-style 39mm diver from Brooklyn, New York, with a Miyota 9039 automatic and 200m water resistance, $699",
+          "Traska Freediver: an everyday sports diver with a Miyota automatic and 200m water resistance, $795",
+          "Vaer D5 Tropic: a 39mm diver assembled in the USA with a Miyota 9015 automatic and 200m water resistance, $749",
+          "Halios Seaforth IV: a much-loved diver from Vancouver with a Swiss Sellita SW200-2 and 200m water resistance, $765",
+          "Zelos Mako V2 500m Bronze: a 40mm bronze diver with a Swiss Sellita SW200 and 500m water resistance, $549",
+          "Henry Archer Vesterhav Aquila: a Danish-designed 40mm diver with a Miyota 9015 and 200m water resistance, $599",
+        ],
+        paragraphs: [],
+      },
+      {
+        heading: "Travel, field and chronograph picks",
+        bullets: [
+          "Nodus Contrail GMT: a 40.5mm GMT from Los Angeles with a Miyota 9075 \"flyer\" GMT and 200m water resistance, $825",
+          "Boldr Venture: a 38mm titanium field watch with an automatic movement and 200m water resistance, $299 to $459",
+          "Brew Metric: a 36mm chronograph with a mechaquartz VK68 movement (quartz accuracy with a mechanical-feeling chronograph), $475",
+          "Studio Underd0g 01SERIES: a hand-wound mechanical chronograph with playful dials, about £600 from the brand in the UK",
+          "Baltic Aquascaphe: a French microbrand diver in 37mm or 39.5mm, from €630 (sold in euros)",
+        ],
+        paragraphs: [],
+      },
+      {
+        heading: "Just over $1,000",
+        bullets: [
+          "Christopher Ward C60 Trident Pro 300: a 40mm Swiss-made diver with 300m water resistance, $1,320",
+          "Farer Three Hand Series III: colorful British design with a Swiss La Joux-Perret movement, $1,220",
+        ],
+        paragraphs: [],
+      },
+      {
+        heading: "How to buy a microbrand watch",
+        bullets: [
+          "Check the movement and who can service it; Miyota, Seiko/TMI and Sellita movements are widely serviced",
+          "Read the warranty and return policy, especially for pre-orders",
+          "Look for owner reviews and wrist shots, and ask the community in the forum",
+          "Buy to wear and enjoy: most microbrand watches aren't bought as investments",
+        ],
+        paragraphs: [
+          "Microbrands are at the heart of Brandon's Brands. See which ones Brandon has featured in Brandon's Favorites, and add yours to your free watch value tracker.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Microbrand watches: a beginner's guide", href: "/learn/microbrand-watches-guide" },
+      { label: "Affordable mechanical watches", href: "/learn/affordable-mechanical-watches" },
+      { label: "Brandon's Favorites", href: "/favorites" },
+      { label: "Upcoming microbrand watch fairs", href: "/events" },
     ],
   },
   {

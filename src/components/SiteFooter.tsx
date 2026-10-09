@@ -24,6 +24,8 @@ export default function SiteFooter() {
             <span className="mx-2 text-slate-500">·</span>
             <Link href="/collectors" className="text-blue-300 transition hover:text-blue-200">Collectors</Link>
             <span className="mx-2 text-slate-500">·</span>
+            <Link href="/watch-value-tracker" className="text-blue-300 transition hover:text-blue-200">Watch value tracker</Link>
+            <span className="mx-2 text-slate-500">·</span>
             <Link href="/terms" className="text-blue-300 transition hover:text-blue-200">Terms</Link>
           </p>
           <p className="mt-1 flex flex-wrap gap-y-1 text-sm [&>a]:whitespace-nowrap">

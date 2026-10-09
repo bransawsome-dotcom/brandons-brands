@@ -37,6 +37,7 @@ const PAGES: (PageHit & { keywords: string })[] = [
   { href: "/collection", title: "Your collection", text: "Track your watches, values and box & papers.", keywords: "collection my watches track value" },
   { href: "/wishlist", title: "Your wishlist", text: "Watches you want, with price alerts.", keywords: "wishlist want price alerts target" },
   { href: "/dashboard", title: "Dashboard", text: "Your collection at a glance.", keywords: "dashboard stats value" },
+  { href: "/watch-value-tracker", title: "Free watch value tracker", text: "Track what your watches are worth, chart your collection's value and set wishlist price alerts.", keywords: "value tracker price tracker watch worth how much is my watch worth collection app alerts estimate" },
   { href: "/learn", title: "Learn about watches", text: "Buying guides, watch types, how watches work and watch history.", keywords: "learn education guides buying guide watch types history how watches work glossary" },
   { href: "/events", title: "Upcoming watch events", text: "Microbrand watch fairs, watch shows and collector meetups, with links to each event's site.", keywords: "events meetups meetup club watch fair show windup microbrand new york nj new jersey calendar" },
   { href: "/wrist-check", title: "Wrist Check", text: "Post what's on your wrist today and see what collectors are wearing.", keywords: "wrist check wrist shot wruw photo wearing today wrist of the week" },

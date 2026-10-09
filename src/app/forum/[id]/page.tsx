@@ -40,19 +40,19 @@ const loadPost = cache(async (id: string): Promise<PostRow | null> => {
   }
 });
 
-// The favorite's photo, for link previews of Brandon's Favorites discussions.
-async function favoriteImage(postId: string): Promise<string | null> {
+// The favorite's photo and reference number, for link previews and search titles of Brandon's Favorites discussions.
+async function favoriteInfo(postId: string): Promise<{ image_url: string | null; reference_number: string | null } | null> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !key) return null;
   try {
-    const res = await fetch(`${url}/rest/v1/brand_favorites?post_id=eq.${postId}&select=image_url`, {
+    const res = await fetch(`${url}/rest/v1/brand_favorites?post_id=eq.${postId}&select=image_url,reference_number`, {
       headers: { apikey: key, Authorization: `Bearer ${key}` },
       next: { revalidate: 300 },
     });
     if (!res.ok) return null;
-    const rows = (await res.json()) as { image_url: string | null }[];
-    return rows[0]?.image_url ?? null;
+    const rows = (await res.json()) as { image_url: string | null; reference_number: string | null }[];
+    return rows[0] ?? null;
   } catch {
     return null;
   }
@@ -68,11 +68,14 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const post = await loadPost(id);
   if (!post) return { title: "Discussion | Brandon's Brands Forum" };
   const favorite = post.subject === FAVORITES_SUBJECT;
+  const info = favorite ? await favoriteInfo(post.id) : null;
+  // Search titles carry the exact model name and reference, which is how people search for a watch.
+  const ref = info?.reference_number?.trim();
   const title = favorite
-    ? `${post.title} | Brandon's Favorites Watch Review | Brandon's Brands`
+    ? `${post.title}${ref && !post.title.includes(ref) ? ` ${ref}` : ""} Review & Video | Brandon's Favorites`
     : `${post.title} | Brandon's Brands Watch Forum`;
   const description = excerpt(post.body);
-  const image = favorite ? await favoriteImage(post.id) : null;
+  const image = info?.image_url ?? null;
   const path = `/forum/${post.id}`;
   return {
     title,

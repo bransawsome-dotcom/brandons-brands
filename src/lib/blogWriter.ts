@@ -9,6 +9,7 @@ import { blogPosts } from "@/lib/blogPosts";
 import { collabEmail, socials } from "@/lib/socials";
 import { IDENTITY_RULE, SITE_URL } from "@/lib/site";
 import { slugify, type DbPost, type SocialDrafts } from "@/lib/blogDb";
+import { keywordForDate } from "@/lib/keywordPlan";
 
 const MODEL = process.env.BLOG_MODEL || process.env.ANTHROPIC_MODEL || "claude-sonnet-5-5";
 
@@ -127,6 +128,7 @@ function buildPrompt(theme: string, topicHint: string, recentTitles: string[]): 
     "",
     recentTitles.length ? `Don't repeat these recent posts:\n${recentTitles.map((t) => `- ${t}`).join("\n")}` : "",
     "",
+    "Social rule: say or write \"brandonsbrands17.com\" by name in every caption and script (people who hear the name search for it, which is the biggest source of traffic for creator sites), and use the post's main keyword in the first line of the Instagram caption, the TikTok caption and the YouTube title.",
     "Then write the social media versions so each platform drives people to the blog post and the other accounts. The blog post will live at " +
       `${SITE_URL}/blog/<slug>; write the link as {{POST_URL}} and it will be filled in.`,
     "",
@@ -165,7 +167,12 @@ export async function writeWeeklyDraft(opts: { topicHint?: string; createdBy?: s
   const recentTitles = [...(recent ?? []).map((r: { title: string }) => r.title), ...blogPosts.map((p) => p.title)];
 
   const theme = themeForDate();
-  const w = await write(theme, clip(opts.topicHint, 300), recentTitles, opts.signal);
+  // This week's target keyword from the monthly keyword plan, unless someone asked for a specific topic.
+  const plan = opts.topicHint ? null : keywordForDate();
+  const hint = plan
+    ? `${plan.topic}. Main keyword to rank for: "${plan.keyword}". Use it naturally in the title, the first paragraph, one subheading and the meta description, and link to ${plan.link} at least once.`
+    : clip(opts.topicHint, 300);
+  const w = await write(plan ? `Keyword plan: ${plan.keyword}` : theme, hint, recentTitles, opts.signal);
 
   // A unique web address.
   const base = slugify(w.title) || `post-${Date.now()}`;
