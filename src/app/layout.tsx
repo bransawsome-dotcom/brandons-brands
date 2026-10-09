@@ -4,6 +4,7 @@ import AuthProvider from "@/components/AuthProvider";
 import MainNav from "@/components/MainNav";
 import SiteFooter from "@/components/SiteFooter";
 import Link from "next/link";
+import { Analytics } from "@vercel/analytics/next";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -61,6 +62,8 @@ export default function RootLayout({
             <SiteFooter />
           </div>
         </AuthProvider>
+        {/* Vercel Web Analytics: page views per page/post, no cookies. Enable it in the Vercel project's Analytics tab. */}
+        <Analytics />
       </body>
     </html>
   );
