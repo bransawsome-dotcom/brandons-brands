@@ -7,44 +7,9 @@ import { getAnthropic } from "@/lib/watchAi";
 import { adminClient } from "@/lib/priceAlerts";
 import { collabEmail } from "@/lib/socials";
 import { SITE_URL } from "@/lib/site";
+import { latestYouTubeVideos, videoKey, type Video } from "@/lib/youtube";
 
 const MODEL = process.env.FAVORITES_MODEL || process.env.ANTHROPIC_MODEL || "claude-sonnet-5-5";
-const YT_CHANNEL = process.env.YOUTUBE_CHANNEL_ID || "UCkc5QQKBGM1_63nAZECyiQQ"; // @BrandonsBrands
-
-export type Video = { id: string; title: string; url: string; published: string; description: string; thumbnail: string };
-
-const decode = (s: string) =>
-  s.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'");
-
-// Brandon's latest YouTube videos and Shorts (YouTube's public feed: newest 15).
-export async function latestYouTubeVideos(): Promise<Video[]> {
-  const res = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${YT_CHANNEL}`, {
-    signal: AbortSignal.timeout(10_000),
-    cache: "no-store",
-  });
-  if (!res.ok) throw new Error(`YouTube feed ${res.status}`);
-  const xml = await res.text();
-  return [...xml.matchAll(/<entry>([\s\S]*?)<\/entry>/g)].map(([, e]) => {
-    const id = e.match(/<yt:videoId>([^<]+)</)?.[1] ?? "";
-    return {
-      id,
-      title: decode(e.match(/<title>([^<]*)</)?.[1] ?? ""),
-      url: `https://youtu.be/${id}`,
-      published: e.match(/<published>([^<]+)</)?.[1] ?? "",
-      description: decode(e.match(/<media:description>([\s\S]*?)<\/media:description>/)?.[1] ?? "").slice(0, 600),
-      thumbnail: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
-    };
-  }).filter((v) => v.id);
-}
-
-// The video ID in any YouTube link (youtu.be/x, watch?v=x, shorts/x), else the link itself.
-export function videoKey(url: string | null | undefined): string {
-  if (!url) return "";
-  const m = url.match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([A-Za-z0-9_-]{11})/);
-  if (m) return `yt:${m[1]}`;
-  return url.replace(/[?#].*$/, "").replace(/\/$/, "").toLowerCase();
-}
-
 const OWN_SOCIAL = /^https:\/\/(www\.)?(instagram\.com\/(reel|p)\/|tiktok\.com\/@brandons\.brands\/video\/|facebook\.com\/)/i;
 
 const schema = {

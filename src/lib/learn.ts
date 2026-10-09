@@ -1131,6 +1131,182 @@ export const learnGuides: LearnGuide[] = [
       { label: "Virtual Events in the forum", href: "/forum?subject=clubs/virtual-events" },
     ],
   },
+  {
+    slug: "watch-trends-2026",
+    title: "Watch Trends 2026: What Collectors Are Buying Now",
+    category: "Collecting & Community",
+    description:
+      "Independent brands, green dials, moon phases, rectangular cases and pre-owned buying: the watch trends collectors care about in 2026, backed by market data.",
+    minutes: 5,
+    updated: "2026-10-09",
+    sections: [
+      {
+        heading: "From hype to collecting",
+        paragraphs: [
+          "After a few years of waitlists and fast-rising prices, the market has settled. Chrono24, the largest online watch marketplace, described 2025 as a shift toward a more collector-oriented market: people buying watches they love to wear, rather than chasing whatever might resell for more.",
+          "That shift shows up in what people search for and buy. Unusual designs, smaller makers and character are winning attention over simply owning the most famous name.",
+        ],
+      },
+      {
+        heading: "Designs gaining ground",
+        paragraphs: ["Chrono24's 2025 marketplace data showed clear winners among design details:"],
+        bullets: [
+          "Moon phase watches: up about 15% in share of demand",
+          "Green dials: up about 9.5%",
+          "Rectangular cases: up about 9%",
+          "Champagne and gold dials: up roughly 7–8%",
+          "Classic blue and black dials: flat",
+        ],
+      },
+      {
+        heading: "Brands gaining attention",
+        paragraphs: [
+          "On the same marketplace, IWC (helped by strong interest in the Ingenieur), Vacheron Constantin, Tudor and Cartier all grew their share of demand in 2025. Rolex remained the most traded brand by far, but its share eased slightly as buyers explored more widely.",
+          "Industry executives surveyed by Deloitte named independent watchmakers as the next big trend, and younger buyers say affordability, uniqueness and sustainability matter most to them.",
+        ],
+      },
+      {
+        heading: "Pre-owned keeps growing",
+        paragraphs: [
+          "Around 40% of Gen Z and Millennial watch buyers say they are likely to buy pre-owned, according to Deloitte. Pre-owned lets you find discontinued models, try more brands and often get more watch for your budget, as long as you buy carefully.",
+        ],
+      },
+      {
+        heading: "What this means for your collection",
+        paragraphs: [
+          "Trends are fun to follow, but the best watch is still the one you will actually wear. Use trends for ideas, then add the watches you like to your wishlist with a target price so you hear about good deals.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Green dial watches guide", href: "/learn/green-dial-watches-guide" },
+      { label: "Moon phase watches explained", href: "/learn/moon-phase-watches-explained" },
+      { label: "Microbrand watches guide", href: "/learn/microbrand-watches-guide" },
+      { label: "Buying pre-owned safely", href: "/learn/buying-pre-owned-watches-safely" },
+      { label: "Start your wishlist", href: "/wishlist" },
+    ],
+  },
+  {
+    slug: "green-dial-watches-guide",
+    title: "Green Dial Watches: Why Collectors Love Them and How to Choose One",
+    category: "Buying Guides",
+    description:
+      "Green dials went from rare to one of the most popular watch colors. Here's why, the shades to know, and how to pick a green dial watch you'll love.",
+    minutes: 4,
+    updated: "2026-10-09",
+    sections: [
+      {
+        heading: "Why green took off",
+        paragraphs: [
+          "For decades most watches came in black, white, silver or blue. Green was a statement. Rolex helped change that with the green-bezel Submariner in 2003 (nicknamed the \"Kermit\") and the all-green \"Hulk\" in 2010, and today almost every brand, from Swiss icons to small microbrands, offers a green option.",
+          "Green is also one of the colors gaining the most ground: Chrono24's 2025 data shows green dials up about 9.5% in share of demand, while classic blue and black stayed flat.",
+        ],
+      },
+      {
+        heading: "Shades to know",
+        bullets: [
+          "Forest and olive green: earthy and easy to wear, great on field and dive watches",
+          "Emerald and sunburst green: brighter, and the dial changes with the light",
+          "Mint and pistachio: light, playful pastels popular on sporty and casual watches",
+          "Fumé (smoked) green: darker toward the edges for a vintage, dressy look",
+          "Malachite and stone dials: natural green stone, each one unique",
+        ],
+        paragraphs: [],
+      },
+      {
+        heading: "How to choose",
+        paragraphs: [
+          "See the dial in daylight if you can: green can look very different indoors and outdoors. Think about what you'll wear it with: olive and forest work with almost everything, while bright greens make more of a statement. Match the style to your life too: a green diver for weekends, a green dress watch for the office.",
+          "Many microbrands offer green dials at friendly prices, so it's an easy way to try the color before committing to a bigger purchase.",
+        ],
+      },
+    ],
+    related: [
+      { label: "Watch trends 2026", href: "/learn/watch-trends-2026" },
+      { label: "Microbrand watches guide", href: "/learn/microbrand-watches-guide" },
+      { label: "Best watches by budget", href: "/learn/best-watches-by-budget" },
+      { label: "Brandon's Favorites", href: "/favorites" },
+    ],
+  },
+  {
+    slug: "moon-phase-watches-explained",
+    title: "Moon Phase Watches Explained: How They Work and Why They're Trending",
+    category: "How Watches Work",
+    description:
+      "How a moon phase complication tracks the lunar cycle, how accurate it is, how to set it, and why moon phase watches are one of 2026's fastest-growing trends.",
+    minutes: 4,
+    updated: "2026-10-09",
+    sections: [
+      {
+        heading: "What a moon phase shows",
+        paragraphs: [
+          "A moon phase display shows the current shape of the moon in the sky, from new moon to full moon and back. A small disc painted with two moons turns slowly behind a window in the dial, so the moon appears to grow and shrink just like the real one.",
+          "It's one of the oldest and most romantic complications in watchmaking, and demand is rising: Chrono24 saw moon phase watches grow about 15% in share of demand in 2025.",
+        ],
+      },
+      {
+        heading: "How accurate is it?",
+        paragraphs: [
+          "The real lunar cycle lasts about 29.5 days. Most moon phase watches use a 59-tooth wheel that moves one tooth a day, covering two lunar cycles. That's very close, but it drifts by about a day every two and a half to three years.",
+          "High-precision versions use extra gearing and can stay accurate for over a hundred years before needing a one-day correction.",
+        ],
+      },
+      {
+        heading: "Setting your moon phase",
+        bullets: [
+          "Look up the date of the most recent full moon",
+          "Use the pusher or crown position for the moon phase to advance the disc until the moon is centered (full)",
+          "Then advance one step for each day since that full moon",
+          "Check your watch's manual: many say not to adjust the moon phase or date during certain evening and night hours",
+        ],
+        paragraphs: [],
+      },
+    ],
+    related: [
+      { label: "Watch complications explained", href: "/learn/watch-complications-explained" },
+      { label: "How to set and wind your watch", href: "/learn/how-to-set-and-wind-your-watch" },
+      { label: "Watch trends 2026", href: "/learn/watch-trends-2026" },
+    ],
+  },
+  {
+    slug: "rectangular-watches-guide",
+    title: "Rectangular and Tank-Style Watches: A Guide to the Classic Shape",
+    category: "Watch Types",
+    description:
+      "From the Cartier Tank to the Jaeger-LeCoultre Reverso, the story of rectangular watches, why they're back in style, and how to wear one.",
+    minutes: 4,
+    updated: "2026-10-09",
+    sections: [
+      {
+        heading: "A shape with history",
+        paragraphs: [
+          "The Cartier Tank, designed in 1917, took its shape from the tanks of World War I and became one of the most copied watch designs ever. In 1931 Jaeger-LeCoultre introduced the Reverso, whose case flips over to protect the crystal, originally for polo players.",
+          "Rectangular watches have been a mark of quiet style ever since, worn by artists, actors and anyone who wanted something different from a round watch.",
+        ],
+      },
+      {
+        heading: "Why they're back",
+        paragraphs: [
+          "As collectors move toward smaller, more wearable watches with character, rectangular cases are having a moment. Chrono24's 2025 data shows rectangular watches up about 9% in share of demand, and many brands, including microbrands, have added tank-style models.",
+        ],
+      },
+      {
+        heading: "How to choose and wear one",
+        bullets: [
+          "Size: rectangular watches wear differently from round ones; measure lug to lug and try it on if you can",
+          "Strap: leather is classic, but a rectangular watch on a bracelet or colorful strap looks modern",
+          "Movement: quartz keeps thin cases light and easy; manual-wind adds tradition",
+          "Style: they pair naturally with a shirt cuff and suit just as well with jeans",
+        ],
+        paragraphs: [],
+      },
+    ],
+    related: [
+      { label: "Choosing the right watch size", href: "/learn/choosing-the-right-watch-size" },
+      { label: "Iconic watches that shaped history", href: "/learn/iconic-watches-that-shaped-history" },
+      { label: "Watch trends 2026", href: "/learn/watch-trends-2026" },
+    ],
+  },
 ];
 
 export function getGuide(slug: string): LearnGuide | undefined {

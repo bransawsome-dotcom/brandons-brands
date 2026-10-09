@@ -98,6 +98,15 @@ export default function PublicListToggle({ kind }: { kind: "collection" | "wishl
           <Link href={path} className="rounded-full border border-white/15 px-2.5 py-1 text-slate-200 hover:bg-white/10">
             See what visitors see →
           </Link>
+          <a
+            href={`${path}/story`}
+            target="_blank"
+            rel="noopener"
+            title="A Story-size picture of your list to post on Instagram or TikTok"
+            className="rounded-full border border-[#D9A43A]/50 px-2.5 py-1 font-semibold text-[#D9A43A] hover:bg-[#D9A43A]/10"
+          >
+            📲 Story card
+          </a>
         </div>
       ) : null}
       <p className="mt-2 text-[11px] leading-4 text-slate-500">

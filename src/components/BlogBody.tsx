@@ -1,5 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import VideoEmbed from "@/components/VideoEmbed";
+import { videoEmbed } from "@/lib/video";
 
 // Renders blog paragraphs: "## " starts a subheading, [text](url) is a link (site links stay on the site).
 function inline(text: string, keyBase: string): ReactNode[] {
@@ -48,6 +50,9 @@ export default function BlogBody({ paragraphs }: { paragraphs: string[] }) {
               <li key={j}>{inline(item, `${i}-${j}`)}</li>
             ))}
           </ul>
+        ) : /^https:\/\/\S+$/.test(p.trim()) && videoEmbed(p.trim()) ? (
+          // A paragraph that is just a video link plays in place.
+          <VideoEmbed key={i} embed={videoEmbed(p.trim())!} title="Video" />
         ) : p.startsWith("## ") ? (
           <h2 key={i} className="pt-4 text-2xl font-semibold tracking-[-0.02em] text-white">
             {p.slice(3)}

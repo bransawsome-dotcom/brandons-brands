@@ -9,6 +9,8 @@ import { FAVORITES_SUBJECT, isModerator, loadFolderOwners } from "@/lib/forum";
 import { loadCollectionData } from "@/lib/storage";
 import type { Watch } from "@/lib/localData";
 import { isAllowedLink, linkInfo, type Favorite } from "@/lib/favorites";
+import { videoEmbed } from "@/lib/video";
+import VideoEmbed from "@/components/VideoEmbed";
 
 const input =
   "w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-blue-400/70";
@@ -37,6 +39,8 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [picking, setPicking] = useState<string | null>(null);
+  // Which favorite's video is playing on the page.
+  const [playing, setPlaying] = useState<string | null>(null);
 
   // Same as the Friday job: Claude reviews Brandon's latest videos and adds one new favorite.
   const pickNow = async () => {
@@ -186,6 +190,7 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
         <ul className="mt-6 grid gap-5 sm:mt-8 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3">
           {items.map((f, i) => {
             const info = linkInfo(f.link_url);
+            const embed = videoEmbed(f.link_url);
             const photo = f.image_url ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={f.image_url} alt={`${f.brand} ${f.model}`} referrerPolicy="no-referrer" loading="lazy" className="h-full w-full object-contain" />
@@ -196,7 +201,26 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
             );
             return (
               <li key={f.id} className="flex flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-[0_25px_70px_rgba(0,0,0,0.28)]">
-                {info && f.link_url ? (
+                {embed && playing === f.id ? (
+                  <div className="bg-black p-3">
+                    <VideoEmbed embed={embed} title={`Brandon's ${f.brand} ${f.model} video`} />
+                  </div>
+                ) : embed ? (
+                  <button
+                    type="button"
+                    onClick={() => setPlaying(f.id)}
+                    className={`group relative flex h-60 w-full items-center justify-center p-4 ${f.image_url ? "bg-white" : "bg-slate-950/80"}`}
+                    aria-label={`Play Brandon's ${f.brand} ${f.model} video here`}
+                  >
+                    {photo}
+                    <span className="absolute inset-0 m-auto flex h-14 w-14 items-center justify-center rounded-full bg-black/60 text-2xl text-white transition group-hover:bg-[#0E5A8F]" aria-hidden>
+                      ▶
+                    </span>
+                    <span className="absolute bottom-3 right-3 rounded-full bg-black/70 px-3 py-1 text-xs font-semibold text-white opacity-90">
+                      ▶ Play here
+                    </span>
+                  </button>
+                ) : info && f.link_url ? (
                   <a
                     href={f.link_url}
                     {...(info.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}

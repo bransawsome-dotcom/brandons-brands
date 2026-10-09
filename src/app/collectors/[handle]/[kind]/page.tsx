@@ -51,13 +51,13 @@ export async function generateMetadata({ params }: { params: Promise<{ handle: s
   } in ${possessive(list.display_name)} ${isCollection ? "collection" : "wishlist"} on Brandon's Brands.${
     isCollection ? " Make an offer on any watch." : " Have one to sell? Make an offer."
   }`;
-  const firstImage = list.items.find((i) => i.image_url && /^https?:/.test(i.image_url))?.image_url;
   const path = `/collectors/${list.handle}/${list.kind}`;
   return {
     title,
     description,
     alternates: { canonical: path },
-    openGraph: { type: "website", url: path, title, description, images: firstImage ? [firstImage] : ["/og-image.png"] },
+    // The branded preview image comes from opengraph-image.tsx next to this page.
+    openGraph: { type: "website", url: path, title, description },
     twitter: { card: "summary_large_image", title, description },
   };
 }
@@ -135,6 +135,15 @@ export default async function PublicListPage({ params }: { params: Promise<{ han
                 </Link>
               ) : null}
               <MessageMemberButton handle={list.handle} name={list.display_name} compact />
+              <a
+                href={`${path}/story`}
+                target="_blank"
+                rel="noopener"
+                title="Save a Story-size picture of this list to share on Instagram or TikTok"
+                className="rounded-full border border-[#D9A43A]/50 px-4 py-1.5 font-semibold text-[#D9A43A] transition hover:bg-[#D9A43A]/10"
+              >
+                📲 Share to Story
+              </a>
             </div>
           </div>
           <dl className="grid grid-cols-2 gap-3 text-center sm:min-w-[260px]">
