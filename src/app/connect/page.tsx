@@ -44,24 +44,24 @@ const ICONS: Record<string, React.ReactNode> = {
 };
 
 const button =
-  "group flex w-full items-center gap-4 rounded-2xl border border-[#3FB4EC]/40 bg-gradient-to-b from-[#1A7DBF] to-[#0E5A8F] px-5 py-4 text-left text-white shadow-[0_10px_30px_rgba(14,90,143,0.35)] transition hover:from-[#2290D6] hover:to-[#136AA6] active:scale-[0.99]";
+  "group flex w-full items-center gap-4 rounded-2xl border border-[#3FB4EC]/40 bg-gradient-to-b from-[#1A7DBF] to-[#0E5A8F] px-4 py-3 text-left text-white sm:px-5 sm:py-4 shadow-[0_10px_30px_rgba(14,90,143,0.35)] transition hover:from-[#2290D6] hover:to-[#136AA6] active:scale-[0.99]";
 
 export default function ConnectPage() {
   return (
-    <div className="connect-page mx-auto flex w-full max-w-md flex-col items-center px-1 pb-8 pt-4 text-center sm:pt-10">
+    <div className="connect-page mx-auto flex w-full max-w-md flex-col items-center px-1 pb-4 pt-0 text-center sm:pt-6">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/logo-256.webp"
         alt="Brandon's Brands logo"
         width={128}
         height={128}
-        className="h-28 w-28 drop-shadow-[0_0_40px_rgba(59,130,246,0.45)] sm:h-32 sm:w-32"
+        className="hidden h-24 w-24 drop-shadow-[0_0_40px_rgba(59,130,246,0.45)] sm:block sm:h-28 sm:w-28"
       />
-      <p className="mt-5 text-xs uppercase tracking-[0.35em] text-blue-300">Brandon&apos;s Brands</p>
-      <h1 className="mt-2 text-3xl font-semibold tracking-[-0.02em] text-white sm:text-4xl">Connect with Brandon</h1>
-      <p className="mt-3 text-sm leading-6 text-slate-300">Luxury watches, microbrands and watch culture. Discover the makers.</p>
+      <p className="text-xs uppercase tracking-[0.35em] text-blue-300 sm:mt-5">Brandon&apos;s Brands</p>
+      <h1 className="mt-1 text-2xl font-semibold tracking-[-0.02em] text-white sm:mt-2 sm:text-4xl">Connect with Brandon</h1>
+      <p className="mt-2 text-sm leading-6 text-slate-300 sm:mt-3">Luxury watches, microbrands and watch culture. Discover the makers.</p>
 
-      <ul className="mt-8 w-full space-y-3">
+      <ul className="mt-5 w-full space-y-2.5 sm:mt-8 sm:space-y-3">
         <li>
           <Link href="/" className={button}>
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/15">{ICONS.Website}</span>
