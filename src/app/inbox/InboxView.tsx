@@ -154,7 +154,7 @@ export default function InboxView() {
     messageRecipient(memberHandle)
       .then((r) => {
         if (!live) return;
-        if (!r) setMember({ handle: memberHandle, id: null, name: "", note: "That member's lists aren't public anymore, so they can't be messaged from here." });
+        if (!r) setMember({ handle: memberHandle, id: null, name: "", note: "That member couldn't be found. They may have changed their public name." });
         else if (r.user_id === userId) setMember({ handle: memberHandle, id: null, name: r.display_name, note: "That's your own public list. 🙂" });
         else setMember({ handle: memberHandle, id: r.user_id, name: r.display_name });
       })
