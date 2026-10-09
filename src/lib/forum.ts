@@ -41,6 +41,8 @@ const BUILT_IN: SubjectNode[] = [
   { slug: "suggestions", name: "Suggestions", icon: "💡", parent: null },
   { slug: "new-releases", name: "New Releases", icon: "✨", parent: null },
   { slug: "vintage", name: "Vintage", icon: "⏳", parent: null },
+  { slug: "for-sale", name: "For Sale", icon: "🏷️", parent: null, description: "Watches members have for sale. Include photos, condition, box & papers, location and price. Brandon's Brands doesn't take part in sales: verify buyers and sellers and use a secure payment method or escrow." },
+  { slug: "seeking-to-buy", name: "Seeking to Buy", icon: "🔎", parent: null, description: "Looking for a specific watch? Post the brand, model, reference and your budget, and members who have one can reply or message you." },
   { slug: "buying-advice", name: "Buying & Selling Advice", icon: "💵", parent: null },
   { slug: "authentication", name: "Authentication, Box & Papers", icon: "🔍", parent: null },
   { slug: "straps", name: "Straps & Accessories", icon: "🧵", parent: null },
@@ -57,6 +59,17 @@ export function slugify(name: string): string {
     .replace(/^-+|-+$/g, "")
     .slice(0, 60);
 }
+
+// Built-in sub-folders under Watch Clubs & Meetups (members can add their own clubs too).
+const CLUB_NODES: SubjectNode[] = [
+  {
+    slug: `${CLUBS_FOLDER}/virtual-events`,
+    name: "Virtual Events",
+    icon: "💻",
+    parent: CLUBS_FOLDER,
+    description: "Online watch meetups, live streams, Zoom and Instagram Live sessions, virtual launches and webinars.",
+  },
+];
 
 const BRAND_NODES: SubjectNode[] = [
   ...watchBrands.map((b) => ({ slug: `${BRANDS_FOLDER}/${slugify(b)}`, name: b, icon: "⌚", parent: BRANDS_FOLDER })),
@@ -85,8 +98,9 @@ export function buildSubjectTree(custom: CustomSubject[]): SubjectTree {
     .sort((a, b) => a.name.localeCompare(b.name));
   // Member-added sub-folders can sit under any subject (clubs under Watch Clubs & Meetups,
   // extra brands under Watch Brands, topics under Suggestions, and so on).
+  const builtInSlugs = new Set(CLUB_NODES.map((n) => n.slug));
   const subs: SubjectNode[] = custom
-    .filter((c) => c.parent)
+    .filter((c) => c.parent && !builtInSlugs.has(c.slug))
     .map((c) => ({
       slug: c.slug,
       name: c.name,
@@ -97,7 +111,10 @@ export function buildSubjectTree(custom: CustomSubject[]): SubjectTree {
       created_by: c.created_by,
     }));
   const top = [...BUILT_IN, ...communityTop];
-  const children = new Map<string, SubjectNode[]>([[BRANDS_FOLDER, [...BRAND_NODES]]]);
+  const children = new Map<string, SubjectNode[]>([
+    [BRANDS_FOLDER, [...BRAND_NODES]],
+    [CLUBS_FOLDER, [...CLUB_NODES]],
+  ]);
   for (const sub of subs) children.set(sub.parent!, [...(children.get(sub.parent!) ?? []), sub]);
   for (const [parent, list] of children) {
     // Keep the brand list alphabetical with Miscellaneous last; everything else alphabetical.
@@ -107,7 +124,7 @@ export function buildSubjectTree(custom: CustomSubject[]): SubjectTree {
     );
   }
   const bySlug = new Map<string, SubjectNode>();
-  for (const n of [...top, ...BRAND_NODES, ...subs]) bySlug.set(n.slug, n);
+  for (const n of [...top, ...BRAND_NODES, ...CLUB_NODES, ...subs]) bySlug.set(n.slug, n);
   return { top, children, bySlug };
 }
 
@@ -146,8 +163,8 @@ export async function createSubject(input: { name: string; parent: string | null
   if (base.length < 2) throw new Error("Use letters or numbers in the topic name.");
   if (input.parent && input.parent.includes("/")) throw new Error("Sub-folders can only be added to a main topic.");
   const slug = input.parent ? `${input.parent}/${base}` : `c-${base}`;
-  const builtInNames = (input.parent ? BRAND_NODES.filter((n) => n.parent === input.parent) : BUILT_IN).map((n) => n.name.toLowerCase());
-  if (builtInNames.includes(name.toLowerCase()) || BRAND_NODES.some((n) => n.slug === slug)) {
+  const builtInNames = (input.parent ? [...BRAND_NODES, ...CLUB_NODES].filter((n) => n.parent === input.parent) : BUILT_IN).map((n) => n.name.toLowerCase());
+  if (builtInNames.includes(name.toLowerCase()) || [...BRAND_NODES, ...CLUB_NODES].some((n) => n.slug === slug)) {
     throw new Error(`"${name}" already exists. Pick it from the list.`);
   }
   const { data, error } = await db()
