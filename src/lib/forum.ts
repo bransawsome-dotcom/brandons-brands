@@ -22,9 +22,19 @@ export type SubjectNode = {
 
 export const BRANDS_FOLDER = "brands";
 export const CLUBS_FOLDER = "clubs";
+// Brandon's favorite watches. Only Brandon's Brands (moderators) starts discussions here; anyone can reply.
+import { FAVORITES_SUBJECT } from "@/lib/favorites";
+export { FAVORITES_SUBJECT };
 
 const BUILT_IN: SubjectNode[] = [
   { slug: "general", name: "General Discussion", icon: "💬", parent: null },
+  {
+    slug: FAVORITES_SUBJECT,
+    name: "Brandon's Favorites",
+    icon: "⭐",
+    parent: null,
+    description: "Brandon's favorite watches, with his reviews and reels. Brandon starts the discussions here; everyone can reply.",
+  },
   { slug: BRANDS_FOLDER, name: "Watch Brands", icon: "⌚", parent: null, folder: true },
   { slug: CLUBS_FOLDER, name: "Watch Clubs & Meetups", icon: "🤝", parent: null, folder: true },
   { slug: "collaborations", name: "Collaborative Opportunities", icon: "🧩", parent: null },

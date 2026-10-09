@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { FAVORITES_SUBJECT } from "@/lib/favorites";
 import { collabEmail, socials } from "@/lib/socials";
 import { SITE_URL } from "@/lib/site";
 
@@ -245,6 +246,34 @@ export default function AboutPage() {
             Welcome to Brandon&apos;s Brands.{" "}
             <span className="text-blue-200">Discover the makers. Explore the details. Find what speaks to you.</span>
           </p>
+        </section>
+
+        {/* Brandon's Favorites */}
+        <section
+          aria-labelledby="favorites"
+          className="mt-12 rounded-[1.75rem] border border-[#3FB4EC]/30 bg-gradient-to-br from-[#1A7DBF]/20 via-slate-950/60 to-[#D9A43A]/10 p-6 sm:p-8"
+        >
+          <p className="text-xs uppercase tracking-[0.3em] text-blue-300">⭐ Brandon&apos;s Favorites</p>
+          <h2 id="favorites" className="mt-2 text-2xl font-semibold text-white sm:text-3xl">The watches Brandon loves</h2>
+          <p className="mt-3 max-w-2xl text-base leading-7 text-slate-300">
+            See Brandon&apos;s favorite watches, each with his review or reel, and talk about them with other collectors in the Brandon&apos;s
+            Favorites forum folder.
+          </p>
+          <div className="mt-5 grid gap-3 sm:flex sm:flex-wrap">
+            <Link
+              href="/favorites"
+              className="inline-flex justify-center text-center rounded-full bg-[#D9A43A] px-4 py-3 text-xs sm:text-sm font-semibold uppercase tracking-[0.08em] text-black sm:px-6 sm:tracking-[0.15em] hover:bg-[#e1b54a]"
+            >
+              See the favorites
+            </Link>
+            <Link
+              href={`/forum?subject=${FAVORITES_SUBJECT}`}
+              className="inline-flex justify-center text-center rounded-full border border-[#3FB4EC]/40 bg-gradient-to-b from-[#1A7DBF] to-[#0E5A8F] px-4 py-3 text-xs sm:text-sm font-semibold uppercase tracking-[0.08em] text-white sm:px-6 sm:tracking-[0.15em] hover:from-[#2290D6] hover:to-[#136AA6]"
+            >
+              <span className="sm:hidden">Favorites forum</span>
+              <span className="hidden sm:inline">Brandon&apos;s Favorites forum</span>
+            </Link>
+          </div>
         </section>
 
         {/* What we do */}

@@ -15,6 +15,7 @@ import {
   deleteComment,
   deletePost,
   getPost,
+  FAVORITES_SUBJECT,
   isModerator,
   listComments,
   describeSubject,
@@ -308,7 +309,13 @@ export default function ForumThreadPage() {
       <article className="rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">
         {editing ? (
           <form onSubmit={saveEdit} className="grid gap-4">
-            <SubjectSelect tree={tree} value={edit.subject} onChange={(slug) => setEdit({ ...edit, subject: slug })} className={input} />
+            <SubjectSelect
+              tree={tree}
+              value={edit.subject}
+              onChange={(slug) => setEdit({ ...edit, subject: slug })}
+              exclude={moderator || edit.subject === FAVORITES_SUBJECT ? [] : [FAVORITES_SUBJECT]}
+              className={input}
+            />
             <input value={edit.title} onChange={(e) => setEdit({ ...edit, title: e.target.value })} maxLength={TITLE_MAX} className={input} required />
             <textarea value={edit.body} onChange={(e) => setEdit({ ...edit, body: e.target.value })} maxLength={BODY_MAX} rows={8} className={input} required />
             <div className="flex gap-3">

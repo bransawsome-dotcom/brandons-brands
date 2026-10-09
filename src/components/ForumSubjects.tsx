@@ -25,16 +25,19 @@ export function SubjectSelect({
   onChange,
   allowNew,
   className,
+  exclude = [],
 }: {
   tree: SubjectTree;
   value: string;
   onChange: (slug: string) => void;
   allowNew?: boolean;
   className?: string;
+  // Topics this member can't post in (e.g. Brandon's Favorites for non-moderators).
+  exclude?: string[];
 }) {
   return (
     <select value={value} onChange={(e) => onChange(e.target.value)} className={className}>
-      {tree.top.map((s) => {
+      {tree.top.filter((s) => !exclude.includes(s.slug)).map((s) => {
         const kids = tree.children.get(s.slug) ?? [];
         if (!kids.length) {
           return (

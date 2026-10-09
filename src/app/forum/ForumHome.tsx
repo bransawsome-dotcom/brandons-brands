@@ -10,6 +10,7 @@ import { useAuth } from "@/components/AuthProvider";
 import {
   BODY_MAX,
   BRANDS_FOLDER,
+  FAVORITES_SUBJECT,
   CLUBS_FOLDER,
   TITLE_MAX,
   createPost,
@@ -152,6 +153,7 @@ export default function ForumHome() {
   const openComposer = () => {
     let start = draft.subject;
     if (subject === BRANDS_FOLDER) start = `${BRANDS_FOLDER}/misc`;
+    else if (subject === FAVORITES_SUBJECT && !moderator) start = "general";
     else if (subject) start = subject;
     setDraft((d) => ({ ...d, subject: start }));
     if (openFolder) setNewSubject((n) => ({ ...n, parent: openFolder }));
@@ -278,7 +280,14 @@ export default function ForumHome() {
                   </div>
                   <label className="space-y-2 text-sm text-slate-300">
                     Topic
-                    <SubjectSelect tree={tree} value={draft.subject} onChange={(slug) => setDraft({ ...draft, subject: slug })} allowNew className={input} />
+                    <SubjectSelect
+                      tree={tree}
+                      value={draft.subject}
+                      onChange={(slug) => setDraft({ ...draft, subject: slug })}
+                      allowNew
+                      exclude={moderator ? [] : [FAVORITES_SUBJECT]}
+                      className={input}
+                    />
                   </label>
 
                   {draft.subject === NEW_SUBJECT ? (
@@ -521,6 +530,11 @@ export default function ForumHome() {
                 ) : null}
               </div>
               {current?.node.description ? <p className="mt-1 text-sm text-slate-400">{current.node.description}</p> : null}
+              {subject === FAVORITES_SUBJECT ? (
+                <Link href="/favorites" className="mt-1 inline-block text-sm font-semibold text-[#D9A43A] hover:text-[#e1b54a]">
+                  ⭐ See the Brandon&apos;s Favorites gallery →
+                </Link>
+              ) : null}
             </div>
             <div className="flex gap-3">
               <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search the forum" className={`${input} sm:w-56`} />
