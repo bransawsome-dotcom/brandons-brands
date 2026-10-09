@@ -93,10 +93,23 @@ export default function MainNav() {
             <path d="m20 20-3.5-3.5" />
           </svg>
         </Link>
-        {guestMode ? (
-          <span className="rounded-full border border-[#D9A43A]/30 bg-[#D9A43A]/10 px-4 py-2 text-center text-xs uppercase tracking-[0.18em] text-[#D9A43A]">
-            Guest Mode
-          </span>
+        {guestMode && !user ? (
+          <>
+            <span className="rounded-full border border-[#D9A43A]/30 bg-[#D9A43A]/10 px-3 py-2 text-center text-xs uppercase tracking-[0.15em] text-[#D9A43A]">
+              Guest
+            </span>
+            {/* Leave guest mode and go to the login page. */}
+            <button
+              type="button"
+              onClick={async () => {
+                await signOut();
+                router.push("/login");
+              }}
+              className="min-w-[100px] rounded-full bg-white/5 px-3 py-2 text-center text-slate-200 transition hover:bg-white/10"
+            >
+              Login
+            </button>
+          </>
         ) : user ? (
           <>
             <InboxBell />
