@@ -36,6 +36,25 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
   const [editing, setEditing] = useState<Draft | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [picking, setPicking] = useState<string | null>(null);
+
+  // Same as the Friday job: Claude reviews Brandon's latest videos and adds one new favorite.
+  const pickNow = async () => {
+    setError(null);
+    setPicking("Claude is reviewing Brandon's latest videos… this takes 1–3 minutes.");
+    const { data } = await db().auth.getSession();
+    const res = await fetch("/api/favorites-weekly", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${data.session?.access_token ?? ""}` },
+    }).catch(() => null);
+    const out = (await res?.json().catch(() => ({}))) as { added?: boolean; brand?: string; model?: string; reason?: string; error?: string } | undefined;
+    if (!res?.ok) {
+      setPicking(null);
+      return setError(out?.error ?? "Couldn't add a favorite. Please try again.");
+    }
+    setPicking(out?.added ? `Added ${out.brand} ${out.model}, with a forum discussion.` : out?.reason ?? "No new watch found.");
+    await reload();
+  };
 
   useEffect(() => {
     let live = true;
@@ -133,9 +152,21 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
           >
             + Add a favorite
           </button>
+          <button
+            type="button"
+            onClick={() => void pickNow()}
+            disabled={Boolean(picking?.endsWith("minutes."))}
+            className="rounded-full border border-[#D9A43A]/50 px-4 py-2 font-semibold text-[#D9A43A] hover:bg-[#D9A43A]/10 disabled:opacity-50"
+          >
+            ⭐ Pick this week&apos;s favorite now
+          </button>
           <Link href={`/forum?subject=${FAVORITES_SUBJECT}`} className="text-blue-200 hover:text-white">
             Post about one in the forum →
           </Link>
+          <span className="w-full text-xs text-slate-400">
+            Every Friday morning Claude reviews Brandon&apos;s latest videos and adds one new watch here (and in the forum folder) automatically.
+          </span>
+          {picking ? <span className={`w-full ${picking.endsWith("minutes.") ? "animate-pulse text-blue-200" : "text-emerald-300"}`}>{picking}</span> : null}
           {error && !editing ? <span className="w-full text-rose-300">{error}</span> : null}
         </div>
       ) : null}
