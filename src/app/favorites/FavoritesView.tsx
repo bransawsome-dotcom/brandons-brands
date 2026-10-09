@@ -53,6 +53,23 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
     if (data) setItems(data as Favorite[]);
   };
 
+  // The page itself is cached for up to a minute; fetch the latest list as soon as it opens.
+  useEffect(() => {
+    if (!supabase) return;
+    let live = true;
+    supabase
+      .from("brand_favorites")
+      .select("*")
+      .order("sort")
+      .order("created_at")
+      .then(({ data }) => {
+        if (live && data) setItems(data as Favorite[]);
+      });
+    return () => {
+      live = false;
+    };
+  }, []);
+
   const move = async (index: number, dir: -1 | 1) => {
     const next = [...items];
     const j = index + dir;
