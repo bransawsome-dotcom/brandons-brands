@@ -197,6 +197,9 @@ export type ForumPost = {
   updated_at: string | null;
   last_activity_at: string;
   comment_count: number;
+  // Photos (data URLs). Only loaded for a single post; the forum list just gets image_count.
+  images?: string[];
+  image_count?: number | null;
 };
 
 export type ForumComment = {
@@ -207,6 +210,7 @@ export type ForumComment = {
   author_name: string;
   body: string;
   created_at: string;
+  images?: string[] | null;
 };
 
 export const TITLE_MAX = 150;
@@ -279,17 +283,28 @@ function toPost(row: PostRow): ForumPost {
   return { ...rest, comment_count: forum_comments?.[0]?.count ?? 0 };
 }
 
+// List columns (no photos, so the forum list stays fast). Falls back if the photos update hasn't been run yet.
+const LIST_COLUMNS = "id,user_id,author_name,subject,title,body,created_at,updated_at,last_activity_at,image_count, forum_comments(count)";
+
 export async function listPosts(subject?: string): Promise<ForumPost[]> {
+  try {
+    return await listPostsWith(LIST_COLUMNS, subject);
+  } catch {
+    return listPostsWith("*, forum_comments(count)", subject);
+  }
+}
+
+async function listPostsWith(columns: string, subject?: string): Promise<ForumPost[]> {
   let query = db()
     .from("forum_posts")
-    .select("*, forum_comments(count)")
+    .select(columns)
     .order("last_activity_at", { ascending: false })
     .limit(200);
   if (subject) query = query.eq("subject", subject);
   const { data, error } = await query;
   const err = friendly(error);
   if (err) throw err;
-  return ((data ?? []) as PostRow[]).map(toPost);
+  return ((data ?? []) as unknown as PostRow[]).map(toPost);
 }
 
 export async function getPost(id: string): Promise<ForumPost | null> {
@@ -299,7 +314,7 @@ export async function getPost(id: string): Promise<ForumPost | null> {
   return data ? toPost(data as PostRow) : null;
 }
 
-export async function createPost(input: { subject: string; title: string; body: string; author_name: string }): Promise<ForumPost> {
+export async function createPost(input: { subject: string; title: string; body: string; author_name: string; images?: string[] }): Promise<ForumPost> {
   const { data, error } = await db()
     .from("forum_posts")
     .insert({
@@ -307,6 +322,7 @@ export async function createPost(input: { subject: string; title: string; body: 
       title: input.title.trim().slice(0, TITLE_MAX),
       body: input.body.trim().slice(0, BODY_MAX),
       author_name: input.author_name,
+      ...(input.images?.length ? { images: input.images } : {}),
     })
     .select("*")
     .single();
@@ -315,13 +331,14 @@ export async function createPost(input: { subject: string; title: string; body: 
   return { ...(data as Omit<ForumPost, "comment_count">), comment_count: 0 };
 }
 
-export async function updatePost(id: string, patch: { title: string; body: string; subject: string }): Promise<void> {
+export async function updatePost(id: string, patch: { title: string; body: string; subject: string; images?: string[] }): Promise<void> {
   const { error } = await db()
     .from("forum_posts")
     .update({
       title: patch.title.trim().slice(0, TITLE_MAX),
       body: patch.body.trim().slice(0, BODY_MAX),
       subject: patch.subject,
+      ...(patch.images ? { images: patch.images } : {}),
       updated_at: new Date().toISOString(),
     })
     .eq("id", id);
@@ -342,10 +359,13 @@ export async function listComments(postId: string): Promise<ForumComment[]> {
   return (data ?? []) as ForumComment[];
 }
 
-export async function addComment(input: { post_id: string; parent_id: string | null; body: string; author_name: string }): Promise<ForumComment> {
+export async function addComment(input: { post_id: string; parent_id: string | null; body: string; author_name: string; images?: string[] }): Promise<ForumComment> {
+  const { images, ...rest } = input;
+  // A reply can be just a photo.
+  const body = input.body.trim().slice(0, COMMENT_MAX) || (images?.length ? "📷" : "");
   const { data, error } = await db()
     .from("forum_comments")
-    .insert({ ...input, body: input.body.trim().slice(0, COMMENT_MAX) })
+    .insert({ ...rest, body, ...(images?.length ? { images } : {}) })
     .select("*")
     .single();
   const err = friendly(error);

@@ -1,5 +1,6 @@
 "use client";
 
+import PhotoPicker from "@/components/PhotoPicker";
 import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -53,7 +54,7 @@ export default function ForumHome() {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<"active" | "new" | "popular">("active");
   const [composing, setComposing] = useState(false);
-  const [draft, setDraft] = useState({ subject: "general", title: "", body: "" });
+  const [draft, setDraft] = useState<{ subject: string; title: string; body: string; images: string[] }>({ subject: "general", title: "", body: "", images: [] });
   const [newSubject, setNewSubject] = useState({ name: "", kind: "subject" as "subject" | "sub", parent: CLUBS_FOLDER as string, description: "" });
   const [posting, setPosting] = useState(false);
   const [postError, setPostError] = useState<string | null>(null);
@@ -198,7 +199,7 @@ export default function ForumHome() {
         await reloadSubjects();
       }
       const created = await createPost({ ...draft, subject: subjectSlug, author_name: authorName });
-      setDraft({ subject: subjectSlug, title: "", body: "" });
+      setDraft({ subject: subjectSlug, title: "", body: "", images: [] });
       setNewSubject({ name: "", kind: "subject", parent: CLUBS_FOLDER, description: "" });
       setComposing(false);
       router.push(`/forum/${created.id}`);
@@ -398,6 +399,7 @@ export default function ForumHome() {
                       {draft.body.length}/{BODY_MAX}
                     </span>
                   </label>
+                  <PhotoPicker photos={draft.images} onChange={(images) => setDraft((d) => ({ ...d, images }))} />
                   {postError ? <p className="text-sm text-rose-300">{postError}</p> : null}
                   <div className="flex flex-wrap gap-3">
                     <button
@@ -668,7 +670,14 @@ export default function ForumHome() {
                       <div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-black/30 text-xl sm:flex">{s.icon}</div>
                       <div className="min-w-0 flex-1">
                         <p className="text-xs uppercase tracking-[0.2em] text-blue-300">{subjectLabel(tree, post.subject)}</p>
-                        <h3 className="mt-1 text-lg font-semibold text-white group-hover:text-[#e1b54a]">{post.title}</h3>
+                        <h3 className="mt-1 text-lg font-semibold text-white group-hover:text-[#e1b54a]">
+                          {post.title}
+                          {post.image_count ? (
+                            <span className="ml-2 align-middle text-xs font-normal text-slate-400" title={`${post.image_count} photo${post.image_count === 1 ? "" : "s"}`}>
+                              📷{post.image_count > 1 ? ` ${post.image_count}` : ""}
+                            </span>
+                          ) : null}
+                        </h3>
                         <p className="mt-1 line-clamp-2 text-sm text-slate-400">{post.body}</p>
                         <p className="mt-2 text-xs text-slate-500">
                           by <span className="text-slate-300">{post.author_name}</span> · {timeAgo(post.created_at)}

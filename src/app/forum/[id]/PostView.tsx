@@ -8,6 +8,8 @@ import FollowBrandon from "@/components/FollowBrandon";
 import ForumIdentity from "@/components/ForumIdentity";
 import SalesDisclaimer from "@/components/SalesDisclaimer";
 import VideoEmbed from "@/components/VideoEmbed";
+import PhotoPicker from "@/components/PhotoPicker";
+import PhotoGallery from "@/components/PhotoGallery";
 import { videoEmbed } from "@/lib/video";
 import FollowButton from "@/components/FollowButton";
 import { SubjectSelect, useSubjectTree } from "@/components/ForumSubjects";
@@ -84,11 +86,12 @@ function ReplyBox({
   autoFocus,
 }: {
   placeholder: string;
-  onSubmit: (body: string, authorName: string) => Promise<void>;
+  onSubmit: (body: string, authorName: string, images: string[]) => Promise<void>;
   onCancel?: () => void;
   autoFocus?: boolean;
 }) {
   const [body, setBody] = useState("");
+  const [photos, setPhotos] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -97,12 +100,13 @@ function ReplyBox({
       {(authorName) => {
         const submit = async (event: FormEvent) => {
           event.preventDefault();
-          if (!body.trim()) return;
+          if (!body.trim() && !photos.length) return;
           setBusy(true);
           setError(null);
           try {
-            await onSubmit(body, authorName);
+            await onSubmit(body, authorName, photos);
             setBody("");
+            setPhotos([]);
           } catch (err) {
             setError(err instanceof Error ? err.message : "Couldn't post that.");
           } finally {
@@ -120,11 +124,12 @@ function ReplyBox({
               autoFocus={autoFocus}
               className={input}
             />
+            <PhotoPicker photos={photos} onChange={setPhotos} compact />
             {error ? <p className="text-sm text-rose-300">{error}</p> : null}
             <div className="flex items-center gap-3">
               <button
                 type="submit"
-                disabled={busy || !body.trim()}
+                disabled={busy || (!body.trim() && !photos.length)}
                 className="rounded-full bg-[#D9A43A] px-5 py-2 text-sm font-semibold text-black hover:bg-[#e1b54a] disabled:opacity-50"
               >
                 {busy ? "Posting…" : "Post"}
@@ -159,7 +164,7 @@ export default function PostView() {
   const [owners, setOwners] = useState<FolderOwners | null>(null);
   const [replyTo, setReplyTo] = useState<string | null>(null);
   const [editing, setEditing] = useState(false);
-  const [edit, setEdit] = useState({ title: "", body: "", subject: "general" });
+  const [edit, setEdit] = useState<{ title: string; body: string; subject: string; images: string[] }>({ title: "", body: "", subject: "general", images: [] });
 
   const loadComments = useCallback(async () => {
     try {
@@ -224,8 +229,8 @@ export default function PostView() {
   const { node: s, parent: sParent } = describeSubject(tree, post.subject);
   const canManagePost = userId === post.user_id || moderator;
 
-  const handleComment = async (body: string, authorName: string, parentId: string | null) => {
-    const created = await addComment({ post_id: post.id, parent_id: parentId, body, author_name: authorName });
+  const handleComment = async (body: string, authorName: string, parentId: string | null, images: string[] = []) => {
+    const created = await addComment({ post_id: post.id, parent_id: parentId, body, author_name: authorName, images });
     setComments((cur) => (cur.some((c) => c.id === created.id) ? cur : [...cur, created]));
     setReplyTo(null);
   };
@@ -251,7 +256,7 @@ export default function PostView() {
   };
 
   const startEdit = () => {
-    setEdit({ title: post.title, body: post.body, subject: post.subject });
+    setEdit({ title: post.title, body: post.body, subject: post.subject, images: post.images ?? [] });
     setEditing(true);
   };
 
@@ -281,7 +286,8 @@ export default function PostView() {
               ) : null}{" "}
               · {timeAgo(c.created_at)}
             </p>
-            <p className="mt-1 whitespace-pre-wrap break-words text-sm leading-6 text-slate-200">{c.body}</p>
+            {c.body !== "📷" || !c.images?.length ? <p className="mt-1 whitespace-pre-wrap break-words text-sm leading-6 text-slate-200">{c.body}</p> : null}
+            <PhotoGallery photos={c.images} alt={`Photo from ${c.author_name}`} small className="mt-2" />
             <div className="mt-1 flex gap-4 text-xs">
               <button type="button" onClick={() => setReplyTo(replyTo === c.id ? null : c.id)} className="font-semibold text-[#D9A43A] hover:text-[#e1b54a]">
                 Reply
@@ -303,7 +309,7 @@ export default function PostView() {
                   placeholder={`Reply to ${c.author_name}…`}
                   autoFocus
                   onCancel={() => setReplyTo(null)}
-                  onSubmit={(body, name) => handleComment(body, name, c.id)}
+                  onSubmit={(body, name, images) => handleComment(body, name, c.id, images)}
                 />
               </div>
             ) : null}
@@ -348,6 +354,7 @@ export default function PostView() {
             />
             <input value={edit.title} onChange={(e) => setEdit({ ...edit, title: e.target.value })} maxLength={TITLE_MAX} className={input} required />
             <textarea value={edit.body} onChange={(e) => setEdit({ ...edit, body: e.target.value })} maxLength={BODY_MAX} rows={8} className={input} required />
+            <PhotoPicker photos={edit.images} onChange={(images) => setEdit((cur) => ({ ...cur, images }))} />
             <div className="flex gap-3">
               <button type="submit" className="rounded-full bg-[#D9A43A] px-5 py-2.5 text-sm font-semibold text-black hover:bg-[#e1b54a]">
                 Save
@@ -385,6 +392,7 @@ export default function PostView() {
               return first ? <VideoEmbed embed={first} title={post.title} className="mt-5" /> : null;
             })()}
             <p className="mt-5 whitespace-pre-wrap break-words text-base leading-7 text-slate-200">{linkify(post.body)}</p>
+            <PhotoGallery photos={post.images} alt={post.title} className="mt-5" />
             <div className="mt-6 flex flex-wrap items-center gap-3 text-sm">
               <FollowButton postId={post.id} label="discussion" />
             {canManagePost ? (
@@ -410,7 +418,7 @@ export default function PostView() {
           {comments.length} {comments.length === 1 ? "reply" : "replies"}
         </h2>
         <div className="mt-4">
-          <ReplyBox placeholder="Join the discussion…" onSubmit={(body, name) => handleComment(body, name, null)} />
+          <ReplyBox placeholder="Join the discussion…" onSubmit={(body, name, images) => handleComment(body, name, null, images)} />
         </div>
         {topLevel.length ? (
           <ul className="mt-4 divide-y divide-white/5">{topLevel.map((c) => renderComment(c, 0))}</ul>

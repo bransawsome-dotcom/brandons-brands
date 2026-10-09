@@ -1,5 +1,6 @@
 "use client";
 
+import { shrinkPhoto } from "@/lib/photos";
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
@@ -12,31 +13,7 @@ const input =
   "w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-2.5 text-sm text-white outline-none transition focus:border-blue-400/70";
 const PAGE = 24;
 
-// Shrink a phone photo to a small JPEG (about 100–200 KB) before saving.
-async function shrink(file: File): Promise<string> {
-  const url = URL.createObjectURL(file);
-  try {
-    const img = await new Promise<HTMLImageElement>((resolve, reject) => {
-      const i = new Image();
-      i.onload = () => resolve(i);
-      i.onerror = () => reject(new Error("That photo couldn't be opened. Try a JPEG or PNG."));
-      i.src = url;
-    });
-    const max = 1000;
-    const scale = Math.min(1, max / Math.max(img.width, img.height));
-    const canvas = document.createElement("canvas");
-    canvas.width = Math.round(img.width * scale);
-    canvas.height = Math.round(img.height * scale);
-    canvas.getContext("2d")!.drawImage(img, 0, 0, canvas.width, canvas.height);
-    for (const q of [0.82, 0.7, 0.58]) {
-      const data = canvas.toDataURL("image/jpeg", q);
-      if (data.length < 650_000) return data;
-    }
-    throw new Error("That photo is too large. Try a smaller one.");
-  } finally {
-    URL.revokeObjectURL(url);
-  }
-}
+const shrink = (file: File) => shrinkPhoto(file, 1000);
 
 export default function WristWall() {
   const { user } = useAuth();
