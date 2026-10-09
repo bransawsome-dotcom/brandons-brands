@@ -5,8 +5,8 @@ import LatestVideos from "@/components/LatestVideos";
 import PollCard from "@/components/PollCard";
 import { loadPolls } from "@/lib/polls";
 
-// The "Latest from Brandon" videos refresh every hour.
-export const revalidate = 3600;
+// Videos and the poll refresh every 5 minutes.
+export const revalidate = 300;
 
 export default async function Home() {
   const poll = (await loadPolls(5)).find((p) => p.active);

@@ -29,6 +29,11 @@ export default function PollsView({ initial }: { initial: Poll[] }) {
     if (data) setPolls(data as Poll[]);
   };
 
+  // The page itself may be cached for a minute; show the latest polls as soon as it opens.
+  useEffect(() => {
+    void Promise.resolve().then(() => reload());
+  }, []);
+
   const create = async (e: FormEvent) => {
     e.preventDefault();
     if (!supabase) return;
