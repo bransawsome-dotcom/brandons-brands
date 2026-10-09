@@ -516,7 +516,7 @@ export default function ForumHome() {
         </aside>
 
         <section className="min-w-0">
-          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mb-4 flex flex-col gap-3">
             <div className="min-w-0">
               {current?.parent ? (
                 <button type="button" onClick={() => chooseSubject(current.parent!.slug)} className="mb-1 text-xs text-slate-400 hover:text-white">
@@ -555,9 +555,10 @@ export default function ForumHome() {
                 </Link>
               ) : null}
             </div>
+            {/* Search and sort sit on their own row under the topic name so neither gets squeezed. */}
             <div className="flex gap-3">
-              <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search the forum" className={`${input} sm:w-56`} />
-              <select value={sort} onChange={(e) => setSort(e.target.value as typeof sort)} className={`${input} w-auto`} aria-label="Sort">
+              <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search posts" aria-label="Search the forum" className={`${input} min-w-0 flex-1 sm:max-w-sm`} />
+              <select value={sort} onChange={(e) => setSort(e.target.value as typeof sort)} className={`${input} !w-44 shrink-0 pr-8 sm:!w-48`} aria-label="Sort">
                 <option value="active">Latest activity</option>
                 <option value="new">Newest</option>
                 <option value="popular">Most replies</option>
