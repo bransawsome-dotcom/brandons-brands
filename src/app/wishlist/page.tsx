@@ -13,6 +13,7 @@ import { applyWishlistLookup } from "@/lib/watchBuild";
 import WishlistScanner from "@/components/WishlistScanner";
 import ShareButton from "@/components/ShareButton";
 import PublicListToggle from "@/components/PublicListToggle";
+import OfferStatus from "@/components/OfferStatus";
 
 const initialForm = {
   brand: "",
@@ -536,6 +537,7 @@ export default function WishlistPage() {
                     {d.year_introduced ? <p className="mt-1 text-xs text-slate-400">Introduced {d.year_introduced}</p> : null}
                     {d.summary ? <p className="mt-3 text-sm leading-6 text-slate-300">{d.summary}</p> : null}
                     {item.notes ? <p className="mt-3 text-sm leading-6 text-slate-200">📝 {item.notes}</p> : null}
+                    <OfferStatus kind="wishlist" />
 
                     {canAutoFill ? (
                       <PriceAlertPanel

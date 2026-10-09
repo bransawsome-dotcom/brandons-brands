@@ -10,6 +10,7 @@ import ProvenanceFields, { emptyProvenance, type Provenance } from "@/components
 import CollectionScanner from "@/components/CollectionScanner";
 import ShareButton from "@/components/ShareButton";
 import PublicListToggle from "@/components/PublicListToggle";
+import OfferStatus from "@/components/OfferStatus";
 import Combobox from "@/components/Combobox";
 import { canonicalBrand, modelsForBrand, watchBrands } from "@/lib/watchCatalog";
 import { formatUsd, parseMoney, lookupWatchDetails, type WatchLookupResult } from "@/lib/watchAiClient";
@@ -607,6 +608,7 @@ export default function CollectionPage() {
                           ))}
                         </div>
                       ) : null}
+                      <OfferStatus kind="collection" />
                         <div className="mt-4 flex items-center justify-between">
                           <div className="text-sm text-slate-200 md:text-slate-300">
                             <div><span className="font-semibold text-white">Market value:</span> {formatUsd(watch.estimated_value)}</div>
