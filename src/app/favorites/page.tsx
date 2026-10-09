@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import FavoritesView from "./FavoritesView";
+import FollowBrandon from "@/components/FollowBrandon";
+import { socials } from "@/lib/socials";
 import { FAVORITES_SUBJECT, loadFavorites } from "@/lib/favorites";
 import { SITE_URL } from "@/lib/site";
 
@@ -28,7 +30,7 @@ export default async function FavoritesPage() {
     name: "Brandon's Favorites",
     description: DESCRIPTION,
     url: `${SITE_URL}/favorites`,
-    author: { "@type": "Person", name: "Brandon Volosov" },
+    author: { "@type": "Person", name: "Brandon Volosov", url: `${SITE_URL}/about`, sameAs: socials.map((s) => s.url) },
     isPartOf: { "@type": "WebSite", name: "Brandon's Brands", url: SITE_URL },
     mainEntity: {
       "@type": "ItemList",
@@ -65,6 +67,8 @@ export default async function FavoritesPage() {
       </section>
 
       <FavoritesView initial={favorites} />
+
+      <FollowBrandon className="mt-10" />
 
       <p className="mt-8 text-center text-sm text-slate-400">
         <Link href="/about" className="text-blue-300 hover:text-blue-200">

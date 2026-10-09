@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { blogPosts } from "@/lib/blogPosts";
 import { SITE_URL } from "@/lib/site";
 import { listPublicCollectors } from "@/lib/publicLists";
+import { FAVORITES_SUBJECT } from "@/lib/favorites";
 
 // Rebuilt hourly so newly public lists are picked up by search engines.
 export const revalidate = 3600;
@@ -35,5 +36,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "monthly",
     priority: 0.7,
   }));
-  return [...pages, ...posts, ...lists];
+  return [...pages, ...posts, ...lists, ...(await forumDiscussions())];
+}
+
+// Every forum discussion (Brandon's Favorites discussions rank highest).
+async function forumDiscussions(): Promise<MetadataRoute.Sitemap> {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) return [];
+  try {
+    const res = await fetch(`${url}/rest/v1/forum_posts?select=id,subject,last_activity_at&order=last_activity_at.desc&limit=2000`, {
+      headers: { apikey: key, Authorization: `Bearer ${key}` },
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return [];
+    const rows = (await res.json()) as { id: string; subject: string; last_activity_at: string }[];
+    return rows.map((r) => ({
+      url: `${SITE_URL}/forum/${r.id}`,
+      lastModified: new Date(r.last_activity_at),
+      changeFrequency: "weekly" as const,
+      priority: r.subject === FAVORITES_SUBJECT ? 0.7 : 0.5,
+    }));
+  } catch {
+    return [];
+  }
 }
