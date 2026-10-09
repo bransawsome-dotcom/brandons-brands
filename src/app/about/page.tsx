@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { FAVORITES_SUBJECT } from "@/lib/favorites";
 import { collabEmail, socials } from "@/lib/socials";
-import { SITE_URL } from "@/lib/site";
+import { IDENTITY, SITE_URL } from "@/lib/site";
 
 const TITLE = "About Brandon's Brands | Brandon Volosov & Watch Microbrands";
 const DESCRIPTION =
-  "Meet Brandon Volosov, founder of Brandon's Brands: a passion for horology, luxury watchmakers and independent microbrands, and a welcoming community for watch enthusiasts. Beyond the brand. Behind the craftsmanship.";
+  "Meet Brandon Volosov, the watch enthusiast and social media creator behind Brandon's Brands: a passion for horology, luxury watchmakers and independent microbrands, and a welcoming community for watch enthusiasts. Beyond the brand. Behind the craftsmanship.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -77,7 +77,11 @@ const offerings = [
 const faqs = [
   {
     q: "What is Brandon's Brands?",
-    a: "Brandon's Brands is a luxury watch brand and online community. We share watch reviews and watch culture on social media, publish a watch blog, and offer free tools for collectors to track their watch collection and wishlist.",
+    a: "Brandon's Brands is the watch channel of Brandon Volosov, a watch enthusiast and social media creator, plus this free online community. Brandon shares watch reviews and watch culture on Instagram, TikTok, YouTube and Facebook, writes a watch blog, and offers free tools for collectors to track their collection and wishlist.",
+  },
+  {
+    q: "Does Brandon's Brands make or sell watches?",
+    a: "No. Brandon's Brands isn't a company, store or watch brand, and Brandon doesn't make, sell or distribute watches. He features watches from other brands he enjoys. Watches in the For Sale forum are listed by members, and any sale is between those members.",
   },
   {
     q: "Is it free to track my watch collection?",
@@ -98,24 +102,24 @@ export default function AboutPage() {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "Organization",
-        "@id": `${SITE_URL}/#organization`,
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
         name: "Brandon's Brands",
         url: SITE_URL,
-        logo: `${SITE_URL}/logo-256.png`,
         image: `${SITE_URL}/og-image.png`,
         slogan: "Discover. Collect. Showcase the world's finest watches.",
-        email: collabEmail,
-        sameAs: socials.map((s) => s.url),
-        founder: { "@id": `${SITE_URL}/about#brandon` },
-        contactPoint: [{ "@type": "ContactPoint", contactType: "customer support", email: collabEmail, availableLanguage: "English" }],
+        description: IDENTITY,
+        creator: { "@id": `${SITE_URL}/about#brandon` },
+        publisher: { "@id": `${SITE_URL}/about#brandon` },
       },
       {
         "@type": "Person",
         "@id": `${SITE_URL}/about#brandon`,
         name: "Brandon Volosov",
-        jobTitle: "Founder",
-        worksFor: { "@id": `${SITE_URL}/#organization` },
+        jobTitle: "Watch content creator",
+        description: "Watch enthusiast and social media creator behind Brandon's Brands.",
+        email: collabEmail,
+        image: `${SITE_URL}/logo-256.png`,
         knowsAbout: ["Horology", "Luxury watches", "Watch microbrands", "Independent watchmakers", "Watch collecting"],
         sameAs: socials.map((s) => s.url),
       },
@@ -125,7 +129,7 @@ export default function AboutPage() {
         url: `${SITE_URL}/about`,
         name: TITLE,
         description: DESCRIPTION,
-        about: { "@id": `${SITE_URL}/#organization` },
+        about: { "@id": `${SITE_URL}/about#brandon` },
         isPartOf: { "@type": "WebSite", name: "Brandon's Brands", url: SITE_URL },
         breadcrumb: {
           "@type": "BreadcrumbList",

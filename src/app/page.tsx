@@ -53,7 +53,7 @@ export default async function Home() {
         <section aria-label="Community" className="mt-12 grid gap-4 sm:grid-cols-3">
           {[
             { href: "/wrist-check", icon: "📸", title: "Wrist Check", text: "Post what's on your wrist today. Brandon picks a Wrist Check of the Week." },
-            { href: "/events", icon: "📅", title: "Meetups & events", text: "The Watch Collective of NJ meetups, fairs and virtual events. RSVP free." },
+            { href: "/events", icon: "📅", title: "Watch events", text: "Upcoming microbrand watch fairs, shows and collector meetups." },
             { href: "/forum", icon: "💬", title: "Forum", text: "Ask questions, share finds and find watches for sale or wanted." },
           ].map((c) => (
             <Link key={c.href} href={c.href} className="group rounded-[1.75rem] border border-[#3FB4EC]/20 bg-[#0E5A8F]/10 p-5 transition hover:-translate-y-1 hover:border-[#3FB4EC]/50">

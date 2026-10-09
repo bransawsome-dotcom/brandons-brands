@@ -53,7 +53,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     description: post.metaDescription || post.excerpt,
     datePublished: post.date,
     author: { "@type": "Person", name: "Brandon Volosov", url: `${SITE_URL}/about`, sameAs: socials.map((s) => s.url) },
-    publisher: { "@type": "Organization", name: "Brandon's Brands", url: SITE_URL, logo: { "@type": "ImageObject", url: `${SITE_URL}/logo-256.webp` } },
+    publisher: { "@type": "Person", name: "Brandon Volosov", url: `${SITE_URL}/about` },
     mainEntityOfPage: `${SITE_URL}/blog/${post.slug}`,
     keywords: post.keywords?.join(", "),
     articleBody: post.body.map(plainText).join("\n\n").slice(0, 5000),

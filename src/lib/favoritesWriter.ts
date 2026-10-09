@@ -6,7 +6,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { getAnthropic } from "@/lib/watchAi";
 import { adminClient } from "@/lib/priceAlerts";
 import { collabEmail } from "@/lib/socials";
-import { SITE_URL } from "@/lib/site";
+import { IDENTITY_RULE, SITE_URL } from "@/lib/site";
 import { latestYouTubeVideos, videoKey, type Video } from "@/lib/youtube";
 
 const MODEL = process.env.FAVORITES_MODEL || process.env.ANTHROPIC_MODEL || "claude-sonnet-5-5";
@@ -80,6 +80,7 @@ export async function addWeeklyFavorite(opts: { signal?: AbortSignal } = {}): Pr
     "Pick ONE watch that Brandon clearly featured hands-on in one of these videos and that isn't already a favorite. Prefer the most recent. Skip founder interviews, multi-watch roundups and general videos unless one specific watch is the clear subject. If nothing fits, set found=false.",
     "Then research that exact watch on the brand's official website (and reputable watch press if needed) with web_search/web_fetch. Use only facts you read; never guess specs, prices or limited-edition numbers. Find a direct official product image URL if you can.",
     "Writing rules: Brandon's first-person voice, warm and enthusiastic, plain English. It's 'one of my favorites' / 'one of Brandon's favorites', NEVER 'my favorite' or 'his favorite'. Never criticise any brand.",
+    IDENTITY_RULE,
     "Finish by calling save_favorite once.",
   ].join("\n");
 

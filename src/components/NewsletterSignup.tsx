@@ -35,7 +35,7 @@ export default function NewsletterSignup({ source, compact = false, className = 
       <p className="text-xs uppercase tracking-[0.3em] text-[#D9A43A]">Free weekly newsletter</p>
       <h2 className={`mt-2 font-semibold text-white ${compact ? "text-lg" : "text-2xl"}`}>Brandon&apos;s week in watches, in your inbox</h2>
       <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">
-        New videos, one of Brandon&apos;s favorites, meetups, the Wrist Check of the week and the best new watches for sale. Sign up and get the{" "}
+        New videos, one of Brandon&apos;s favorites, upcoming watch events, the Wrist Check of the week and the best new watches for sale. Sign up and get the{" "}
         <strong className="text-white">pre-owned watch buying checklist</strong> free.
       </p>
       {state === "done" || state === "already" ? (

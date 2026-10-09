@@ -43,7 +43,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
       dateModified: g.updated,
       articleSection: g.category,
       author: { "@type": "Person", name: "Brandon Volosov", url: `${SITE_URL}/about`, sameAs: socials.map((s) => s.url) },
-      publisher: { "@type": "Organization", name: "Brandon's Brands", url: SITE_URL, logo: { "@type": "ImageObject", url: `${SITE_URL}/logo-256.png` } },
+      publisher: { "@type": "Person", name: "Brandon Volosov", url: `${SITE_URL}/about` },
       mainEntityOfPage: url,
     },
     {

@@ -7,7 +7,7 @@ import { adminClient } from "@/lib/priceAlerts";
 import { learnGuides } from "@/lib/learn";
 import { blogPosts } from "@/lib/blogPosts";
 import { collabEmail, socials } from "@/lib/socials";
-import { SITE_URL } from "@/lib/site";
+import { IDENTITY_RULE, SITE_URL } from "@/lib/site";
 import { slugify, type DbPost, type SocialDrafts } from "@/lib/blogDb";
 
 const MODEL = process.env.BLOG_MODEL || process.env.ANTHROPIC_MODEL || "claude-sonnet-5-5";
@@ -102,7 +102,7 @@ function buildPrompt(theme: string, topicHint: string, recentTitles: string[]): 
   const social = socials.map((s) => `- ${s.name} ${s.handle}: ${s.url}`).join("\n");
   const guides = learnGuides.map((g) => `- ${g.title}: /learn/${g.slug}`).join("\n");
   return [
-    `You write the weekly blog for Brandon's Brands (${SITE_URL}), a luxury watch and microbrand site run by watch reviewer Brandon Volosov. Today is ${today}.`,
+    `You write the weekly blog for Brandon's Brands (${SITE_URL}), a watch community site run by Brandon Volosov, a watch enthusiast and social media creator (not a company; he doesn't make or sell watches). Today is ${today}.`,
     `This week's theme: ${theme}.`,
     topicHint ? `Specific topic requested: ${topicHint}` : "",
     "",
@@ -111,13 +111,14 @@ function buildPrompt(theme: string, topicHint: string, recentTitles: string[]): 
     "Voice: write as Brandon, in the first person, warm, enthusiastic and knowledgeable but easy to read for newcomers. Short paragraphs, plain English, explain any jargon.",
     "Rules:",
     "- Never call any watch 'my favorite' or 'his favorite'. Say 'one of my favorites' at most. Never criticise or put down any brand; stay positive and fair so no brand feels alienated.",
+    IDENTITY_RULE,
     "- No financial or investment advice; values are informational only.",
     "- Don't claim Brandon has handled or reviewed a watch unless a source shows he did.",
     "",
     "SEO and traffic goal (always): help the post rank on Google and drive readers to the site and Brandon's social accounts.",
     "- Use the main keyword in the title, the first paragraph and one subheading.",
     "- Add 2–4 subheadings (paragraphs starting with '## ').",
-    "- Include 2–4 internal links in markdown, e.g. [our guide to automatic movements](/learn/slug), [Brandon's Favorites](/favorites), [the forum](/forum), [track your collection](/collection), [Wrist Check](/wrist-check), [upcoming meetups](/events), [the weekly newsletter](/newsletter).",
+    "- Include 2–4 internal links in markdown, e.g. [the guide to automatic movements](/learn/slug), [Brandon's Favorites](/favorites), [the forum](/forum), [track your collection](/collection), [Wrist Check](/wrist-check), [upcoming watch events](/events), [the weekly newsletter](/newsletter).",
     "- End the post with a short paragraph inviting readers to follow Brandon on Instagram, TikTok, YouTube and Facebook (markdown links) and to join the conversation in the forum.",
     "",
     `Brandon's social accounts:\n${social}`,

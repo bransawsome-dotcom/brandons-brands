@@ -6,6 +6,7 @@ import { loadAllPosts } from "@/lib/blogDb";
 import { latestYouTubeVideos } from "@/lib/youtube";
 import { collabEmail, socials } from "@/lib/socials";
 import { SITE_URL } from "@/lib/site";
+import { eventWhen, type SiteEvent } from "@/lib/events";
 
 export const EMAIL_RE = /^[^\s@<>()",;:]+@[^\s@<>()",;:]+\.[a-z]{2,}$/i;
 const FROM = () => process.env.NEWSLETTER_FROM || process.env.OFFER_FROM || "Brandon's Brands <offers@brandonsbrands17.com>";
@@ -68,7 +69,7 @@ export async function subscribe(email: string, source: string, userId?: string |
     headers: { "List-Unsubscribe": `<${SITE_URL}/api/newsletter/unsubscribe?token=${token}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" },
     html: shell(
       `<h1 style="color:#fff;font-size:24px;margin:12px 0">Welcome to the weekly newsletter</h1>
-       <p style="color:#cbd5e1;line-height:24px">Thanks for joining! Once a week you'll get Brandon's newest videos and blog posts, one of Brandon's favorites, upcoming meetups, the Wrist Check of the week and the best new watches for sale in the community.</p>
+       <p style="color:#cbd5e1;line-height:24px">Thanks for joining! Once a week you'll get Brandon's newest videos and blog posts, one of Brandon's favorites, upcoming watch events, the Wrist Check of the week and the best new watches for sale in the community.</p>
        <p style="color:#cbd5e1;line-height:24px">As promised, here's your free guide:</p>
        <p><a href="${SITE_URL}/learn/buying-pre-owned-watches-safely" style="display:inline-block;background:#D9A43A;color:#000;padding:12px 20px;border-radius:999px;text-decoration:none;font-weight:700">Pre-owned watch buying checklist →</a></p>
        <p style="color:#cbd5e1;line-height:24px">While you're there, <a href="${SITE_URL}/collection" style="color:#93c5fd">start tracking your own collection</a> for free.</p>`,
@@ -88,7 +89,6 @@ export async function unsubscribe(token: string): Promise<boolean> {
   return Boolean(data?.length);
 }
 
-const dateFmt = (iso: string) => new Date(iso).toLocaleString("en-US", { timeZone: "America/New_York", weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
 
 // This week's newsletter, built from what's new on the site.
 export async function buildDigest(intro: string): Promise<{ subject: string; inner: string; count: number }> {
@@ -98,7 +98,7 @@ export async function buildDigest(intro: string): Promise<{ subject: string; inn
     loadAllPosts(),
     latestYouTubeVideos(0).catch(() => []),
     db.from("brand_favorites").select("brand,model,note,post_id,image_url").order("created_at", { ascending: false }).limit(1),
-    db.from("events").select("id,title,starts_at,location,online").gte("starts_at", new Date().toISOString()).order("starts_at").limit(3),
+    db.from("events").select("id,title,starts_at,ends_at,location,online,link,description,created_at").gte("starts_at", new Date().toISOString()).order("starts_at").limit(3),
     db.from("polls").select("id,question,a_label,b_label").eq("active", true).order("created_at", { ascending: false }).limit(1),
     db.from("wrist_shots").select("id,display_name,watch").not("featured_at", "is", null).order("featured_at", { ascending: false }).limit(1),
     db.from("forum_posts").select("id,title").eq("subject", "for-sale").gte("created_at", weekAgo.toISOString()).order("created_at", { ascending: false }).limit(5),
@@ -140,9 +140,9 @@ export async function buildDigest(intro: string): Promise<{ subject: string; inn
     );
   if (events.data?.length)
     inner += section(
-      "📅 Upcoming meetups",
+      "📅 Upcoming watch events",
       `<ul style="padding-left:18px;margin:0">${events.data
-        .map((e) => `<li style="margin:0 0 8px;color:#cbd5e1"><a href="${SITE_URL}/events#${e.id}" style="color:#fff;font-weight:700;text-decoration:none">${esc(e.title)}</a> — ${dateFmt(e.starts_at)}${e.location ? `, ${esc(e.location)}` : e.online ? ", online" : ""}</li>`)
+        .map((e) => `<li style="margin:0 0 8px;color:#cbd5e1"><a href="${esc(e.link ?? `${SITE_URL}/events#${e.id}`)}" style="color:#fff;font-weight:700;text-decoration:none">${esc(e.title)}</a> — ${esc(eventWhen(e as SiteEvent))}${e.location ? `, ${esc(e.location)}` : e.online ? ", online" : ""}</li>`)
         .join("")}</ul>`,
     );
   if (forSale.data?.length)
