@@ -116,7 +116,9 @@ export function useRequireAuth() {
 
   useEffect(() => {
     if (!auth.loading && !auth.user && !auth.guestMode) {
-      router.push("/login");
+      // Come back to this page after logging in (e.g. a "Message" button on a public list).
+      const here = window.location.pathname + window.location.search;
+      router.push(here && here !== "/" ? `/login?next=${encodeURIComponent(here)}` : "/login");
     }
   }, [auth.loading, auth.user, auth.guestMode, router]);
 

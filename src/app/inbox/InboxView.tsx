@@ -7,11 +7,16 @@ import type { User } from "@supabase/supabase-js";
 import { useRequireAuth } from "@/components/AuthProvider";
 import { accountName } from "@/lib/account";
 import { forumName, isModerator, timeAgo } from "@/lib/forum";
+import { collabEmail } from "@/lib/socials";
 import {
   BRAND_NAME,
   FOLDERS,
   KIND_ICON,
   MESSAGE_MAX,
+  MESSAGE_SUBJECTS,
+  OTHER_SUBJECT,
+  SALE_SUBJECTS,
+  SUBJECT_MAX,
   brandContactId,
   deleteNotification,
   folderOf,
@@ -20,6 +25,7 @@ import {
   listNotifications,
   markConversationRead,
   markNotificationsRead,
+  messageRecipient,
   sendAnnouncement,
   sendMessage,
   watchInbox,
@@ -36,6 +42,9 @@ function senderName(user: User | null, moderator: boolean): string {
   if (moderator) return BRAND_NAME;
   return forumName(user) || accountName(user) || (user?.email ?? "").split("@")[0] || "Member";
 }
+
+// The composer's subject picker: a fixed list, "Other" (type your own), or "reply" to keep the conversation's subject.
+const REPLY = "__reply";
 
 const EMPTY_TEXT: Record<FolderKey, { icon: string; title: string; text: React.ReactNode }> = {
   all: { icon: "📥", title: "You're all caught up.", text: "Messages, forum replies, website updates and group events all land here." },
@@ -89,10 +98,15 @@ export default function InboxView() {
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
-  const toId = params.get("to");
-  const toName = params.get("name") ?? "";
+  // ?member=<handle> comes from a "Message" button on a public collection or wishlist.
+  const memberHandle = params.get("member");
+  const [member, setMember] = useState<{ handle: string; id: string | null; name: string; note?: string } | null>(null);
+  const memberReady = member && member.handle === memberHandle ? member : null;
+  const toId = params.get("to") ?? memberReady?.id ?? null;
+  const toName = params.get("name") ?? memberReady?.name ?? "";
   const folderParam = params.get("folder") ?? (params.get("tab") === "messages" ? "messages" : null);
-  const folder: FolderKey = toId ? "messages" : FOLDERS.some((f) => f.key === folderParam) ? (folderParam as FolderKey) : "all";
+  const folder: FolderKey =
+    toId || memberHandle ? "messages" : FOLDERS.some((f) => f.key === folderParam) ? (folderParam as FolderKey) : "all";
 
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -102,6 +116,8 @@ export default function InboxView() {
   const [brandId, setBrandId] = useState<string | null>(null);
   const [pickedId, setActiveId] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
+  const [subjectChoice, setSubjectChoice] = useState<string | null>(null);
+  const [otherSubject, setOtherSubject] = useState("");
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
   const threadEnd = useRef<HTMLDivElement>(null);
@@ -128,6 +144,22 @@ export default function InboxView() {
     return watchInbox(userId, () => void load());
   }, [userId, load]);
 
+  useEffect(() => {
+    if (!userId || !memberHandle) return;
+    let live = true;
+    messageRecipient(memberHandle)
+      .then((r) => {
+        if (!live) return;
+        if (!r) setMember({ handle: memberHandle, id: null, name: "", note: "That member's lists aren't public anymore, so they can't be messaged from here." });
+        else if (r.user_id === userId) setMember({ handle: memberHandle, id: null, name: r.display_name, note: "That's your own public list. 🙂" });
+        else setMember({ handle: memberHandle, id: r.user_id, name: r.display_name });
+      })
+      .catch((err) => live && setMember({ handle: memberHandle, id: null, name: "", note: err instanceof Error ? err.message : "Couldn't find that member." }));
+    return () => {
+      live = false;
+    };
+  }, [userId, memberHandle]);
+
   // A "Message" link (?to=…&name=…) opens that conversation until another one is picked.
   const activeId = pickedId ?? toId;
 
@@ -140,7 +172,7 @@ export default function InboxView() {
     const counts: Record<FolderKey, number> = { all: 0, messages: 0, offers: 0, alerts: 0, forum: 0, updates: 0, events: 0 };
     for (const n of notifications) if (!n.read_at) counts[folderOf(n.kind)] += 1;
     counts.messages = conversations.reduce((sum, c) => sum + c.unread, 0);
-    counts.all = counts.messages + counts.forum + counts.updates + counts.events;
+    counts.all = counts.messages + counts.offers + counts.alerts + counts.forum + counts.updates + counts.events;
     return counts;
   }, [notifications, conversations]);
 
@@ -168,12 +200,25 @@ export default function InboxView() {
   const openConversation = (otherId: string) => {
     setActiveId(otherId);
     setSendError(null);
-    if (folder !== "messages" || toId) router.replace(`${pathname}?folder=messages`, { scroll: false });
+    setSubjectChoice(null);
+    setOtherSubject("");
+    if (folder !== "messages" || toId || memberHandle) router.replace(`${pathname}?folder=messages`, { scroll: false });
   };
+
+  // The conversation's current subject (the most recent one used), for replies.
+  const threadSubject = [...thread].reverse().find((m) => m.subject)?.subject ?? null;
+  const choice = subjectChoice ?? (thread.length ? REPLY : "");
+  const subjectToSend = choice === REPLY ? threadSubject : choice === OTHER_SUBJECT ? otherSubject.trim() : choice;
+  const subjectMissing = !thread.length && !subjectToSend;
+  const saleTip = SALE_SUBJECTS.has(choice === REPLY ? threadSubject ?? "" : choice);
 
   const handleSend = async (event: FormEvent) => {
     event.preventDefault();
     if (!userId || !activeId || !draft.trim()) return;
+    if (subjectMissing || (choice === OTHER_SUBJECT && !otherSubject.trim())) {
+      setSendError(choice === OTHER_SUBJECT ? "Type a subject for your message." : "Pick a subject for your message.");
+      return;
+    }
     setSending(true);
     setSendError(null);
     try {
@@ -181,10 +226,13 @@ export default function InboxView() {
         recipient_id: activeId,
         recipient_name: activeName.slice(0, 60),
         sender_name: senderName(user, moderator).slice(0, 60),
+        subject: subjectToSend || null,
         body: draft,
       });
       setMessages((cur) => (cur.some((m) => m.id === sent.id) ? cur : [...cur, sent]));
       setDraft("");
+      setSubjectChoice(null);
+      setOtherSubject("");
     } catch (err) {
       setSendError(err instanceof Error ? err.message : "Couldn't send that.");
     } finally {
@@ -306,7 +354,10 @@ export default function InboxView() {
                           <span className="block text-sm font-semibold text-white">
                             {c.unread} new message{c.unread === 1 ? "" : "s"} from {c.otherName}
                           </span>
-                          <span className="mt-0.5 block truncate text-sm text-slate-400">{c.last.body}</span>
+                          <span className="mt-0.5 block truncate text-sm text-slate-400">
+                            {c.last.subject ? <span className="text-slate-200">{c.last.subject} · </span> : null}
+                            {c.last.body}
+                          </span>
                           <span className="mt-1 block text-xs text-slate-500">{timeAgo(c.last.created_at)}</span>
                         </span>
                       </button>
@@ -400,6 +451,7 @@ export default function InboxView() {
                           <span className="flex items-center justify-between gap-2">
                             <span className="truncate text-xs text-slate-400">
                               {c.last.sender_id === userId ? "You: " : ""}
+                              {c.last.subject ? `${c.last.subject} · ` : ""}
                               {c.last.body}
                             </span>
                             {c.unread ? <span className="shrink-0 rounded-full bg-[#D9A43A] px-1.5 text-[10px] font-bold text-black">{c.unread}</span> : null}
@@ -408,11 +460,22 @@ export default function InboxView() {
                       </button>
                     </li>
                   ))}
-                  {!conversations.length && !showBrandStarter && !toId ? (
-                    <li className="px-4 py-8 text-center text-sm text-slate-400">
-                      No messages yet. Tap <span className="text-slate-200">Message</span> next to a member&apos;s name in the forum to start one.
-                    </li>
+                  {memberHandle && memberReady?.note ? (
+                    <li className="mx-3 my-3 rounded-2xl border border-amber-300/30 bg-amber-400/10 px-4 py-3 text-sm text-amber-100">{memberReady.note}</li>
                   ) : null}
+                  {memberHandle && !memberReady ? <li className="px-4 py-3 text-sm text-slate-400">Finding that member…</li> : null}
+                  <li className="px-4 py-4 text-xs leading-5 text-slate-500">
+                    {conversations.length ? "Start a new conversation" : "No messages yet. Start one"} with <span className="text-slate-300">Message</span>{" "}
+                    next to a member&apos;s name in the{" "}
+                    <Link href="/forum" className="text-[#D9A43A] hover:text-[#e1b54a]">
+                      forum
+                    </Link>{" "}
+                    or on a public list in{" "}
+                    <Link href="/collectors" className="text-[#D9A43A] hover:text-[#e1b54a]">
+                      Collectors
+                    </Link>
+                    .
+                  </li>
                 </ul>
               </aside>
 
@@ -424,22 +487,31 @@ export default function InboxView() {
                         type="button"
                         onClick={() => {
                           setActiveId(null);
-                          if (toId) router.replace(`${pathname}?folder=messages`, { scroll: false });
+                          if (toId || memberHandle) router.replace(`${pathname}?folder=messages`, { scroll: false });
                         }}
                         className="text-slate-400 hover:text-white md:hidden"
                         aria-label="Back to conversations"
                       >
                         ←
                       </button>
-                      <p className="font-semibold text-white">{activeName}</p>
+                      <div className="min-w-0">
+                        <p className="truncate font-semibold text-white">{activeName}</p>
+                        {threadSubject ? <p className="truncate text-xs text-slate-400">{threadSubject}</p> : null}
+                      </div>
                     </div>
                     <div className="max-h-[28rem] flex-1 space-y-3 overflow-y-auto px-4 py-4">
                       {!thread.length ? <p className="py-8 text-center text-sm text-slate-400">Say hello 👋</p> : null}
-                      {thread.map((m) => {
+                      {thread.map((m, i) => {
                         const mine = m.sender_id === userId;
+                        // Show the subject when it starts or changes, not on every reply.
+                        const prevSubject = thread.slice(0, i).reverse().find((x) => x.subject)?.subject ?? null;
+                        const showSubject = m.subject && m.subject !== prevSubject;
                         return (
                           <div key={m.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
                             <div className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm ${mine ? "bg-[#D9A43A] text-black" : "bg-white/10 text-slate-100"}`}>
+                              {showSubject ? (
+                                <p className={`mb-1 text-[11px] font-bold uppercase tracking-[0.12em] ${mine ? "text-black/70" : "text-blue-200"}`}>{m.subject}</p>
+                              ) : null}
                               <p className="whitespace-pre-wrap break-words">{m.body}</p>
                               <p className={`mt-1 text-[10px] ${mine ? "text-black/60" : "text-slate-400"}`}>
                                 {timeAgo(m.created_at)}
@@ -452,6 +524,61 @@ export default function InboxView() {
                       <div ref={threadEnd} />
                     </div>
                     <form onSubmit={handleSend} className="border-t border-white/10 p-3">
+                      {!thread.length ? (
+                        <div className="mb-3 rounded-2xl border border-blue-400/20 bg-blue-500/10 px-4 py-3 text-xs leading-5 text-blue-100">
+                          <span className="font-semibold text-white">Before you send:</span> messages are private between you and {activeName}. Be
+                          respectful, and keep personal details like your address, phone number and payment information out of messages.
+                        </div>
+                      ) : null}
+                      <div className="mb-2 grid gap-2 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+                        <label className="block">
+                          <span className="sr-only">Subject</span>
+                          <select
+                            value={choice}
+                            onChange={(e) => {
+                              setSubjectChoice(e.target.value);
+                              setSendError(null);
+                            }}
+                            required={!thread.length}
+                            className={`${input} py-2.5 text-sm ${choice ? "" : "text-slate-400"}`}
+                          >
+                            {thread.length ? (
+                              <option value={REPLY}>{threadSubject ? `Reply · ${threadSubject}` : "Reply"}</option>
+                            ) : (
+                              <option value="" disabled>
+                                Pick a subject…
+                              </option>
+                            )}
+                            {MESSAGE_SUBJECTS.map((s) => (
+                              <option key={s} value={s}>
+                                {s}
+                              </option>
+                            ))}
+                            <option value={OTHER_SUBJECT}>Other (type your own)</option>
+                          </select>
+                        </label>
+                        {choice === OTHER_SUBJECT ? (
+                          <label className="block">
+                            <span className="sr-only">Your subject</span>
+                            <input
+                              value={otherSubject}
+                              onChange={(e) => setOtherSubject(e.target.value)}
+                              maxLength={SUBJECT_MAX}
+                              required
+                              autoFocus
+                              placeholder="What's it about?"
+                              className={`${input} py-2.5 text-sm`}
+                            />
+                          </label>
+                        ) : null}
+                      </div>
+                      {saleTip ? (
+                        <p className="mb-2 rounded-xl border border-amber-300/25 bg-amber-400/10 px-3 py-2 text-[11px] leading-5 text-amber-100">
+                          Buying or selling? Brandon&apos;s Brands doesn&apos;t take part in sales between members and can&apos;t verify watches or payments.
+                          Use a trusted escrow or authentication service, or meet in a safe public place, and never send money by gift card or wire to
+                          someone you haven&apos;t verified.
+                        </p>
+                      ) : null}
                       {sendError ? <p className="mb-2 text-sm text-rose-300">{sendError}</p> : null}
                       <div className="flex gap-2">
                         <textarea
@@ -463,20 +590,28 @@ export default function InboxView() {
                               (e.currentTarget.form as HTMLFormElement).requestSubmit();
                             }
                           }}
-                          rows={2}
+                          rows={thread.length ? 2 : 4}
                           maxLength={MESSAGE_MAX}
+                          aria-label="Message"
                           placeholder={`Message ${activeName}…`}
                           className={`${input} resize-none`}
                         />
                         <button
                           type="submit"
-                          disabled={sending || !draft.trim()}
+                          disabled={sending || !draft.trim() || subjectMissing}
                           className="shrink-0 self-end rounded-full bg-[#D9A43A] px-5 py-3 text-sm font-semibold text-black hover:bg-[#e1b54a] disabled:opacity-50"
                         >
                           {sending ? "…" : "Send"}
                         </button>
                       </div>
-                      <p className="mt-1 text-[11px] text-slate-500">Sending as {senderName(user, moderator)}. Enter to send, Shift+Enter for a new line.</p>
+                      <p className="mt-1 text-[11px] leading-4 text-slate-500">
+                        Sending as {senderName(user, moderator)}. Enter to send, Shift+Enter for a new line. Messages between members aren&apos;t
+                        checked by Brandon&apos;s Brands. Report anything inappropriate to{" "}
+                        <a href={`mailto:${collabEmail}`} className="underline hover:text-slate-300">
+                          {collabEmail}
+                        </a>
+                        .
+                      </p>
                     </form>
                   </>
                 ) : (

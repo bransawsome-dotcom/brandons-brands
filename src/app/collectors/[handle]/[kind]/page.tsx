@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 import MakeOfferButton from "@/components/MakeOfferButton";
+import MessageMemberButton from "@/components/MessageMemberButton";
 import { SITE_URL } from "@/lib/site";
 import { loadPublicList, money, possessive, type ListKind, type PublicWatch, type PublicWish } from "@/lib/publicLists";
 
@@ -132,6 +133,7 @@ export default async function PublicListPage({ params }: { params: Promise<{ han
                   {other === "collection" ? "Collection" : "Wishlist"}
                 </Link>
               ) : null}
+              <MessageMemberButton handle={list.handle} name={list.display_name} compact />
             </div>
           </div>
           <dl className="grid grid-cols-2 gap-3 text-center sm:min-w-[260px]">
@@ -146,7 +148,7 @@ export default async function PublicListPage({ params }: { params: Promise<{ han
           </dl>
         </div>
         {isCollection && list.items.length ? (
-          <p className="mt-5 text-sm text-slate-300">Interested in one of these watches? Use <span className="font-semibold text-[#D9A43A]">Make an offer</span> and the owner will get it right away.</p>
+          <p className="mt-5 text-sm text-slate-300">Interested in one of these watches? Use <span className="font-semibold text-[#D9A43A]">Make an offer</span> and the owner will get it right away, or send them a message.</p>
         ) : null}
       </section>
 

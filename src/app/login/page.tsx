@@ -6,6 +6,13 @@ import supabase from "@/lib/supabaseClient";
 import { useAuth } from "@/components/AuthProvider";
 import PasswordInput from "@/components/PasswordInput";
 
+// Where to go after logging in: ?next=/inbox?member=… (same-site paths only).
+function nextPath(): string {
+  if (typeof window === "undefined") return "/dashboard";
+  const next = new URLSearchParams(window.location.search).get("next") ?? "";
+  return next.startsWith("/") && !next.startsWith("//") ? next : "/dashboard";
+}
+
 export default function LoginPage() {
   const router = useRouter();
   const { user, loading, signInGuest } = useAuth();
@@ -16,7 +23,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!loading && user) {
-      router.replace("/dashboard");
+      router.replace(nextPath());
     }
   }, [loading, user, router]);
 
@@ -43,7 +50,7 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/dashboard");
+    router.push(nextPath());
   };
 
   return (

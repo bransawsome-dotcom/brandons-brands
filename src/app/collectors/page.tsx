@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import MessageMemberButton from "@/components/MessageMemberButton";
 import { listPublicCollectors, possessive } from "@/lib/publicLists";
 
 export const revalidate = 300;
@@ -21,7 +22,7 @@ export default async function CollectorsPage() {
         <h1 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-white sm:text-5xl">Watch collectors</h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-slate-300">
           Public collections and wishlists from Brandon&apos;s Brands members. See what others are wearing and hunting for, and make an
-          offer on watches in public collections.
+          offer on watches in public collections or message a collector.
         </p>
       </section>
 
@@ -58,6 +59,7 @@ export default async function CollectorsPage() {
                     Wishlist · {c.wish_count}
                   </Link>
                 ) : null}
+                <MessageMemberButton handle={c.handle} name={c.display_name} compact />
               </div>
             </li>
           ))}
