@@ -1,4 +1,5 @@
 import Link from "next/link";
+import NewsletterSignup from "@/components/NewsletterSignup";
 import type { Metadata } from "next";
 import FavoritesView from "./FavoritesView";
 import FollowBrandon from "@/components/FollowBrandon";
@@ -68,7 +69,8 @@ export default async function FavoritesPage() {
 
       <FavoritesView initial={favorites} />
 
-      <FollowBrandon className="mt-10" />
+      <NewsletterSignup source="favorites" compact className="mt-10" />
+      <FollowBrandon className="mt-6" />
 
       <p className="mt-8 text-center text-sm text-slate-400">
         <Link href="/about" className="text-blue-300 hover:text-blue-200">

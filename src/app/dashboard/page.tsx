@@ -1,6 +1,7 @@
 "use client";
 
 import { parseMoney } from "@/lib/watchAiClient";
+import ValueHistory from "@/components/ValueHistory";
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -153,6 +154,8 @@ export default function DashboardPage() {
             <p className={`mt-4 text-3xl font-semibold ${totalProfit >= 0 ? "text-emerald-300" : "text-rose-300"}`}>{formatCurrency(totalProfit)}</p>
           </div>
         </div>
+
+        <ValueHistory userId={userId} watches={watches} className="mt-6" />
 
         <div className="mt-6 grid gap-6 lg:grid-cols-3">
           <div className="rounded-[1.75rem] border border-white/10 bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.25)] transition hover:-translate-y-0.5 hover:shadow-[0_26px_78px_rgba(0,0,0,0.3)]">

@@ -38,6 +38,10 @@ const PAGES: (PageHit & { keywords: string })[] = [
   { href: "/wishlist", title: "Your wishlist", text: "Watches you want, with price alerts.", keywords: "wishlist want price alerts target" },
   { href: "/dashboard", title: "Dashboard", text: "Your collection at a glance.", keywords: "dashboard stats value" },
   { href: "/learn", title: "Learn about watches", text: "Buying guides, watch types, how watches work and watch history.", keywords: "learn education guides buying guide watch types history how watches work glossary" },
+  { href: "/events", title: "Meetups & events", text: "The Watch Collective of NJ meetups, watch fairs and virtual events. RSVP free.", keywords: "events meetups meetup club watch collective nj new jersey fair rsvp calendar" },
+  { href: "/wrist-check", title: "Wrist Check", text: "Post what's on your wrist today and see what collectors are wearing.", keywords: "wrist check wrist shot wruw photo wearing today wrist of the week" },
+  { href: "/polls", title: "Which would you pick? Polls", text: "Vote on watch match-ups.", keywords: "polls poll vote which would you pick versus vs" },
+  { href: "/newsletter", title: "Weekly newsletter", text: "Brandon's week in watches in your inbox, plus a free pre-owned buying checklist.", keywords: "newsletter email subscribe weekly checklist" },
   { href: "/terms", title: "Terms & Disclaimers", text: "Sales between members, offers, email sharing and site terms.", keywords: "terms disclaimer disclaimers legal privacy email sharing sales responsibility" },
   { href: "/about#contact", title: "Contact us", text: "Collaborations and questions.", keywords: "contact email collab collaboration help" },
 ];

@@ -117,7 +117,7 @@ function buildPrompt(theme: string, topicHint: string, recentTitles: string[]): 
     "SEO and traffic goal (always): help the post rank on Google and drive readers to the site and Brandon's social accounts.",
     "- Use the main keyword in the title, the first paragraph and one subheading.",
     "- Add 2–4 subheadings (paragraphs starting with '## ').",
-    "- Include 2–4 internal links in markdown, e.g. [our guide to automatic movements](/learn/slug), [Brandon's Favorites](/favorites), [the forum](/forum), [track your collection](/collection).",
+    "- Include 2–4 internal links in markdown, e.g. [our guide to automatic movements](/learn/slug), [Brandon's Favorites](/favorites), [the forum](/forum), [track your collection](/collection), [Wrist Check](/wrist-check), [upcoming meetups](/events), [the weekly newsletter](/newsletter).",
     "- End the post with a short paragraph inviting readers to follow Brandon on Instagram, TikTok, YouTube and Facebook (markdown links) and to join the conversation in the forum.",
     "",
     `Brandon's social accounts:\n${social}`,

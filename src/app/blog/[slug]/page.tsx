@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import NewsletterSignup from "@/components/NewsletterSignup";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { formatPostDate } from "@/lib/blogPosts";
@@ -77,7 +78,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </p>
         <BlogBody paragraphs={post.body} />
       </article>
-      <FollowBrandon className="mt-8" />
+      <NewsletterSignup source="blog" compact className="mt-8" />
+      <FollowBrandon className="mt-6" />
     </div>
   );
 }

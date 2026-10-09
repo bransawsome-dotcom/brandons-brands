@@ -18,6 +18,7 @@ export default function SignupPage() {
   const [submitting, setSubmitting] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [agreeEmail, setAgreeEmail] = useState(false);
+  const [wantsNewsletter, setWantsNewsletter] = useState(false);
 
   useEffect(() => {
     if (!loading && user) {
@@ -73,6 +74,16 @@ export default function SignupPage() {
     if (error) {
       setMessage(error.message);
       return;
+    }
+
+    // Optional weekly newsletter (only if they ticked the box).
+    if (wantsNewsletter) {
+      fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, source: "signup" }),
+        keepalive: true,
+      }).catch(() => {});
     }
 
     // Let the site team know someone joined (sent once; the server checks the account is brand new).
@@ -167,6 +178,17 @@ export default function SignupPage() {
                   className="mt-1 h-5 w-5 shrink-0 accent-[#D9A43A]"
                 />
                 <span>{EMAIL_SHARE_CONSENT} Your email is never shown on your public collection, wishlist or forum posts.</span>
+              </label>
+              <label className="flex items-start gap-3 text-sm leading-6 text-slate-300">
+                <input
+                  type="checkbox"
+                  checked={wantsNewsletter}
+                  onChange={(e) => setWantsNewsletter(e.target.checked)}
+                  className="mt-1 h-5 w-5 shrink-0 accent-[#D9A43A]"
+                />
+                <span>
+                  Optional: send me the free weekly newsletter (new videos, meetups, watches for sale) and the pre-owned buying checklist. Unsubscribe anytime.
+                </span>
               </label>
             </fieldset>
 

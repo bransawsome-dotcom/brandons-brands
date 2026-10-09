@@ -28,6 +28,15 @@ export default function SiteFooter() {
             <span className="mx-2 text-slate-500">·</span>
             <Link href="/terms" className="text-blue-300 transition hover:text-blue-200">Terms</Link>
           </p>
+          <p className="mt-1 flex flex-wrap gap-y-1 text-sm [&>a]:whitespace-nowrap">
+            <Link href="/events" className="text-[#D9A43A] transition hover:text-[#e1b54a]">Events</Link>
+            <span className="mx-2 text-slate-500">·</span>
+            <Link href="/wrist-check" className="text-[#D9A43A] transition hover:text-[#e1b54a]">Wrist Check</Link>
+            <span className="mx-2 text-slate-500">·</span>
+            <Link href="/polls" className="text-[#D9A43A] transition hover:text-[#e1b54a]">Polls</Link>
+            <span className="mx-2 text-slate-500">·</span>
+            <Link href="/newsletter" className="text-[#D9A43A] transition hover:text-[#e1b54a]">Newsletter</Link>
+          </p>
           </div>
         </div>
         {/* Phones: an even 2 x 2 grid. Larger screens: one row. */}

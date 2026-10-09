@@ -1,11 +1,15 @@
 import Link from "next/link";
+import NewsletterSignup from "@/components/NewsletterSignup";
 import ShowOffCTA from "@/components/ShowOffCTA";
 import LatestVideos from "@/components/LatestVideos";
+import PollCard from "@/components/PollCard";
+import { loadPolls } from "@/lib/polls";
 
 // The "Latest from Brandon" videos refresh every hour.
 export const revalidate = 3600;
 
-export default function Home() {
+export default async function Home() {
+  const poll = (await loadPolls(5)).find((p) => p.active);
   return (
     <div className="min-h-screen bg-[#07111F] text-white">
       <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-10 sm:px-6 sm:py-14 lg:px-16">
@@ -43,6 +47,25 @@ export default function Home() {
 
         <LatestVideos className="mt-12" />
 
+        {poll ? <PollCard poll={poll} className="mt-12" /> : null}
+
+        {/* Community: reasons to come back every week. */}
+        <section aria-label="Community" className="mt-12 grid gap-4 sm:grid-cols-3">
+          {[
+            { href: "/wrist-check", icon: "📸", title: "Wrist Check", text: "Post what's on your wrist today. Brandon picks a Wrist Check of the Week." },
+            { href: "/events", icon: "📅", title: "Meetups & events", text: "The Watch Collective of NJ meetups, fairs and virtual events. RSVP free." },
+            { href: "/forum", icon: "💬", title: "Forum", text: "Ask questions, share finds and find watches for sale or wanted." },
+          ].map((c) => (
+            <Link key={c.href} href={c.href} className="group rounded-[1.75rem] border border-[#3FB4EC]/20 bg-[#0E5A8F]/10 p-5 transition hover:-translate-y-1 hover:border-[#3FB4EC]/50">
+              <p className="text-2xl" aria-hidden>
+                {c.icon}
+              </p>
+              <h2 className="mt-2 text-lg font-semibold text-white">{c.title}</h2>
+              <p className="mt-1 text-sm leading-6 text-slate-300">{c.text}</p>
+            </Link>
+          ))}
+        </section>
+
         <section id="collection" className="mt-12 grid gap-6 sm:grid-cols-3">
           <Link href="/collection" className="group flex h-full flex-col rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl transition hover:-translate-y-1 hover:border-[#D9A43A]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D9A43A]">
             <h2 className="mb-3 text-2xl font-semibold text-white">My Collection</h2>
@@ -70,6 +93,8 @@ export default function Home() {
         </section>
 
         <ShowOffCTA className="mt-12" />
+
+        <NewsletterSignup source="home" className="mt-12" />
       </main>
     </div>
   );

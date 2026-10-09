@@ -1,4 +1,5 @@
 import Link from "next/link";
+import NewsletterSignup from "@/components/NewsletterSignup";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import FollowBrandon from "@/components/FollowBrandon";
@@ -136,7 +137,8 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
       </section>
 
       <ShowOffCTA className="mt-10" />
-      <FollowBrandon className="mt-10" />
+      <NewsletterSignup source="guide" compact className="mt-10" />
+      <FollowBrandon className="mt-6" />
     </div>
   );
 }
