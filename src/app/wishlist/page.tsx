@@ -281,13 +281,13 @@ export default function WishlistPage() {
           <ShareButton kind="wishlist" />
           <PublicListToggle kind="wishlist" />
           <dl className="grid grid-cols-2 gap-3 text-center sm:min-w-[260px]">
-            <div className="rounded-2xl border border-white/10 bg-black/20 px-3 py-3">
-              <dt className="text-[11px] uppercase tracking-[0.18em] text-slate-400">Watches</dt>
-              <dd className="mt-1 text-xl font-semibold text-white">{wishlist.length}</dd>
+            <div className="flex min-w-0 flex-col justify-between rounded-2xl border border-white/10 bg-black/20 px-2 py-3 sm:px-3">
+              <dt className="whitespace-nowrap text-[10px] uppercase tracking-[0.1em] text-slate-400 sm:text-[11px] sm:tracking-[0.18em]">Watches</dt>
+              <dd className="mt-1 whitespace-nowrap text-sm font-semibold tabular-nums min-[360px]:text-lg sm:text-xl text-white">{wishlist.length}</dd>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 px-3 py-3">
-              <dt className="text-[11px] uppercase tracking-[0.18em] text-slate-400">Market value</dt>
-              <dd className="mt-1 text-xl font-semibold text-[#D9A43A]">{totalValue ? formatUsd(totalValue) : "—"}</dd>
+            <div className="flex min-w-0 flex-col justify-between rounded-2xl border border-white/10 bg-black/20 px-2 py-3 sm:px-3">
+              <dt className="whitespace-nowrap text-[10px] uppercase tracking-[0.1em] text-slate-400 sm:text-[11px] sm:tracking-[0.18em]">Market value</dt>
+              <dd className="mt-1 whitespace-nowrap text-sm font-semibold tabular-nums min-[360px]:text-lg sm:text-xl text-[#D9A43A]">{totalValue ? formatUsd(totalValue) : "—"}</dd>
             </div>
           </dl>
           </div>

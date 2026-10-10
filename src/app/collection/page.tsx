@@ -258,18 +258,18 @@ export default function CollectionPage() {
           <div className="flex flex-col items-stretch gap-3 sm:items-end">
           <ShareButton kind="collection" />
           <PublicListToggle kind="collection" />
-          <dl className="grid grid-cols-3 gap-3 text-center sm:min-w-[360px]">
-            <div className="rounded-2xl border border-white/10 bg-black/20 px-3 py-3">
-              <dt className="text-[11px] uppercase tracking-[0.18em] text-slate-400">Watches</dt>
-              <dd className="mt-1 text-xl font-semibold text-white">{watches.length}</dd>
+          <dl className="grid grid-cols-3 gap-2 text-center min-[360px]:gap-3 sm:min-w-[360px]">
+            <div className="flex min-w-0 flex-col justify-between rounded-2xl border border-white/10 bg-black/20 px-2 py-3 sm:px-3">
+              <dt className="whitespace-nowrap text-[10px] uppercase tracking-[0.1em] text-slate-400 sm:text-[11px] sm:tracking-[0.18em]">Watches</dt>
+              <dd className="mt-1 whitespace-nowrap text-sm font-semibold tabular-nums min-[360px]:text-lg sm:text-xl text-white">{watches.length}</dd>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 px-3 py-3">
-              <dt className="text-[11px] uppercase tracking-[0.18em] text-slate-400">Paid</dt>
-              <dd className="mt-1 text-xl font-semibold text-white">{formatUsd(totals.paid)}</dd>
+            <div className="flex min-w-0 flex-col justify-between rounded-2xl border border-white/10 bg-black/20 px-2 py-3 sm:px-3">
+              <dt className="whitespace-nowrap text-[10px] uppercase tracking-[0.1em] text-slate-400 sm:text-[11px] sm:tracking-[0.18em]">Paid</dt>
+              <dd className="mt-1 whitespace-nowrap text-sm font-semibold tabular-nums min-[360px]:text-lg sm:text-xl text-white">{formatUsd(totals.paid)}</dd>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 px-3 py-3">
-              <dt className="text-[11px] uppercase tracking-[0.18em] text-slate-400">Est. value</dt>
-              <dd className="mt-1 text-xl font-semibold text-[#D9A43A]">{formatUsd(totals.value)}</dd>
+            <div className="flex min-w-0 flex-col justify-between rounded-2xl border border-white/10 bg-black/20 px-2 py-3 sm:px-3">
+              <dt className="whitespace-nowrap text-[10px] uppercase tracking-[0.1em] text-slate-400 sm:text-[11px] sm:tracking-[0.18em]">Est. value</dt>
+              <dd className="mt-1 whitespace-nowrap text-sm font-semibold tabular-nums min-[360px]:text-lg sm:text-xl text-[#D9A43A]">{formatUsd(totals.value)}</dd>
             </div>
           </dl>
           </div>
