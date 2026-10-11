@@ -26,7 +26,7 @@ export default function WatchCarousel({ watches, className = "" }: { watches: Ca
   useEffect(() => {
     const fit = () => {
       const w = Math.min(window.innerWidth, 1200);
-      const card = w < 480 ? 110 : w < 900 ? 140 : 170;
+      const card = w < 480 ? 130 : w < 900 ? 170 : 210;
       const radius = Math.round((card / 2 + 14) / Math.tan(Math.PI / Math.max(items.length, 3)));
       setSize({ card, radius });
     };
@@ -107,9 +107,10 @@ export default function WatchCarousel({ watches, className = "" }: { watches: Ca
               className="absolute inset-0 flex cursor-pointer flex-col overflow-hidden rounded-[1.25rem] border border-[#D9A43A]/30 bg-slate-950/85 shadow-[0_18px_50px_rgba(0,0,0,0.45)] outline-none focus-visible:ring-2 focus-visible:ring-[#D9A43A]"
               style={{ transform: `rotateY(${i * step}deg) translateZ(${size.radius}px)`, backfaceVisibility: "hidden" }}
             >
-              <div className="flex flex-1 items-center justify-center bg-gradient-to-b from-white/10 to-transparent p-2">
+              <div className="relative min-h-0 flex-1 overflow-hidden bg-black">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={w.image} alt="" draggable={false} loading="lazy" className="max-h-full max-w-full object-contain" />
+                <img src={w.image} alt="" draggable={false} className="absolute inset-0 h-full w-full object-cover" />
+                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-slate-950/90 to-transparent" />
               </div>
               <div className="px-2 pb-2 pt-1 text-center">
                 <p className="truncate text-[10px] uppercase tracking-[0.15em] text-[#D9A43A]">{w.brand}</p>
