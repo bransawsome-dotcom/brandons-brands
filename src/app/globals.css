@@ -125,12 +125,19 @@ body {
   .bb-seconds-hand { animation: none; transform: rotate(60deg); }
 }
 
-/* Vault door that opens over the Collection page once a day (VaultIntro). About 1.5s in all. */
+/* Vault door that opens over the Collection page once a day (VaultIntro). About 2s in all. */
 @keyframes bb-vault-spin { from { transform: rotate(0deg); } to { transform: rotate(var(--bb-turn, 300deg)); } }
 @keyframes bb-vault-bolt { from { transform: translateX(0); } to { transform: translateX(-21px); } }
 @keyframes bb-vault-door { from { transform: rotateY(0deg); } to { transform: rotateY(-112deg); } }
-@keyframes bb-vault-fade { 0%, 82% { opacity: 1; } 100% { opacity: 0; } }
-.bb-vault { animation: bb-vault-fade 1.5s ease-in forwards; }
+@keyframes bb-vault-fade { 0%, 80% { opacity: 1; } 100% { opacity: 0; } }
+.bb-vault { animation: bb-vault-fade 2s ease-in forwards; }
+@keyframes bb-vault-clock {
+  0% { transform: translate(0, 0) scale(0.2) rotate(0deg); opacity: 0; }
+  12% { opacity: 1; }
+  72% { opacity: 1; }
+  100% { transform: translate(var(--bb-dx), var(--bb-dy)) scale(1.7) rotate(var(--bb-spin)); opacity: 0; }
+}
+.bb-vault-clock { opacity: 0; animation: bb-vault-clock 0.95s cubic-bezier(0.2, 0.6, 0.35, 1) forwards; }
 .bb-vault-dial { transform-box: view-box; transform-origin: 100px 100px; --bb-turn: -420deg; animation: bb-vault-spin 0.4s cubic-bezier(0.3, 0, 0.2, 1) forwards; }
 .bb-vault-wheel { transform-box: view-box; transform-origin: 100px 100px; --bb-turn: 240deg; animation: bb-vault-spin 0.45s cubic-bezier(0.45, 0, 0.2, 1) 0.22s forwards; }
 .bb-vault-bolt { animation: bb-vault-bolt 0.2s ease-in 0.62s forwards; }

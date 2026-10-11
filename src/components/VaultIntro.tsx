@@ -5,12 +5,19 @@ import { takeVaultRequest } from "@/lib/vault";
 
 // A bank-vault door that opens over the Collection page when someone clicks a Collection button: the
 // combination dial and wheel spin, the round locking bolts slide back, and the thick steel door
-// swings open on its hinge to a gold-lit vault (about 1.5 seconds). Tap to skip. Never shown on a
+// swings open on its hinge to a gold-lit vault (about 2 seconds). Tap to skip. Never shown on a
 // refresh or when coming back from another page, or to people who ask their device to reduce motion.
 const LOCK_BOLTS = Array.from({ length: 12 }, (_, i) => i * 30 + 15);
 const RIM_BOLTS = Array.from({ length: 28 }, (_, i) => (i * 360) / 28);
 const SPOKES = Array.from({ length: 16 }, (_, i) => i * 22.5);
 const DEPTH = 10; // layers that give the door its thickness
+
+// Brandon's logo bursting out of the vault as the door opens: [angle°, distance, size (% of the stage), spin°, delay s, unused]
+const BURST: [number, number, number, number, number, number][] = [
+  [-90, 58, 22, -25, 0.0, 0], [-40, 64, 18, 30, 0.04, 1], [10, 60, 21, -40, 0.08, 2], [55, 66, 17, 20, 0.02, 0],
+  [100, 56, 20, -15, 0.1, 1], [145, 64, 18, 35, 0.05, 2], [190, 60, 21, -30, 0.12, 0], [235, 66, 17, 25, 0.07, 1],
+  [-65, 38, 14, 45, 0.16, 2], [30, 40, 15, -50, 0.18, 1], [120, 42, 14, 40, 0.15, 0], [210, 38, 15, -35, 0.2, 2],
+];
 
 const pol = (r: number, deg: number) => {
   const a = (deg * Math.PI) / 180;
@@ -25,7 +32,7 @@ export default function VaultIntro() {
     if (!takeVaultRequest()) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     Promise.resolve().then(() => setShow(true));
-    const t = window.setTimeout(() => setShow(false), 1500);
+    const t = window.setTimeout(() => setShow(false), 2000);
     return () => window.clearTimeout(t);
   }, []);
 
@@ -184,6 +191,34 @@ export default function VaultIntro() {
             {/* Soft light across the face. */}
             <ellipse cx="72" cy="58" rx="58" ry="30" fill="#ffffff" opacity="0.08" transform="rotate(-30 72 58)" />
           </svg>
+        </div>
+
+        {/* Brandon's logo bursting out of the open vault toward the viewer. */}
+        <div className="pointer-events-none absolute inset-0" style={{ transformStyle: "preserve-3d" }}>
+          {BURST.map(([deg, dist, size, spin, delay], i) => {
+            const rad = (deg * Math.PI) / 180;
+            return (
+              <div
+                key={i}
+                className="bb-vault-clock absolute"
+                style={
+                  {
+                    left: `${50 - size / 2}%`,
+                    top: `${50 - size / 2}%`,
+                    width: `${size}%`,
+                    height: `${size}%`,
+                    "--bb-dx": `${Math.cos(rad) * dist * 4.8}px`,
+                    "--bb-dy": `${Math.sin(rad) * dist * 4.8}px`,
+                    "--bb-spin": `${spin * 6}deg`,
+                    animationDelay: `${1.0 + delay}s`,
+                  } as React.CSSProperties
+                }
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/logo-256.webp" alt="" draggable={false} className="h-full w-full drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]" />
+              </div>
+            );
+          })}
         </div>
 
         {/* Hinge on the left. */}
