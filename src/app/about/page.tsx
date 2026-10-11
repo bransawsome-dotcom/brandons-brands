@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import LogoMark from "@/components/LogoMark";
 import { FAVORITES_SUBJECT } from "@/lib/favorites";
 import { collabEmail, socials } from "@/lib/socials";
 import { IDENTITY, SITE_URL } from "@/lib/site";
@@ -170,14 +171,14 @@ export default function AboutPage() {
             </h1>
             <p className="mt-4 text-xl font-medium text-[#D9A43A] sm:text-2xl">Beyond the Brand. Behind the Craftsmanship.</p>
           </div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/logo-1024.webp"
-            alt="Brandon's Brands luxury watch logo"
-            width={320}
-            height={320}
-            className="mx-auto h-56 w-56 drop-shadow-[0_0_60px_rgba(59,130,246,0.35)] sm:h-72 sm:w-72 lg:h-80 lg:w-80"
-          />
+          {/* The logo with its gold seconds hand sweeping in real time. */}
+          <div role="img" aria-label="Brandon's Brands luxury watch logo" className="mx-auto">
+            <LogoMark
+              src="/logo-1024.webp"
+              className="block h-56 w-56 drop-shadow-[0_0_60px_rgba(59,130,246,0.35)] sm:h-72 sm:w-72 lg:h-80 lg:w-80"
+              handWidth={1}
+            />
+          </div>
         </header>
 
         {/* Meet Brandon */}

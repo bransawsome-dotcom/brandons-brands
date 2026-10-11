@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import LogoMark from "@/components/LogoMark";
 import { collabEmail, socials } from "@/lib/socials";
 
 // "Connect with Brandon": the page the printed QR code opens (brandonsbrands17.com/connect).
@@ -49,14 +50,9 @@ const button =
 export default function ConnectPage() {
   return (
     <div className="connect-page mx-auto flex w-full max-w-md flex-col items-center px-1 pb-4 pt-0 text-center sm:pt-6">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/logo-256.webp"
-        alt="Brandon's Brands logo"
-        width={128}
-        height={128}
-        className="hidden h-24 w-24 drop-shadow-[0_0_40px_rgba(59,130,246,0.45)] sm:block sm:h-28 sm:w-28"
-      />
+      <div role="img" aria-label="Brandon's Brands logo" className="hidden sm:block">
+        <LogoMark className="h-24 w-24 drop-shadow-[0_0_40px_rgba(59,130,246,0.45)] sm:h-28 sm:w-28" />
+      </div>
       <p className="text-xs uppercase tracking-[0.35em] text-blue-300 sm:mt-5">Brandon&apos;s Brands</p>
       <h1 className="mt-1 text-2xl font-semibold tracking-[-0.02em] text-white sm:mt-2 sm:text-4xl">Connect with Brandon</h1>
       <p className="mt-2 text-sm leading-6 text-slate-300 sm:mt-3">Luxury watches, microbrands and watch culture. Discover the makers.</p>

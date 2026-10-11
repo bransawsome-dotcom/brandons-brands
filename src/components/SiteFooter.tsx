@@ -1,4 +1,5 @@
 import Link from "next/link";
+import LogoMark from "@/components/LogoMark";
 import { collabEmail, socials } from "@/lib/socials";
 import { SALES_DISCLAIMER } from "@/lib/legal";
 
@@ -7,8 +8,9 @@ export default function SiteFooter() {
     <footer className="site-footer mt-12 rounded-[2rem] border border-white/10 bg-white/5 px-5 py-6 backdrop-blur-xl sm:px-8">
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo-256.webp" alt="Brandon's Brands logo" width={56} height={56} className="h-12 w-12 shrink-0 sm:h-14 sm:w-14" />
+          <span role="img" aria-label="Brandon's Brands logo" className="shrink-0">
+            <LogoMark className="h-12 w-12 sm:h-14 sm:w-14" />
+          </span>
           <div>
           <p className="whitespace-nowrap text-xs uppercase tracking-[0.18em] text-blue-300 sm:tracking-[0.3em]">Follow Brandon&apos;s Brands</p>
           <p className="mt-2 text-sm text-slate-300">
