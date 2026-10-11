@@ -124,3 +124,13 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .bb-seconds-hand { animation: none; transform: rotate(60deg); }
 }
+
+/* Vault door that opens over the Collection page once a day (VaultIntro). Total about 1.2s. */
+@keyframes bb-vault-wheel { from { transform: rotate(0deg); } to { transform: rotate(300deg); } }
+@keyframes bb-vault-bolt { from { transform: translateX(0); } to { transform: translateX(-26px); } }
+@keyframes bb-vault-door { from { transform: rotateY(0deg); opacity: 1; } to { transform: rotateY(-105deg); opacity: 0.85; } }
+@keyframes bb-vault-fade { 0%, 75% { opacity: 1; } 100% { opacity: 0; } }
+.bb-vault { animation: bb-vault-fade 1.35s ease-in forwards; }
+.bb-vault-wheel { transform-box: view-box; transform-origin: 100px 100px; animation: bb-vault-wheel 0.5s cubic-bezier(0.45, 0, 0.2, 1) forwards; }
+.bb-vault-bolt { animation: bb-vault-bolt 0.22s ease-in 0.42s forwards; }
+.bb-vault-door { transform-origin: 0% 50%; transform-style: preserve-3d; animation: bb-vault-door 0.55s cubic-bezier(0.55, 0, 0.35, 1) 0.62s forwards; }

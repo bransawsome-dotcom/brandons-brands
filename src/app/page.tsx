@@ -4,6 +4,8 @@ import NewsletterSignup from "@/components/NewsletterSignup";
 import ShowOffCTA from "@/components/ShowOffCTA";
 import LatestVideos from "@/components/LatestVideos";
 import PollCard from "@/components/PollCard";
+import WatchCarousel from "@/components/WatchCarousel";
+import { FAVORITES_PATH, loadFavorites } from "@/lib/favorites";
 import { loadPolls } from "@/lib/polls";
 
 // Videos and the poll refresh every 5 minutes.
@@ -11,6 +13,10 @@ export const revalidate = 300;
 
 export default async function Home() {
   const poll = (await loadPolls(5)).find((p) => p.active);
+  // Brandon's Favorites with a photo, for the turning 3D ring under the headline.
+  const ring = (await loadFavorites())
+    .filter((f) => f.image_url)
+    .map((f) => ({ id: f.id, brand: f.brand, model: f.model, image: f.image_url as string, href: f.post_id ? `/forum/${f.post_id}` : FAVORITES_PATH }));
   return (
     <div className="min-h-screen bg-[#07111F] text-white">
       <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-10 sm:px-6 sm:py-14 lg:px-16">
@@ -42,6 +48,7 @@ export default async function Home() {
               <span className="block">Discover. Collect.</span>
               <span className="block">Showcase the world&apos;s finest watches.</span>
             </p>
+            <WatchCarousel watches={ring} className="mt-8 w-full" />
           </div>
         </section>
 

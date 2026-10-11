@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useRequireAuth } from "@/components/AuthProvider";
+import VaultIntro from "@/components/VaultIntro";
 import { loadCollectionData, saveCollectionData, deleteCollectionItem } from "@/lib/storage";
 import { provenanceLabels, type Watch } from "@/lib/localData";
 import ProvenanceFields, { emptyProvenance, type Provenance } from "@/components/ProvenanceFields";
@@ -244,6 +245,7 @@ export default function CollectionPage() {
 
   return (
     <div className="mx-auto w-full max-w-7xl px-3 py-8 sm:px-6 sm:py-14 lg:px-16 overflow-x-hidden">
+      <VaultIntro />
       <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
