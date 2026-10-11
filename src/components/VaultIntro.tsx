@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { takeVaultRequest } from "@/lib/vault";
 
-// A bank-vault door that opens over the Collection page on the first visit of the day: the
+// A bank-vault door that opens over the Collection page when someone clicks a Collection button: the
 // combination dial and wheel spin, the round locking bolts slide back, and the thick steel door
-// swings open on its hinge to a gold-lit vault (about 1.3 seconds). Tap to skip. Shown at most
-// once a day per browser, and never to people who ask their device to reduce motion.
-const KEY = "bb-vault-opened";
+// swings open on its hinge to a gold-lit vault (about 1.5 seconds). Tap to skip. Never shown on a
+// refresh or when coming back from another page, or to people who ask their device to reduce motion.
 const LOCK_BOLTS = Array.from({ length: 12 }, (_, i) => i * 30 + 15);
 const RIM_BOLTS = Array.from({ length: 28 }, (_, i) => (i * 360) / 28);
 const SPOKES = Array.from({ length: 16 }, (_, i) => i * 22.5);
@@ -21,14 +21,9 @@ export default function VaultIntro() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    try {
-      const today = new Date().toLocaleDateString("en-CA");
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-      if (localStorage.getItem(KEY) === today) return;
-      localStorage.setItem(KEY, today);
-    } catch {
-      return;
-    }
+    // Only right after a Collection button was clicked (not on refresh or coming back from another page).
+    if (!takeVaultRequest()) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     Promise.resolve().then(() => setShow(true));
     const t = window.setTimeout(() => setShow(false), 1500);
     return () => window.clearTimeout(t);
