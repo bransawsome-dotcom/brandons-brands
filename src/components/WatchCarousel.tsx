@@ -6,8 +6,9 @@ import { useEffect, useRef, useState } from "react";
 export type CarouselWatch = { id: string; brand: string; model: string; image: string; href: string };
 
 // A slowly turning 3D ring of watches (Brandon's Favorites) built with CSS 3D transforms only.
-// Hover or touch pauses it, drag or swipe spins it, tapping a watch opens it. People who ask their
-// device to reduce motion get a still ring they can still drag.
+// It keeps turning on its own; click-and-drag, a finger swipe, a two-finger trackpad swipe or the
+// arrow buttons spin it (with momentum), and tapping a watch opens it. People who ask their device to
+// reduce motion get a still ring they can still spin.
 const MIN_ITEMS = 8; // repeat watches so the ring always looks full
 const SPEED = 6; // degrees per second
 
@@ -15,8 +16,10 @@ export default function WatchCarousel({ watches, className = "" }: { watches: Ca
   const router = useRouter();
   const ringRef = useRef<HTMLDivElement>(null);
   const angle = useRef(0);
-  const paused = useRef(false);
-  const drag = useRef<{ x: number; start: number; moved: boolean; href?: string } | null>(null);
+  const vel = useRef(-SPEED); // degrees per second; eases back to the slow auto-turn after a spin
+  const still = useRef(false);
+  const drag = useRef<{ x: number; start: number; moved: boolean; href?: string; lastX: number; lastT: number; v: number } | null>(null);
+  const boxRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ card: 150, radius: 320 });
 
   const items = watches.length ? Array.from({ length: Math.max(MIN_ITEMS, watches.length) }, (_, i) => watches[i % watches.length]) : [];
@@ -37,13 +40,17 @@ export default function WatchCarousel({ watches, className = "" }: { watches: Ca
 
   // Turn the ring every frame (unless paused, dragging or reduced motion).
   useEffect(() => {
-    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    still.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let raf = 0;
     let last = performance.now();
     const tick = (now: number) => {
-      const dt = (now - last) / 1000;
+      const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
-      if (!still && !paused.current && !drag.current) angle.current -= SPEED * dt;
+      if (!drag.current) {
+        const cruise = still.current ? 0 : -SPEED;
+        vel.current = cruise + (vel.current - cruise) * Math.exp(-dt * 2.2);
+        angle.current += vel.current * dt;
+      }
       if (ringRef.current) ringRef.current.style.transform = `translateZ(-${size.radius}px) rotateY(${angle.current}deg)`;
       raf = requestAnimationFrame(tick);
     };
@@ -51,25 +58,38 @@ export default function WatchCarousel({ watches, className = "" }: { watches: Ca
     return () => cancelAnimationFrame(raf);
   }, [size.radius]);
 
+  // Two-finger sideways swipe on a trackpad spins the ring (vertical scrolling still scrolls the page).
+  useEffect(() => {
+    const el = boxRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      e.preventDefault();
+      angle.current -= e.deltaX * 0.25;
+      vel.current = -e.deltaX * 4;
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, [items.length]);
+
+  const nudge = (dir: 1 | -1) => {
+    vel.current = dir * step * 3.2;
+  };
+
   if (items.length < 3) return null;
 
   return (
     <section aria-label="Brandon's Favorites" className={`relative select-none ${className}`}>
       <div
-        className="relative mx-auto touch-pan-y overflow-hidden"
+        className="relative mx-auto cursor-grab touch-pan-y overflow-hidden"
         style={{ height: size.card * 1.8, perspective: size.radius * 3.2 }}
-        onPointerEnter={(e) => {
-          if (e.pointerType === "mouse") paused.current = true;
-        }}
-        onPointerLeave={() => {
-          paused.current = false;
-          drag.current = null;
-        }}
+        ref={boxRef}
         onPointerDown={(e) => {
+          if (e.button !== 0) return;
           const card = (e.target as HTMLElement).closest<HTMLElement>("[data-href]");
-          drag.current = { x: e.clientX, start: angle.current, moved: false, href: card?.dataset.href };
+          drag.current = { x: e.clientX, start: angle.current, moved: false, href: card?.dataset.href, lastX: e.clientX, lastT: performance.now(), v: 0 };
           e.currentTarget.setPointerCapture(e.pointerId);
-          if (e.pointerType !== "mouse") paused.current = true;
+          e.currentTarget.style.cursor = "grabbing";
         }}
         onPointerMove={(e) => {
           const d = drag.current;
@@ -77,16 +97,23 @@ export default function WatchCarousel({ watches, className = "" }: { watches: Ca
           const dx = e.clientX - d.x;
           if (Math.abs(dx) > 6) d.moved = true;
           angle.current = d.start + dx * 0.35;
+          const now = performance.now();
+          const dt = (now - d.lastT) / 1000;
+          if (dt > 0) d.v = 0.7 * d.v + 0.3 * (((e.clientX - d.lastX) * 0.35) / dt);
+          d.lastX = e.clientX;
+          d.lastT = now;
         }}
         onPointerUp={(e) => {
           const d = drag.current;
           drag.current = null;
-          if (e.pointerType !== "mouse") window.setTimeout(() => (paused.current = false), 1500);
-          if (d && !d.moved && d.href) router.push(d.href);
+          e.currentTarget.style.cursor = "";
+          if (!d) return;
+          if (d.moved) vel.current = Math.max(-400, Math.min(400, d.v)); // let it coast
+          else if (d.href) router.push(d.href);
         }}
-        onPointerCancel={() => {
+        onPointerCancel={(e) => {
           drag.current = null;
-          paused.current = false;
+          e.currentTarget.style.cursor = "";
         }}
       >
         <div
@@ -104,7 +131,7 @@ export default function WatchCarousel({ watches, className = "" }: { watches: Ca
               onKeyDown={(e) => {
                 if (e.key === "Enter") router.push(w.href);
               }}
-              className="absolute inset-0 flex cursor-pointer flex-col overflow-hidden rounded-[1.25rem] border border-[#D9A43A]/30 bg-slate-950/85 shadow-[0_18px_50px_rgba(0,0,0,0.45)] outline-none focus-visible:ring-2 focus-visible:ring-[#D9A43A]"
+              className="absolute inset-0 flex flex-col overflow-hidden rounded-[1.25rem] border border-[#D9A43A]/30 bg-slate-950/85 shadow-[0_18px_50px_rgba(0,0,0,0.45)] outline-none focus-visible:ring-2 focus-visible:ring-[#D9A43A]"
               style={{ transform: `rotateY(${i * step}deg) translateZ(${size.radius}px)`, backfaceVisibility: "hidden" }}
             >
               <div className="relative min-h-0 flex-1 overflow-hidden bg-black">
@@ -120,9 +147,17 @@ export default function WatchCarousel({ watches, className = "" }: { watches: Ca
           ))}
         </div>
       </div>
-      <p className="mt-1 text-center text-xs text-slate-400">
-        <span className="text-[#D9A43A]">⭐ Brandon&apos;s Favorites</span> · drag to spin, tap a watch to see it
-      </p>
+      <div className="mt-1 flex items-center justify-center gap-3 text-xs text-slate-400">
+        <button type="button" onClick={() => nudge(1)} aria-label="Spin left" className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 text-base text-slate-200 hover:border-[#D9A43A]/60 hover:text-[#D9A43A]">
+          ‹
+        </button>
+        <p>
+          <span className="text-[#D9A43A]">⭐ Brandon&apos;s Favorites</span> · drag to spin, tap a watch to see it
+        </p>
+        <button type="button" onClick={() => nudge(-1)} aria-label="Spin right" className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 text-base text-slate-200 hover:border-[#D9A43A]/60 hover:text-[#D9A43A]">
+          ›
+        </button>
+      </div>
     </section>
   );
 }
