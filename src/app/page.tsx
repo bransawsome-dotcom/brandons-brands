@@ -1,4 +1,5 @@
 import Link from "next/link";
+import LogoMark from "@/components/LogoMark";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import ShowOffCTA from "@/components/ShowOffCTA";
 import LatestVideos from "@/components/LatestVideos";
@@ -18,14 +19,13 @@ export default async function Home() {
           <div className="relative z-10 flex w-full flex-col items-center text-center animate-fade-in">
             {/* The logo gets its own square space; "Brandon's Brands" sits centered inside its inner dial. */}
             <div className="logo-stage relative flex max-w-none shrink-0 items-center justify-center">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              {/* The big faded logo, with its gold seconds hand sweeping in real time. */}
+              <LogoMark
                 src="/logo-1024.webp"
-                alt=""
-                aria-hidden
-                width={1024}
-                height={1024}
-                className="pointer-events-none absolute inset-0 -z-10 h-full w-full select-none opacity-[0.28] drop-shadow-[0_0_90px_rgba(59,130,246,0.35)]"
+                className="pointer-events-none absolute inset-0 -z-10 h-full w-full select-none"
+                imgClassName="opacity-[0.28] drop-shadow-[0_0_90px_rgba(59,130,246,0.35)]"
+                handClassName="opacity-70"
+                handWidth={0.7}
               />
               <div className="relative">
                 <p className="absolute bottom-full left-1/2 mb-5 -translate-x-1/2 whitespace-nowrap rounded-full border border-blue-400/25 bg-white/5 px-3 py-1.5 text-[10px] uppercase tracking-[0.25em] text-blue-300 shadow-[0_0_45px_rgba(59,130,246,0.15)] sm:mb-8 sm:px-4 sm:py-2 sm:text-sm sm:tracking-[0.3em]">

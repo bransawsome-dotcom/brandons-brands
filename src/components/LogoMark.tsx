@@ -12,10 +12,18 @@ export default function LogoMark({
   className = "",
   secondsPerTurn = 60,
   syncToClock = true,
+  src = "/logo-256.webp",
+  imgClassName = "",
+  handClassName = "",
+  handWidth = 1.6,
 }: {
   className?: string;
   secondsPerTurn?: number;
   syncToClock?: boolean;
+  src?: string;
+  imgClassName?: string; // e.g. faded logo behind the home page headline
+  handClassName?: string;
+  handWidth?: number; // in % of the logo width; thinner for big logos
 }) {
   // Start the hand where the real seconds hand would be (set after load so the server and browser agree).
   const [delay, setDelay] = useState<string | undefined>(undefined);
@@ -27,10 +35,10 @@ export default function LogoMark({
   }, [syncToClock]);
 
   return (
-    <span className={`relative inline-block shrink-0 ${className}`}>
+    <span className={`${/\babsolute\b/.test(className) ? "" : "relative"} inline-block shrink-0 ${className}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/logo-256.webp" alt="" width={256} height={256} className="h-full w-full" />
-      <svg viewBox="0 0 100 100" className="pointer-events-none absolute inset-0 h-full w-full" aria-hidden>
+      <img src={src} alt="" width={256} height={256} className={`h-full w-full ${imgClassName}`} />
+      <svg viewBox="0 0 100 100" className={`pointer-events-none absolute inset-0 h-full w-full ${handClassName}`} aria-hidden>
         <g
           className="bb-seconds-hand"
           style={{
@@ -40,9 +48,9 @@ export default function LogoMark({
             animationDelay: delay,
           }}
         >
-          <line x1={PIVOT_X} y1={PIVOT_Y + 6} x2={PIVOT_X} y2={PIVOT_Y - 22} stroke="#D9A43A" strokeWidth="1.6" strokeLinecap="round" />
-          <circle cx={PIVOT_X} cy={PIVOT_Y + 5} r="1.7" fill="#D9A43A" />
-          <circle cx={PIVOT_X} cy={PIVOT_Y} r="2" fill="#D9A43A" stroke="#0b1220" strokeWidth="0.6" />
+          <line x1={PIVOT_X} y1={PIVOT_Y + 6} x2={PIVOT_X} y2={PIVOT_Y - 22} stroke="#D9A43A" strokeWidth={handWidth} strokeLinecap="round" />
+          <circle cx={PIVOT_X} cy={PIVOT_Y + 5} r={handWidth * 1.05} fill="#D9A43A" />
+          <circle cx={PIVOT_X} cy={PIVOT_Y} r={handWidth * 1.25} fill="#D9A43A" stroke="#0b1220" strokeWidth={handWidth * 0.35} />
         </g>
       </svg>
     </span>
