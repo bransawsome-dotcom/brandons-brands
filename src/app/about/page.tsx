@@ -193,6 +193,10 @@ export default function AboutPage() {
               inspiration behind it.
             </p>
             <p>
+              It all started with his dad. Watches were something Brandon and his father shared, and it&apos;s still something they
+              enjoy doing together today. That shared passion is at the heart of everything Brandon does.
+            </p>
+            <p>
               Brandon created Brandon&apos;s Brands to share that curiosity and enthusiasm with others. His interests span both
               established luxury watchmakers and independent microbrands, with a particular appreciation for discovering names that
               deserve a closer look.
