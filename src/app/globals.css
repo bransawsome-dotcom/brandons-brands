@@ -110,3 +110,17 @@ body {
     height: 920px;
   }
 }
+
+/* Gold seconds hand on the logo (LogoMark): one smooth sweep per turn. */
+@keyframes bb-sweep {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.bb-seconds-hand {
+  animation-name: bb-sweep;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bb-seconds-hand { animation: none; transform: rotate(60deg); }
+}
