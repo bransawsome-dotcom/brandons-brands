@@ -174,7 +174,7 @@ export default function AboutPage() {
           {/* The logo with its gold seconds hand sweeping in real time. */}
           <div role="img" aria-label="Brandon's Brands luxury watch logo" className="mx-auto">
             <LogoMark
-              src="/logo-1024.webp"
+              src="/logo-dial-1024.webp"
               className="block h-56 w-56 drop-shadow-[0_0_60px_rgba(59,130,246,0.35)] sm:h-72 sm:w-72 lg:h-80 lg:w-80"
               handWidth={1}
             />

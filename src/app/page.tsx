@@ -28,11 +28,12 @@ export default async function Home() {
             <div className="logo-stage relative flex max-w-none shrink-0 items-center justify-center">
               {/* The big faded logo, with its gold seconds hand sweeping in real time. */}
               <LogoMark
-                src="/logo-1024.webp"
+                src="/logo-dial-1024.webp"
                 className="pointer-events-none absolute inset-0 -z-10 h-full w-full select-none"
                 imgClassName="opacity-[0.28] drop-shadow-[0_0_90px_rgba(59,130,246,0.35)]"
                 handClassName="opacity-70"
                 handWidth={0.7}
+                timeHandsOpacity={0.32}
               />
               <div className="relative">
                 <p className="absolute bottom-full left-1/2 mb-5 -translate-x-1/2 whitespace-nowrap rounded-full border border-blue-400/25 bg-white/5 px-3 py-1.5 text-[10px] uppercase tracking-[0.25em] text-blue-300 shadow-[0_0_45px_rgba(59,130,246,0.15)] sm:mb-8 sm:px-4 sm:py-2 sm:text-sm sm:tracking-[0.3em]">
