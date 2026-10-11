@@ -95,8 +95,8 @@ body {
 
 /* Home page logo square: sized per screen so "Brandon's Brands" sits inside the logo's inner dial. */
 .logo-stage {
-  width: 400px;
-  height: 400px;
+  width: min(400px, calc(100vw - 80px));
+  height: min(400px, calc(100vw - 80px));
 }
 @media (min-width: 640px) {
   .logo-stage {
