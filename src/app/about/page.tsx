@@ -159,7 +159,7 @@ export default function AboutPage() {
     <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-16">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
 
-      <article className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-8 lg:p-10">
+      <article className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8 lg:p-10">
         <nav aria-label="Breadcrumb" className="mb-6 text-xs text-muted">
           <ol className="flex items-center gap-2">
             <li>
@@ -175,7 +175,7 @@ export default function AboutPage() {
           <div>
             <span aria-hidden className="block h-px w-10 bg-gold" />
             <p className="mt-4 text-xs uppercase tracking-[0.3em] text-gold">About Us</p>
-            <h1 className="mt-3 font-display text-5xl font-semibold uppercase leading-[0.95] tracking-[-0.01em] text-ink sm:text-7xl">
+            <h1 className="mt-3 font-display text-5xl font-semibold uppercase leading-[1.05] tracking-[-0.01em] text-ink sm:text-6xl">
               About Brandon&apos;s <span className="font-light text-gold">Brands</span>
             </h1>
             <p className="mt-5 font-serif text-2xl italic text-ink/80 sm:text-3xl">Beyond the Brand. Behind the Craftsmanship.</p>
@@ -184,7 +184,7 @@ export default function AboutPage() {
           <div role="img" aria-label="Brandon's Brands luxury watch logo" className="mx-auto">
             <LogoMark
               src="/logo-dial-1024.webp"
-              className="block h-56 w-56 drop-shadow-[0_10px_30px_rgba(43,38,32,0.08)] sm:h-72 sm:w-72 lg:h-80 lg:w-80"
+              className="block h-56 w-56 drop-shadow-[0_10px_30px_rgba(27,42,65,0.08)] sm:h-72 sm:w-72 lg:h-80 lg:w-80"
               handWidth={1}
             />
           </div>
@@ -223,7 +223,7 @@ export default function AboutPage() {
           <div className="grid gap-8 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-gold">How it works</p>
-              <h2 id="collectors-house" className="mt-3 font-display text-4xl font-semibold uppercase leading-none text-ink sm:text-5xl">
+              <h2 id="collectors-house" className="mt-3 font-display text-4xl font-semibold uppercase leading-[1.05] text-ink sm:text-5xl">
                 A Collector&apos;s <span className="font-light text-gold">House</span>
               </h2>
               <p className="mt-4 font-serif text-xl italic leading-8 text-ink/80">
@@ -234,7 +234,7 @@ export default function AboutPage() {
               <span aria-hidden className="absolute bottom-6 left-[19px] top-6 w-px bg-hairline-strong sm:left-[23px]" />
               {house.map((h) => (
                 <li key={h.n} className="relative grid grid-cols-[40px_minmax(0,1fr)] gap-5 pb-8 last:pb-0 sm:grid-cols-[48px_minmax(0,1fr)] sm:gap-7">
-                  <span className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gold bg-raised font-display text-sm font-semibold text-gold sm:h-12 sm:w-12 sm:text-base">
+                  <span className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gold bg-raised font-display text-sm font-semibold text-gold sm:h-12 sm:w-12 sm:text-lg">
                     {h.n}
                   </span>
                   <div className="pt-1 sm:pt-2">
@@ -312,7 +312,7 @@ export default function AboutPage() {
           <div className="mt-5 grid gap-3 sm:flex sm:flex-wrap">
             <Link
               href="/favorites"
-              className="inline-flex justify-center text-center rounded-full bg-gold px-4 py-3 text-xs sm:text-sm font-semibold uppercase tracking-[0.08em] text-on-gold sm:px-6 sm:tracking-[0.15em] hover:bg-gold-bright"
+              className="inline-flex justify-center text-center rounded-full bg-navy px-4 py-3 text-xs sm:text-sm font-semibold uppercase tracking-[0.08em] text-on-navy sm:px-6 sm:tracking-[0.15em] hover:bg-navy-deep"
             >
               See the favorites
             </Link>
@@ -390,7 +390,7 @@ export default function AboutPage() {
           </p>
           <a
             href={`mailto:${collabEmail}?subject=${encodeURIComponent("Hello from brandonsbrands17.com")}`}
-            className="mt-7 inline-flex rounded-full bg-gold px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-on-gold shadow-[0_10px_30px_rgba(43,38,32,0.08)] transition hover:bg-gold-bright"
+            className="mt-7 inline-flex rounded-full bg-navy px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-on-navy shadow-[0_10px_30px_rgba(27,42,65,0.08)] transition hover:bg-navy-deep"
           >
             Contact Us
           </a>

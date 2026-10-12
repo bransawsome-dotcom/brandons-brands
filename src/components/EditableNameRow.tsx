@@ -78,7 +78,7 @@ export default function EditableNameRow({
         <button
           type="submit"
           disabled={saving}
-          className="rounded-full bg-gold px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.15em] text-on-gold hover:bg-gold-bright disabled:opacity-60"
+          className="rounded-full bg-navy px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.15em] text-on-navy hover:bg-navy-deep disabled:opacity-60"
         >
           {saving ? "Saving…" : "Save"}
         </button>

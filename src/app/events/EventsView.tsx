@@ -79,7 +79,7 @@ export default function EventsView({ initial }: { initial: SiteEvent[] }) {
             href={e.link}
             target="_blank"
             rel="noopener noreferrer"
-            className={isPast ? "rounded-full border border-hairline px-3 py-1.5 text-gold hover:bg-surface" : "rounded-full bg-gold px-4 py-2 font-semibold text-on-gold hover:bg-gold-bright"}
+            className={isPast ? "rounded-full border border-hairline px-3 py-1.5 text-gold hover:bg-surface" : "rounded-full bg-navy px-4 py-2 font-semibold text-on-navy hover:bg-navy-deep"}
           >
             {isPast ? "Event site ↗" : "Details & RSVP on the event site ↗"}
           </a>
@@ -126,7 +126,7 @@ export default function EventsView({ initial }: { initial: SiteEvent[] }) {
             <input type="checkbox" checked={form.online} onChange={(e) => setForm({ ...form, online: e.target.checked })} className="h-4 w-4" /> Online event
           </label>
           {error ? <p className="text-sm text-rose-700">{error}</p> : null}
-          <button type="submit" className="justify-self-start rounded-full bg-gold px-5 py-2 text-sm font-semibold text-on-gold">
+          <button type="submit" className="justify-self-start rounded-full bg-navy px-5 py-2 text-sm font-semibold text-on-navy">
             Add event
           </button>
         </form>

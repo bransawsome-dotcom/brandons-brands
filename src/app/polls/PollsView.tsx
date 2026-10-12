@@ -79,7 +79,7 @@ export default function PollsView({ initial }: { initial: Poll[] }) {
           </div>
           <p className="text-xs text-muted">Keep it positive: two watches you&apos;d happily recommend. Share it on Instagram Stories with a link sticker to this page.</p>
           {error ? <p className="text-sm text-rose-700">{error}</p> : null}
-          <button type="submit" disabled={busy} className="justify-self-start rounded-full bg-gold px-5 py-2 text-sm font-semibold text-on-gold disabled:opacity-50">
+          <button type="submit" disabled={busy} className="justify-self-start rounded-full bg-navy px-5 py-2 text-sm font-semibold text-on-navy disabled:opacity-50">
             {busy ? "Adding…" : "Add poll"}
           </button>
         </form>

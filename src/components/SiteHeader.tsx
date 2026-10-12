@@ -27,7 +27,7 @@ function isActive(pathname: string | null, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-const smallCaps = "whitespace-nowrap text-[11px] uppercase tracking-[0.2em]";
+const smallCaps = "whitespace-nowrap text-[12px] font-medium uppercase tracking-[0.2em]";
 
 export default function SiteHeader() {
   const pathname = usePathname();
@@ -41,7 +41,7 @@ export default function SiteHeader() {
 
   return (
     <header className="site-header theme-cream relative z-30 border-b border-hairline bg-ground text-ink">
-      <div className="border-b border-hairline">
+      <div className="theme-navy">
         <div className={`mx-auto flex max-w-[1180px] items-center justify-between gap-4 px-4 py-2 text-muted sm:px-6 ${smallCaps}`}>
           <span className="hidden sm:inline">Luxury &amp; microbrand watch reviews</span>
           <Link href="/wrist-check" className="mx-auto text-muted transition hover:text-gold-bright sm:mx-0">
@@ -67,7 +67,7 @@ export default function SiteHeader() {
           <span className="hidden sm:block">
             <LogoMark className="h-11 w-11" />
           </span>
-          <span className="whitespace-nowrap font-display text-[24px] font-semibold uppercase leading-none tracking-[0.06em] min-[400px]:text-[28px] sm:text-[40px] sm:tracking-[0.08em] lg:text-[48px]">Brandon&apos;s Brands</span>
+          <span className="whitespace-nowrap font-display text-[17px] font-semibold uppercase leading-[1.05] tracking-[0.04em] min-[400px]:text-[19px] sm:text-[36px] sm:tracking-[0.08em] lg:text-[44px]">Brandon&apos;s Brands</span>
         </Link>
 
         <div className="flex items-center gap-2 justify-self-end sm:gap-3">
@@ -95,11 +95,17 @@ export default function SiteHeader() {
               <Link
                 href="/account"
                 aria-current={isActive(pathname, "/account") ? "page" : undefined}
-                className={`hidden min-h-11 items-center text-ink transition hover:text-gold-bright sm:inline-flex ${smallCaps}`}
+                aria-label="Account"
+                className={`inline-flex min-h-11 min-w-9 items-center justify-center text-ink transition hover:text-gold-bright ${smallCaps}`}
               >
-                Account
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden className="sm:hidden">
+                  <circle cx="12" cy="8.5" r="3.5" />
+                  <path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5" />
+                </svg>
+                <span className="hidden sm:inline">Account</span>
               </Link>
-              <button type="button" onClick={handleSignOut} className={`min-h-11 text-gold transition hover:text-gold-bright ${smallCaps}`}>
+              {/* Phones: Log out lives on the Account page, so the header stays on one line. */}
+              <button type="button" onClick={handleSignOut} className={`hidden min-h-11 text-gold transition hover:text-gold-bright sm:inline ${smallCaps}`}>
                 Log out
               </button>
             </>

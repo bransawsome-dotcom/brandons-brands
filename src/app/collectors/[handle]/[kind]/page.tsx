@@ -115,7 +115,7 @@ export default async function PublicListPage({ params }: { params: Promise<{ han
         <span className="text-ink/80">{list.display_name}</span>
       </nav>
 
-      <section className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-8">
+      <section className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.35em] text-gold">Public {list.kind}</p>
@@ -186,7 +186,7 @@ export default async function PublicListPage({ params }: { params: Promise<{ han
                   { label: "Retail today", value: money(wish.retail_price) },
                 ];
             return (
-              <li key={item.id} className="flex flex-col overflow-hidden rounded-md border border-hairline bg-surface shadow-[0_10px_30px_rgba(43,38,32,0.08)]">
+              <li key={item.id} className="flex flex-col overflow-hidden rounded-md border border-hairline bg-surface shadow-[0_10px_30px_rgba(27,42,65,0.08)]">
                 {item.image_url ? (
                   <div className="bb-shine flex h-56 items-center justify-center bg-surface p-4">
                     {/* eslint-disable-next-line @next/next/no-img-element */}

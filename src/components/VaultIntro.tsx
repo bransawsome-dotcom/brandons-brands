@@ -215,7 +215,7 @@ export default function VaultIntro() {
                 }
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/logo-256.webp" alt="" draggable={false} className="h-full w-full drop-shadow-[0_10px_30px_rgba(43,38,32,0.08)]" />
+                <img src="/logo-256.webp" alt="" draggable={false} className="h-full w-full drop-shadow-[0_10px_30px_rgba(27,42,65,0.08)]" />
               </div>
             );
           })}

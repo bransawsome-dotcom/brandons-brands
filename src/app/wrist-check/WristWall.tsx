@@ -123,7 +123,7 @@ export default function WristWall() {
           </div>
           <p className="text-[11px] text-muted">Only post photos you took. Your public name is shown with it. Up to 3 a day.</p>
           {error ? <p className="text-sm text-rose-700">{error}</p> : null}
-          <button type="submit" disabled={!photo || busy} className="justify-self-start rounded-full bg-gold px-5 py-2 text-sm font-semibold text-on-gold disabled:opacity-40">
+          <button type="submit" disabled={!photo || busy} className="justify-self-start rounded-full bg-navy px-5 py-2 text-sm font-semibold text-on-navy disabled:opacity-40">
             {busy ? "Posting…" : "Post wrist shot"}
           </button>
         </form>

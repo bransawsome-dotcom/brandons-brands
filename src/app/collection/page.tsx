@@ -266,7 +266,7 @@ export default function CollectionPage() {
   return (
     <div className="mx-auto w-full max-w-7xl px-3 py-8 sm:px-6 sm:py-14 lg:px-16 overflow-x-hidden">
       <VaultIntro />
-      <div className="rounded-md border border-hairline bg-surface p-6 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-8">
+      <div className="rounded-md border border-hairline bg-surface p-6 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8">
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.35em] text-gold sm:text-sm">My Collection</p>
@@ -519,7 +519,7 @@ export default function CollectionPage() {
             <button
               type="submit"
               disabled={lookingUp}
-              className="w-full disabled:opacity-60 rounded-full bg-gold px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-on-gold shadow-[0_10px_30px_rgba(43,38,32,0.08)] transition hover:-translate-y-0.5 hover:bg-gold-bright sm:w-auto"
+              className="w-full disabled:opacity-60 rounded-full bg-navy px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-on-navy shadow-[0_10px_30px_rgba(27,42,65,0.08)] transition hover:-translate-y-0.5 hover:bg-navy-deep sm:w-auto"
             >
               {lookingUp ? "Looking up…" : "Add Watch"}
             </button>
@@ -611,7 +611,7 @@ export default function CollectionPage() {
         ) : filteredWatches.length ? (
           <div className={view === "grid" ? "grid gap-6 md:grid-cols-2 xl:grid-cols-3" : "space-y-3"}>
             {filteredWatches.map((watch) => (
-              <div key={watch.id} className={`group relative overflow-hidden border border-hairline bg-surface backdrop-blur-xl transition hover:border-gold/40 ${view === "grid" ? "rounded-md shadow-[0_10px_30px_rgba(43,38,32,0.08)] hover:-translate-y-0.5 shadow-[0_10px_30px_rgba(43,38,32,0.08)]" : "rounded"}`}>
+              <div key={watch.id} className={`group relative overflow-hidden border border-hairline bg-surface backdrop-blur-xl transition hover:border-gold/40 ${view === "grid" ? "rounded-md shadow-[0_10px_30px_rgba(27,42,65,0.08)] hover:-translate-y-0.5 shadow-[0_10px_30px_rgba(27,42,65,0.08)]" : "rounded"}`}>
                 <Link href={`/collection/${watch.id}`} className="absolute inset-0 z-0" aria-hidden />
                 {view === "grid" ? (
                   <div className="flex flex-col relative z-10">
@@ -640,7 +640,7 @@ export default function CollectionPage() {
                             <div><span className="font-semibold text-ink">Retail at purchase:</span> {formatUsd(watch.retail_price)}</div>
                           </div>
                           <div className="flex gap-2">
-                            <Link href={`/collection/${watch.id}`} className="rounded-full bg-gold px-3 py-1 text-sm font-semibold uppercase tracking-[0.12em] text-on-gold shadow-[0_10px_30px_rgba(43,38,32,0.08)]">View</Link>
+                            <Link href={`/collection/${watch.id}`} className="rounded-full bg-navy px-3 py-1 text-sm font-semibold uppercase tracking-[0.12em] text-on-navy shadow-[0_10px_30px_rgba(27,42,65,0.08)]">View</Link>
                             <button
                               type="button"
                               onClick={(e) => {
@@ -747,7 +747,7 @@ export default function CollectionPage() {
                   const el = document.getElementById("add-watch");
                   if (el) el.scrollIntoView({ behavior: "smooth" });
                 }}
-                className="inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-on-gold"
+                className="inline-flex items-center gap-2 rounded-full bg-navy px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-on-navy"
               >
                 <span>➕</span>
                 <span>Add Your First Watch</span>
@@ -760,7 +760,7 @@ export default function CollectionPage() {
         {selectedWatch ? (
           <div className="fixed inset-0 z-50 flex items-center justify-center">
             <div className="absolute inset-0 bg-black/70" onClick={() => setSelectedWatch(null)} />
-            <div className="relative z-10 w-full max-w-3xl rounded border border-hairline bg-surface p-6 shadow-[0_10px_30px_rgba(43,38,32,0.08)]">
+            <div className="relative z-10 w-full max-w-3xl rounded border border-hairline bg-surface p-6 shadow-[0_10px_30px_rgba(27,42,65,0.08)]">
               <div className="grid gap-6 lg:grid-cols-2">
                 <div className="h-80 bg-raised overflow-hidden rounded-lg">
                   {selectedWatch.image_url ? (

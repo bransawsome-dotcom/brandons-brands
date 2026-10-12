@@ -152,7 +152,7 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
               setError(null);
               setEditing({ ...EMPTY });
             }}
-            className="rounded-full bg-gold px-4 py-2 font-semibold text-on-gold hover:bg-gold-bright"
+            className="rounded-full bg-navy px-4 py-2 font-semibold text-on-navy hover:bg-navy-deep"
           >
             + Add a favorite
           </button>
@@ -200,7 +200,7 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
               </span>
             );
             return (
-              <li key={f.id} className="flex flex-col overflow-hidden rounded-md border border-hairline bg-surface shadow-[0_10px_30px_rgba(43,38,32,0.08)]">
+              <li key={f.id} className="flex flex-col overflow-hidden rounded-md border border-hairline bg-surface shadow-[0_10px_30px_rgba(27,42,65,0.08)]">
                 {embed && playing === f.id ? (
                   <div className="bg-surface p-3">
                     <VideoEmbed embed={embed} title={`Brandon's ${f.brand} ${f.model} video`} />
@@ -464,7 +464,7 @@ function FavoriteForm({
         </label>
         {error ? <p className="mt-3 text-sm text-rose-700">{error}</p> : null}
         <div className="mt-5 flex gap-3">
-          <button type="submit" disabled={busy} className="rounded-full bg-gold px-6 py-3 text-sm font-semibold text-on-gold hover:bg-gold-bright disabled:opacity-60">
+          <button type="submit" disabled={busy} className="rounded-full bg-navy px-6 py-3 text-sm font-semibold text-on-navy hover:bg-navy-deep disabled:opacity-60">
             {busy ? "Saving…" : draft.id ? "Save" : "Add to favorites"}
           </button>
           <button type="button" onClick={onClose} className="rounded-full border border-hairline px-6 py-3 text-sm text-ink">

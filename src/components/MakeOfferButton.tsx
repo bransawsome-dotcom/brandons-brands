@@ -89,7 +89,7 @@ export default function MakeOfferButton({
         className={`w-full rounded-full px-5 py-3 text-sm font-semibold uppercase tracking-[0.15em] transition ${
           sell
             ? "border border-hairline-strong bg-raised text-ink hover:border-gold hover:bg-surface"
-            : "bg-gold text-on-gold hover:bg-gold-bright"
+            : "bg-navy text-on-navy hover:bg-navy-deep"
         }`}
       >
         {sell ? "Offer to sell" : "Make an offer"}
@@ -104,7 +104,7 @@ export default function MakeOfferButton({
           aria-label={sell ? `Offer to sell a ${watchLabel}` : `Make an offer on ${watchLabel}`}
           onClick={(e) => e.target === e.currentTarget && setOpen(false)}
         >
-          <div className="max-h-[92vh] w-full max-w-md overflow-y-auto rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(43,38,32,0.08)] sm:p-6">
+          <div className="max-h-[92vh] w-full max-w-md overflow-y-auto rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(27,42,65,0.08)] sm:p-6">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
                 <p className="text-xs uppercase tracking-[0.25em] text-gold">{sell ? "Offer to sell" : "Make an offer"}</p>
@@ -207,7 +207,7 @@ export default function MakeOfferButton({
                 <button
                   type="submit"
                   disabled={sending}
-                  className="w-full rounded-full bg-gold px-5 py-3 text-sm font-semibold uppercase tracking-[0.15em] text-on-gold transition hover:bg-gold-bright disabled:opacity-60"
+                  className="w-full rounded-full bg-navy px-5 py-3 text-sm font-semibold uppercase tracking-[0.15em] text-on-navy transition hover:bg-navy-deep disabled:opacity-60"
                 >
                   {sending ? "Sending…" : sell ? "Send offer to sell" : "Send offer"}
                 </button>

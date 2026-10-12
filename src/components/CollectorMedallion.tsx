@@ -35,7 +35,7 @@ export default function CollectorMedallion({ name, seed, size = 176 }: { name: s
       {[0, 90, 180, 270].map((a) => (
         <line key={a} x1="100" y1="36" x2="100" y2="42" stroke="#9d9382" strokeWidth="1.5" transform={`rotate(${a} 100 100)`} />
       ))}
-      <text x="100" y="100" textAnchor="middle" dominantBaseline="central" fontFamily="var(--font-display-face), 'Arial Narrow', sans-serif" fontWeight="600" fontSize="58" fontStyle="italic" fill="#2b2620">
+      <text x="100" y="100" textAnchor="middle" dominantBaseline="central" fontFamily="var(--font-display-face), 'Times New Roman', serif" fontWeight="600" fontSize="50" fill="#1b2a41">
         {initial}
       </text>
     </svg>

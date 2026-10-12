@@ -247,7 +247,7 @@ export default function BlogDraftsPage() {
 
   return (
     <div className="mx-auto w-full max-w-7xl px-0 py-4 sm:px-6 sm:py-8">
-      <section className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-8">
+      <section className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8">
         <p className="text-xs uppercase tracking-[0.35em] text-gold">Content studio</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-[-0.02em] text-ink sm:text-4xl">Blog & social drafts</h1>
         <p className="mt-2 max-w-3xl text-sm leading-6 text-ink/80">
@@ -267,7 +267,7 @@ export default function BlogDraftsPage() {
             type="button"
             onClick={() => void generate()}
             disabled={Boolean(busy)}
-            className="shrink-0 rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-on-gold hover:bg-gold-bright disabled:opacity-50"
+            className="shrink-0 rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-on-navy hover:bg-navy-deep disabled:opacity-50"
           >
             ✍️ Write a new draft now
           </button>
@@ -346,7 +346,7 @@ export default function BlogDraftsPage() {
                       type="button"
                       onClick={() => void save("published")}
                       disabled={Boolean(busy)}
-                      className="rounded-full bg-gold px-5 py-2 text-sm font-semibold text-on-gold hover:bg-gold-bright disabled:opacity-50"
+                      className="rounded-full bg-navy px-5 py-2 text-sm font-semibold text-on-navy hover:bg-navy-deep disabled:opacity-50"
                     >
                       Publish to blog
                     </button>

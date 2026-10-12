@@ -26,7 +26,7 @@ export default function SocialMediaPage() {
       <header className="max-w-3xl">
         <span aria-hidden className="block h-px w-10 bg-gold" />
         <p className="mt-4 text-xs uppercase tracking-[0.3em] text-gold">Watch &amp; Follow</p>
-        <h1 className="mt-3 font-display text-5xl font-semibold uppercase leading-[0.95] text-ink sm:text-7xl">
+        <h1 className="mt-3 font-display text-5xl font-semibold uppercase leading-[1.05] text-ink sm:text-6xl">
           Brandon&apos;s Brands on <span className="font-light text-gold">every platform</span>
         </h1>
         <p className="mt-5 font-serif text-xl italic leading-8 text-ink/80 sm:text-2xl">
@@ -74,7 +74,7 @@ export default function SocialMediaPage() {
               href={facebookGroup.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 inline-flex min-h-11 items-center self-start rounded-full bg-gold px-6 text-xs font-semibold uppercase tracking-[0.18em] text-on-gold transition hover:bg-gold-bright"
+              className="mt-6 inline-flex min-h-11 items-center self-start rounded-full bg-navy px-6 text-xs font-semibold uppercase tracking-[0.18em] text-on-navy transition hover:bg-navy-deep"
             >
               Join the group
             </a>
@@ -89,7 +89,7 @@ export default function SocialMediaPage() {
         </p>
         <a
           href={`mailto:${collabEmail}`}
-          className="mt-6 inline-flex min-h-11 items-center rounded-full bg-gold px-6 text-xs font-semibold uppercase tracking-[0.18em] text-on-gold transition hover:bg-gold-bright"
+          className="mt-6 inline-flex min-h-11 items-center rounded-full bg-navy px-6 text-xs font-semibold uppercase tracking-[0.18em] text-on-navy transition hover:bg-navy-deep"
         >
           Email {collabEmail}
         </a>

@@ -133,7 +133,7 @@ export default function WatchDetailsPage() {
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6 sm:py-12">
-      <div className="rounded border border-hairline bg-surface p-6 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl">
+      <div className="rounded border border-hairline bg-surface p-6 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl">
         <div className="grid gap-6 lg:grid-cols-2">
           <div className="bb-shine h-96 w-full overflow-hidden rounded-lg bg-raised">
             {watch.image_url ? (
@@ -144,7 +144,7 @@ export default function WatchDetailsPage() {
           </div>
           <div>
             <p className="text-sm uppercase tracking-[0.3em] text-gold">{watch.brand}</p>
-            <h1 className="mt-2 text-4xl font-bold text-ink">{watch.model}</h1>
+            <h1 className="mt-2 text-3xl font-bold text-ink sm:text-4xl">{watch.model}</h1>
             {watch.reference_number ? <p className="mt-2 text-sm text-ink/80">Reference: <span className="font-semibold text-ink">{watch.reference_number}</span></p> : null}
 
             {!editing ? (

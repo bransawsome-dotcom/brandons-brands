@@ -132,7 +132,7 @@ function ReplyBox({
               <button
                 type="submit"
                 disabled={busy || (!body.trim() && !photos.length)}
-                className="rounded-full bg-gold px-5 py-2 text-sm font-semibold text-on-gold hover:bg-gold-bright disabled:opacity-50"
+                className="rounded-full bg-navy px-5 py-2 text-sm font-semibold text-on-navy hover:bg-navy-deep disabled:opacity-50"
               >
                 {busy ? "Posting…" : "Post"}
               </button>
@@ -344,7 +344,7 @@ export default function PostView() {
         </Link>
       </nav>
 
-      <article className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-8">
+      <article className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8">
         {editing ? (
           <form onSubmit={saveEdit} className="grid gap-4">
             <SubjectSelect
@@ -358,7 +358,7 @@ export default function PostView() {
             <textarea value={edit.body} onChange={(e) => setEdit({ ...edit, body: e.target.value })} maxLength={BODY_MAX} rows={8} className={input} required />
             <PhotoPicker photos={edit.images} onChange={(images) => setEdit((cur) => ({ ...cur, images }))} />
             <div className="flex gap-3">
-              <button type="submit" className="rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-on-gold hover:bg-gold-bright">
+              <button type="submit" className="rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-on-navy hover:bg-navy-deep">
                 Save
               </button>
               <button type="button" onClick={() => setEditing(false)} className="rounded-full border border-hairline px-5 py-2.5 text-sm text-ink">

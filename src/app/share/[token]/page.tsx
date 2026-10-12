@@ -122,7 +122,7 @@ export default async function SharedPage({ params }: { params: Promise<{ token: 
 
   return (
     <div className="mx-auto w-full max-w-7xl px-3 py-8 sm:px-6 sm:py-14 lg:px-16">
-      <section className="rounded-md border border-hairline bg-surface p-6 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-8">
+      <section className="rounded-md border border-hairline bg-surface p-6 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.35em] text-gold">Shared {isCollection ? "collection" : "wishlist"}</p>
@@ -169,7 +169,7 @@ export default async function SharedPage({ params }: { params: Promise<{ token: 
                   ...(shared.show_paid ? [{ label: "Target", value: money(wish.target_price) }] : []),
                 ];
             return (
-              <li key={item.id} className="flex flex-col overflow-hidden rounded-md border border-hairline bg-surface shadow-[0_10px_30px_rgba(43,38,32,0.08)]">
+              <li key={item.id} className="flex flex-col overflow-hidden rounded-md border border-hairline bg-surface shadow-[0_10px_30px_rgba(27,42,65,0.08)]">
                 {item.image_url ? (
                   <div className="flex h-56 items-center justify-center bg-surface p-4">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -232,7 +232,7 @@ export default async function SharedPage({ params }: { params: Promise<{ token: 
         </p>
         <Link
           href="/signup"
-          className="mt-4 inline-flex rounded-full bg-gold px-6 py-3 text-sm font-semibold uppercase tracking-[0.15em] text-on-gold hover:bg-gold-bright"
+          className="mt-4 inline-flex rounded-full bg-navy px-6 py-3 text-sm font-semibold uppercase tracking-[0.15em] text-on-navy hover:bg-navy-deep"
         >
           Create a free account
         </Link>

@@ -33,7 +33,7 @@ function SectionHead({ eyebrow, bold, light, id }: { eyebrow: string; bold: stri
     <div>
       <div className="mb-4 h-0.5 w-11 bg-gold" aria-hidden />
       <p className="mb-2 text-xs uppercase tracking-[0.22em] text-gold">{eyebrow}</p>
-      <h2 id={id} className="font-display text-[44px] font-semibold uppercase leading-[0.95] text-ink sm:text-[60px]">
+      <h2 id={id} className="font-display text-[38px] font-semibold uppercase leading-[1.05] text-ink sm:text-[54px]">
         {bold} <span className="font-light text-gold">{light}</span>
       </h2>
     </div>
@@ -43,7 +43,7 @@ function SectionHead({ eyebrow, bold, light, id }: { eyebrow: string; bold: stri
 // Full-width photo with a line of italic serif text over it (edge to edge, even inside the page container).
 function PhotoBand({ label, line, desktop, mobile, alt, small = false }: { label: string; line: string; desktop: string; mobile: string; alt: string; small?: boolean }) {
   return (
-    <section aria-label={label} className="relative left-1/2 mt-24 w-screen -translate-x-1/2 overflow-hidden bg-[#2b2620]">
+    <section aria-label={label} className="relative left-1/2 mt-24 w-screen -translate-x-1/2 overflow-hidden bg-[#1b2a41]">
       <picture>
         <source media="(max-width: 700px)" srcSet={mobile} />
         <img src={desktop} alt={alt} width={1600} height={900} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
@@ -96,7 +96,7 @@ export default async function Home() {
         <div className="relative mx-auto max-w-[1180px] px-4 pb-20 pt-16 sm:px-6 md:pb-28 md:pt-24">
           <div className="max-w-2xl animate-fade-in">
             <p className="mb-5 text-xs uppercase tracking-[0.22em] text-gold">Brandon&apos;s Brands · Luxury &amp; microbrand watches</p>
-            <h1 className="font-display text-[72px] font-semibold uppercase leading-[0.84] tracking-[-0.01em] sm:text-[104px] lg:text-[128px]">
+            <h1 className="font-display text-[62px] font-semibold uppercase leading-[0.84] tracking-[-0.01em] sm:text-[104px] lg:text-[128px]">
               Discover.
               <span className="block font-light text-gold">Collect.</span>
               <span className="sr-only"> Luxury and microbrand watch reviews by Brandon Volosov</span>
@@ -106,7 +106,7 @@ export default async function Home() {
               worth every day, and trade notes with collectors who care as much as you do.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/signup" className="inline-flex min-h-[52px] items-center bg-gold px-7 text-xs font-semibold uppercase tracking-[0.2em] text-on-gold transition hover:bg-gold-bright">
+              <Link href="/signup" className="inline-flex min-h-[52px] items-center bg-navy px-7 text-xs font-semibold uppercase tracking-[0.2em] text-on-navy transition hover:bg-navy-deep">
                 Create free account
               </Link>
               <Link href="/collectors" className="inline-flex min-h-[52px] items-center border border-hairline-strong bg-[#f1ece3]/60 px-7 text-xs font-semibold uppercase tracking-[0.2em] text-ink transition hover:border-gold hover:text-gold-bright">
@@ -169,7 +169,7 @@ export default async function Home() {
             <img src="/redesign/wristcheck.webp" alt="A steel watch with a green dial and brown leather strap on a wrist" width={900} height={675} loading="lazy" className="aspect-[4/3] w-full object-cover" />
             <div className="flex flex-1 flex-col p-8">
             <p className="text-[11px] uppercase tracking-[0.2em] text-gold">Wrist Check</p>
-            <h3 className="mt-3 font-display text-[32px] font-semibold uppercase leading-none">Post today&apos;s wrist shot</h3>
+            <h3 className="mt-3 font-display text-[29px] font-semibold uppercase leading-[1.05]">Post today&apos;s wrist shot</h3>
             <p className="mt-4 flex-1 leading-7 text-muted">Share what you&apos;re wearing. Each week Brandon picks one for Wrist Check of the Week.</p>
             <Link href="/wrist-check" className={`mt-6 ${smallLink}`}>
               Post a wrist check →
@@ -178,7 +178,7 @@ export default async function Home() {
           </article>
           <article className="flex flex-col border-b border-hairline p-8 md:border-b-0 md:border-r">
             <p className="text-[11px] uppercase tracking-[0.2em] text-gold">{nextEvent ? `Next watch fair · ${eventWhen(nextEvent)}` : "Watch events"}</p>
-            <h3 className="mt-3 font-display text-[32px] font-semibold uppercase leading-none">{nextEvent ? nextEvent.title : "Microbrand fairs and meetups"}</h3>
+            <h3 className="mt-3 font-display text-[29px] font-semibold uppercase leading-[1.05]">{nextEvent ? nextEvent.title : "Microbrand fairs and meetups"}</h3>
             <p className="mt-4 flex-1 leading-7 text-muted">
               {nextEvent?.location ? `${nextEvent.location}. ` : ""}Microbrand watch fairs, shows and collector meetups worth knowing about.
             </p>
@@ -188,7 +188,7 @@ export default async function Home() {
           </article>
           <article className="flex flex-col p-8">
             <p className="text-[11px] uppercase tracking-[0.2em] text-gold">Forum</p>
-            <h3 className="mt-3 font-display text-[32px] font-semibold uppercase leading-none">Questions, finds, for sale</h3>
+            <h3 className="mt-3 font-display text-[29px] font-semibold uppercase leading-[1.05]">Questions, finds, for sale</h3>
             <p className="mt-4 flex-1 leading-7 text-muted">Ask, share and swap with collectors. Sales and trades happen between members.</p>
             <Link href="/forum" className={`mt-6 ${smallLink}`}>
               Read the threads →
@@ -222,7 +222,7 @@ export default async function Home() {
                   <img src={c.img} alt={c.alt} width={900} height={675} loading="lazy" className="-mx-8 -mt-8 mb-7 aspect-[4/3] w-[calc(100%+4rem)] max-w-none object-cover" />
                 )}
                 <p className="text-[11px] uppercase tracking-[0.2em] text-gold">{c.label}</p>
-                <h3 className="mt-3 font-display text-[32px] font-semibold uppercase leading-none text-ink">{c.title}</h3>
+                <h3 className="mt-3 font-display text-[29px] font-semibold uppercase leading-[1.05] text-ink">{c.title}</h3>
                 <p className="mt-4 flex-1 leading-7 text-muted">{c.text}</p>
                 <span className={`mt-6 ${smallLink}`}>Open →</span>
               </>

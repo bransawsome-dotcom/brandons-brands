@@ -145,7 +145,7 @@ export default function TextMessageSettings() {
         <button
           type="submit"
           disabled={saving || !changed}
-          className="rounded-full bg-gold px-5 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-on-gold transition hover:bg-gold-bright disabled:opacity-50"
+          className="rounded-full bg-navy px-5 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-on-navy transition hover:bg-navy-deep disabled:opacity-50"
         >
           {saving ? "Saving…" : "Save"}
         </button>

@@ -131,7 +131,7 @@ export default function WatchCarousel({ watches, className = "" }: { watches: Ca
               onKeyDown={(e) => {
                 if (e.key === "Enter") router.push(w.href);
               }}
-              className="absolute inset-0 flex flex-col overflow-hidden rounded border border-gold/30 bg-raised shadow-[0_10px_30px_rgba(43,38,32,0.08)] outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              className="absolute inset-0 flex flex-col overflow-hidden rounded border border-gold/30 bg-raised shadow-[0_10px_30px_rgba(27,42,65,0.08)] outline-none focus-visible:ring-2 focus-visible:ring-gold"
               style={{ transform: `rotateY(${i * step}deg) translateZ(${size.radius}px)`, backfaceVisibility: "hidden" }}
             >
               <div className="bb-shine relative min-h-0 flex-1 overflow-hidden bg-surface">

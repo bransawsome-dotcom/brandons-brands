@@ -59,7 +59,7 @@ export default async function RecentVideoCards({ count = 4 }: { count?: number }
             <span className="absolute left-3 top-3 text-[11px] font-medium tracking-[0.06em] text-white/90 sm:left-4 sm:top-4">{c.handle}</span>
             <span
               aria-hidden
-              className="absolute inset-0 m-auto flex h-12 w-12 items-center justify-center rounded-full border border-white/70 bg-black/25 pl-0.5 text-base text-white backdrop-blur-sm transition group-hover:border-gold-bright group-hover:bg-gold group-hover:text-on-gold sm:h-14 sm:w-14"
+              className="absolute inset-0 m-auto flex h-12 w-12 items-center justify-center rounded-full border border-white/70 bg-black/25 pl-0.5 text-base text-white backdrop-blur-sm transition group-hover:border-navy group-hover:bg-navy group-hover:text-on-navy sm:h-14 sm:w-14"
             >
               ▶
             </span>

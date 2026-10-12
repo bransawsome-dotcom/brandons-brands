@@ -52,13 +52,13 @@ const ICONS: Record<string, React.ReactNode> = {
 };
 
 const button =
-  "group flex w-full items-center gap-4 rounded border border-hairline-strong bg-raised px-4 py-3 text-left text-ink sm:px-5 sm:py-4 shadow-[0_10px_30px_rgba(43,38,32,0.08)] transition hover:border-gold hover:bg-surface active:scale-[0.99]";
+  "group flex w-full items-center gap-4 rounded border border-hairline-strong bg-raised px-4 py-3 text-left text-ink sm:px-5 sm:py-4 shadow-[0_10px_30px_rgba(27,42,65,0.08)] transition hover:border-gold hover:bg-surface active:scale-[0.99]";
 
 export default function ConnectPage() {
   return (
     <div className="connect-page mx-auto flex w-full max-w-md flex-col items-center px-1 pb-4 pt-0 text-center sm:pt-6">
       <div role="img" aria-label="Brandon's Brands logo" className="hidden sm:block">
-        <LogoMark className="h-24 w-24 drop-shadow-[0_10px_30px_rgba(43,38,32,0.08)] sm:h-28 sm:w-28" />
+        <LogoMark className="h-24 w-24 drop-shadow-[0_10px_30px_rgba(27,42,65,0.08)] sm:h-28 sm:w-28" />
       </div>
       <p className="text-xs uppercase tracking-[0.35em] text-gold sm:mt-5">Brandon&apos;s Brands</p>
       <h1 className="mt-1 text-2xl font-semibold tracking-[-0.02em] text-ink sm:mt-2 sm:text-4xl">Connect with Brandon</h1>

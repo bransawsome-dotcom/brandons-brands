@@ -88,7 +88,7 @@ export default function WishlistScanner({ onAdd }: { onAdd: (items: WishlistItem
       </p>
 
       <label
-        className={`mt-4 inline-flex cursor-pointer rounded-full bg-gold px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-on-gold transition hover:bg-gold-bright ${busy ? "pointer-events-none opacity-60" : ""}`}
+        className={`mt-4 inline-flex cursor-pointer rounded-full bg-navy px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-on-navy transition hover:bg-navy-deep ${busy ? "pointer-events-none opacity-60" : ""}`}
       >
         {busy && !rows.length ? "Reading…" : "Choose photo"}
         <input type="file" accept="image/*" onChange={handleFile} className="sr-only" disabled={busy} />
@@ -140,7 +140,7 @@ export default function WishlistScanner({ onAdd }: { onAdd: (items: WishlistItem
             type="button"
             onClick={handleAdd}
             disabled={busy || !rows.some((r) => r.selected)}
-            className="rounded-full bg-gold px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-on-gold transition hover:bg-gold-bright disabled:opacity-60"
+            className="rounded-full bg-navy px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-on-navy transition hover:bg-navy-deep disabled:opacity-60"
           >
             {busy ? "Adding…" : `Add ${rows.filter((r) => r.selected).length} to wishlist`}
           </button>

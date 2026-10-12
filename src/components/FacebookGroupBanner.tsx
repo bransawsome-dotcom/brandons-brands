@@ -7,7 +7,7 @@ export default function FacebookGroupBanner({ className = "" }: { className?: st
       <div className="flex flex-col items-start gap-6 md:flex-row md:items-center">
         <div className="min-w-0 flex-1">
           <p className="text-[11px] uppercase tracking-[0.2em] text-gold">Facebook group · 6,600+ collectors</p>
-          <h2 id="fb-group" className="mt-2 font-display text-[36px] font-semibold uppercase leading-none text-ink sm:text-[44px]">
+          <h2 id="fb-group" className="mt-2 font-display text-[32px] font-semibold uppercase leading-[1.05] text-ink sm:text-[38px]">
             {facebookGroup.name.replace(/ Watches$/, "")} <span className="font-light text-gold">Watches</span>
           </h2>
           <p className="mt-3 text-muted">Wrist checks, hidden gems and watch fair news, hosted by Brandon.</p>

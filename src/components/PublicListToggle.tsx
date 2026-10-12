@@ -125,7 +125,7 @@ export default function PublicListToggle({ kind }: { kind: "collection" | "wishl
           aria-labelledby="go-public-title"
           onClick={(e) => e.target === e.currentTarget && setConfirming(false)}
         >
-          <div className="w-full max-w-md rounded-md border border-hairline bg-surface p-6 text-left shadow-[0_10px_30px_rgba(43,38,32,0.08)]">
+          <div className="w-full max-w-md rounded-md border border-hairline bg-surface p-6 text-left shadow-[0_10px_30px_rgba(27,42,65,0.08)]">
             <p className="text-xs uppercase tracking-[0.25em] text-gold">Make it public?</p>
             <h2 id="go-public-title" className="mt-2 text-xl font-semibold text-ink">
               Your {kind} will be visible to everyone
@@ -152,7 +152,7 @@ export default function PublicListToggle({ kind }: { kind: "collection" | "wishl
                 type="button"
                 onClick={toggle}
                 disabled={busy}
-                className="rounded-full bg-emerald-500 px-5 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-on-gold transition hover:bg-emerald-400 disabled:opacity-60"
+                className="rounded-full bg-emerald-500 px-5 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-white transition hover:bg-emerald-400 disabled:opacity-60"
               >
                 Make it public
               </button>

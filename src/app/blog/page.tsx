@@ -17,7 +17,7 @@ export default async function BlogPage() {
   const blogPosts = await loadAllPosts();
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-16">
-      <div className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-8">
+      <div className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8">
         <div className="mb-10">
           <p className="text-sm uppercase tracking-[0.3em] text-gold">The Journal</p>
           <h1 className="mt-3 text-4xl font-semibold tracking-[-0.03em] text-ink sm:text-5xl">
@@ -39,7 +39,7 @@ export default async function BlogPage() {
             {blogPosts.map((post) => (
               <article
                 key={post.slug}
-                className="flex flex-col rounded-md border border-hairline bg-raised p-6 shadow-[0_10px_30px_rgba(43,38,32,0.08)] transition hover:-translate-y-1"
+                className="flex flex-col rounded-md border border-hairline bg-raised p-6 shadow-[0_10px_30px_rgba(27,42,65,0.08)] transition hover:-translate-y-1"
               >
                 <p className="text-xs uppercase tracking-[0.25em] text-gold">
                   {post.category} · {formatPostDate(post.date)}
@@ -48,7 +48,7 @@ export default async function BlogPage() {
                 <p className="mt-4 flex-1 text-sm leading-7 text-ink/80">{post.excerpt}</p>
                 <Link
                   href={`/blog/${post.slug}`}
-                  className="mt-6 inline-flex self-start rounded-full bg-gold px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-on-gold transition hover:bg-gold-bright"
+                  className="mt-6 inline-flex self-start rounded-full bg-navy px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-on-navy transition hover:bg-navy-deep"
                 >
                   Read post
                 </Link>

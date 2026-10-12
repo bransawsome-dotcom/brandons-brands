@@ -75,7 +75,7 @@ export default function ValueHistory({ userId, watches, className = "" }: { user
   const since = series[0] ? new Date(`${series[0].day}T12:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "";
 
   return (
-    <section className={`rounded-md border border-hairline bg-raised p-6 shadow-[0_10px_30px_rgba(43,38,32,0.08)] ${className}`}>
+    <section className={`rounded-md border border-hairline bg-raised p-6 shadow-[0_10px_30px_rgba(27,42,65,0.08)] ${className}`}>
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <p className="text-sm uppercase tracking-[0.25em] text-muted">Collection value over time</p>

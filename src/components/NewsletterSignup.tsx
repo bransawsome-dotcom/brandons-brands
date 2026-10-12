@@ -61,7 +61,7 @@ export default function NewsletterSignup({ source, compact = false, className = 
           <button
             type="submit"
             disabled={state === "sending"}
-            className="min-h-[52px] shrink-0 bg-gold px-7 text-xs font-semibold uppercase tracking-[0.2em] text-on-gold transition hover:bg-gold-bright disabled:opacity-60"
+            className="min-h-[52px] shrink-0 bg-navy px-7 text-xs font-semibold uppercase tracking-[0.2em] text-on-navy transition hover:bg-navy-deep disabled:opacity-60"
           >
             {state === "sending" ? "Signing up…" : "Sign me up"}
           </button>

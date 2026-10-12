@@ -110,7 +110,7 @@ export default function WatchValueTrackerPage() {
           price alerts for the watches you want next.
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
-          <Link href="/signup" className="rounded-full bg-gold px-6 py-3 text-sm font-semibold text-on-gold hover:bg-gold-bright">
+          <Link href="/signup" className="rounded-full bg-navy px-6 py-3 text-sm font-semibold text-on-navy hover:bg-navy-deep">
             Start tracking free
           </Link>
           <Link href="/collection" className="rounded-full border border-hairline px-6 py-3 text-sm font-semibold text-ink hover:bg-surface">

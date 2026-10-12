@@ -21,7 +21,7 @@ export default function LatestVideosGrid({ videos }: { videos: { id: string; tit
                 <span className="relative block aspect-[9/16] overflow-hidden border border-hairline bg-surface">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={v.thumbnail} alt="" loading="lazy" className="h-full w-full object-cover opacity-90 transition group-hover:opacity-100" />
-                  <span className="absolute inset-0 m-auto flex h-12 w-12 items-center justify-center rounded-full bg-black/55 text-xl text-white group-hover:bg-gold group-hover:text-on-gold" aria-hidden>
+                  <span className="absolute inset-0 m-auto flex h-12 w-12 items-center justify-center rounded-full bg-black/55 text-xl text-white group-hover:bg-navy group-hover:text-on-navy" aria-hidden>
                     ▶
                   </span>
                 </span>

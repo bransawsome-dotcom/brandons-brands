@@ -40,7 +40,10 @@ export default function WelcomeTour() {
 
   useEffect(() => {
     if (!user || read(SEEN_KEY)) return;
-    const t = setTimeout(() => dialog.current?.showModal(), 600);
+    const t = setTimeout(() => {
+      dialog.current?.showModal();
+      dialog.current?.querySelector<HTMLButtonElement>("[data-next]")?.focus();
+    }, 600);
     return () => clearTimeout(t);
   }, [user]);
 
@@ -58,7 +61,7 @@ export default function WelcomeTour() {
       type="button"
       aria-pressed={picked.includes(b)}
       onClick={() => toggle(b)}
-      className={`min-h-9 rounded-full border px-3.5 text-xs transition ${picked.includes(b) ? "border-gold bg-gold text-on-gold" : "border-hairline-strong text-ink hover:border-gold"}`}
+      className={`min-h-9 rounded-full border px-3.5 text-xs transition ${picked.includes(b) ? "border-gold bg-navy text-on-navy" : "border-hairline-strong text-ink hover:border-gold"}`}
     >
       {b}
     </button>
@@ -69,7 +72,7 @@ export default function WelcomeTour() {
       ref={dialog}
       onCancel={finish}
       aria-labelledby="welcome-title"
-      className="m-auto w-[calc(100%-2rem)] max-w-xl rounded-md border border-hairline bg-ground p-0 text-ink shadow-[0_30px_80px_rgba(43,38,32,0.35)] backdrop:bg-[#2b2620]/55 backdrop:backdrop-blur-sm"
+      className="m-auto w-[calc(100%-2rem)] max-w-xl rounded-md border border-hairline bg-ground p-0 text-ink shadow-[0_30px_80px_rgba(27,42,65,0.35)] backdrop:bg-[#1b2a41]/55 backdrop:backdrop-blur-sm"
     >
       <div className="flex items-center justify-between border-b border-hairline px-6 py-4">
         <p className="text-[11px] uppercase tracking-[0.3em] text-gold">Welcome to Brandon&apos;s Brands</p>
@@ -83,7 +86,7 @@ export default function WelcomeTour() {
           <div key={step} className="bb-tour-step">
             <span className="font-display text-sm font-semibold text-gold">0{step + 1}</span>
             <p className="mt-2 text-[11px] uppercase tracking-[0.3em] text-muted">{steps[step].kicker}</p>
-            <h2 id="welcome-title" className="mt-2 font-display text-4xl font-semibold uppercase leading-none sm:text-5xl">
+            <h2 id="welcome-title" className="mt-2 font-display text-4xl font-semibold uppercase leading-[1.05] sm:text-5xl">
               {steps[step].title}
             </h2>
             <p className="mt-4 font-serif text-xl italic leading-8 text-ink/80">{steps[step].text}</p>
@@ -91,7 +94,7 @@ export default function WelcomeTour() {
         ) : (
           <div className="bb-tour-step">
             <span className="font-display text-sm font-semibold text-gold">04</span>
-            <h2 id="welcome-title" className="mt-2 font-display text-4xl font-semibold uppercase leading-none">
+            <h2 id="welcome-title" className="mt-2 font-display text-4xl font-semibold uppercase leading-[1.05]">
               Pick your <span className="font-light text-gold">brands</span>
             </h2>
             <p className="mt-3 text-sm text-ink/80">Choose the names you love. You can change these any time.</p>
@@ -113,7 +116,7 @@ export default function WelcomeTour() {
           <Link
             href="/collection"
             onClick={finish}
-            className="inline-flex min-h-11 items-center rounded-full bg-gold px-6 text-xs font-semibold uppercase tracking-[0.2em] text-on-gold hover:bg-gold-bright"
+            className="inline-flex min-h-11 items-center rounded-full bg-navy px-6 text-xs font-semibold uppercase tracking-[0.2em] text-on-navy hover:bg-navy-deep"
           >
             Start my collection
           </Link>
@@ -121,8 +124,8 @@ export default function WelcomeTour() {
           <button
             type="button"
             onClick={() => setStep(step + 1)}
-            autoFocus
-            className="inline-flex min-h-11 items-center rounded-full bg-gold px-6 text-xs font-semibold uppercase tracking-[0.2em] text-on-gold hover:bg-gold-bright"
+            data-next
+            className="inline-flex min-h-11 items-center rounded-full bg-navy px-6 text-xs font-semibold uppercase tracking-[0.2em] text-on-navy hover:bg-navy-deep"
           >
             Next →
           </button>

@@ -1,36 +1,58 @@
 @import "tailwindcss";
 
-/* Brandon's Brands, cream luxury look: warm cream ground, espresso ink, bronze accent.
-   Fonts (self-hosted, SIL Open Font License): Barlow Condensed for display, Instrument Sans for text,
+/* Brandon's Brands luxury look: cream ground, navy ink, warm-grey surfaces, bronze accent.
+   Fonts (self-hosted, SIL Open Font License): Cinzel (engraved capitals) for display, Instrument Sans for text,
    Cormorant Garamond for italic accents. Loaded in src/app/fonts.ts. */
 :root {
   --background: #f1ece3;
-  --foreground: #2b2620;
+  --foreground: #1b2a41;
   --ground: #f1ece3;
-  --surface: #e8e1d5;
-  --raised: #f8f5ef;
-  --hairline: #d8cebe;
-  --hairline-strong: #9d9382;
-  --ink: #2b2620;
-  --muted: #6a6155;
+  --surface: #e6e4df;
+  --raised: #f9f7f3;
+  --hairline: #d3d1cb;
+  --hairline-strong: #8f949b;
+  --ink: #1b2a41;
+  --muted: #5d6570;
   --gold: #7a5c30;
   --gold-bright: #9c7a45;
-  --on-gold: #f8f5ef;
+  --on-gold: #f9f7f3;
+  --navy: #1b2a41;
+  --navy-deep: #111c2e;
+  --on-navy: #f3efe7;
+  --steel: #8f949b;
 }
 
-/* Cream (light) look from the reference design, used on the header, footer and homepage.
-   Cream is now the site default (see :root); .theme-cream is kept so components can force it. */
+/* Cream, navy and grey look: cream ground, navy ink and buttons, warm-grey cards and rules, bronze accents.
+   Cream is the site default (see :root); .theme-cream is kept so components can force it. */
 .theme-cream {
   --ground: #f1ece3;
-  --surface: #e8e1d5;
-  --raised: #f8f5ef;
-  --hairline: #d8cebe;
-  --hairline-strong: #9d9382;
-  --ink: #2b2620;
-  --muted: #6a6155;
+  --surface: #e6e4df;
+  --raised: #f9f7f3;
+  --hairline: #d3d1cb;
+  --hairline-strong: #8f949b;
+  --ink: #1b2a41;
+  --muted: #5d6570;
   --gold: #7a5c30;
   --gold-bright: #9c7a45;
-  --on-gold: #f8f5ef;
+  --on-gold: #f9f7f3;
+  color: var(--ink);
+}
+/* Navy panels (announcement strip, footer): the same tokens, flipped for a dark ground. */
+.theme-navy {
+  --ground: #1b2a41;
+  --surface: #1b2a41;
+  --raised: #22344f;
+  --hairline: #34465f;
+  --hairline-strong: #6f7f95;
+  --ink: #f3efe7;
+  --muted: #aab3c0;
+  --gold: #d4b06a;
+  --gold-bright: #e6c785;
+  --on-gold: #1b2a41;
+  --navy: #f3efe7;
+  --navy-deep: #ffffff;
+  --on-navy: #1b2a41;
+  background: #1b2a41;
   color: var(--ink);
 }
 /* The homepage is cream from edge to edge. */
@@ -52,13 +74,17 @@ body:has(.bb-home) {
   --color-gold: var(--gold);
   --color-gold-bright: var(--gold-bright);
   --color-on-gold: var(--on-gold);
+  --color-navy: var(--navy);
+  --color-navy-deep: var(--navy-deep);
+  --color-on-navy: var(--on-navy);
+  --color-steel: var(--steel);
   --font-sans: var(--font-text), "Helvetica Neue", Arial, sans-serif;
-  --font-display: var(--font-display-face), "Arial Narrow", sans-serif;
+  --font-display: var(--font-display-face), "Times New Roman", serif;
   --font-serif: var(--font-serif-face), Garamond, "Times New Roman", serif;
 }
 
 .font-display {
-  font-family: var(--font-display-face), "Arial Narrow", sans-serif;
+  font-family: var(--font-display-face), "Times New Roman", serif;
 }
 .font-serif {
   font-family: var(--font-serif-face), Garamond, "Times New Roman", serif;
@@ -248,3 +274,18 @@ body {
 @keyframes bb-tour-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.bb-tour-step{animation:none}}
 dialog[open]{animation:bb-tour-in .35s cubic-bezier(0.22,1,0.36,1)}
+
+/* Engraved display capitals: a touch of tracking reads like a caseback engraving. */
+.font-display{letter-spacing:0.04em}
+
+/* Pronounced type: slightly larger body text everywhere, and every page and section heading in the engraved capitals. */
+html { font-size: 106.25%; } /* 17px base */
+main :is(h1, h2):not(.font-sans) {
+  font-family: var(--font-display-face), "Times New Roman", serif;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+/* Safety net for long single words in the wide capitals on narrow phones. */
+@media (max-width: 639px) {
+  main :is(h1, h2) { overflow-wrap: break-word; hyphens: auto; }
+}

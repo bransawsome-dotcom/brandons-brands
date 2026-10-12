@@ -319,7 +319,7 @@ export default function InboxView() {
                     <span className="mr-2">{f.icon}</span>
                     {f.name}
                   </span>
-                  {count ? <span className="shrink-0 rounded-full bg-gold px-2 text-[11px] font-bold text-on-gold">{count}</span> : null}
+                  {count ? <span className="shrink-0 rounded-full bg-navy px-2 text-[11px] font-bold text-on-navy">{count}</span> : null}
                 </button>
               );
             })}
@@ -417,7 +417,7 @@ export default function InboxView() {
                   {showBrandStarter ? (
                     <li>
                       <button type="button" onClick={() => openConversation(brandId!)} className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-surface">
-                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gold text-xs font-bold text-on-gold">BB</span>
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-navy text-xs font-bold text-on-navy">BB</span>
                         <span>
                           <span className="block text-sm font-semibold text-ink">Message {BRAND_NAME}</span>
                           <span className="block text-xs text-muted">Questions, collabs, feedback</span>
@@ -444,7 +444,7 @@ export default function InboxView() {
                       >
                         <span
                           className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
-                            c.otherName === BRAND_NAME ? "bg-gold text-on-gold" : "bg-surface text-ink"
+                            c.otherName === BRAND_NAME ? "bg-navy text-on-navy" : "bg-surface text-ink"
                           }`}
                         >
                           {c.otherName === BRAND_NAME ? "BB" : c.otherName.slice(0, 2).toUpperCase()}
@@ -460,7 +460,7 @@ export default function InboxView() {
                               {c.last.subject ? `${c.last.subject} · ` : ""}
                               {c.last.body}
                             </span>
-                            {c.unread ? <span className="shrink-0 rounded-full bg-gold px-1.5 text-[10px] font-bold text-on-gold">{c.unread}</span> : null}
+                            {c.unread ? <span className="shrink-0 rounded-full bg-navy px-1.5 text-[10px] font-bold text-on-navy">{c.unread}</span> : null}
                           </span>
                         </span>
                       </button>
@@ -514,12 +514,12 @@ export default function InboxView() {
                         const showSubject = m.subject && m.subject !== prevSubject;
                         return (
                           <div key={m.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
-                            <div className={`max-w-[80%] rounded px-4 py-2 text-sm ${mine ? "bg-gold text-on-gold" : "bg-surface text-ink"}`}>
+                            <div className={`max-w-[80%] rounded px-4 py-2 text-sm ${mine ? "bg-navy text-on-navy" : "bg-surface text-ink"}`}>
                               {showSubject ? (
-                                <p className={`mb-1 text-[11px] font-bold uppercase tracking-[0.12em] ${mine ? "text-on-gold" : "text-gold"}`}>{m.subject}</p>
+                                <p className={`mb-1 text-[11px] font-bold uppercase tracking-[0.12em] ${mine ? "text-on-navy/80" : "text-gold"}`}>{m.subject}</p>
                               ) : null}
                               <p className="whitespace-pre-wrap break-words">{m.body}</p>
-                              <p className={`mt-1 text-[10px] ${mine ? "text-on-gold" : "text-muted"}`}>
+                              <p className={`mt-1 text-[10px] ${mine ? "text-on-navy/70" : "text-muted"}`}>
                                 {timeAgo(m.created_at)}
                                 {mine && m.read_at ? " · Read" : ""}
                               </p>
@@ -605,7 +605,7 @@ export default function InboxView() {
                         <button
                           type="submit"
                           disabled={sending || !draft.trim() || subjectMissing}
-                          className="shrink-0 self-end rounded-full bg-gold px-5 py-3 text-sm font-semibold text-on-gold hover:bg-gold-bright disabled:opacity-50"
+                          className="shrink-0 self-end rounded-full bg-navy px-5 py-3 text-sm font-semibold text-on-navy hover:bg-navy-deep disabled:opacity-50"
                         >
                           {sending ? "…" : "Send"}
                         </button>
@@ -700,7 +700,7 @@ function AnnouncementComposer({ kind, onSent }: { kind: "site_update" | "group_e
       />
       {status && !status.ok ? <p className="text-sm text-rose-700">{status.text}</p> : null}
       <div className="flex gap-3">
-        <button type="submit" disabled={busy} className="rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-on-gold hover:bg-gold-bright disabled:opacity-60">
+        <button type="submit" disabled={busy} className="rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-on-navy hover:bg-navy-deep disabled:opacity-60">
           {busy ? "Sending…" : "Send to all members"}
         </button>
         <button type="button" onClick={() => setOpen(false)} className="rounded-full border border-hairline px-5 py-2.5 text-sm text-ink">

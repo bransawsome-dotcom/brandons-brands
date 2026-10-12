@@ -79,10 +79,10 @@ export default function ResetPasswordPage() {
   return (
     <div className="min-h-screen text-ink">
       <main className="mx-auto flex min-h-[70vh] w-full max-w-3xl flex-col justify-center px-6 py-16 sm:px-10 lg:px-16">
-        <div className="rounded-md border border-hairline bg-surface p-10 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl">
+        <div className="rounded-md border border-hairline bg-surface p-10 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl">
           <div className="mb-8 space-y-4">
             <p className="text-sm uppercase tracking-[0.35em] text-gold">Member Access</p>
-            <h1 className="text-4xl font-semibold text-ink">Choose a new password</h1>
+            <h1 className="text-3xl font-semibold text-ink sm:text-4xl">Choose a new password</h1>
           </div>
 
           {done ? (
@@ -119,7 +119,7 @@ export default function ResetPasswordPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="rounded-full bg-gold px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-on-gold transition hover:bg-gold-bright disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-full bg-navy px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-on-navy transition hover:bg-navy-deep disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {submitting ? "Saving…" : "Save new password"}
               </button>

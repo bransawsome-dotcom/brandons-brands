@@ -109,7 +109,7 @@ export default function ChangePassword() {
             <button
               type="submit"
               disabled={saving}
-              className="rounded-full bg-gold px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.15em] text-on-gold transition hover:bg-gold-bright disabled:opacity-60"
+              className="rounded-full bg-navy px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.15em] text-on-navy transition hover:bg-navy-deep disabled:opacity-60"
             >
               {saving ? "Saving…" : "Save new password"}
             </button>

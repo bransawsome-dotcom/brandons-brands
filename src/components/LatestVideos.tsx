@@ -13,7 +13,7 @@ export default async function LatestVideos({ count = 6, className = "" }: { coun
         <div>
           <div className="mb-4 h-0.5 w-11 bg-gold" aria-hidden />
           <p className="mb-2 text-xs uppercase tracking-[0.22em] text-gold">New this week</p>
-          <h2 id="latest-videos" className="font-display text-[44px] font-semibold uppercase leading-[0.95] text-ink sm:text-[60px]">
+          <h2 id="latest-videos" className="font-display text-[38px] font-semibold uppercase leading-[1.05] text-ink sm:text-[54px]">
             Latest from <span className="font-light text-gold">Brandon</span>
           </h2>
           <p className="mt-3 text-muted">Hands-on watch reviews of new releases, microbrands and independents.</p>

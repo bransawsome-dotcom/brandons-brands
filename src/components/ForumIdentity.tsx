@@ -59,7 +59,7 @@ export default function ForumIdentity({ children, action = "post" }: { children:
         <button
           type="submit"
           disabled={saving}
-          className="shrink-0 rounded-full bg-gold px-6 py-3 text-sm font-semibold uppercase tracking-[0.15em] text-on-gold hover:bg-gold-bright disabled:opacity-60"
+          className="shrink-0 rounded-full bg-navy px-6 py-3 text-sm font-semibold uppercase tracking-[0.15em] text-on-navy hover:bg-navy-deep disabled:opacity-60"
         >
           {saving ? "Saving…" : "Save name"}
         </button>

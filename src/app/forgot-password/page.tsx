@@ -35,10 +35,10 @@ export default function ForgotPasswordPage() {
   return (
     <div className="min-h-screen text-ink">
       <main className="mx-auto flex min-h-[70vh] w-full max-w-3xl flex-col justify-center px-6 py-16 sm:px-10 lg:px-16">
-        <div className="rounded-md border border-hairline bg-surface p-10 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl">
+        <div className="rounded-md border border-hairline bg-surface p-10 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl">
           <div className="mb-8 space-y-4">
             <p className="text-sm uppercase tracking-[0.35em] text-gold">Member Access</p>
-            <h1 className="text-4xl font-semibold text-ink">Reset your password</h1>
+            <h1 className="text-3xl font-semibold text-ink sm:text-4xl">Reset your password</h1>
             <p className="max-w-2xl text-sm leading-7 text-ink/80">
               Enter the email you signed up with and we&apos;ll send you a link to choose a new password.
             </p>
@@ -73,7 +73,7 @@ export default function ForgotPasswordPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="rounded-full bg-gold px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-on-gold transition hover:bg-gold-bright disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-full bg-navy px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-on-navy transition hover:bg-navy-deep disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {submitting ? "Sending…" : "Send reset link"}
               </button>

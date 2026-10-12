@@ -71,7 +71,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
         </Link>
       </nav>
 
-      <article className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-10">
+      <article className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-10">
         <p className="text-xs uppercase tracking-[0.35em] text-gold">{g.category}</p>
         <h1 className="mt-3 text-3xl font-semibold leading-tight tracking-[-0.02em] text-ink sm:text-4xl">{g.title}</h1>
         <p className="mt-4 text-lg leading-8 text-ink/80">{g.description}</p>

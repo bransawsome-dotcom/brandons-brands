@@ -107,7 +107,7 @@ export default function NewsletterSendPage() {
             {confirm ? (
               <span className="flex items-center gap-2 text-sm text-ink">
                 Send to all {preview?.subscribers ?? 0}?
-                <button type="button" onClick={() => void send(false)} disabled={Boolean(busy)} className="rounded-full bg-gold px-4 py-2 font-semibold text-on-gold">
+                <button type="button" onClick={() => void send(false)} disabled={Boolean(busy)} className="rounded-full bg-navy px-4 py-2 font-semibold text-on-navy">
                   Yes, send
                 </button>
                 <button type="button" onClick={() => setConfirm(false)} className="text-muted hover:text-ink">
@@ -119,7 +119,7 @@ export default function NewsletterSendPage() {
                 type="button"
                 onClick={() => setConfirm(true)}
                 disabled={Boolean(busy) || !preview?.addressReady || !preview?.subscribers}
-                className="rounded-full bg-gold px-5 py-2 text-sm font-semibold text-on-gold hover:bg-gold-bright disabled:opacity-40"
+                className="rounded-full bg-navy px-5 py-2 text-sm font-semibold text-on-navy hover:bg-navy-deep disabled:opacity-40"
               >
                 Send to everyone
               </button>

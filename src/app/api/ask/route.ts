@@ -38,7 +38,7 @@ export async function POST(request: Request) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return bad(`Questions can't be sent right now. Please email ${collabEmail}.`, 503);
   const from = process.env.NEWSLETTER_FROM || process.env.OFFER_FROM || "Brandon's Brands <offers@brandonsbrands17.com>";
-  const html = `<div style="font-family:Arial,Helvetica,sans-serif;background:#f1ece3;padding:24px;color:#2b2620">
+  const html = `<div style="font-family:Arial,Helvetica,sans-serif;background:#f1ece3;padding:24px;color:#1b2a41">
   <p style="letter-spacing:3px;font-size:12px;color:#7a5c30;margin:0">ASK BRANDON · ${esc(topic.toUpperCase())}</p>
   <h2 style="margin:8px 0 16px">${esc(name)} has a question</h2>
   <p style="white-space:pre-wrap;line-height:22px;background:#f8f5ef;border:1px solid #d8cebe;padding:16px">${esc(question)}</p>

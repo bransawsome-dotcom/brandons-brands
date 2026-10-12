@@ -69,7 +69,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
 
   return (
     <div className="mx-auto w-full max-w-6xl px-0 py-4 sm:px-6 sm:py-10">
-      <section className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-8">
+      <section className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8">
         <p className="text-xs uppercase tracking-[0.35em] text-gold">Search</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-[-0.02em] text-ink sm:text-4xl">Search Brandon&apos;s Brands</h1>
         <form action="/search" method="get" role="search" className="mt-5 flex gap-2">
@@ -85,7 +85,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
             placeholder="Watches, brands, collectors, forum names…"
             className="min-w-0 flex-1 rounded-full border border-hairline bg-raised px-5 py-3 text-ink outline-none transition focus:border-gold/70"
           />
-          <button type="submit" className="shrink-0 rounded-full bg-gold px-5 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-on-gold hover:bg-gold-bright">
+          <button type="submit" className="shrink-0 rounded-full bg-navy px-5 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-on-navy hover:bg-navy-deep">
             Search
           </button>
         </form>

@@ -288,7 +288,7 @@ export default function WishlistPage() {
 
   return (
     <div className="mx-auto w-full max-w-7xl px-3 py-8 sm:px-6 sm:py-14 lg:px-16 overflow-x-hidden">
-      <div className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-8">
+      <div className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8">
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.3em] text-gold">Wishlist</p>
@@ -440,7 +440,7 @@ export default function WishlistPage() {
             <button
               type="submit"
               disabled={lookingUp}
-              className="w-full rounded-full bg-gold px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-on-gold shadow-[0_10px_30px_rgba(43,38,32,0.08)] transition hover:-translate-y-0.5 hover:bg-gold-bright disabled:opacity-60"
+              className="w-full rounded-full bg-navy px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-on-navy shadow-[0_10px_30px_rgba(27,42,65,0.08)] transition hover:-translate-y-0.5 hover:bg-navy-deep disabled:opacity-60"
             >
               {lookingUp ? "Looking up…" : editingId ? "Save" : "Add to Wishlist"}
             </button>
@@ -491,7 +491,7 @@ export default function WishlistPage() {
               <button
                 type="button"
                 onClick={() => document.getElementById("add-wishlist")?.scrollIntoView({ behavior: "smooth" })}
-                className="inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-on-gold"
+                className="inline-flex items-center gap-2 rounded-full bg-navy px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-on-navy"
               >
                 <span>➕</span>
                 <span>Add Your First Wishlist Item</span>
@@ -512,7 +512,7 @@ export default function WishlistPage() {
                 <article
                   key={item.id}
                   id={`w-${item.id}`}
-                  className="scroll-mt-6 flex flex-col overflow-hidden rounded-md border border-hairline bg-surface shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl"
+                  className="scroll-mt-6 flex flex-col overflow-hidden rounded-md border border-hairline bg-surface shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl"
                 >
                   {item.image_url ? (
                     <div className="bb-shine flex h-56 items-center justify-center bg-surface p-4">

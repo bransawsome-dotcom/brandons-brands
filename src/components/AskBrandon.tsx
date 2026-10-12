@@ -60,7 +60,7 @@ export default function AskBrandon() {
       <button
         type="button"
         onClick={open}
-        className="fixed bottom-20 right-4 z-40 inline-flex items-center gap-2 rounded-full border border-gold/40 bg-ink py-2.5 pl-3 pr-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#f1ece3] shadow-[0_12px_30px_rgba(43,38,32,0.25)] transition hover:-translate-y-0.5 md:bottom-6 md:right-6"
+        className="fixed bottom-20 right-4 z-40 inline-flex items-center gap-2 rounded-full border border-gold/40 bg-ink py-2.5 pl-3 pr-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#f1ece3] shadow-[0_12px_30px_rgba(27,42,65,0.25)] transition hover:-translate-y-0.5 md:bottom-6 md:right-6"
         aria-haspopup="dialog"
         aria-label="Ask Brandon a question"
       >
@@ -71,7 +71,7 @@ export default function AskBrandon() {
       <dialog
         ref={dialog}
         aria-labelledby="ask-title"
-        className="m-auto w-[calc(100%-2rem)] max-w-lg rounded-md border border-hairline bg-ground p-0 text-ink shadow-[0_30px_80px_rgba(43,38,32,0.35)] backdrop:bg-[#2b2620]/50 backdrop:backdrop-blur-sm"
+        className="m-auto w-[calc(100%-2rem)] max-w-lg rounded-md border border-hairline bg-ground p-0 text-ink shadow-[0_30px_80px_rgba(27,42,65,0.35)] backdrop:bg-[#1b2a41]/50 backdrop:backdrop-blur-sm"
       >
         <div className="relative p-6 sm:p-8">
           <button type="button" onClick={() => dialog.current?.close()} aria-label="Close" className="absolute right-4 top-4 h-9 w-9 rounded-full text-xl text-muted hover:bg-surface hover:text-ink">
@@ -79,7 +79,7 @@ export default function AskBrandon() {
           </button>
           <span aria-hidden className="block h-px w-10 bg-gold" />
           <p className="mt-4 text-[11px] uppercase tracking-[0.3em] text-gold">Ask Brandon</p>
-          <h2 id="ask-title" className="mt-2 font-display text-4xl font-semibold uppercase leading-none">
+          <h2 id="ask-title" className="mt-2 font-display text-4xl font-semibold uppercase leading-[1.05]">
             A question about <span className="font-light text-gold">watches?</span>
           </h2>
           <p className="mt-3 font-serif text-lg italic text-ink/80">Brandon reads every message and replies by email.</p>
@@ -114,7 +114,7 @@ export default function AskBrandon() {
                       aria-pressed={topic === t}
                       onClick={() => setTopic(t)}
                       className={`min-h-9 rounded-full border px-3.5 text-xs transition ${
-                        topic === t ? "border-gold bg-gold text-on-gold" : "border-hairline-strong text-ink hover:border-gold"
+                        topic === t ? "border-gold bg-navy text-on-navy" : "border-hairline-strong text-ink hover:border-gold"
                       }`}
                     >
                       {t}
@@ -135,7 +135,7 @@ export default function AskBrandon() {
               <button
                 type="submit"
                 disabled={state === "sending"}
-                className="inline-flex min-h-12 items-center justify-center rounded-full bg-gold px-6 text-xs font-semibold uppercase tracking-[0.2em] text-on-gold transition hover:bg-gold-bright disabled:opacity-60"
+                className="inline-flex min-h-12 items-center justify-center rounded-full bg-navy px-6 text-xs font-semibold uppercase tracking-[0.2em] text-on-navy transition hover:bg-navy-deep disabled:opacity-60"
               >
                 {state === "sending" ? "Sending…" : "Send to Brandon"}
               </button>

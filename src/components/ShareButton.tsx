@@ -120,7 +120,7 @@ export default function ShareButton({ kind }: { kind: ShareKind }) {
       </button>
 
       {open ? (
-        <div className="absolute right-0 z-40 mt-2 w-[min(24rem,calc(100vw-2rem))] rounded border border-hairline bg-raised p-4 text-left text-sm shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl">
+        <div className="absolute right-0 z-40 mt-2 w-[min(24rem,calc(100vw-2rem))] rounded border border-hairline bg-raised p-4 text-left text-sm shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl">
           <p className="font-semibold text-ink">Share your {label.noun}</p>
           {!userId ? (
             <p className="mt-2 text-ink/80">
@@ -169,7 +169,7 @@ export default function ShareButton({ kind }: { kind: ShareKind }) {
                     aria-label="Share link"
                   />
                   <div className="flex flex-wrap gap-2">
-                    <button type="button" onClick={copy} className="rounded-full bg-gold px-4 py-2 text-xs font-semibold text-on-gold hover:bg-gold-bright">
+                    <button type="button" onClick={copy} className="rounded-full bg-navy px-4 py-2 text-xs font-semibold text-on-navy hover:bg-navy-deep">
                       Copy link
                     </button>
                     {canNativeShare ? (
@@ -195,7 +195,7 @@ export default function ShareButton({ kind }: { kind: ShareKind }) {
                   type="button"
                   onClick={turnOn}
                   disabled={busy}
-                  className="mt-3 w-full rounded-full bg-gold px-4 py-2.5 text-sm font-semibold text-on-gold hover:bg-gold-bright disabled:opacity-60"
+                  className="mt-3 w-full rounded-full bg-navy px-4 py-2.5 text-sm font-semibold text-on-navy hover:bg-navy-deep disabled:opacity-60"
                 >
                   {busy ? "Creating link…" : "Create share link"}
                 </button>

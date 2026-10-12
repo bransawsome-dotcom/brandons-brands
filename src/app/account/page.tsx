@@ -42,10 +42,10 @@ export default function AccountPage() {
   return (
     <div className="mx-auto w-full max-w-7xl px-0 py-4 sm:px-6 sm:py-14 lg:px-16">
       <div className="grid gap-6 sm:gap-8 lg:grid-cols-[320px_1fr]">
-        <section className="rounded-md border border-hairline bg-surface p-6 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-8">
+        <section className="rounded-md border border-hairline bg-surface p-6 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8">
           <div className="flex flex-col items-center gap-5 text-center sm:gap-6">
-            <div className="flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-gold/10 via-surface to-surface shadow-[0_10px_30px_rgba(43,38,32,0.08)]">
-              <span className="text-4xl font-semibold text-ink">{initials}</span>
+            <div className="flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-gold/10 via-surface to-surface shadow-[0_10px_30px_rgba(27,42,65,0.08)]">
+              <span className="text-3xl font-semibold text-ink sm:text-4xl">{initials}</span>
             </div>
             <div>
               <p className="text-sm uppercase tracking-[0.3em] text-gold">Account</p>
@@ -64,7 +64,7 @@ export default function AccountPage() {
           </div>
         </section>
 
-        <section className="rounded-md border border-hairline bg-surface p-4 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-8">
+        <section className="rounded-md border border-hairline bg-surface p-4 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8">
           <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
             <div className="rounded-md border border-hairline bg-surface p-5 sm:p-6">
               <p className="text-sm uppercase tracking-[0.3em] text-gold">Total Watches</p>
@@ -117,7 +117,7 @@ export default function AccountPage() {
                 <button
                   type="button"
                   onClick={signOut}
-                  className="rounded-full bg-gold px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-on-gold transition hover:bg-gold-bright"
+                  className="rounded-full bg-navy px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-on-navy transition hover:bg-navy-deep"
                 >
                   Logout
                 </button>

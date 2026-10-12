@@ -3,7 +3,7 @@ import LogoMark from "@/components/LogoMark";
 import { collabEmail, facebookGroup, socials } from "@/lib/socials";
 import { SALES_DISCLAIMER } from "@/lib/legal";
 
-// Footer, dark luxury look: brand column plus four link columns, then the disclaimer.
+// Footer, navy panel: brand column plus four link columns, then the disclaimer.
 const columns: { title: string; links: { href: string; label: string; external?: boolean }[] }[] = [
   {
     title: "About",
@@ -45,12 +45,12 @@ const linkCls = "text-sm text-ink/85 transition hover:text-gold-bright";
 
 export default function SiteFooter() {
   return (
-    <footer className="site-footer theme-cream mt-24 border-t border-hairline bg-surface text-ink">
+    <footer className="site-footer theme-navy mt-24 text-ink">
       <div className="mx-auto grid max-w-[1180px] gap-10 px-4 py-14 sm:grid-cols-2 sm:px-6 lg:grid-cols-[1.6fr_repeat(4,1fr)]">
         <div>
           <Link href="/" className="flex items-center gap-3" aria-label="Brandon's Brands home">
             <LogoMark className="h-12 w-12" />
-            <span className="whitespace-nowrap font-display text-[24px] font-semibold uppercase leading-none tracking-[0.06em]">Brandon&apos;s Brands</span>
+            <span className="whitespace-nowrap font-display text-[22px] font-semibold uppercase leading-[1.05] tracking-[0.06em]">Brandon&apos;s Brands</span>
           </Link>
           <p className="mt-4 max-w-xs text-sm leading-6 text-muted">Luxury and microbrand watch reviews by Brandon Volosov, and a free community for collectors.</p>
           <p className="mt-4 text-sm text-muted">

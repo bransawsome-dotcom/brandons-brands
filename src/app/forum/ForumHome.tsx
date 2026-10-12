@@ -269,12 +269,12 @@ export default function ForumHome() {
 
   return (
     <div className="mx-auto w-full max-w-7xl px-3 py-8 sm:px-6 sm:py-14 lg:px-16">
-      <div className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-8">
+      <div className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <span aria-hidden className="block h-px w-10 bg-gold" />
             <p className="mt-4 text-xs uppercase tracking-[0.3em] text-gold">Community Forum</p>
-            <h1 className="mt-3 font-display text-5xl font-semibold uppercase leading-[0.95] text-ink sm:text-7xl">
+            <h1 className="mt-3 font-display text-5xl font-semibold uppercase leading-[1.05] text-ink sm:text-6xl">
               Talk <span className="font-light text-gold">watches.</span>
             </h1>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-ink/80 sm:text-base">
@@ -284,7 +284,7 @@ export default function ForumHome() {
           <button
             type="button"
             onClick={() => openComposer()}
-            className="shrink-0 rounded-full bg-gold px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-on-gold shadow-[0_10px_30px_rgba(43,38,32,0.08)] transition hover:-translate-y-0.5 hover:bg-gold-bright"
+            className="shrink-0 rounded-full bg-navy px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-on-navy shadow-[0_10px_30px_rgba(27,42,65,0.08)] transition hover:-translate-y-0.5 hover:bg-navy-deep"
           >
             + New post
           </button>
@@ -330,7 +330,7 @@ export default function ForumHome() {
                             onClick={() => setNewSubject({ ...newSubject, kind: o.key })}
                             aria-pressed={newSubject.kind === o.key}
                             className={`rounded-full border px-4 py-2 text-xs font-semibold transition ${
-                              newSubject.kind === o.key ? "border-gold bg-gold text-on-gold" : "border-hairline text-ink hover:bg-surface"
+                              newSubject.kind === o.key ? "border-gold bg-navy text-on-navy" : "border-hairline text-ink hover:bg-surface"
                             }`}
                           >
                             {o.label}
@@ -412,7 +412,7 @@ export default function ForumHome() {
                     <button
                       type="submit"
                       disabled={posting}
-                      className="rounded-full bg-gold px-6 py-3 text-sm font-semibold uppercase tracking-[0.15em] text-on-gold hover:bg-gold-bright disabled:opacity-60"
+                      className="rounded-full bg-navy px-6 py-3 text-sm font-semibold uppercase tracking-[0.15em] text-on-navy hover:bg-navy-deep disabled:opacity-60"
                     >
                       {posting ? "Posting…" : "Post"}
                     </button>
@@ -596,7 +596,7 @@ export default function ForumHome() {
             <div className="mb-4 rounded-md border border-gold/30 bg-gold/5 p-5 text-sm text-ink/80">
               <p className="font-semibold text-ink">No clubs yet.</p>
               <p className="mt-1">Belong to a watch club or meetup group? Add it as its own folder here so members can find events and chat.</p>
-              <button type="button" onClick={() => startAddSubfolder(CLUBS_FOLDER)} className="mt-3 rounded-full bg-gold px-4 py-2 text-xs font-semibold text-on-gold hover:bg-gold-bright">
+              <button type="button" onClick={() => startAddSubfolder(CLUBS_FOLDER)} className="mt-3 rounded-full bg-navy px-4 py-2 text-xs font-semibold text-on-navy hover:bg-navy-deep">
                 + Add a club
               </button>
             </div>
@@ -659,7 +659,7 @@ export default function ForumHome() {
               {!search && subject && locked.includes(subject) ? (
                 <p className="mt-2 text-sm text-muted">Only Brandon starts discussions here. When he does, you can reply and join in.</p>
               ) : !search ? (
-                <button type="button" onClick={() => openComposer()} className="mt-4 rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-on-gold hover:bg-gold-bright">
+                <button type="button" onClick={() => openComposer()} className="mt-4 rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-on-navy hover:bg-navy-deep">
                   Start the first one
                 </button>
               ) : null}
@@ -753,7 +753,7 @@ function GettingStarted({ onNewPost }: { onNewPost: () => void }) {
           <ol className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {STEPS.map((step, i) => (
               <li key={step.title} className="flex gap-3">
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gold text-sm font-bold text-on-gold">{i + 1}</span>
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-navy text-sm font-bold text-on-navy">{i + 1}</span>
                 <div>
                   <p className="text-sm font-semibold text-ink">{step.title}</p>
                   <p className="mt-1 text-sm leading-6 text-ink/80">{step.text}</p>
@@ -847,7 +847,7 @@ function AddSubfolderForm({
           />
           {error ? <p className="text-rose-700">{error}</p> : null}
           <div className="flex gap-3">
-            <button type="submit" disabled={busy} className="rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-on-gold hover:bg-gold-bright disabled:opacity-60">
+            <button type="submit" disabled={busy} className="rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-on-navy hover:bg-navy-deep disabled:opacity-60">
               {busy ? "Adding…" : `Add ${thing}`}
             </button>
             <button type="button" onClick={onCancel} className="rounded-full border border-hairline px-5 py-2.5 text-sm text-ink hover:bg-surface">
