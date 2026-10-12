@@ -1,5 +1,8 @@
 "use client";
 
+import VersionPicker from "@/components/VersionPicker";
+import type { WatchVersion } from "@/lib/watchAiClient";
+
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -153,7 +156,22 @@ export default function CollectionPage() {
     if (name === "brand" || name === "model" || name === "reference_number") setLookup(null);
   };
 
-  const runLookup = async (override?: { brand?: string; model?: string }): Promise<WatchLookupResult | null> => {
+  // After a model is picked from the list, a Version dropdown offers its sub-models / references.
+  const [versionFor, setVersionFor] = useState<{ brand: string; model: string } | null>(null);
+  const chooseVersion = (v: WatchVersion | null) => {
+    if (!versionFor) return;
+    const base = versionFor.model;
+    if (!v) {
+      void runLookup({ brand: versionFor.brand, model: base });
+      return;
+    }
+    const model = v.name.toLowerCase().includes(base.toLowerCase()) ? v.name : `${base} ${v.name}`;
+    setForm((current) => ({ ...current, model, reference_number: v.reference_number || current.reference_number }));
+    setLookup(null);
+    void runLookup({ brand: versionFor.brand, model, reference_number: v.reference_number });
+  };
+
+  const runLookup = async (override?: { brand?: string; model?: string; reference_number?: string }): Promise<WatchLookupResult | null> => {
     const brand = (override?.brand ?? form.brand).trim();
     const model = (override?.model ?? form.model).trim();
     if (!brand || !model) {
@@ -166,7 +184,7 @@ export default function CollectionPage() {
       const result = await lookupWatchDetails({
         brand,
         model,
-        reference_number: form.reference_number.trim() || undefined,
+        reference_number: (override?.reference_number ?? form.reference_number).trim() || undefined,
         purchase_date: form.purchase_date || undefined,
       });
       setLookup(result);
@@ -234,6 +252,7 @@ export default function CollectionPage() {
     setWatches(updated);
     await saveCollectionData(userId, updated);
     setForm(initialForm);
+    setVersionFor(null);
     setProvenance(emptyProvenance);
     setPhotoFile(null);
     setPreview("");
@@ -320,13 +339,16 @@ export default function CollectionPage() {
                 onChange={(value) => {
                   setForm((current) => ({ ...current, model: value }));
                   setLookup(null);
+                  setVersionFor(null);
                 }}
                 onSelect={(value) => {
-                  // Picking a model from the list fills in details, prices and a photo automatically.
-                  if (canAutoFill) void runLookup({ brand: form.brand, model: value });
+                  // Picking a model from the list shows its versions, then fills in details, prices and a photo.
+                  if (canAutoFill) setVersionFor({ brand: form.brand, model: value });
                 }}
               />
             </div>
+
+            {versionFor ? <VersionPicker key={`${versionFor.brand}|${versionFor.model}`} brand={versionFor.brand} model={versionFor.model} onChoose={chooseVersion} /> : null}
 
             <div className="grid gap-6 lg:grid-cols-2 lg:items-end">
               <label className="space-y-2 text-sm text-slate-300">

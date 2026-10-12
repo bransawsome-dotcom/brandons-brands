@@ -107,3 +107,11 @@ export function formatUsd(value?: string | number | null): string {
 export function checkPriceNow(id: string): Promise<{ id: string; found: number; added: number }> {
   return post("/api/price-alerts/check", { id });
 }
+
+export type WatchVersion = { name: string; reference_number: string; detail: string };
+
+// Versions (sub-models / references) of a model for the Version dropdown. Instant once someone has looked it up.
+export async function findWatchVersions(brand: string, model: string): Promise<WatchVersion[]> {
+  const res = await post<{ variants: WatchVersion[] }>("/api/watch-variants", { brand, model });
+  return res.variants ?? [];
+}

@@ -1,5 +1,8 @@
 "use client";
 
+import VersionPicker from "@/components/VersionPicker";
+import type { WatchVersion } from "@/lib/watchAiClient";
+
 import { ChangeEvent, FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { deleteWishlistItem, loadWishlistData, saveWishlistData } from "@/lib/storage";
 import { useRequireAuth } from "@/components/AuthProvider";
@@ -148,7 +151,22 @@ export default function WishlistPage() {
     if (name === "reference_number") setLookup(null);
   };
 
-  const runLookup = async (override?: { brand?: string; model?: string }): Promise<WatchLookupResult | null> => {
+  // After a model is picked from the list, a Version dropdown offers its sub-models / references.
+  const [versionFor, setVersionFor] = useState<{ brand: string; model: string } | null>(null);
+  const chooseVersion = (v: WatchVersion | null) => {
+    if (!versionFor) return;
+    const base = versionFor.model;
+    if (!v) {
+      void runLookup({ brand: versionFor.brand, model: base });
+      return;
+    }
+    const model = v.name.toLowerCase().includes(base.toLowerCase()) ? v.name : `${base} ${v.name}`;
+    setForm((current) => ({ ...current, model, reference_number: v.reference_number || current.reference_number }));
+    setLookup(null);
+    void runLookup({ brand: versionFor.brand, model, reference_number: v.reference_number });
+  };
+
+  const runLookup = async (override?: { brand?: string; model?: string; reference_number?: string }): Promise<WatchLookupResult | null> => {
     const brand = (override?.brand ?? form.brand).trim();
     const model = (override?.model ?? form.model).trim();
     if (!brand || !model) {
@@ -159,7 +177,7 @@ export default function WishlistPage() {
     setMessage("Looking up details, prices and a photo… this can take up to a minute.");
     try {
       // No purchase date: wishlist prices are today's.
-      const result = await lookupWatchDetails({ brand, model, reference_number: form.reference_number.trim() || undefined });
+      const result = await lookupWatchDetails({ brand, model, reference_number: (override?.reference_number ?? form.reference_number).trim() || undefined });
       setLookup(result);
       setForm((current) => ({ ...current, reference_number: current.reference_number || result.reference_number || "" }));
       setMessage(null);
@@ -174,6 +192,7 @@ export default function WishlistPage() {
 
   const resetForm = () => {
     setForm(initialForm);
+    setVersionFor(null);
     setEditingId(null);
     setLookup(null);
   };
@@ -334,12 +353,16 @@ export default function WishlistPage() {
               onChange={(value) => {
                 setForm((current) => ({ ...current, model: value }));
                 setLookup(null);
+                setVersionFor(null);
               }}
               onSelect={(value) => {
-                if (canAutoFill) void runLookup({ brand: form.brand, model: value });
+                // Picking a model from the list shows its versions, then fills in details, prices and a photo.
+                if (canAutoFill) setVersionFor({ brand: form.brand, model: value });
               }}
             />
           </div>
+
+          {versionFor ? <VersionPicker key={`${versionFor.brand}|${versionFor.model}`} brand={versionFor.brand} model={versionFor.model} onChoose={chooseVersion} /> : null}
 
           <div className="grid gap-6 lg:grid-cols-2 lg:items-end">
             <label className="space-y-2 text-sm text-slate-300">
