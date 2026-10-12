@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     "watch price alerts",
   ],
   alternates: { canonical: "/watch-value-tracker" },
-  openGraph: { type: "website", url: "/watch-value-tracker", title: "Free Watch Value Tracker", description: DESCRIPTION, images: ["/og-image.png"] },
+  openGraph: { type: "website", url: "/watch-value-tracker", title: "Free Watch Value Tracker", description: DESCRIPTION, images: ["/og-image.png?v=2"] },
   twitter: { card: "summary_large_image", title: "Free Watch Value Tracker", description: DESCRIPTION },
 };
 

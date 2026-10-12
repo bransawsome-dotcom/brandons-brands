@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   alternates: { canonical: "/favorites" },
-  openGraph: { type: "website", url: "/favorites", title: "Brandon's Favorites", description: DESCRIPTION, images: ["/og-image.png"] },
+  openGraph: { type: "website", url: "/favorites", title: "Brandon's Favorites", description: DESCRIPTION, images: ["/og-image.png?v=2"] },
   twitter: { card: "summary_large_image", title: "Brandon's Favorites", description: DESCRIPTION },
 };
 

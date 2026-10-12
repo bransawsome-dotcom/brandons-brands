@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+/* Cinzel (SIL Open Font License), the engraved capitals used in the Brandon's Brands graphics. */
+@font-face {
+  font-family: "Cinzel";
+  src: url("/fonts/cinzel-latin.woff2") format("woff2");
+  font-weight: 400 900;
+  font-display: swap;
+}
+.font-display {
+  font-family: "Cinzel", Georgia, "Times New Roman", serif;
+  letter-spacing: 0.02em;
+}
+
 :root {
   --background: #0B1739;
   --foreground: #ededed;

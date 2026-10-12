@@ -37,14 +37,14 @@ export const metadata: Metadata = {
     siteName: "Brandon's Brands",
     title: "About Brandon's Brands",
     description: DESCRIPTION,
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Brandon's Brands – Luxury Watch Curation" }],
+    images: [{ url: "/og-image.png?v=2", width: 1200, height: 630, alt: "Brandon's Brands: watches worth knowing" }],
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
     title: "About Brandon's Brands",
     description: DESCRIPTION,
-    images: ["/og-image.png"],
+    images: ["/og-image.png?v=2"],
   },
 };
 

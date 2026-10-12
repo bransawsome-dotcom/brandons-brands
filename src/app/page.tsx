@@ -4,6 +4,7 @@ import VaultLink from "@/components/VaultLink";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import ShowOffCTA from "@/components/ShowOffCTA";
 import LatestVideos from "@/components/LatestVideos";
+import FacebookGroupBanner from "@/components/FacebookGroupBanner";
 import PollCard from "@/components/PollCard";
 import WatchCarousel from "@/components/WatchCarousel";
 import { FAVORITES_PATH, loadFavorites } from "@/lib/favorites";
@@ -65,6 +66,8 @@ export default async function Home() {
             </Link>
           ))}
         </section>
+
+        <FacebookGroupBanner className="mt-12" />
 
         <section id="collection" className="mt-12 grid gap-6 sm:grid-cols-3">
           <VaultLink href="/collection" className="group flex h-full flex-col rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl transition hover:-translate-y-1 hover:border-[#D9A43A]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D9A43A]">

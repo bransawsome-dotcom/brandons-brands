@@ -29,9 +29,9 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Brandon's Brands",
     locale: "en_US",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Brandon's Brands – Luxury Watch Curation" }],
+    images: [{ url: "/og-image.png?v=2", width: 1200, height: 630, alt: "Brandon's Brands: watches worth knowing" }],
   },
-  twitter: { card: "summary_large_image", images: ["/og-image.png"] },
+  twitter: { card: "summary_large_image", images: ["/og-image.png?v=2"] },
 };
 
 export default function RootLayout({

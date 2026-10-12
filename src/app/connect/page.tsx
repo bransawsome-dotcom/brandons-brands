@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "Connect with Brandon | Brandon's Brands",
   description: "Follow Brandon Volosov and Brandon's Brands on Instagram, TikTok, YouTube and Facebook, or visit the website.",
   alternates: { canonical: "/connect" },
-  openGraph: { type: "website", url: "/connect", title: "Connect with Brandon", images: ["/og-image.png"] },
+  openGraph: { type: "website", url: "/connect", title: "Connect with Brandon", images: ["/og-image.png?v=2"] },
 };
 
 const ICONS: Record<string, React.ReactNode> = {

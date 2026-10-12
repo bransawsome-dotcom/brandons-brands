@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   alternates: { canonical: "/learn" },
-  openGraph: { type: "website", url: "/learn", title: "Learn About Watches | Brandon's Brands", description: DESCRIPTION, images: ["/og-image.png"] },
+  openGraph: { type: "website", url: "/learn", title: "Learn About Watches | Brandon's Brands", description: DESCRIPTION, images: ["/og-image.png?v=2"] },
   twitter: { card: "summary_large_image", title: "Learn About Watches | Brandon's Brands", description: DESCRIPTION },
 };
 

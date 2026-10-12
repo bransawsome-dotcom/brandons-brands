@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: `${g.title} | Brandon's Brands`,
     description: g.description,
     alternates: { canonical: path },
-    openGraph: { type: "article", url: path, title: g.title, description: g.description, images: ["/og-image.png"] },
+    openGraph: { type: "article", url: path, title: g.title, description: g.description, images: ["/og-image.png?v=2"] },
     twitter: { card: "summary_large_image", title: g.title, description: g.description },
   };
 }
