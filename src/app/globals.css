@@ -34,6 +34,7 @@
   color: var(--ink);
 }
 /* The homepage is cream from edge to edge. */
+html:has(.bb-home),
 body:has(.bb-home) {
   background: #f1ece3;
 }
