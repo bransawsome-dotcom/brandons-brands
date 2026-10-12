@@ -3,68 +3,89 @@ import LogoMark from "@/components/LogoMark";
 import { collabEmail, facebookGroup, socials } from "@/lib/socials";
 import { SALES_DISCLAIMER } from "@/lib/legal";
 
+// Footer, dark luxury look: brand column plus four link columns, then the disclaimer.
+const columns: { title: string; links: { href: string; label: string; external?: boolean }[] }[] = [
+  {
+    title: "About",
+    links: [
+      { href: "/about", label: "About Brandon" },
+      { href: "/about#contact", label: "Contact" },
+      { href: "/newsletter", label: "Newsletter" },
+      { href: "/terms", label: "Terms" },
+    ],
+  },
+  {
+    title: "Community",
+    links: [
+      { href: "/forum", label: "Forum" },
+      { href: "/wrist-check", label: "Wrist Check" },
+      { href: "/events", label: "Watch events" },
+      { href: "/polls", label: "Polls" },
+      { href: facebookGroup.url, label: "Facebook group", external: true },
+    ],
+  },
+  {
+    title: "Tools & guides",
+    links: [
+      { href: "/collection", label: "Collection" },
+      { href: "/wishlist", label: "Wishlist" },
+      { href: "/watch-value-tracker", label: "Watch value tracker" },
+      { href: "/collectors", label: "Collectors" },
+      { href: "/learn", label: "Watch guides" },
+      { href: "/blog", label: "Blog" },
+    ],
+  },
+  {
+    title: "Follow",
+    links: socials.map((s) => ({ href: s.url, label: s.name, external: true })),
+  },
+];
+
+const linkCls = "text-sm text-ink/85 transition hover:text-gold-bright";
+
 export default function SiteFooter() {
   return (
-    <footer className="site-footer mt-12 rounded-[2rem] border border-white/10 bg-white/5 px-5 py-6 backdrop-blur-xl sm:px-8">
-      <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-4">
-          <span role="img" aria-label="Brandon's Brands logo" className="shrink-0">
-            <LogoMark className="h-12 w-12 sm:h-14 sm:w-14" />
-          </span>
-          <div>
-          <p className="whitespace-nowrap text-xs uppercase tracking-[0.18em] text-blue-300 sm:tracking-[0.3em]">Follow Brandon&apos;s Brands</p>
-          <p className="mt-2 text-sm text-slate-300">
+    <footer className="site-footer mt-24 border-t border-hairline bg-surface text-ink">
+      <div className="mx-auto grid max-w-[1180px] gap-10 px-4 py-14 sm:grid-cols-2 sm:px-6 lg:grid-cols-[1.6fr_repeat(4,1fr)]">
+        <div>
+          <Link href="/" className="flex items-center gap-3" aria-label="Brandon's Brands home">
+            <LogoMark className="h-12 w-12" />
+            <span className="whitespace-nowrap font-display text-[24px] font-semibold uppercase leading-none tracking-[0.06em]">Brandon&apos;s Brands</span>
+          </Link>
+          <p className="mt-4 max-w-xs text-sm leading-6 text-muted">Luxury and microbrand watch reviews by Brandon Volosov, and a free community for collectors.</p>
+          <p className="mt-4 text-sm text-muted">
             Collabs:{" "}
-            <a href={`mailto:${collabEmail}`} className="text-[#D9A43A] transition hover:text-[#e1b54a]">
+            <a href={`mailto:${collabEmail}`} className="text-gold transition hover:text-gold-bright">
               {collabEmail}
             </a>
           </p>
-          <p className="mt-1 flex flex-wrap gap-y-1 text-sm [&>a]:whitespace-nowrap">
-            <Link href="/about" className="text-blue-300 transition hover:text-blue-200">About us</Link>
-            <span className="mx-2 text-slate-500">·</span>
-            <Link href="/about#contact" className="text-blue-300 transition hover:text-blue-200">Contact us</Link>
-            <span className="mx-2 text-slate-500">·</span>
-            <Link href="/collectors" className="text-blue-300 transition hover:text-blue-200">Collectors</Link>
-            <span className="mx-2 text-slate-500">·</span>
-            <Link href="/watch-value-tracker" className="text-blue-300 transition hover:text-blue-200">Watch value tracker</Link>
-            <span className="mx-2 text-slate-500">·</span>
-            <Link href="/terms" className="text-blue-300 transition hover:text-blue-200">Terms</Link>
-          </p>
-          <p className="mt-1 flex flex-wrap gap-y-1 text-sm [&>a]:whitespace-nowrap">
-            <Link href="/events" className="text-[#D9A43A] transition hover:text-[#e1b54a]">Events</Link>
-            <span className="mx-2 text-slate-500">·</span>
-            <Link href="/wrist-check" className="text-[#D9A43A] transition hover:text-[#e1b54a]">Wrist Check</Link>
-            <span className="mx-2 text-slate-500">·</span>
-            <Link href="/polls" className="text-[#D9A43A] transition hover:text-[#e1b54a]">Polls</Link>
-            <span className="mx-2 text-slate-500">·</span>
-            <Link href="/newsletter" className="text-[#D9A43A] transition hover:text-[#e1b54a]">Newsletter</Link>
-            <span className="mx-2 text-slate-500">·</span>
-            <a href={facebookGroup.url} target="_blank" rel="noreferrer" className="text-[#D9A43A] transition hover:text-[#e1b54a]">Facebook group</a>
-          </p>
-          </div>
         </div>
-        {/* Phones: an even 2 x 2 grid. Larger screens: one row. */}
-        <ul className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
-          {socials.map((s) => (
-            <li key={s.name}>
-              <a
-                href={s.url}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={`${s.name} ${s.handle}`}
-                className="flex w-full justify-center rounded-full border sm:inline-flex sm:w-auto border-[#3FB4EC]/40 bg-gradient-to-b from-[#1A7DBF] to-[#0E5A8F] px-4 py-2 text-sm font-medium text-white shadow-[0_0_18px_rgba(30,155,215,0.25)] transition hover:border-[#5CC4F2]/70 hover:from-[#2290D6] hover:to-[#136AA6] hover:shadow-[0_0_24px_rgba(30,155,215,0.45)]"
-              >
-                {s.name}
-              </a>
-            </li>
-          ))}
-        </ul>
+        {columns.map((col) => (
+          <nav key={col.title} aria-label={col.title}>
+            <p className="mb-3 text-[11px] uppercase tracking-[0.2em] text-muted">{col.title}</p>
+            <ul className="space-y-2">
+              {col.links.map((l) => (
+                <li key={l.href}>
+                  {l.external ? (
+                    <a href={l.href} target="_blank" rel="noreferrer" className={linkCls}>
+                      {l.label}
+                    </a>
+                  ) : (
+                    <Link href={l.href} className={linkCls}>
+                      {l.label}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))}
       </div>
-      <p className="mt-5 border-t border-white/10 pt-4 text-[11px] leading-5 text-slate-500">
-        <span className="font-semibold text-slate-400">Disclaimer:</span> {SALES_DISCLAIMER} Any deal made through connections on this site is
-        solely between the people involved.{" "}
-        <Link href="/terms" className="underline hover:text-slate-300">
-          Terms & Disclaimers
+      <p className="mx-auto max-w-[1180px] border-t border-hairline px-4 py-6 text-[11px] leading-5 text-muted sm:px-6">
+        <span className="font-semibold text-ink/80">Disclaimer:</span> {SALES_DISCLAIMER} Any deal made through connections on this site is solely between the
+        people involved.{" "}
+        <Link href="/terms" className="underline hover:text-ink">
+          Terms &amp; Disclaimers
         </Link>
       </p>
     </footer>

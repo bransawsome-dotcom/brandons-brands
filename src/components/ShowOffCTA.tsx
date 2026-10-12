@@ -8,19 +8,19 @@ import { useAuth } from "@/components/AuthProvider";
 export default function ShowOffCTA({ className = "" }: { className?: string }) {
   const { user } = useAuth();
   return (
-    <div className={`rounded-[2rem] border border-[#D9A43A]/30 bg-[#D9A43A]/5 p-6 text-center ${className}`}>
-      <p className="text-lg font-semibold text-white">Show off your own watches</p>
-      <p className="mt-1 text-sm text-slate-300">Build your collection and wishlist with photos, values and box &amp; papers. Keep them private, or choose to make them public and share them with other collectors.</p>
-      <div className="mt-4 flex flex-wrap justify-center gap-3">
+    <div className={`border border-hairline bg-surface px-6 py-10 text-center ${className}`}>
+      <p className="font-display text-[32px] font-semibold uppercase leading-none text-ink sm:text-[40px]">Show off <span className="font-light text-gold">your own watches</span></p>
+      <p className="mx-auto mt-3 max-w-2xl leading-7 text-muted">Build your collection and wishlist with photos, values and box &amp; papers. Keep them private, or choose to make them public and share them with other collectors.</p>
+      <div className="mt-6 flex flex-wrap justify-center gap-3">
         <Link
           href={user ? "/collection" : "/signup"}
-          className="inline-flex rounded-full bg-[#D9A43A] px-6 py-3 text-sm font-semibold uppercase tracking-[0.15em] text-black hover:bg-[#e1b54a]"
+          className="inline-flex min-h-[52px] items-center bg-gold px-7 text-xs font-semibold uppercase tracking-[0.2em] text-on-gold transition hover:bg-gold-bright"
         >
           {user ? "Go to my collection" : "Create a free account"}
         </Link>
         <Link
           href="/collectors"
-          className="inline-flex rounded-full border border-white/15 px-6 py-3 text-sm font-semibold uppercase tracking-[0.15em] text-slate-200 hover:bg-white/5"
+          className="inline-flex min-h-[52px] items-center border border-hairline-strong px-7 text-xs font-semibold uppercase tracking-[0.2em] text-ink transition hover:border-gold hover:text-gold-bright"
         >
           Browse collectors
         </Link>

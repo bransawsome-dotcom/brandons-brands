@@ -30,13 +30,13 @@ export default function NewsletterSignup({ source, compact = false, className = 
   return (
     <section
       aria-label="Newsletter sign-up"
-      className={`rounded-[2rem] border border-[#D9A43A]/30 bg-gradient-to-br from-[#D9A43A]/10 via-slate-950/60 to-[#1A7DBF]/15 ${compact ? "p-5" : "p-6 sm:p-8"} ${className}`}
+      className={`border border-hairline bg-surface ${compact ? "p-5" : "p-6 sm:p-8"} ${className}`}
     >
-      <p className="text-xs uppercase tracking-[0.3em] text-[#D9A43A]">Free weekly newsletter</p>
-      <h2 className={`mt-2 font-semibold text-white ${compact ? "text-lg" : "text-2xl"}`}>Brandon&apos;s week in watches, in your inbox</h2>
-      <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">
+      <p className="text-xs uppercase tracking-[0.22em] text-gold">Free weekly newsletter</p>
+      <h2 className={`mt-2 font-display font-semibold uppercase leading-none text-ink ${compact ? "text-2xl" : "text-[36px] sm:text-[44px]"}`}>Brandon&apos;s week <span className="font-serif font-normal normal-case italic text-gold">in watches</span></h2>
+      <p className="mt-3 max-w-2xl text-sm leading-6 text-muted">
         New videos, one of Brandon&apos;s favorites, upcoming watch events, the Wrist Check of the week and the best new watches for sale. Sign up and get the{" "}
-        <strong className="text-white">pre-owned watch buying checklist</strong> free.
+        <strong className="text-ink">pre-owned watch buying checklist</strong> free.
       </p>
       {state === "done" || state === "already" ? (
         <p className="mt-4 rounded-2xl bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
@@ -55,20 +55,20 @@ export default function NewsletterSignup({ source, compact = false, className = 
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"
             autoComplete="email"
-            className="min-w-0 flex-1 rounded-full border border-white/10 bg-slate-950/90 px-5 py-3 text-white outline-none focus:border-blue-400/70"
+            className="min-h-[52px] min-w-0 flex-1 border border-hairline-strong bg-ground px-5 text-ink outline-none focus:border-gold"
           />
           <input tabIndex={-1} autoComplete="off" aria-hidden value={website} onChange={(e) => setWebsite(e.target.value)} name="website" className="hidden" />
           <button
             type="submit"
             disabled={state === "sending"}
-            className="shrink-0 rounded-full bg-[#D9A43A] px-6 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-black hover:bg-[#e1b54a] disabled:opacity-60"
+            className="min-h-[52px] shrink-0 bg-gold px-7 text-xs font-semibold uppercase tracking-[0.2em] text-on-gold transition hover:bg-gold-bright disabled:opacity-60"
           >
             {state === "sending" ? "Signing up…" : "Sign me up"}
           </button>
         </form>
       )}
       {error ? <p className="mt-2 text-sm text-rose-300">{error}</p> : null}
-      <p className="mt-3 text-[11px] text-slate-500">One email a week. Unsubscribe anytime with one click. We never sell your email.</p>
+      <p className="mt-3 text-[11px] text-muted">One email a week. Unsubscribe anytime with one click. We never sell your email.</p>
     </section>
   );
 }

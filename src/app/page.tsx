@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import LogoMark from "@/components/LogoMark";
 import VaultLink from "@/components/VaultLink";
@@ -6,99 +7,210 @@ import ShowOffCTA from "@/components/ShowOffCTA";
 import LatestVideos from "@/components/LatestVideos";
 import FacebookGroupBanner from "@/components/FacebookGroupBanner";
 import PollCard from "@/components/PollCard";
-import WatchCarousel from "@/components/WatchCarousel";
+import TheEdit from "@/components/TheEdit";
 import { FAVORITES_PATH, loadFavorites } from "@/lib/favorites";
 import { loadPolls } from "@/lib/polls";
+import { eventWhen, loadEvents, splitEvents } from "@/lib/events";
+import { SITE_URL } from "@/lib/site";
 
-// Videos and the poll refresh every 5 minutes.
+// Videos, the poll and the next event refresh every 5 minutes.
 export const revalidate = 300;
 
-export default async function Home() {
-  const poll = (await loadPolls(5)).find((p) => p.active);
-  // Brandon's Favorites with a photo, for the turning 3D ring under the headline.
-  const ring = (await loadFavorites())
-    .filter((f) => f.image_url)
-    .map((f) => ({ id: f.id, brand: f.brand, model: f.model, image: f.image_url as string, href: f.post_id ? `/forum/${f.post_id}` : FAVORITES_PATH }));
+const TITLE = "Brandon's Brands | Luxury & Microbrand Watch Reviews and Free Collection Tracker";
+const DESCRIPTION =
+  "Watch reviews of luxury microbrands and independent watchmakers by Brandon Volosov, plus a free watch collection tracker with daily value estimates, a wishlist with price alerts, upcoming watch fairs and a community of collectors.";
+
+export const metadata: Metadata = {
+  title: { absolute: TITLE },
+  description: DESCRIPTION,
+  alternates: { canonical: "/" },
+  openGraph: { type: "website", url: "/", title: TITLE, description: DESCRIPTION },
+};
+
+// Small gold rule + label + two-weight headline used by every section.
+function SectionHead({ eyebrow, bold, light, id }: { eyebrow: string; bold: string; light: string; id: string }) {
   return (
-    <div className="min-h-screen bg-[#07111F] text-white">
-      <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-10 sm:px-6 sm:py-14 lg:px-16">
-        <section className="relative flex flex-col items-center justify-center overflow-hidden rounded-[2rem] border border-white/10 px-6 pb-12 pt-6 shadow-[0_30px_120px_rgba(0,0,0,0.55)] sm:px-10 sm:pb-16 sm:pt-8 lg:pb-20 lg:pt-10">
-          <div className="hero-bg absolute inset-0 -z-10 pointer-events-none" />
-          <div className="relative z-10 flex w-full flex-col items-center text-center animate-fade-in">
-            {/* The logo is the hero: a working watch showing the visitor's local time. */}
-            <h1 className="sr-only">Brandon&apos;s Brands: luxury watch curation</h1>
-            <div className="logo-stage relative flex max-w-none shrink-0 items-center justify-center">
-              <LogoMark
-                src="/logo-dial-1024.webp"
-                className="pointer-events-none absolute inset-0 h-full w-full select-none"
-                imgClassName="drop-shadow-[0_0_90px_rgba(59,130,246,0.35)]"
-                handWidth={0.7}
-              />
-            </div>
-            <p className="-mt-2 mb-4 whitespace-nowrap rounded-full border border-blue-400/25 bg-white/5 px-3 py-1.5 text-[10px] uppercase tracking-[0.25em] text-blue-300 shadow-[0_0_45px_rgba(59,130,246,0.15)] sm:-mt-4 sm:px-4 sm:py-2 sm:text-sm sm:tracking-[0.3em] lg:-mt-6">
-              Luxury Watch Curation
-            </p>
-            <p className="max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
-              <span className="block">Discover. Collect.</span>
-              <span className="block">Showcase the world&apos;s finest watches.</span>
-            </p>
-            <WatchCarousel watches={ring} className="mt-8 w-full" />
-          </div>
-        </section>
+    <div>
+      <div className="mb-4 h-0.5 w-11 bg-gold" aria-hidden />
+      <p className="mb-2 text-xs uppercase tracking-[0.22em] text-gold">{eyebrow}</p>
+      <h2 id={id} className="font-display text-[44px] font-semibold uppercase leading-[0.95] text-ink sm:text-[60px]">
+        {bold} <span className="font-light text-gold">{light}</span>
+      </h2>
+    </div>
+  );
+}
 
-        <LatestVideos className="mt-12" />
+const smallLink = "text-xs uppercase tracking-[0.2em] text-gold transition hover:text-gold-bright";
 
-        {poll ? <PollCard poll={poll} className="mt-12" /> : null}
+export default async function Home() {
+  const [polls, favorites, events] = await Promise.all([loadPolls(5), loadFavorites(), loadEvents()]);
+  const poll = polls.find((p) => p.active);
+  const edit = favorites.slice(0, 8).map((f) => ({
+    id: f.id,
+    brand: f.brand,
+    model: f.model,
+    image: f.image_url ?? null,
+    href: f.post_id ? `/forum/${f.post_id}` : FAVORITES_PATH,
+  }));
+  const nextEvent = splitEvents(events).upcoming[0];
 
-        {/* Community: reasons to come back every week. */}
-        <section aria-label="Community" className="mt-12 grid gap-4 sm:grid-cols-3">
-          {[
-            { href: "/wrist-check", icon: "📸", title: "Wrist Check", text: "Post what's on your wrist today. Brandon picks a Wrist Check of the Week." },
-            { href: "/events", icon: "📅", title: "Watch events", text: "Upcoming microbrand watch fairs, shows and collector meetups." },
-            { href: "/forum", icon: "💬", title: "Forum", text: "Ask questions, share finds and find watches for sale or wanted." },
-          ].map((c) => (
-            <Link key={c.href} href={c.href} className="group rounded-[1.75rem] border border-[#3FB4EC]/20 bg-[#0E5A8F]/10 p-5 transition hover:-translate-y-1 hover:border-[#3FB4EC]/50">
-              <p className="text-2xl" aria-hidden>
-                {c.icon}
-              </p>
-              <h2 className="mt-2 text-lg font-semibold text-white">{c.title}</h2>
-              <p className="mt-1 text-sm leading-6 text-slate-300">{c.text}</p>
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Brandon's Brands",
+    url: SITE_URL,
+    description: DESCRIPTION,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: { "@type": "EntryPoint", urlTemplate: `${SITE_URL}/search?q={search_term_string}` },
+      "query-input": "required name=search_term_string",
+    },
+  };
+
+  return (
+    <div className="text-ink">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+
+      {/* Hero */}
+      <section className="grid items-center gap-10 border-b border-hairline pb-16 pt-6 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] md:gap-12 md:pb-24 md:pt-12">
+        <div className="animate-fade-in">
+          <p className="mb-5 text-xs uppercase tracking-[0.22em] text-gold">Brandon&apos;s Brands · Luxury &amp; microbrand watches</p>
+          <h1 className="font-display text-[72px] font-semibold uppercase leading-[0.84] tracking-[-0.01em] sm:text-[104px] lg:text-[128px]">
+            Discover.
+            <span className="block font-light text-gold">Collect.</span>
+            <span className="sr-only"> Luxury and microbrand watch reviews by Brandon Volosov</span>
+          </h1>
+          <p className="mt-7 max-w-xl text-lg leading-8 text-ink/85">
+            Watch reviews of luxury microbrands and independent watchmakers by Brandon Volosov. Keep your collection in a private vault, track what it&apos;s
+            worth every day, and trade notes with collectors who care as much as you do.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/signup" className="inline-flex min-h-[52px] items-center bg-gold px-7 text-xs font-semibold uppercase tracking-[0.2em] text-on-gold transition hover:bg-gold-bright">
+              Create free account
             </Link>
-          ))}
+            <Link href="/collectors" className="inline-flex min-h-[52px] items-center border border-hairline-strong px-7 text-xs font-semibold uppercase tracking-[0.2em] text-ink transition hover:border-gold hover:text-gold-bright">
+              Browse collectors
+            </Link>
+          </div>
+          <dl className="mt-10 grid max-w-xl grid-cols-3 border-t border-hairline">
+            {[
+              ["Daily", "Value estimates"],
+              ["Weekly", "Wrist Check"],
+              ["Free", "For collectors"],
+            ].map(([big, small], i) => (
+              <div key={big} className={`pt-4 ${i ? "border-l border-hairline pl-4" : "pr-4"}`}>
+                <dt className="font-serif text-3xl text-ink">{big}</dt>
+                <dd className="mt-1 text-[11px] uppercase tracking-[0.16em] text-muted">{small}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+        <div className="relative mx-auto aspect-square w-full max-w-[440px] border border-hairline bg-surface p-6 sm:p-10">
+          {/* The logo is a working watch showing the visitor's local time. */}
+          <LogoMark src="/logo-dial-1024.webp" className="h-full w-full" handWidth={0.9} />
+          <p className="absolute inset-x-0 -bottom-7 text-center text-[11px] uppercase tracking-[0.2em] text-muted">Set to your local time</p>
+        </div>
+      </section>
+
+      <LatestVideos className="mt-20" />
+
+      {poll ? <PollCard poll={poll} className="mt-16" /> : null}
+
+      {/* The Edit: Brandon's Favorites */}
+      {edit.length ? (
+        <section aria-labelledby="the-edit" className="mt-24 border-t border-hairline pt-20">
+          <div className="mb-12 flex flex-wrap items-end justify-between gap-5">
+            <SectionHead id="the-edit" eyebrow="Brandon's Favorites" bold="The" light="Edit" />
+            <Link href={FAVORITES_PATH} className={smallLink}>
+              See all favorites →
+            </Link>
+          </div>
+          <TheEdit watches={edit} />
         </section>
+      ) : null}
 
-        <FacebookGroupBanner className="mt-12" />
+      {/* Brand line */}
+      <section aria-label="The collector's eye" className="mt-24 border-y border-hairline bg-surface px-6 py-20 text-center sm:py-28">
+        <p className="text-xs uppercase tracking-[0.22em] text-muted">The collector&apos;s eye</p>
+        <p className="mt-4 font-serif text-[56px] italic leading-none text-ink sm:text-[88px]">Worn, not kept.</p>
+      </section>
 
-        <section id="collection" className="mt-12 grid gap-6 sm:grid-cols-3">
-          <VaultLink href="/collection" className="group flex h-full flex-col rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl transition hover:-translate-y-1 hover:border-[#D9A43A]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D9A43A]">
-            <h2 className="mb-3 text-2xl font-semibold text-white">My Collection</h2>
-            <p className="flex-1 text-sm leading-6 text-slate-300">
-              Store your watches with photo, brand, model and purchase date, and track what each one is worth with daily estimated values.
-            </p>
-            <span className="mt-5 inline-flex items-center gap-1 self-start text-sm font-semibold uppercase tracking-[0.15em] text-[#D9A43A]">Open collection <span aria-hidden className="transition group-hover:translate-x-1">→</span></span>
-          </VaultLink>
-
-          <Link href="/wishlist" className="group flex h-full flex-col rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl transition hover:-translate-y-1 hover:border-[#D9A43A]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D9A43A]">
-            <h2 className="mb-3 text-2xl font-semibold text-white">Wishlist</h2>
-            <p className="flex-1 text-sm leading-6 text-slate-300">
-              Save watches you want to own.
-            </p>
-            <span className="mt-5 inline-flex items-center gap-1 self-start text-sm font-semibold uppercase tracking-[0.15em] text-[#D9A43A]">Open wishlist <span aria-hidden className="transition group-hover:translate-x-1">→</span></span>
+      {/* Community */}
+      <section aria-labelledby="community" className="mt-24">
+        <div className="mb-12 flex flex-wrap items-end justify-between gap-5">
+          <SectionHead id="community" eyebrow="The community" bold="Wear it." light="Show it." />
+          <Link href="/forum" className={smallLink}>
+            Visit the forum →
           </Link>
-
-          <Link href="/social" className="group flex h-full flex-col rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl transition hover:-translate-y-1 hover:border-[#D9A43A]/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D9A43A]">
-            <h2 className="mb-3 text-2xl font-semibold text-white">Social Media</h2>
-            <p className="flex-1 text-sm leading-6 text-slate-300">
-              Follow along on Instagram, TikTok, YouTube and Facebook.
+        </div>
+        <div className="grid border border-hairline bg-surface md:grid-cols-3">
+          <article className="flex flex-col border-b border-hairline p-8 md:border-b-0 md:border-r">
+            <p className="text-[11px] uppercase tracking-[0.2em] text-gold">Wrist Check</p>
+            <h3 className="mt-3 font-display text-[32px] font-semibold uppercase leading-none">Post today&apos;s wrist shot</h3>
+            <p className="mt-4 flex-1 leading-7 text-muted">Share what you&apos;re wearing. Each week Brandon picks one for Wrist Check of the Week.</p>
+            <Link href="/wrist-check" className={`mt-6 ${smallLink}`}>
+              Post a wrist check →
+            </Link>
+          </article>
+          <article className="flex flex-col border-b border-hairline p-8 md:border-b-0 md:border-r">
+            <p className="text-[11px] uppercase tracking-[0.2em] text-gold">{nextEvent ? `Next watch fair · ${eventWhen(nextEvent)}` : "Watch events"}</p>
+            <h3 className="mt-3 font-display text-[32px] font-semibold uppercase leading-none">{nextEvent ? nextEvent.title : "Microbrand fairs and meetups"}</h3>
+            <p className="mt-4 flex-1 leading-7 text-muted">
+              {nextEvent?.location ? `${nextEvent.location}. ` : ""}Microbrand watch fairs, shows and collector meetups worth knowing about.
             </p>
-            <span className="mt-5 inline-flex items-center gap-1 self-start text-sm font-semibold uppercase tracking-[0.15em] text-[#D9A43A]">Follow along <span aria-hidden className="transition group-hover:translate-x-1">→</span></span>
-          </Link>
-        </section>
+            <Link href="/events" className={`mt-6 ${smallLink}`}>
+              Upcoming watch fairs →
+            </Link>
+          </article>
+          <article className="flex flex-col p-8">
+            <p className="text-[11px] uppercase tracking-[0.2em] text-gold">Forum</p>
+            <h3 className="mt-3 font-display text-[32px] font-semibold uppercase leading-none">Questions, finds, for sale</h3>
+            <p className="mt-4 flex-1 leading-7 text-muted">Ask, share and swap with collectors. Sales and trades happen between members.</p>
+            <Link href="/forum" className={`mt-6 ${smallLink}`}>
+              Read the threads →
+            </Link>
+          </article>
+        </div>
+      </section>
 
-        <ShowOffCTA className="mt-12" />
+      <FacebookGroupBanner className="mt-24" />
 
-        <NewsletterSignup source="home" className="mt-12" />
-      </main>
+      {/* Free tools */}
+      <section id="collection" aria-labelledby="tools" className="mt-24 border-t border-hairline pt-20">
+        <div className="mb-12">
+          <SectionHead id="tools" eyebrow="Free collector tools" bold="Everything you own," light="in one place" />
+        </div>
+        <div className="grid gap-6 md:grid-cols-3">
+          {[
+            { href: "/collection", vault: true, label: "My Collection", title: "The Vault", text: "Store each watch with photos, brand, model, purchase date, and box and papers, with an estimated value updated daily." },
+            { href: "/wishlist", label: "Wishlist", title: "The Display Case", text: "Save the watches you want, get price alerts, and move them into your vault the day you buy one." },
+            { href: "/watch-value-tracker", label: "Watch value tracker", title: "What it's worth", text: "See your collection's value over time and the watches that moved the most." },
+          ].map((c) => {
+            const body = (
+              <>
+                <p className="text-[11px] uppercase tracking-[0.2em] text-gold">{c.label}</p>
+                <h3 className="mt-3 font-display text-[32px] font-semibold uppercase leading-none text-ink">{c.title}</h3>
+                <p className="mt-4 flex-1 leading-7 text-muted">{c.text}</p>
+                <span className={`mt-6 ${smallLink}`}>Open →</span>
+              </>
+            );
+            const cls = "group flex h-full flex-col border border-hairline bg-surface p-8 transition hover:border-gold/60";
+            return c.vault ? (
+              <VaultLink key={c.href} href={c.href} className={cls}>
+                {body}
+              </VaultLink>
+            ) : (
+              <Link key={c.href} href={c.href} className={cls}>
+                {body}
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      <ShowOffCTA className="mt-24" />
+
+      <NewsletterSignup source="home" className="mt-16" />
     </div>
   );
 }
