@@ -1,0 +1,148 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
+
+// "Ask Brandon": a floating pill on every page that opens a short form. Questions are emailed to Brandon.
+const TOPICS = ["Buying advice", "A listing I found", "My collection", "Collab"];
+const HIDE_ON = [/^\/connect/, /^\/admin/, /^\/inbox/];
+
+export default function AskBrandon() {
+  const path = usePathname() ?? "/";
+  const dialog = useRef<HTMLDialogElement>(null);
+  const [topic, setTopic] = useState(TOPICS[0]);
+  const [state, setState] = useState<"idle" | "sending" | "sent">("idle");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const d = dialog.current;
+    if (!d) return;
+    const close = (e: MouseEvent) => {
+      if (e.target === d) d.close();
+    };
+    d.addEventListener("click", close);
+    return () => d.removeEventListener("click", close);
+  }, []);
+
+  if (HIDE_ON.some((r) => r.test(path))) return null;
+
+  const open = () => {
+    setError("");
+    if (state === "sent") setState("idle");
+    dialog.current?.showModal();
+  };
+
+  async function submit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const f = new FormData(e.currentTarget);
+    setState("sending");
+    setError("");
+    const res = await fetch("/api/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...Object.fromEntries(f), topic, page: path }),
+    }).catch(() => null);
+    const data = res ? await res.json().catch(() => ({})) : {};
+    if (res?.ok) {
+      setState("sent");
+      (e.target as HTMLFormElement).reset();
+    } else {
+      setState("idle");
+      setError(data.error ?? "Something went wrong. Please try again.");
+    }
+  }
+
+  const field =
+    "mt-1.5 w-full rounded border border-hairline-strong bg-raised px-3 py-2.5 text-[15px] text-ink placeholder:text-muted/70 focus:border-gold focus:outline-none";
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={open}
+        className="fixed bottom-20 right-4 z-40 inline-flex items-center gap-2 rounded-full border border-gold/40 bg-ink py-2.5 pl-3 pr-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#f1ece3] shadow-[0_12px_30px_rgba(43,38,32,0.25)] transition hover:-translate-y-0.5 md:bottom-6 md:right-6"
+        aria-haspopup="dialog"
+        aria-label="Ask Brandon a question"
+      >
+        <span aria-hidden className="flex h-6 w-6 items-center justify-center rounded-full bg-gold text-[13px] normal-case tracking-normal text-on-gold">?</span>
+        Ask<span className="hidden sm:inline"> Brandon</span>
+      </button>
+
+      <dialog
+        ref={dialog}
+        aria-labelledby="ask-title"
+        className="m-auto w-[calc(100%-2rem)] max-w-lg rounded-md border border-hairline bg-ground p-0 text-ink shadow-[0_30px_80px_rgba(43,38,32,0.35)] backdrop:bg-[#2b2620]/50 backdrop:backdrop-blur-sm"
+      >
+        <div className="relative p-6 sm:p-8">
+          <button type="button" onClick={() => dialog.current?.close()} aria-label="Close" className="absolute right-4 top-4 h-9 w-9 rounded-full text-xl text-muted hover:bg-surface hover:text-ink">
+            ×
+          </button>
+          <span aria-hidden className="block h-px w-10 bg-gold" />
+          <p className="mt-4 text-[11px] uppercase tracking-[0.3em] text-gold">Ask Brandon</p>
+          <h2 id="ask-title" className="mt-2 font-display text-4xl font-semibold uppercase leading-none">
+            A question about <span className="font-light text-gold">watches?</span>
+          </h2>
+          <p className="mt-3 font-serif text-lg italic text-ink/80">Brandon reads every message and replies by email.</p>
+
+          {state === "sent" ? (
+            <div className="mt-6 rounded border border-hairline bg-raised p-5" role="status">
+              <p className="font-display text-2xl font-semibold uppercase">Sent to Brandon</p>
+              <p className="mt-2 text-sm text-ink/80">Thanks! Watch your inbox for his reply.</p>
+              <button type="button" onClick={() => dialog.current?.close()} className="mt-4 text-xs font-semibold uppercase tracking-[0.2em] text-gold hover:text-gold-bright">
+                Close
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={submit} className="mt-6 grid gap-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label className="text-[11px] uppercase tracking-[0.2em] text-muted">
+                  Name
+                  <input name="name" required minLength={2} maxLength={80} autoComplete="name" className={field} />
+                </label>
+                <label className="text-[11px] uppercase tracking-[0.2em] text-muted">
+                  Email
+                  <input name="email" type="email" required maxLength={200} autoComplete="email" className={field} />
+                </label>
+              </div>
+              <fieldset>
+                <legend className="text-[11px] uppercase tracking-[0.2em] text-muted">Topic</legend>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {TOPICS.map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      aria-pressed={topic === t}
+                      onClick={() => setTopic(t)}
+                      className={`min-h-9 rounded-full border px-3.5 text-xs transition ${
+                        topic === t ? "border-gold bg-gold text-on-gold" : "border-hairline-strong text-ink hover:border-gold"
+                      }`}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              </fieldset>
+              <label className="text-[11px] uppercase tracking-[0.2em] text-muted">
+                Your question
+                <textarea name="question" required minLength={10} maxLength={2000} rows={4} className={`${field} resize-y normal-case tracking-normal`} />
+              </label>
+              <input name="website" tabIndex={-1} autoComplete="off" aria-hidden className="hidden" />
+              {error ? (
+                <p role="alert" className="text-sm text-rose-700">
+                  {error}
+                </p>
+              ) : null}
+              <button
+                type="submit"
+                disabled={state === "sending"}
+                className="inline-flex min-h-12 items-center justify-center rounded-full bg-gold px-6 text-xs font-semibold uppercase tracking-[0.2em] text-on-gold transition hover:bg-gold-bright disabled:opacity-60"
+              >
+                {state === "sending" ? "Sending…" : "Send to Brandon"}
+              </button>
+            </form>
+          )}
+        </div>
+      </dialog>
+    </>
+  );
+}

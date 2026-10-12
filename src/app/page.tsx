@@ -215,7 +215,7 @@ export default async function Home() {
                 {c.vault ? (
                   <div className="relative -mx-8 -mt-8 mb-7 w-[calc(100%+4rem)] max-w-none">
                     <LoopVideo name="vault" poster="/redesign/video/vault-poster.webp" label="A bank vault door unlocks and swings open" className="aspect-[4/3] w-full object-cover" />
-                    <span className="absolute bottom-2 right-3 text-[9px] uppercase tracking-[0.12em] text-white/70">Preview footage · license before launch</span>
+                    <span className="absolute bottom-2 right-3 text-[9px] uppercase tracking-[0.12em] text-ink">Preview footage · license before launch</span>
                   </div>
                 ) : (
                   // eslint-disable-next-line @next/next/no-img-element

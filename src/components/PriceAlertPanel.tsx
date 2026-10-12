@@ -50,11 +50,11 @@ export default function PriceAlertPanel({
   };
 
   return (
-    <div className={`mt-5 rounded-2xl border p-4 ${on ? "border-[#3FB4EC]/40 bg-[#0E5A8F]/15" : "border-white/10 bg-black/20"}`}>
+    <div className={`mt-5 rounded border p-4 ${on ? "border-gold/40 bg-gold/15" : "border-hairline bg-surface"}`}>
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-sm font-semibold text-white">{on ? "🔔" : "🔕"} Price alert</p>
-          <p className="mt-0.5 text-xs text-slate-400">
+          <p className="text-sm font-semibold text-ink">{on ? "🔔" : "🔕"} Price alert</p>
+          <p className="mt-0.5 text-xs text-muted">
             {!target
               ? "Add a target price (Edit) to turn this on."
               : on
@@ -69,20 +69,20 @@ export default function PriceAlertPanel({
           aria-label="Price alert"
           disabled={busy || (!target && !on)}
           onClick={toggle}
-          className={`relative h-7 w-12 shrink-0 rounded-full transition disabled:opacity-40 ${on ? "bg-[#1A7DBF]" : "bg-white/15"}`}
+          className={`relative h-7 w-12 shrink-0 rounded-full transition disabled:opacity-40 ${on ? "bg-gold" : "bg-hairline"}`}
         >
-          <span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all ${on ? "left-6" : "left-1"}`} />
+          <span className={`absolute top-1 h-5 w-5 rounded-full bg-surface shadow transition-all ${on ? "left-6" : "left-1"}`} />
         </button>
       </div>
 
       {on && target ? (
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-muted">
           <span>{item.alert_checked_at ? `Last checked ${when(item.alert_checked_at)}` : "First check within a day"}</span>
           <button
             type="button"
             onClick={onCheck}
             disabled={checking}
-            className="rounded-full border border-[#3FB4EC]/40 px-3 py-1 font-semibold text-blue-200 transition hover:bg-[#1A7DBF]/20 disabled:opacity-60"
+            className="rounded-full border border-gold/40 px-3 py-1 font-semibold text-gold transition hover:bg-gold/20 disabled:opacity-60"
           >
             {checking ? "Searching… up to a minute" : "Check now"}
           </button>
@@ -94,29 +94,29 @@ export default function PriceAlertPanel({
           {shown.map((m) => (
             <li key={m.id} className="rounded-xl border border-emerald-400/25 bg-emerald-500/5 p-3 text-sm">
               <div className="flex items-start justify-between gap-2">
-                <a href={m.url} target="_blank" rel="noopener noreferrer" className="min-w-0 font-semibold text-emerald-200 hover:underline">
+                <a href={m.url} target="_blank" rel="noopener noreferrer" className="min-w-0 font-semibold text-emerald-800 hover:underline">
                   {formatUsd(m.price_usd)}
-                  {m.currency !== "USD" && m.price ? <span className="font-normal text-slate-400"> ({m.currency} {Math.round(m.price).toLocaleString("en-US")})</span> : null}
-                  <span className="font-normal text-slate-300"> · {m.marketplace}</span>
+                  {m.currency !== "USD" && m.price ? <span className="font-normal text-muted"> ({m.currency} {Math.round(m.price).toLocaleString("en-US")})</span> : null}
+                  <span className="font-normal text-ink/80"> · {m.marketplace}</span>
                 </a>
-                <button type="button" onClick={() => onDismiss(m.id)} aria-label="Dismiss" className="shrink-0 text-slate-500 hover:text-slate-200">
+                <button type="button" onClick={() => onDismiss(m.id)} aria-label="Dismiss" className="shrink-0 text-muted hover:text-ink">
                   ✕
                 </button>
               </div>
-              <p className="mt-1 text-xs leading-5 text-slate-300">
+              <p className="mt-1 text-xs leading-5 text-ink/80">
                 {[m.location && `📍 ${m.location}`, m.seller && m.seller !== m.marketplace ? m.seller : "", m.condition, m.box_papers].filter(Boolean).join(" · ")}
               </p>
-              <p className="mt-0.5 text-[11px] text-slate-500">Found {when(m.found_at)}</p>
+              <p className="mt-0.5 text-[11px] text-muted">Found {when(m.found_at)}</p>
             </li>
           ))}
           {matches.length > 3 ? (
             <li>
-              <button type="button" onClick={() => setShowAll((v) => !v)} className="text-xs font-semibold text-blue-300 hover:text-blue-200">
+              <button type="button" onClick={() => setShowAll((v) => !v)} className="text-xs font-semibold text-gold hover:text-gold">
                 {showAll ? "Show fewer" : `Show all ${matches.length}`}
               </button>
             </li>
           ) : null}
-          <li className="text-[11px] leading-4 text-slate-500">Asking prices from public listings. Always verify the seller, reference and box &amp; papers.</li>
+          <li className="text-[11px] leading-4 text-muted">Asking prices from public listings. Always verify the seller, reference and box &amp; papers.</li>
         </ul>
       ) : null}
     </div>

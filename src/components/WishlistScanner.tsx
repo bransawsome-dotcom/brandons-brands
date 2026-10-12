@@ -76,30 +76,30 @@ export default function WishlistScanner({ onAdd }: { onAdd: (items: WishlistItem
     if (failed.length) setError(`Couldn't find prices for: ${failed.join(", ")}. They were added without them — use Auto-fill on the card to try again.`);
   };
 
-  const input = "w-full rounded-xl border border-white/10 bg-slate-950/90 px-3 py-2 text-sm text-white outline-none focus:border-blue-400/70";
+  const input = "w-full rounded-xl border border-hairline bg-raised px-3 py-2 text-sm text-ink outline-none focus:border-gold/70";
 
   return (
-    <div className="rounded-[1.75rem] border border-[#D9A43A]/30 bg-[#D9A43A]/5 p-5 sm:p-6">
-      <p className="text-xs uppercase tracking-[0.3em] text-[#D9A43A]">Scan a list</p>
-      <h2 className="mt-2 text-xl font-semibold text-white">Add your whole wishlist from one photo</h2>
-      <p className="mt-2 text-sm leading-6 text-slate-300">
+    <div className="rounded-md border border-gold/30 bg-gold/5 p-5 sm:p-6">
+      <p className="text-xs uppercase tracking-[0.3em] text-gold">Scan a list</p>
+      <h2 className="mt-2 text-xl font-semibold text-ink">Add your whole wishlist from one photo</h2>
+      <p className="mt-2 text-sm leading-6 text-ink/80">
         Snap a photo of your wishlist (handwritten, printed, a notes screenshot or a dealer listing). We&apos;ll read each watch and
         fill in its photo, details, today&apos;s retail price and market value. A price written next to a watch becomes your target price.
       </p>
 
       <label
-        className={`mt-4 inline-flex cursor-pointer rounded-full bg-[#D9A43A] px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-[#e1b54a] ${busy ? "pointer-events-none opacity-60" : ""}`}
+        className={`mt-4 inline-flex cursor-pointer rounded-full bg-gold px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-on-gold transition hover:bg-gold-bright ${busy ? "pointer-events-none opacity-60" : ""}`}
       >
         {busy && !rows.length ? "Reading…" : "Choose photo"}
         <input type="file" accept="image/*" onChange={handleFile} className="sr-only" disabled={busy} />
       </label>
 
-      {status ? <p className="mt-4 text-sm text-slate-200">{status}</p> : null}
-      {error ? <p className="mt-2 text-sm text-rose-300">{error}</p> : null}
+      {status ? <p className="mt-4 text-sm text-ink">{status}</p> : null}
+      {error ? <p className="mt-2 text-sm text-rose-700">{error}</p> : null}
 
       {rows.length ? (
         <div className="mt-4 space-y-3">
-          <div className="hidden px-3 text-[11px] uppercase tracking-[0.15em] text-slate-400 sm:grid sm:grid-cols-[auto_1fr_1fr_1fr_1fr_auto] sm:gap-2">
+          <div className="hidden px-3 text-[11px] uppercase tracking-[0.15em] text-muted sm:grid sm:grid-cols-[auto_1fr_1fr_1fr_1fr_auto] sm:gap-2">
             <span className="w-5" />
             <span>Brand</span>
             <span>Model</span>
@@ -108,13 +108,13 @@ export default function WishlistScanner({ onAdd }: { onAdd: (items: WishlistItem
             <span className="w-24">Priority</span>
           </div>
           {rows.map((row, i) => (
-            <div key={i} className="grid gap-2 rounded-2xl border border-white/10 bg-black/30 p-3 sm:grid-cols-[auto_1fr_1fr_1fr_1fr_auto] sm:items-center">
+            <div key={i} className="grid gap-2 rounded border border-hairline bg-surface p-3 sm:grid-cols-[auto_1fr_1fr_1fr_1fr_auto] sm:items-center">
               <input
                 type="checkbox"
                 checked={row.selected}
                 onChange={(e) => updateRow(i, { selected: e.target.checked })}
                 aria-label={`Add ${row.brand} ${row.model}`}
-                className="h-5 w-5 accent-[#D9A43A]"
+                className="h-5 w-5 accent-gold"
               />
               <input className={input} value={row.brand} onChange={(e) => updateRow(i, { brand: e.target.value })} placeholder="Brand" aria-label="Brand" />
               <input className={input} value={row.model} onChange={(e) => updateRow(i, { model: e.target.value })} placeholder="Model" aria-label="Model" />
@@ -140,7 +140,7 @@ export default function WishlistScanner({ onAdd }: { onAdd: (items: WishlistItem
             type="button"
             onClick={handleAdd}
             disabled={busy || !rows.some((r) => r.selected)}
-            className="rounded-full bg-[#D9A43A] px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-[#e1b54a] disabled:opacity-60"
+            className="rounded-full bg-gold px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-on-gold transition hover:bg-gold-bright disabled:opacity-60"
           >
             {busy ? "Adding…" : `Add ${rows.filter((r) => r.selected).length} to wishlist`}
           </button>

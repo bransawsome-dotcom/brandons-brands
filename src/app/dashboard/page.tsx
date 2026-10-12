@@ -2,6 +2,7 @@
 
 import { parseMoney } from "@/lib/watchAiClient";
 import ValueHistory from "@/components/ValueHistory";
+import WelcomeTour from "@/components/WelcomeTour";
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -24,7 +25,7 @@ function ValueChart({ points }: { points: { label: string; value: number }[] }) 
   const width = 700;
   const height = 160;
   const pad = 24;
-  if (!points.length) return <div className="text-slate-400">Not enough data for chart.</div>;
+  if (!points.length) return <div className="text-muted">Not enough data for chart.</div>;
 
   const vals = points.map((p) => p.value);
   const max = Math.max(...vals);
@@ -39,7 +40,7 @@ function ValueChart({ points }: { points: { label: string; value: number }[] }) 
   const areaPts = `M ${pad},${height - pad} L ${pts} L ${width - pad},${height - pad} Z`;
 
   return (
-    <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-40 rounded-3xl bg-slate-950/90 p-2">
+    <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-40 rounded-md bg-raised p-2">
       <defs>
         <linearGradient id="g1" x1="0" x2="0" y1="0" y2="1">
           <stop offset="0%" stopColor="#D9A43A" stopOpacity="0.18" />
@@ -115,125 +116,126 @@ export default function DashboardPage() {
 
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-16">
-      <div className="rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900/90 via-black/70 to-slate-950/95 p-5 shadow-[0_30px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:p-8">
+      <WelcomeTour />
+      <div className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-8">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div className="space-y-2">
-            <p className="text-sm uppercase tracking-[0.35em] text-[#D9A43A]">Dashboard</p>
-            <h1 className="text-4xl font-semibold text-white">Collection Intelligence</h1>
-            <p className="max-w-2xl text-sm text-slate-300">A premium overview of the archive, performance, and activity across your Brandon&apos;s Brands collection.</p>
+            <p className="text-sm uppercase tracking-[0.35em] text-gold">Dashboard</p>
+            <h1 className="text-4xl font-semibold text-ink">Collection Intelligence</h1>
+            <p className="max-w-2xl text-sm text-ink/80">A premium overview of the archive, performance, and activity across your Brandon&apos;s Brands collection.</p>
           </div>
           <div className="grid gap-3 sm:grid-cols-3">
-            <Link href="/collection" className="rounded-full border border-[#D9A43A]/25 bg-[#0f172a] px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:border-[#D9A43A] hover:bg-[#111827]">
+            <Link href="/collection" className="rounded-full border border-gold/25 bg-raised px-5 py-3 text-sm font-semibold text-ink transition hover:-translate-y-0.5 hover:border-gold hover:bg-surface">
               Add Watch
             </Link>
-            <Link href="/collection" className="rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white/10">
+            <Link href="/collection" className="rounded-full border border-hairline bg-surface px-5 py-3 text-sm font-semibold text-ink transition hover:-translate-y-0.5 hover:bg-surface">
               View Collection
             </Link>
-            <Link href="/wishlist" className="rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white/10">
+            <Link href="/wishlist" className="rounded-full border border-hairline bg-surface px-5 py-3 text-sm font-semibold text-ink transition hover:-translate-y-0.5 hover:bg-surface">
               Wishlist
             </Link>
           </div>
         </div>
         {totalWatches === 0 ? (
-          <div className="mt-6 rounded-[1rem] border border-white/6 bg-white/3 p-4 text-sm text-slate-300">
+          <div className="mt-6 rounded-[1rem] border border-hairline bg-surface p-4 text-sm text-ink/80">
             Collection statistics will appear here after you add your first watch.
           </div>
         ) : null}
 
         <div className="mt-10 grid gap-6 lg:grid-cols-3">
-          <div className="rounded-[1.75rem] border border-white/10 bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.25)] transition hover:-translate-y-0.5 hover:shadow-[0_26px_78px_rgba(0,0,0,0.3)]">
-            <p className="text-sm uppercase tracking-[0.28em] text-slate-400">Total Collection Value</p>
-            <p className="mt-4 text-3xl font-semibold text-white">{formatCurrency(totalEstimatedValue)}</p>
+          <div className="rounded-md border border-hairline bg-raised p-6 shadow-[0_10px_30px_rgba(43,38,32,0.08)] transition hover:-translate-y-0.5 shadow-[0_10px_30px_rgba(43,38,32,0.08)]">
+            <p className="text-sm uppercase tracking-[0.28em] text-muted">Total Collection Value</p>
+            <p className="mt-4 text-3xl font-semibold text-ink">{formatCurrency(totalEstimatedValue)}</p>
           </div>
-          <div className="rounded-[1.75rem] border border-white/10 bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.25)] transition hover:-translate-y-0.5 hover:shadow-[0_26px_78px_rgba(0,0,0,0.3)]">
-            <p className="text-sm uppercase tracking-[0.28em] text-slate-400">Total Purchase Cost</p>
-            <p className="mt-4 text-3xl font-semibold text-white">{formatCurrency(totalPurchaseCost)}</p>
+          <div className="rounded-md border border-hairline bg-raised p-6 shadow-[0_10px_30px_rgba(43,38,32,0.08)] transition hover:-translate-y-0.5 shadow-[0_10px_30px_rgba(43,38,32,0.08)]">
+            <p className="text-sm uppercase tracking-[0.28em] text-muted">Total Purchase Cost</p>
+            <p className="mt-4 text-3xl font-semibold text-ink">{formatCurrency(totalPurchaseCost)}</p>
           </div>
-          <div className="rounded-[1.75rem] border border-white/10 bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.25)] transition hover:-translate-y-0.5 hover:shadow-[0_26px_78px_rgba(0,0,0,0.3)]">
-            <p className="text-sm uppercase tracking-[0.28em] text-slate-400">Profit / Loss</p>
-            <p className={`mt-4 text-3xl font-semibold ${totalProfit >= 0 ? "text-emerald-300" : "text-rose-300"}`}>{formatCurrency(totalProfit)}</p>
+          <div className="rounded-md border border-hairline bg-raised p-6 shadow-[0_10px_30px_rgba(43,38,32,0.08)] transition hover:-translate-y-0.5 shadow-[0_10px_30px_rgba(43,38,32,0.08)]">
+            <p className="text-sm uppercase tracking-[0.28em] text-muted">Profit / Loss</p>
+            <p className={`mt-4 text-3xl font-semibold ${totalProfit >= 0 ? "text-emerald-800" : "text-rose-700"}`}>{formatCurrency(totalProfit)}</p>
           </div>
         </div>
 
         <ValueHistory userId={userId} watches={watches} className="mt-6" />
 
         <div className="mt-6 grid gap-6 lg:grid-cols-3">
-          <div className="rounded-[1.75rem] border border-white/10 bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.25)] transition hover:-translate-y-0.5 hover:shadow-[0_26px_78px_rgba(0,0,0,0.3)]">
-            <p className="text-sm uppercase tracking-[0.28em] text-slate-400">Number of Watches</p>
-            <p className="mt-4 text-3xl font-semibold text-white">{totalWatches}</p>
+          <div className="rounded-md border border-hairline bg-raised p-6 shadow-[0_10px_30px_rgba(43,38,32,0.08)] transition hover:-translate-y-0.5 shadow-[0_10px_30px_rgba(43,38,32,0.08)]">
+            <p className="text-sm uppercase tracking-[0.28em] text-muted">Number of Watches</p>
+            <p className="mt-4 text-3xl font-semibold text-ink">{totalWatches}</p>
           </div>
-          <div className="rounded-[1.75rem] border border-white/10 bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.25)] transition hover:-translate-y-0.5 hover:shadow-[0_26px_78px_rgba(0,0,0,0.3)]">
-            <p className="text-sm uppercase tracking-[0.28em] text-slate-400">Average Watch Value</p>
-            <p className="mt-4 text-3xl font-semibold text-white">{formatCurrency(avgWatchValue)}</p>
+          <div className="rounded-md border border-hairline bg-raised p-6 shadow-[0_10px_30px_rgba(43,38,32,0.08)] transition hover:-translate-y-0.5 shadow-[0_10px_30px_rgba(43,38,32,0.08)]">
+            <p className="text-sm uppercase tracking-[0.28em] text-muted">Average Watch Value</p>
+            <p className="mt-4 text-3xl font-semibold text-ink">{formatCurrency(avgWatchValue)}</p>
           </div>
-          <div className="rounded-[1.75rem] border border-white/10 bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.25)] transition hover:-translate-y-0.5 hover:shadow-[0_26px_78px_rgba(0,0,0,0.3)]">
-            <p className="text-sm uppercase tracking-[0.28em] text-slate-400">Most Valuable Watch</p>
-            <p className="mt-4 text-xl font-semibold text-white">{mostValuable ? `${mostValuable.brand} ${mostValuable.model}` : "—"}</p>
-            <p className="mt-2 text-sm text-slate-400">{mostValuable ? formatCurrency(mostValuable.estimated_value) : "No data"}</p>
+          <div className="rounded-md border border-hairline bg-raised p-6 shadow-[0_10px_30px_rgba(43,38,32,0.08)] transition hover:-translate-y-0.5 shadow-[0_10px_30px_rgba(43,38,32,0.08)]">
+            <p className="text-sm uppercase tracking-[0.28em] text-muted">Most Valuable Watch</p>
+            <p className="mt-4 text-xl font-semibold text-ink">{mostValuable ? `${mostValuable.brand} ${mostValuable.model}` : "—"}</p>
+            <p className="mt-2 text-sm text-muted">{mostValuable ? formatCurrency(mostValuable.estimated_value) : "No data"}</p>
           </div>
         </div>
 
         <div className="mt-10 grid gap-6 lg:grid-cols-3">
-          <div className="lg:col-span-2 rounded-[2rem] border border-white/10 bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.25)]">
+          <div className="lg:col-span-2 rounded-md border border-hairline bg-raised p-6 shadow-[0_10px_30px_rgba(43,38,32,0.08)]">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="text-sm uppercase tracking-[0.25em] text-slate-400">Collection Value by Brand</p>
-                <h2 className="mt-2 text-2xl font-semibold text-white">Brand Breakdown</h2>
+                <p className="text-sm uppercase tracking-[0.25em] text-muted">Collection Value by Brand</p>
+                <h2 className="mt-2 text-2xl font-semibold text-ink">Brand Breakdown</h2>
               </div>
-              <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.22em] text-slate-300">Dynamic</span>
+              <span className="rounded-full border border-hairline bg-surface px-4 py-2 text-xs uppercase tracking-[0.22em] text-ink/80">Dynamic</span>
             </div>
             <div className="mt-6 space-y-4">
               {valueByBrand.length ? valueByBrand.map((item) => (
-                <div key={item.label} className="rounded-3xl border border-white/10 bg-black/30 p-4">
+                <div key={item.label} className="rounded-md border border-hairline bg-surface p-4">
                   <div className="flex items-center justify-between gap-4">
-                    <p className="text-sm text-slate-300">{item.label}</p>
-                    <p className="text-sm font-semibold text-white">{formatCurrency(item.value)}</p>
+                    <p className="text-sm text-ink/80">{item.label}</p>
+                    <p className="text-sm font-semibold text-ink">{formatCurrency(item.value)}</p>
                   </div>
-                  <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/5">
-                    <div className="h-2 rounded-full bg-[#D9A43A]" style={{ width: `${Math.min(100, (item.value / Math.max(1, valueByBrand[0].value)) * 100)}%` }} />
+                  <div className="mt-3 h-2 overflow-hidden rounded-full bg-surface">
+                    <div className="h-2 rounded-full bg-gold" style={{ width: `${Math.min(100, (item.value / Math.max(1, valueByBrand[0].value)) * 100)}%` }} />
                   </div>
                 </div>
-              )) : <p className="text-slate-400">No brand value data available.</p>}
+              )) : <p className="text-muted">No brand value data available.</p>}
             </div>
           </div>
 
-          <div className="rounded-[2rem] border border-white/10 bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.25)]">
-            <p className="text-sm uppercase tracking-[0.25em] text-slate-400">Quick Actions</p>
+          <div className="rounded-md border border-hairline bg-raised p-6 shadow-[0_10px_30px_rgba(43,38,32,0.08)]">
+            <p className="text-sm uppercase tracking-[0.25em] text-muted">Quick Actions</p>
             <div className="mt-6 space-y-4">
-              <Link href="/collection" className="block rounded-3xl border border-[#D9A43A]/20 bg-[#111827] px-5 py-4 text-left transition hover:-translate-y-0.5 hover:border-[#D9A43A] hover:bg-[#1f2937]">
-                <p className="text-sm uppercase tracking-[0.22em] text-slate-400">Add Watch</p>
-                <p className="mt-2 text-lg font-semibold text-white">Curate a new luxury piece</p>
+              <Link href="/collection" className="block rounded-md border border-gold/20 bg-surface px-5 py-4 text-left transition hover:-translate-y-0.5 hover:border-gold hover:bg-surface">
+                <p className="text-sm uppercase tracking-[0.22em] text-muted">Add Watch</p>
+                <p className="mt-2 text-lg font-semibold text-ink">Curate a new luxury piece</p>
               </Link>
-              <Link href="/collection" className="block rounded-3xl border border-white/10 bg-[#111827] px-5 py-4 text-left transition hover:-translate-y-0.5 hover:border-white/20 hover:bg-[#1f2937]">
-                <p className="text-sm uppercase tracking-[0.22em] text-slate-400">View Collection</p>
-                <p className="mt-2 text-lg font-semibold text-white">Explore every watch in the archive</p>
+              <Link href="/collection" className="block rounded-md border border-hairline bg-surface px-5 py-4 text-left transition hover:-translate-y-0.5 hover:border-hairline-strong hover:bg-surface">
+                <p className="text-sm uppercase tracking-[0.22em] text-muted">View Collection</p>
+                <p className="mt-2 text-lg font-semibold text-ink">Explore every watch in the archive</p>
               </Link>
-              <Link href="/wishlist" className="block rounded-3xl border border-white/10 bg-[#111827] px-5 py-4 text-left transition hover:-translate-y-0.5 hover:border-white/20 hover:bg-[#1f2937]">
-                <p className="text-sm uppercase tracking-[0.22em] text-slate-400">Wishlist</p>
-                <p className="mt-2 text-lg font-semibold text-white">Review future acquisitions</p>
+              <Link href="/wishlist" className="block rounded-md border border-hairline bg-surface px-5 py-4 text-left transition hover:-translate-y-0.5 hover:border-hairline-strong hover:bg-surface">
+                <p className="text-sm uppercase tracking-[0.22em] text-muted">Wishlist</p>
+                <p className="mt-2 text-lg font-semibold text-ink">Review future acquisitions</p>
               </Link>
             </div>
           </div>
         </div>
 
         <div className="mt-6 grid gap-6 lg:grid-cols-3">
-          <div className="lg:col-span-2 rounded-[2rem] border border-white/10 bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.25)]">
+          <div className="lg:col-span-2 rounded-md border border-hairline bg-raised p-6 shadow-[0_10px_30px_rgba(43,38,32,0.08)]">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="text-sm uppercase tracking-[0.25em] text-slate-400">Purchase Timeline</p>
-                <h2 className="mt-2 text-2xl font-semibold text-white">Cost Evolution</h2>
+                <p className="text-sm uppercase tracking-[0.25em] text-muted">Purchase Timeline</p>
+                <h2 className="mt-2 text-2xl font-semibold text-ink">Cost Evolution</h2>
               </div>
-              <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.22em] text-slate-300">Historical</span>
+              <span className="rounded-full border border-hairline bg-surface px-4 py-2 text-xs uppercase tracking-[0.22em] text-ink/80">Historical</span>
             </div>
             <div className="mt-6">
               <ValueChart points={purchaseTimeline} />
             </div>
           </div>
 
-          <div className="rounded-[2rem] border border-white/10 bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.25)]">
+          <div className="rounded-md border border-hairline bg-raised p-6 shadow-[0_10px_30px_rgba(43,38,32,0.08)]">
             <div>
-              <p className="text-sm uppercase tracking-[0.25em] text-slate-400">Value vs Purchase Price</p>
-              <h2 className="mt-2 text-2xl font-semibold text-white">Estimated vs Cost</h2>
+              <p className="text-sm uppercase tracking-[0.25em] text-muted">Value vs Purchase Price</p>
+              <h2 className="mt-2 text-2xl font-semibold text-ink">Estimated vs Cost</h2>
             </div>
             <div className="mt-6">
               <ValueChart points={valuesVsCost} />
@@ -242,39 +244,39 @@ export default function DashboardPage() {
         </div>
 
         <div className="mt-10 grid gap-6 lg:grid-cols-2">
-          <div className="rounded-[2rem] border border-white/10 bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.25)]">
-            <p className="text-sm uppercase tracking-[0.25em] text-slate-400">Recently Added</p>
+          <div className="rounded-md border border-hairline bg-raised p-6 shadow-[0_10px_30px_rgba(43,38,32,0.08)]">
+            <p className="text-sm uppercase tracking-[0.25em] text-muted">Recently Added</p>
             <div className="mt-6 space-y-4">
               {recentlyAdded.length ? recentlyAdded.map((watch) => (
-                <div key={watch.id} className="rounded-3xl border border-white/10 bg-black/30 p-4 transition hover:bg-white/5">
+                <div key={watch.id} className="rounded-md border border-hairline bg-surface p-4 transition hover:bg-surface">
                   <div className="flex items-center justify-between gap-4">
                     <div>
-                      <p className="text-sm text-slate-300">{watch.brand}</p>
-                      <p className="text-lg font-semibold text-white">{watch.model}</p>
+                      <p className="text-sm text-ink/80">{watch.brand}</p>
+                      <p className="text-lg font-semibold text-ink">{watch.model}</p>
                     </div>
-                    <span className="rounded-full bg-[#D9A43A]/15 px-3 py-1 text-xs uppercase tracking-[0.18em] text-[#D9A43A]">New</span>
+                    <span className="rounded-full bg-gold/15 px-3 py-1 text-xs uppercase tracking-[0.18em] text-gold">New</span>
                   </div>
-                  <p className="mt-3 text-sm text-slate-400">Added {smallDate(watch.purchase_date)}</p>
+                  <p className="mt-3 text-sm text-muted">Added {smallDate(watch.purchase_date)}</p>
                 </div>
-              )) : <p className="text-slate-400">No recently added watches yet.</p>}
+              )) : <p className="text-muted">No recently added watches yet.</p>}
             </div>
           </div>
 
-          <div className="rounded-[2rem] border border-white/10 bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.25)]">
-            <p className="text-sm uppercase tracking-[0.25em] text-slate-400">Recently Edited</p>
+          <div className="rounded-md border border-hairline bg-raised p-6 shadow-[0_10px_30px_rgba(43,38,32,0.08)]">
+            <p className="text-sm uppercase tracking-[0.25em] text-muted">Recently Edited</p>
             <div className="mt-6 space-y-4">
               {recentlyEdited.length ? recentlyEdited.map((watch) => (
-                <div key={watch.id} className="rounded-3xl border border-white/10 bg-black/30 p-4 transition hover:bg-white/5">
+                <div key={watch.id} className="rounded-md border border-hairline bg-surface p-4 transition hover:bg-surface">
                   <div className="flex items-center justify-between gap-4">
                     <div>
-                      <p className="text-sm text-slate-300">{watch.brand}</p>
-                      <p className="text-lg font-semibold text-white">{watch.model}</p>
+                      <p className="text-sm text-ink/80">{watch.brand}</p>
+                      <p className="text-lg font-semibold text-ink">{watch.model}</p>
                     </div>
-                    <span className="rounded-full bg-slate-700/70 px-3 py-1 text-xs uppercase tracking-[0.18em] text-slate-200">Edited</span>
+                    <span className="rounded-full bg-surface px-3 py-1 text-xs uppercase tracking-[0.18em] text-ink">Edited</span>
                   </div>
-                  <p className="mt-3 text-sm text-slate-400">Updated {smallDate(watch.edited_at)}</p>
+                  <p className="mt-3 text-sm text-muted">Updated {smallDate(watch.edited_at)}</p>
                 </div>
-              )) : <p className="text-slate-400">No recently edited watches yet.</p>}
+              )) : <p className="text-muted">No recently edited watches yet.</p>}
             </div>
           </div>
         </div>

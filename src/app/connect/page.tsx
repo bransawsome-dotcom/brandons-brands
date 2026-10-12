@@ -52,60 +52,60 @@ const ICONS: Record<string, React.ReactNode> = {
 };
 
 const button =
-  "group flex w-full items-center gap-4 rounded-2xl border border-[#3FB4EC]/40 bg-gradient-to-b from-[#1A7DBF] to-[#0E5A8F] px-4 py-3 text-left text-white sm:px-5 sm:py-4 shadow-[0_10px_30px_rgba(14,90,143,0.35)] transition hover:from-[#2290D6] hover:to-[#136AA6] active:scale-[0.99]";
+  "group flex w-full items-center gap-4 rounded border border-hairline-strong bg-raised px-4 py-3 text-left text-ink sm:px-5 sm:py-4 shadow-[0_10px_30px_rgba(43,38,32,0.08)] transition hover:border-gold hover:bg-surface active:scale-[0.99]";
 
 export default function ConnectPage() {
   return (
     <div className="connect-page mx-auto flex w-full max-w-md flex-col items-center px-1 pb-4 pt-0 text-center sm:pt-6">
       <div role="img" aria-label="Brandon's Brands logo" className="hidden sm:block">
-        <LogoMark className="h-24 w-24 drop-shadow-[0_0_40px_rgba(59,130,246,0.45)] sm:h-28 sm:w-28" />
+        <LogoMark className="h-24 w-24 drop-shadow-[0_10px_30px_rgba(43,38,32,0.08)] sm:h-28 sm:w-28" />
       </div>
-      <p className="text-xs uppercase tracking-[0.35em] text-blue-300 sm:mt-5">Brandon&apos;s Brands</p>
-      <h1 className="mt-1 text-2xl font-semibold tracking-[-0.02em] text-white sm:mt-2 sm:text-4xl">Connect with Brandon</h1>
-      <p className="mt-2 text-sm leading-6 text-slate-300 sm:mt-3">Luxury watches, microbrands and watch culture. Discover the makers.</p>
+      <p className="text-xs uppercase tracking-[0.35em] text-gold sm:mt-5">Brandon&apos;s Brands</p>
+      <h1 className="mt-1 text-2xl font-semibold tracking-[-0.02em] text-ink sm:mt-2 sm:text-4xl">Connect with Brandon</h1>
+      <p className="mt-2 text-sm leading-6 text-ink/80 sm:mt-3">Luxury watches, microbrands and watch culture. Discover the makers.</p>
 
       <ul className="mt-5 w-full space-y-2.5 sm:mt-8 sm:space-y-3">
         <li>
           <Link href="/" className={button}>
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/15">{ICONS.Website}</span>
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-hairline">{ICONS.Website}</span>
             <span className="min-w-0 flex-1">
               <span className="block text-base font-semibold">Website</span>
-              <span className="block truncate text-xs text-blue-100">brandonsbrands17.com</span>
+              <span className="block truncate text-xs text-gold">brandonsbrands17.com</span>
             </span>
-            <span aria-hidden className="text-blue-100 transition group-hover:translate-x-0.5">→</span>
+            <span aria-hidden className="text-gold transition group-hover:translate-x-0.5">→</span>
           </Link>
         </li>
         {socials.map((s) => (
           <li key={s.name}>
             <a href={s.url} target="_blank" rel="noopener noreferrer" className={button}>
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/15">{ICONS[s.name]}</span>
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-hairline">{ICONS[s.name]}</span>
               <span className="min-w-0 flex-1">
                 <span className="block text-base font-semibold">{s.name}</span>
-                <span className="block truncate text-xs text-blue-100">{s.handle}</span>
+                <span className="block truncate text-xs text-gold">{s.handle}</span>
               </span>
-              <span aria-hidden className="text-blue-100 transition group-hover:translate-x-0.5">↗</span>
+              <span aria-hidden className="text-gold transition group-hover:translate-x-0.5">↗</span>
             </a>
           </li>
         ))}
         <li>
           <a href={facebookGroup.url} target="_blank" rel="noopener noreferrer" className={button}>
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/15">{ICONS.Group}</span>
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-hairline">{ICONS.Group}</span>
             <span className="min-w-0 flex-1">
               <span className="block text-base font-semibold">Join the Facebook group</span>
-              <span className="block truncate text-xs text-blue-100">{facebookGroup.name}</span>
+              <span className="block truncate text-xs text-gold">{facebookGroup.name}</span>
             </span>
-            <span aria-hidden className="text-blue-100 transition group-hover:translate-x-0.5">↗</span>
+            <span aria-hidden className="text-gold transition group-hover:translate-x-0.5">↗</span>
           </a>
         </li>
       </ul>
 
-      <p className="mt-8 text-sm text-slate-400">
+      <p className="mt-8 text-sm text-muted">
         Collaborations:{" "}
-        <a href={`mailto:${collabEmail}`} className="font-semibold text-[#D9A43A] hover:text-[#e1b54a]">
+        <a href={`mailto:${collabEmail}`} className="font-semibold text-gold hover:text-gold-bright">
           {collabEmail}
         </a>
       </p>
-      <Link href="/about" className="mt-2 text-xs text-slate-500 hover:text-slate-300">
+      <Link href="/about" className="mt-2 text-xs text-muted hover:text-ink/80">
         About Brandon&apos;s Brands
       </Link>
     </div>

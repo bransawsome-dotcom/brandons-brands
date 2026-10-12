@@ -54,51 +54,51 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-surface text-ink">
       <main className="mx-auto flex min-h-screen w-full max-w-3xl flex-col justify-center px-6 py-16 sm:px-10 lg:px-16">
-        <div className="rounded-[2rem] border border-white/10 bg-white/5 p-10 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl">
+        <div className="rounded-md border border-hairline bg-surface p-10 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl">
           <div className="mb-8 space-y-4">
-            <p className="text-sm uppercase tracking-[0.35em] text-blue-300">Member Access</p>
-            <h1 className="text-4xl font-semibold text-white">Login to Brandon&apos;s Brands</h1>
-            <p className="max-w-2xl text-sm leading-7 text-slate-300">
+            <p className="text-sm uppercase tracking-[0.35em] text-gold">Member Access</p>
+            <h1 className="text-4xl font-semibold text-ink">Login to Brandon&apos;s Brands</h1>
+            <p className="max-w-2xl text-sm leading-7 text-ink/80">
               Secure access for your private watch collection, wishlist, and account dashboard.
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="grid gap-6">
-            <label className="space-y-2 text-sm text-slate-300">
+            <label className="space-y-2 text-sm text-ink/80">
               Email
               <input
                 type="email"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 required
-                className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-blue-400/70"
+                className="w-full rounded-md border border-hairline bg-raised px-4 py-3 text-ink outline-none transition focus:border-gold/70"
                 placeholder="name@example.com"
               />
             </label>
-            <label className="space-y-2 text-sm text-slate-300">
+            <label className="space-y-2 text-sm text-ink/80">
               Password
               <PasswordInput
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 required
-                className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-blue-400/70"
+                className="w-full rounded-md border border-hairline bg-raised px-4 py-3 text-ink outline-none transition focus:border-gold/70"
                 placeholder="Enter your password"
               />
               <span className="block text-right">
-                <a href="/forgot-password" className="text-sm font-semibold text-blue-300 hover:text-blue-200">
+                <a href="/forgot-password" className="text-sm font-semibold text-gold hover:text-gold">
                   Forgot password?
                 </a>
               </span>
             </label>
 
-            {message ? <div className="rounded-3xl bg-rose-500/10 px-4 py-3 text-sm text-rose-200">{message}</div> : null}
+            {message ? <div className="rounded-md bg-rose-500/10 px-4 py-3 text-sm text-rose-700">{message}</div> : null}
 
             <button
               type="submit"
               disabled={submitting}
-              className="rounded-full bg-[#D9A43A] px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-[#e1b54a] disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-full bg-gold px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-on-gold transition hover:bg-gold-bright disabled:cursor-not-allowed disabled:opacity-60"
             >
               {submitting ? "Signing in…" : "Login"}
             </button>
@@ -109,13 +109,13 @@ export default function LoginPage() {
                 signInGuest();
                 router.push("/dashboard");
               }}
-              className="rounded-full border border-white/10 bg-white/5 px-6 py-4 text-sm font-semibold text-white uppercase tracking-[0.18em] transition hover:bg-white/10"
+              className="rounded-full border border-hairline bg-surface px-6 py-4 text-sm font-semibold text-ink uppercase tracking-[0.18em] transition hover:bg-surface"
             >
               Continue as Guest
             </button>
 
-            <p className="text-sm text-slate-400">
-              New to Brandon&apos;s Brands? <a href="/signup" className="font-semibold text-white hover:text-blue-200">Create an account</a>.
+            <p className="text-sm text-muted">
+              New to Brandon&apos;s Brands? <a href="/signup" className="font-semibold text-ink hover:text-gold">Create an account</a>.
             </p>
           </form>
         </div>

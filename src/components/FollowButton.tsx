@@ -44,7 +44,7 @@ export default function FollowButton({ postId, subject, label }: { postId?: stri
       aria-pressed={following}
       title={following ? "You'll get inbox alerts for new activity. Click to stop." : "Get inbox alerts for new activity"}
       className={`shrink-0 rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] transition disabled:opacity-60 ${
-        following ? "border-emerald-400/40 bg-emerald-500/10 text-emerald-200" : "border-white/15 bg-white/5 text-slate-200 hover:bg-white/10"
+        following ? "border-emerald-400/40 bg-emerald-500/10 text-emerald-800" : "border-hairline bg-surface text-ink hover:bg-surface"
       }`}
     >
       {following ? "✓ Following" : `+ Follow${label ? ` ${label}` : ""}`}

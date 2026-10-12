@@ -69,7 +69,7 @@ export default function Combobox({ label, name, value, options, placeholder, req
   };
 
   return (
-    <div ref={wrapRef} className="relative space-y-2 text-sm text-slate-300">
+    <div ref={wrapRef} className="relative space-y-2 text-sm text-ink/80">
       <label htmlFor={`${id}-input`}>{label}</label>
       <div className="relative">
         <input
@@ -97,7 +97,7 @@ export default function Combobox({ label, name, value, options, placeholder, req
             setOpen(true);
           }}
           onKeyDown={onKeyDown}
-          className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 pr-11 text-white outline-none transition focus:border-blue-400/70 disabled:opacity-50"
+          className="w-full rounded-md border border-hairline bg-raised px-4 py-3 pr-11 text-ink outline-none transition focus:border-gold/70 disabled:opacity-50"
         />
         <button
           type="button"
@@ -108,7 +108,7 @@ export default function Combobox({ label, name, value, options, placeholder, req
             setShowAll(true);
             setOpen((o) => !o);
           }}
-          className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-slate-400 hover:text-white disabled:opacity-50"
+          className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-muted hover:text-ink disabled:opacity-50"
         >
           ▾
         </button>
@@ -118,7 +118,7 @@ export default function Combobox({ label, name, value, options, placeholder, req
           id={`${id}-list`}
           ref={listRef}
           role="listbox"
-          className="absolute z-30 mt-1 max-h-64 w-full overflow-auto rounded-2xl border border-white/10 bg-slate-950 p-1 shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
+          className="absolute z-30 mt-1 max-h-64 w-full overflow-auto rounded border border-hairline bg-raised p-1 shadow-[0_10px_30px_rgba(43,38,32,0.08)]"
         >
           {filtered.length ? (
             filtered.map((option, i) => (
@@ -132,13 +132,13 @@ export default function Combobox({ label, name, value, options, placeholder, req
                   choose(option);
                 }}
                 onMouseEnter={() => setActive(i)}
-                className={`cursor-pointer rounded-xl px-3 py-2 ${i === active ? "bg-blue-500/20 text-white" : "text-slate-200"} ${option === value ? "font-semibold text-[#D9A43A]" : ""}`}
+                className={`cursor-pointer rounded-xl px-3 py-2 ${i === active ? "bg-gold/20 text-ink" : "text-ink"} ${option === value ? "font-semibold text-gold" : ""}`}
               >
                 {option}
               </li>
             ))
           ) : (
-            <li className="px-3 py-2 text-slate-400">
+            <li className="px-3 py-2 text-muted">
               {value.trim() ? `Not in the list — "${value.trim()}" will be used as typed.` : emptyHint ?? "No options"}
             </li>
           )}

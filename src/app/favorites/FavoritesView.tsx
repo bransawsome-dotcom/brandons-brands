@@ -13,7 +13,7 @@ import { videoEmbed } from "@/lib/video";
 import VideoEmbed from "@/components/VideoEmbed";
 
 const input =
-  "w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-blue-400/70";
+  "w-full rounded border border-hairline bg-raised px-4 py-3 text-ink outline-none transition focus:border-gold/70";
 
 type Draft = { id?: string; watch_id: string | null; brand: string; model: string; reference_number: string; image_url: string; link_url: string; note: string; features: string };
 const EMPTY: Draft = { watch_id: null, brand: "", model: "", reference_number: "", image_url: "", link_url: "", note: "", features: "" };
@@ -144,15 +144,15 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
   return (
     <>
       {moderator ? (
-        <div className="mt-6 flex flex-wrap items-center gap-3 rounded-2xl border border-[#D9A43A]/30 bg-[#D9A43A]/5 px-4 py-3 text-sm">
-          <span className="text-[#D9A43A]">Only you see this · editing the gallery</span>
+        <div className="mt-6 flex flex-wrap items-center gap-3 rounded border border-gold/30 bg-gold/5 px-4 py-3 text-sm">
+          <span className="text-gold">Only you see this · editing the gallery</span>
           <button
             type="button"
             onClick={() => {
               setError(null);
               setEditing({ ...EMPTY });
             }}
-            className="rounded-full bg-[#D9A43A] px-4 py-2 font-semibold text-black hover:bg-[#e1b54a]"
+            className="rounded-full bg-gold px-4 py-2 font-semibold text-on-gold hover:bg-gold-bright"
           >
             + Add a favorite
           </button>
@@ -160,27 +160,27 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
             type="button"
             onClick={() => void pickNow()}
             disabled={Boolean(picking?.endsWith("minutes."))}
-            className="rounded-full border border-[#D9A43A]/50 px-4 py-2 font-semibold text-[#D9A43A] hover:bg-[#D9A43A]/10 disabled:opacity-50"
+            className="rounded-full border border-gold/50 px-4 py-2 font-semibold text-gold hover:bg-gold/10 disabled:opacity-50"
           >
             ⭐ Pick this week&apos;s favorite now
           </button>
-          <Link href={`/forum?subject=${FAVORITES_SUBJECT}`} className="text-blue-200 hover:text-white">
+          <Link href={`/forum?subject=${FAVORITES_SUBJECT}`} className="text-gold hover:text-ink">
             Post about one in the forum →
           </Link>
-          <span className="w-full text-xs text-slate-400">
+          <span className="w-full text-xs text-muted">
             Every Friday morning Claude reviews Brandon&apos;s latest videos and adds one new watch here (and in the forum folder) automatically.
           </span>
-          {picking ? <span className={`w-full ${picking.endsWith("minutes.") ? "animate-pulse text-blue-200" : "text-emerald-300"}`}>{picking}</span> : null}
-          {error && !editing ? <span className="w-full text-rose-300">{error}</span> : null}
+          {picking ? <span className={`w-full ${picking.endsWith("minutes.") ? "animate-pulse text-gold" : "text-emerald-800"}`}>{picking}</span> : null}
+          {error && !editing ? <span className="w-full text-rose-700">{error}</span> : null}
         </div>
       ) : null}
 
       {!items.length ? (
-        <div className="mt-8 rounded-[2rem] border border-dashed border-white/15 bg-white/5 p-12 text-center text-slate-300">
-          <p className="text-lg font-semibold text-white">Brandon&apos;s favorites are coming soon</p>
+        <div className="mt-8 rounded-md border border-dashed border-hairline bg-surface p-12 text-center text-ink/80">
+          <p className="text-lg font-semibold text-ink">Brandon&apos;s favorites are coming soon</p>
           <p className="mt-2 text-sm">
             Follow along on social media, or join the conversation in the{" "}
-            <Link href={`/forum?subject=${FAVORITES_SUBJECT}`} className="text-[#D9A43A] hover:text-[#e1b54a]">
+            <Link href={`/forum?subject=${FAVORITES_SUBJECT}`} className="text-gold hover:text-gold-bright">
               Brandon&apos;s Favorites forum
             </Link>
             .
@@ -200,23 +200,23 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
               </span>
             );
             return (
-              <li key={f.id} className="flex flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-[0_25px_70px_rgba(0,0,0,0.28)]">
+              <li key={f.id} className="flex flex-col overflow-hidden rounded-md border border-hairline bg-surface shadow-[0_10px_30px_rgba(43,38,32,0.08)]">
                 {embed && playing === f.id ? (
-                  <div className="bg-black p-3">
+                  <div className="bg-surface p-3">
                     <VideoEmbed embed={embed} title={`Brandon's ${f.brand} ${f.model} video`} />
                   </div>
                 ) : embed ? (
                   <button
                     type="button"
                     onClick={() => setPlaying(f.id)}
-                    className={`bb-shine group relative flex h-60 w-full items-center justify-center p-4 ${f.image_url ? "bg-white" : "bg-slate-950/80"}`}
+                    className={`bb-shine group relative flex h-60 w-full items-center justify-center p-4 ${f.image_url ? "bg-surface" : "bg-raised"}`}
                     aria-label={`Play Brandon's ${f.brand} ${f.model} video here`}
                   >
                     {photo}
-                    <span className="absolute inset-0 m-auto flex h-14 w-14 items-center justify-center rounded-full bg-black/60 text-2xl text-white transition group-hover:bg-[#0E5A8F]" aria-hidden>
+                    <span className="absolute inset-0 m-auto flex h-14 w-14 items-center justify-center rounded-full bg-black/60 text-2xl text-ink transition group-hover:bg-gold" aria-hidden>
                       ▶
                     </span>
-                    <span className="absolute bottom-3 right-3 rounded-full bg-black/70 px-3 py-1 text-xs font-semibold text-white opacity-90">
+                    <span className="absolute bottom-3 right-3 rounded-full bg-black/70 px-3 py-1 text-xs font-semibold text-ink opacity-90">
                       ▶ Play here
                     </span>
                   </button>
@@ -224,29 +224,29 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
                   <a
                     href={f.link_url}
                     {...(info.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                    className={`bb-shine group relative flex h-60 items-center justify-center p-4 ${f.image_url ? "bg-white" : "bg-slate-950/80"}`}
+                    className={`bb-shine group relative flex h-60 items-center justify-center p-4 ${f.image_url ? "bg-surface" : "bg-raised"}`}
                     aria-label={`${info.label}: ${f.brand} ${f.model}`}
                   >
                     {photo}
-                    <span className="absolute bottom-3 right-3 rounded-full bg-black/70 px-3 py-1 text-xs font-semibold text-white opacity-90 transition group-hover:bg-[#0E5A8F]">
+                    <span className="absolute bottom-3 right-3 rounded-full bg-black/70 px-3 py-1 text-xs font-semibold text-ink opacity-90 transition group-hover:bg-gold">
                       {info.icon} {info.label}
                     </span>
                   </a>
                 ) : (
-                  <div className={`flex h-60 items-center justify-center p-4 ${f.image_url ? "bg-white" : "bg-slate-950/80"}`}>{photo}</div>
+                  <div className={`flex h-60 items-center justify-center p-4 ${f.image_url ? "bg-surface" : "bg-raised"}`}>{photo}</div>
                 )}
                 <div className="flex flex-1 flex-col p-5">
-                  <p className="text-xs uppercase tracking-[0.25em] text-blue-300">{f.brand}</p>
-                  <h2 className="mt-1 text-xl font-semibold text-white">{f.model}</h2>
-                  {f.reference_number ? <p className="text-sm text-slate-400">Ref. {f.reference_number}</p> : null}
-                  {f.note ? <p className="mt-3 text-sm leading-6 text-slate-300">{f.note}</p> : null}
+                  <p className="text-xs uppercase tracking-[0.25em] text-gold">{f.brand}</p>
+                  <h2 className="mt-1 text-xl font-semibold text-ink">{f.model}</h2>
+                  {f.reference_number ? <p className="text-sm text-muted">Ref. {f.reference_number}</p> : null}
+                  {f.note ? <p className="mt-3 text-sm leading-6 text-ink/80">{f.note}</p> : null}
                   {f.features ? (
-                    <details className="group mt-3 rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm">
-                      <summary className="cursor-pointer list-none font-semibold text-blue-200 marker:hidden">
+                    <details className="group mt-3 rounded border border-hairline bg-surface px-4 py-3 text-sm">
+                      <summary className="cursor-pointer list-none font-semibold text-gold marker:hidden">
                         <span className="group-open:hidden">What I love about it ▾</span>
                         <span className="hidden group-open:inline">What I love about it ▴</span>
                       </summary>
-                      <p className="mt-2 whitespace-pre-line leading-6 text-slate-300">{f.features.replace(/^What I love about it:\s*/i, "")}</p>
+                      <p className="mt-2 whitespace-pre-line leading-6 text-ink/80">{f.features.replace(/^What I love about it:\s*/i, "")}</p>
                     </details>
                   ) : null}
                   <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-2 pt-5">
@@ -254,27 +254,27 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
                       <a
                         href={f.link_url}
                         {...(info.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                        className="inline-flex rounded-full border border-[#3FB4EC]/40 bg-gradient-to-b from-[#1A7DBF] to-[#0E5A8F] px-4 py-2 text-sm font-semibold text-white hover:from-[#2290D6] hover:to-[#136AA6]"
+                        className="inline-flex rounded-full border border-hairline-strong bg-raised px-4 py-2 text-sm font-semibold text-ink hover:border-gold hover:bg-surface"
                       >
                         {info.label} {info.external ? "↗" : "→"}
                       </a>
                     ) : (
-                      <span className="text-sm text-slate-500">Review coming soon</span>
+                      <span className="text-sm text-muted">Review coming soon</span>
                     )}
-                    <Link href={f.post_id ? `/forum/${f.post_id}` : `/forum?subject=${FAVORITES_SUBJECT}`} className="text-sm text-[#D9A43A] hover:text-[#e1b54a]">
+                    <Link href={f.post_id ? `/forum/${f.post_id}` : `/forum?subject=${FAVORITES_SUBJECT}`} className="text-sm text-gold hover:text-gold-bright">
                       Discuss →
                     </Link>
                   </div>
                   {moderator ? (
-                    <div className="mt-4 flex flex-wrap gap-2 border-t border-white/10 pt-3 text-xs">
-                      <button type="button" onClick={() => move(i, -1)} disabled={i === 0} className="rounded-full border border-white/15 px-3 py-1 text-slate-200 disabled:opacity-30">
+                    <div className="mt-4 flex flex-wrap gap-2 border-t border-hairline pt-3 text-xs">
+                      <button type="button" onClick={() => move(i, -1)} disabled={i === 0} className="rounded-full border border-hairline px-3 py-1 text-ink disabled:opacity-30">
                         ↑ Move up
                       </button>
                       <button
                         type="button"
                         onClick={() => move(i, 1)}
                         disabled={i === items.length - 1}
-                        className="rounded-full border border-white/15 px-3 py-1 text-slate-200 disabled:opacity-30"
+                        className="rounded-full border border-hairline px-3 py-1 text-ink disabled:opacity-30"
                       >
                         ↓ Move down
                       </button>
@@ -294,11 +294,11 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
                             features: f.features ?? "",
                           });
                         }}
-                        className="rounded-full border border-white/15 px-3 py-1 text-slate-200"
+                        className="rounded-full border border-hairline px-3 py-1 text-ink"
                       >
                         Edit
                       </button>
-                      <button type="button" onClick={() => remove(f)} className="rounded-full border border-rose-400/30 px-3 py-1 text-rose-200">
+                      <button type="button" onClick={() => remove(f)} className="rounded-full border border-rose-400/30 px-3 py-1 text-rose-700">
                         Remove
                       </button>
                     </div>
@@ -376,18 +376,18 @@ function FavoriteForm({
 
   return (
     <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/70 p-3 backdrop-blur-sm sm:items-center" role="dialog" aria-modal="true" aria-labelledby="fav-form-title">
-      <form onSubmit={onSubmit} className="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-[2rem] border border-white/10 bg-slate-900 p-5 shadow-2xl sm:p-7">
+      <form onSubmit={onSubmit} className="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-md border border-hairline bg-raised p-5 shadow-2xl sm:p-7">
         <div className="flex items-start justify-between gap-3">
-          <h2 id="fav-form-title" className="text-xl font-semibold text-white">
+          <h2 id="fav-form-title" className="text-xl font-semibold text-ink">
             {draft.id ? "Edit favorite" : "Add a favorite"}
           </h2>
-          <button type="button" onClick={onClose} aria-label="Close" className="rounded-full px-2 text-2xl leading-none text-slate-400 hover:text-white">
+          <button type="button" onClick={onClose} aria-label="Close" className="rounded-full px-2 text-2xl leading-none text-muted hover:text-ink">
             ×
           </button>
         </div>
 
         {!draft.id ? (
-          <label className="mt-5 block text-sm text-slate-300">
+          <label className="mt-5 block text-sm text-ink/80">
             From your collection (optional)
             <select value={draft.watch_id ?? ""} onChange={(e) => pick(e.target.value)} className={`${input} mt-1`}>
               <option value="">{watches === null ? "Loading your collection…" : "Choose a watch, or type it in below"}</option>
@@ -402,20 +402,20 @@ function FavoriteForm({
         ) : null}
 
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          <label className="block text-sm text-slate-300">
+          <label className="block text-sm text-ink/80">
             Brand
             <input value={draft.brand} onChange={(e) => setDraft({ ...draft, brand: e.target.value })} required maxLength={60} className={`${input} mt-1`} />
           </label>
-          <label className="block text-sm text-slate-300">
+          <label className="block text-sm text-ink/80">
             Model
             <input value={draft.model} onChange={(e) => setDraft({ ...draft, model: e.target.value })} required maxLength={100} className={`${input} mt-1`} />
           </label>
         </div>
-        <label className="mt-3 block text-sm text-slate-300">
+        <label className="mt-3 block text-sm text-ink/80">
           Reference (optional)
           <input value={draft.reference_number} onChange={(e) => setDraft({ ...draft, reference_number: e.target.value })} maxLength={60} className={`${input} mt-1`} />
         </label>
-        <label className="mt-3 block text-sm text-slate-300">
+        <label className="mt-3 block text-sm text-ink/80">
           Review or reel link
           <input
             value={draft.link_url}
@@ -424,9 +424,9 @@ function FavoriteForm({
             inputMode="url"
             className={`${input} mt-1`}
           />
-          <span className="mt-1 block text-xs text-slate-500">Instagram, TikTok, YouTube or Facebook reel, or a review on the blog. You can add it later.</span>
+          <span className="mt-1 block text-xs text-muted">Instagram, TikTok, YouTube or Facebook reel, or a review on the blog. You can add it later.</span>
         </label>
-        <label className="mt-3 block text-sm text-slate-300">
+        <label className="mt-3 block text-sm text-ink/80">
           Photo link (optional)
           <input
             value={draft.image_url}
@@ -436,9 +436,9 @@ function FavoriteForm({
             className={`${input} mt-1`}
           />
         </label>
-        <label className="mt-3 block text-sm text-slate-300">
+        <label className="mt-3 block text-sm text-ink/80">
           Short note (optional)
-          <span className="mt-0.5 block text-xs text-slate-500">Say &quot;one of Brandon&apos;s favorites&quot;, never &quot;his favorite&quot;, so no brand feels left out.</span>
+          <span className="mt-0.5 block text-xs text-muted">Say &quot;one of Brandon&apos;s favorites&quot;, never &quot;his favorite&quot;, so no brand feels left out.</span>
           <textarea
             value={draft.note}
             onChange={(e) => setDraft({ ...draft, note: e.target.value })}
@@ -448,9 +448,9 @@ function FavoriteForm({
             className={`${input} mt-1 resize-none`}
           />
         </label>
-        <label className="mt-3 block text-sm text-slate-300">
+        <label className="mt-3 block text-sm text-ink/80">
           What I love about it (optional)
-          <span className="mt-0.5 block text-xs text-slate-500">
+          <span className="mt-0.5 block text-xs text-muted">
             The watch&apos;s unique features from the brand&apos;s website, written in Brandon&apos;s voice. Shown on the card and in the forum discussion.
           </span>
           <textarea
@@ -462,12 +462,12 @@ function FavoriteForm({
             className={`${input} mt-1`}
           />
         </label>
-        {error ? <p className="mt-3 text-sm text-rose-300">{error}</p> : null}
+        {error ? <p className="mt-3 text-sm text-rose-700">{error}</p> : null}
         <div className="mt-5 flex gap-3">
-          <button type="submit" disabled={busy} className="rounded-full bg-[#D9A43A] px-6 py-3 text-sm font-semibold text-black hover:bg-[#e1b54a] disabled:opacity-60">
+          <button type="submit" disabled={busy} className="rounded-full bg-gold px-6 py-3 text-sm font-semibold text-on-gold hover:bg-gold-bright disabled:opacity-60">
             {busy ? "Saving…" : draft.id ? "Save" : "Add to favorites"}
           </button>
-          <button type="button" onClick={onClose} className="rounded-full border border-white/15 px-6 py-3 text-sm text-slate-200">
+          <button type="button" onClick={onClose} className="rounded-full border border-hairline px-6 py-3 text-sm text-ink">
             Cancel
           </button>
         </div>

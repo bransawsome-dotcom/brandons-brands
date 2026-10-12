@@ -54,13 +54,13 @@ export default async function FavoritesPage() {
   return (
     <div className="mx-auto w-full max-w-7xl px-0 py-4 sm:px-6 sm:py-12 lg:px-16">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
-      <section className="rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">
-        <p className="text-xs uppercase tracking-[0.35em] text-blue-300">⭐ Brandon&apos;s Favorites</p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-white sm:text-5xl">The watches Brandon loves</h1>
-        <p className="mt-4 max-w-2xl text-base leading-7 text-slate-300">
+      <section className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-8">
+        <p className="text-xs uppercase tracking-[0.35em] text-gold">⭐ Brandon&apos;s Favorites</p>
+        <h1 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-ink sm:text-5xl">The watches Brandon loves</h1>
+        <p className="mt-4 max-w-2xl text-base leading-7 text-ink/80">
           A personal pick of favorite watches, from the icons to the independent makers. Tap any watch to watch the reel or read the review,
           then join the conversation in the{" "}
-          <Link href={`/forum?subject=${FAVORITES_SUBJECT}`} className="text-[#D9A43A] hover:text-[#e1b54a]">
+          <Link href={`/forum?subject=${FAVORITES_SUBJECT}`} className="text-gold hover:text-gold-bright">
             Brandon&apos;s Favorites forum
           </Link>
           .
@@ -72,12 +72,12 @@ export default async function FavoritesPage() {
       <NewsletterSignup source="favorites" compact className="mt-10" />
       <FollowBrandon className="mt-6" />
 
-      <p className="mt-8 text-center text-sm text-slate-400">
-        <Link href="/about" className="text-blue-300 hover:text-blue-200">
+      <p className="mt-8 text-center text-sm text-muted">
+        <Link href="/about" className="text-gold hover:text-gold">
           About Brandon
         </Link>
-        <span className="mx-2 text-slate-600">·</span>
-        <Link href="/collectors" className="text-blue-300 hover:text-blue-200">
+        <span className="mx-2 text-muted">·</span>
+        <Link href="/collectors" className="text-gold hover:text-gold">
           Browse collectors
         </Link>
       </p>

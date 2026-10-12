@@ -30,7 +30,7 @@ export function formatPhone(e164?: string): string {
 }
 
 const input =
-  "w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-blue-400/70";
+  "w-full rounded border border-hairline bg-raised px-4 py-3 text-ink outline-none transition focus:border-gold/70";
 
 // Phone number and permission for text message notifications, saved on the member's account.
 export default function TextMessageSettings() {
@@ -52,10 +52,10 @@ export default function TextMessageSettings() {
 
   if (!user || guestMode) {
     return (
-      <div className="rounded-3xl bg-white/5 px-4 py-3">
-        <p className="font-medium text-white">Text message notifications</p>
-        <p className="mt-1 text-slate-400">
-          <Link href="/signup" className="font-semibold text-[#D9A43A] hover:text-[#e1b54a]">
+      <div className="rounded-md bg-surface px-4 py-3">
+        <p className="font-medium text-ink">Text message notifications</p>
+        <p className="mt-1 text-muted">
+          <Link href="/signup" className="font-semibold text-gold hover:text-gold-bright">
             Create an account
           </Link>{" "}
           to add a phone number for text notifications.
@@ -106,12 +106,12 @@ export default function TextMessageSettings() {
   const changed = normalizePhone(phone) !== (saved.sms_phone ?? "") || optIn !== Boolean(saved.sms_opt_in);
 
   return (
-    <form onSubmit={handleSave} className="space-y-4 rounded-3xl bg-white/5 px-4 py-4">
+    <form onSubmit={handleSave} className="space-y-4 rounded-md bg-surface px-4 py-4">
       <div className="flex items-center justify-between gap-3">
-        <p className="font-medium text-white">Text message notifications</p>
+        <p className="font-medium text-ink">Text message notifications</p>
         <span
           className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.15em] ${
-            saved.sms_opt_in ? "bg-emerald-500/15 text-emerald-200" : "bg-white/5 text-slate-400"
+            saved.sms_opt_in ? "bg-emerald-500/15 text-emerald-800" : "bg-surface text-muted"
           }`}
         >
           {saved.sms_opt_in ? "On" : "Off"}
@@ -119,7 +119,7 @@ export default function TextMessageSettings() {
       </div>
 
       <label className="block space-y-2">
-        <span className="text-slate-300">Mobile phone number</span>
+        <span className="text-ink/80">Mobile phone number</span>
         <input
           type="tel"
           inputMode="tel"
@@ -131,10 +131,10 @@ export default function TextMessageSettings() {
         />
       </label>
 
-      <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-white/10 bg-black/20 p-3">
-        <input type="checkbox" checked={optIn} onChange={(e) => setOptIn(e.target.checked)} className="mt-1 h-4 w-4 shrink-0 accent-[#D9A43A]" />
-        <span className="text-xs leading-5 text-slate-300">
-          <span className="block text-sm font-semibold text-white">Yes, text me notifications</span>
+      <label className="flex cursor-pointer items-start gap-3 rounded border border-hairline bg-surface p-3">
+        <input type="checkbox" checked={optIn} onChange={(e) => setOptIn(e.target.checked)} className="mt-1 h-4 w-4 shrink-0 accent-gold" />
+        <span className="text-xs leading-5 text-ink/80">
+          <span className="block text-sm font-semibold text-ink">Yes, text me notifications</span>
           I agree to receive text messages from Brandon&apos;s Brands at this number, such as forum replies and account updates. Message
           frequency varies. Message and data rates may apply. Reply STOP to unsubscribe or HELP for help. Consent is not a condition of
           any purchase. You can turn this off here at any time.
@@ -145,11 +145,11 @@ export default function TextMessageSettings() {
         <button
           type="submit"
           disabled={saving || !changed}
-          className="rounded-full bg-[#D9A43A] px-5 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-[#e1b54a] disabled:opacity-50"
+          className="rounded-full bg-gold px-5 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-on-gold transition hover:bg-gold-bright disabled:opacity-50"
         >
           {saving ? "Saving…" : "Save"}
         </button>
-        {status ? <span className={`text-sm ${status.kind === "ok" ? "text-emerald-300" : "text-rose-300"}`}>{status.text}</span> : null}
+        {status ? <span className={`text-sm ${status.kind === "ok" ? "text-emerald-800" : "text-rose-700"}`}>{status.text}</span> : null}
       </div>
     </form>
   );

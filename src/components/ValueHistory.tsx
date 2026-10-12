@@ -75,14 +75,14 @@ export default function ValueHistory({ userId, watches, className = "" }: { user
   const since = series[0] ? new Date(`${series[0].day}T12:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "";
 
   return (
-    <section className={`rounded-[2rem] border border-white/10 bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.25)] ${className}`}>
+    <section className={`rounded-md border border-hairline bg-raised p-6 shadow-[0_10px_30px_rgba(43,38,32,0.08)] ${className}`}>
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="text-sm uppercase tracking-[0.25em] text-slate-400">Collection value over time</p>
-          <h2 className="mt-2 text-2xl font-semibold text-white">{series.length ? usd(series[series.length - 1].total) : "—"}</h2>
+          <p className="text-sm uppercase tracking-[0.25em] text-muted">Collection value over time</p>
+          <h2 className="mt-2 text-2xl font-semibold text-ink">{series.length ? usd(series[series.length - 1].total) : "—"}</h2>
         </div>
         {change !== null ? (
-          <p className={`text-sm font-semibold ${change >= 0 ? "text-emerald-300" : "text-rose-300"}`}>
+          <p className={`text-sm font-semibold ${change >= 0 ? "text-emerald-800" : "text-rose-700"}`}>
             {pctText(change)} since {since}
           </p>
         ) : null}
@@ -94,24 +94,24 @@ export default function ValueHistory({ userId, watches, className = "" }: { user
           <circle cx={x(series.length - 1)} cy={y(series[series.length - 1].total)} r="5" fill="#D9A43A" />
         </svg>
       ) : (
-        <p className="mt-4 rounded-2xl border border-white/10 bg-black/30 p-4 text-sm text-slate-300">
+        <p className="mt-4 rounded border border-hairline bg-surface p-4 text-sm text-ink/80">
           Your chart starts today. Values refresh every day, so your collection&apos;s value trend will build here over the coming weeks.
         </p>
       )}
       {movers.length ? (
         <div className="mt-5">
-          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Biggest moves</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-muted">Biggest moves</p>
           <ul className="mt-2 grid gap-2 sm:grid-cols-2">
             {movers.map((m) => (
-              <li key={m.name} className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-black/30 px-4 py-2 text-sm">
-                <span className="truncate text-slate-200">{m.name}</span>
-                <span className={`shrink-0 font-semibold ${m.change >= 0 ? "text-emerald-300" : "text-rose-300"}`}>{pctText(m.change)}</span>
+              <li key={m.name} className="flex items-center justify-between gap-3 rounded border border-hairline bg-surface px-4 py-2 text-sm">
+                <span className="truncate text-ink">{m.name}</span>
+                <span className={`shrink-0 font-semibold ${m.change >= 0 ? "text-emerald-800" : "text-rose-700"}`}>{pctText(m.change)}</span>
               </li>
             ))}
           </ul>
         </div>
       ) : null}
-      <p className="mt-4 text-[11px] text-slate-500">Estimated market values for information only, not appraisals.</p>
+      <p className="mt-4 text-[11px] text-muted">Estimated market values for information only, not appraisals.</p>
     </section>
   );
 }

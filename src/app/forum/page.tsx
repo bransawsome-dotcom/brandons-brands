@@ -6,6 +6,7 @@ import { SkeletonList } from "@/components/Skeleton";
 export const metadata: Metadata = {
   title: "Community Forum | Brandon's Brands",
   description: "Talk watches with the Brandon's Brands community: Rolex, Omega, vintage, buying advice, wrist shots and more.",
+  alternates: { canonical: "/forum" },
 };
 
 export default function ForumPage() {

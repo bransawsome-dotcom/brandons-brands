@@ -122,30 +122,30 @@ export default async function SharedPage({ params }: { params: Promise<{ token: 
 
   return (
     <div className="mx-auto w-full max-w-7xl px-3 py-8 sm:px-6 sm:py-14 lg:px-16">
-      <section className="rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">
+      <section className="rounded-md border border-hairline bg-surface p-6 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-8">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.35em] text-blue-300">Shared {isCollection ? "collection" : "wishlist"}</p>
-            <h1 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-white sm:text-5xl">
+            <p className="text-xs uppercase tracking-[0.35em] text-gold">Shared {isCollection ? "collection" : "wishlist"}</p>
+            <h1 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-ink sm:text-5xl">
               {possessive(shared.owner_name)} {isCollection ? "watch collection" : "watch wishlist"}
             </h1>
-            <p className="mt-3 text-sm text-slate-400">Read-only view shared from Brandon&apos;s Brands.</p>
+            <p className="mt-3 text-sm text-muted">Read-only view shared from Brandon&apos;s Brands.</p>
           </div>
           <dl className="grid grid-cols-2 gap-3 text-center sm:min-w-[260px]">
-            <div className="rounded-2xl border border-white/10 bg-black/20 px-3 py-3">
-              <dt className="text-[11px] uppercase tracking-[0.18em] text-slate-400">Watches</dt>
-              <dd className="mt-1 text-xl font-semibold text-white">{shared.items.length}</dd>
+            <div className="rounded border border-hairline bg-surface px-3 py-3">
+              <dt className="text-[11px] uppercase tracking-[0.18em] text-muted">Watches</dt>
+              <dd className="mt-1 text-xl font-semibold text-ink">{shared.items.length}</dd>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 px-3 py-3">
-              <dt className="text-[11px] uppercase tracking-[0.18em] text-slate-400">{isCollection ? "Est. value" : "Market value"}</dt>
-              <dd className="mt-1 text-xl font-semibold text-[#D9A43A]">{total ? money(total) : "—"}</dd>
+            <div className="rounded border border-hairline bg-surface px-3 py-3">
+              <dt className="text-[11px] uppercase tracking-[0.18em] text-muted">{isCollection ? "Est. value" : "Market value"}</dt>
+              <dd className="mt-1 text-xl font-semibold text-gold">{total ? money(total) : "—"}</dd>
             </div>
           </dl>
         </div>
       </section>
 
       {!shared.items.length ? (
-        <div className="mt-8 rounded-[2rem] border border-dashed border-white/15 bg-white/5 p-12 text-center text-slate-300">Nothing here yet.</div>
+        <div className="mt-8 rounded-md border border-dashed border-hairline bg-surface p-12 text-center text-ink/80">Nothing here yet.</div>
       ) : (
         <ul className="mt-8 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
           {shared.items.map((item) => {
@@ -169,25 +169,25 @@ export default async function SharedPage({ params }: { params: Promise<{ token: 
                   ...(shared.show_paid ? [{ label: "Target", value: money(wish.target_price) }] : []),
                 ];
             return (
-              <li key={item.id} className="flex flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-[0_25px_70px_rgba(0,0,0,0.28)]">
+              <li key={item.id} className="flex flex-col overflow-hidden rounded-md border border-hairline bg-surface shadow-[0_10px_30px_rgba(43,38,32,0.08)]">
                 {item.image_url ? (
-                  <div className="flex h-56 items-center justify-center bg-white p-4">
+                  <div className="flex h-56 items-center justify-center bg-surface p-4">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={item.image_url} alt={`${item.brand} ${item.model}`} referrerPolicy="no-referrer" className="h-full w-full object-contain" />
                   </div>
                 ) : (
-                  <div className="flex h-56 items-center justify-center bg-slate-950/80 text-sm text-slate-500">No photo</div>
+                  <div className="flex h-56 items-center justify-center bg-raised text-sm text-muted">No photo</div>
                 )}
                 <div className="flex flex-1 flex-col p-5">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="text-xs uppercase tracking-[0.25em] text-blue-300">{item.brand}</p>
-                      <h2 className="mt-1 text-xl font-semibold text-white">{item.model}</h2>
-                      {item.reference_number ? <p className="text-sm text-slate-400">Ref. {item.reference_number}</p> : null}
-                      {isCollection && w.nickname ? <p className="text-sm italic text-slate-400">“{w.nickname}”</p> : null}
+                      <p className="text-xs uppercase tracking-[0.25em] text-gold">{item.brand}</p>
+                      <h2 className="mt-1 text-xl font-semibold text-ink">{item.model}</h2>
+                      {item.reference_number ? <p className="text-sm text-muted">Ref. {item.reference_number}</p> : null}
+                      {isCollection && w.nickname ? <p className="text-sm italic text-muted">“{w.nickname}”</p> : null}
                     </div>
                     {!isCollection && wish.priority ? (
-                      <span className="shrink-0 rounded-full border border-[#D9A43A]/30 bg-[#D9A43A]/10 px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-[#D9A43A]">
+                      <span className="shrink-0 rounded-full border border-gold/30 bg-gold/10 px-3 py-1 text-[11px] uppercase tracking-[0.15em] text-gold">
                         {wish.priority}
                       </span>
                     ) : null}
@@ -196,10 +196,10 @@ export default async function SharedPage({ params }: { params: Promise<{ token: 
                   {isCollection && (provenance(w).length || w.condition) ? (
                     <div className="mt-3 flex flex-wrap gap-1.5">
                       {w.condition ? (
-                        <span className="rounded-full border border-white/15 bg-white/5 px-2.5 py-0.5 text-[11px] text-slate-200">{w.condition}</span>
+                        <span className="rounded-full border border-hairline bg-surface px-2.5 py-0.5 text-[11px] text-ink">{w.condition}</span>
                       ) : null}
                       {provenance(w).map((p) => (
-                        <span key={p} className="rounded-full border border-emerald-400/30 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-200">
+                        <span key={p} className="rounded-full border border-emerald-400/30 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-800">
                           ✓ {p}
                         </span>
                       ))}
@@ -208,16 +208,16 @@ export default async function SharedPage({ params }: { params: Promise<{ token: 
 
                   <dl className={`mt-4 grid gap-2 text-center ${stats.length === 3 ? "grid-cols-3" : "grid-cols-2"}`}>
                     {stats.map((s) => (
-                      <div key={s.label} className="rounded-2xl border border-white/10 bg-black/30 p-2">
-                        <dt className="text-[10px] uppercase tracking-[0.15em] text-slate-400">{s.label}</dt>
-                        <dd className={`mt-1 font-semibold ${s.gold ? "text-[#D9A43A]" : "text-white"}`}>{s.value ?? "—"}</dd>
+                      <div key={s.label} className="rounded border border-hairline bg-surface p-2">
+                        <dt className="text-[10px] uppercase tracking-[0.15em] text-muted">{s.label}</dt>
+                        <dd className={`mt-1 font-semibold ${s.gold ? "text-gold" : "text-ink"}`}>{s.value ?? "—"}</dd>
                       </div>
                     ))}
                   </dl>
-                  {range ? <p className="mt-2 text-xs text-slate-400">Market range {range}</p> : null}
-                  {specs ? <p className="mt-3 text-sm text-slate-300">{specs}</p> : null}
-                  {isCollection && shared.show_paid && w.purchase_date ? <p className="mt-1 text-xs text-slate-400">Bought {w.purchase_date}</p> : null}
-                  {shared.show_notes && item.notes ? <p className="mt-3 text-sm leading-6 text-slate-200">📝 {item.notes}</p> : null}
+                  {range ? <p className="mt-2 text-xs text-muted">Market range {range}</p> : null}
+                  {specs ? <p className="mt-3 text-sm text-ink/80">{specs}</p> : null}
+                  {isCollection && shared.show_paid && w.purchase_date ? <p className="mt-1 text-xs text-muted">Bought {w.purchase_date}</p> : null}
+                  {shared.show_notes && item.notes ? <p className="mt-3 text-sm leading-6 text-ink">📝 {item.notes}</p> : null}
                 </div>
               </li>
             );
@@ -225,19 +225,19 @@ export default async function SharedPage({ params }: { params: Promise<{ token: 
         </ul>
       )}
 
-      <div className="mt-10 rounded-[2rem] border border-[#D9A43A]/30 bg-[#D9A43A]/5 p-6 text-center">
-        <p className="text-lg font-semibold text-white">Track your own watches</p>
-        <p className="mt-1 text-sm text-slate-300">
+      <div className="mt-10 rounded-md border border-gold/30 bg-gold/5 p-6 text-center">
+        <p className="text-lg font-semibold text-ink">Track your own watches</p>
+        <p className="mt-1 text-sm text-ink/80">
           Build your collection and wishlist with photos, values and box &amp; papers, then share it with one link.
         </p>
         <Link
           href="/signup"
-          className="mt-4 inline-flex rounded-full bg-[#D9A43A] px-6 py-3 text-sm font-semibold uppercase tracking-[0.15em] text-black hover:bg-[#e1b54a]"
+          className="mt-4 inline-flex rounded-full bg-gold px-6 py-3 text-sm font-semibold uppercase tracking-[0.15em] text-on-gold hover:bg-gold-bright"
         >
           Create a free account
         </Link>
       </div>
-      <p className="mt-4 text-center text-xs text-slate-500">Values are estimates from public listings, not appraisals.</p>
+      <p className="mt-4 text-center text-xs text-muted">Values are estimates from public listings, not appraisals.</p>
     </div>
   );
 }

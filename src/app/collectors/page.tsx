@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import MessageMemberButton from "@/components/MessageMemberButton";
+import CollectorMedallion from "@/components/CollectorMedallion";
 import { listPublicCollectors, possessive } from "@/lib/publicLists";
 
 export const revalidate = 300;
@@ -17,52 +18,61 @@ export default async function CollectorsPage() {
   const collectors = await listPublicCollectors();
   return (
     <div className="mx-auto w-full max-w-7xl px-0 py-4 sm:px-6 sm:py-12 lg:px-16">
-      <section className="rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">
-        <p className="text-xs uppercase tracking-[0.35em] text-blue-300">Community</p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-white sm:text-5xl">Watch collectors</h1>
-        <p className="mt-4 max-w-2xl text-base leading-7 text-slate-300">
-          Public collections and wishlists from Brandon&apos;s Brands members. See what others are wearing and hunting for, and make an
-          offer on watches in public collections or message a collector.
+      <section className="border-b border-hairline pb-10">
+        <div className="mb-4 h-0.5 w-11 bg-gold" aria-hidden />
+        <p className="mb-2 text-xs uppercase tracking-[0.22em] text-gold">Community</p>
+        <h1 className="font-display text-[48px] font-semibold uppercase leading-[0.95] text-ink sm:text-[72px]">
+          Watch <span className="font-light text-gold">collectors</span>
+        </h1>
+        <p className="mt-4 max-w-2xl text-base leading-7 text-ink/80">
+          Public watch collections and wishlists from Brandon&apos;s Brands members. Hover a medallion to turn its bezel, then open a collection to see
+          what they wear, make an offer, or message the collector.
         </p>
       </section>
 
       {!collectors.length ? (
-        <div className="mt-8 rounded-[2rem] border border-dashed border-white/15 bg-white/5 p-10 text-center text-slate-300">
-          <p className="text-lg font-semibold text-white">No public lists yet</p>
+        <div className="mt-8 rounded-md border border-dashed border-hairline bg-surface p-10 text-center text-ink/80">
+          <p className="text-lg font-semibold text-ink">No public lists yet</p>
           <p className="mt-2 text-sm">
             Members can make their collection or wishlist public from the{" "}
-            <Link href="/collection" className="text-[#D9A43A] hover:text-[#e1b54a]">Collection</Link> and{" "}
-            <Link href="/wishlist" className="text-[#D9A43A] hover:text-[#e1b54a]">Wishlist</Link> pages.
+            <Link href="/collection" className="text-gold hover:text-gold-bright">Collection</Link> and{" "}
+            <Link href="/wishlist" className="text-gold hover:text-gold-bright">Wishlist</Link> pages.
           </p>
         </div>
       ) : (
-        <ul className="mt-6 grid gap-4 sm:mt-8 sm:grid-cols-2 lg:grid-cols-3">
-          {collectors.map((c) => (
-            <li key={c.handle} className="rounded-[1.75rem] border border-white/10 bg-slate-950/80 p-5">
-              <p className="text-xl font-semibold text-white">{c.display_name}</p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {c.collection_public ? (
-                  <Link
-                    href={`/collectors/${c.handle}/collection`}
-                    className="rounded-full border border-[#D9A43A]/40 bg-[#D9A43A]/10 px-4 py-2 text-sm font-semibold text-[#D9A43A] hover:bg-[#D9A43A]/20"
-                    aria-label={`${possessive(c.display_name)} collection`}
-                  >
-                    Collection · {c.watch_count}
-                  </Link>
-                ) : null}
-                {c.wishlist_public ? (
-                  <Link
-                    href={`/collectors/${c.handle}/wishlist`}
-                    className="rounded-full border border-blue-400/30 bg-blue-500/10 px-4 py-2 text-sm font-semibold text-blue-200 hover:bg-blue-500/20"
-                    aria-label={`${possessive(c.display_name)} wishlist`}
-                  >
-                    Wishlist · {c.wish_count}
-                  </Link>
-                ) : null}
-                <MessageMemberButton handle={c.handle} name={c.display_name} compact />
-              </div>
-            </li>
-          ))}
+        <ul className="mt-10 grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 lg:grid-cols-5">
+          {collectors.map((c) => {
+            const main = c.collection_public ? `/collectors/${c.handle}/collection` : `/collectors/${c.handle}/wishlist`;
+            const count = c.collection_public ? c.watch_count : c.wish_count;
+            return (
+              <li key={c.handle} className="group flex flex-col items-center text-center">
+                <Link href={main} aria-label={`${possessive(c.display_name)} ${c.collection_public ? "collection" : "wishlist"}`} className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-gold">
+                  <CollectorMedallion name={c.display_name} seed={c.handle} size={168} />
+                </Link>
+                <Link href={main} className="mt-4 font-display text-2xl font-semibold uppercase leading-none text-ink transition hover:text-gold">
+                  {c.display_name}
+                </Link>
+                <p className="mt-2 text-[11px] uppercase tracking-[0.18em] text-muted">
+                  {count} {c.collection_public ? (count === 1 ? "watch" : "watches") : count === 1 ? "on wishlist" : "on wishlist"}
+                </p>
+                <div className="mt-3 flex flex-wrap justify-center gap-x-3 gap-y-1 text-[11px] uppercase tracking-[0.16em]">
+                  {c.collection_public ? (
+                    <Link href={`/collectors/${c.handle}/collection`} className="text-gold hover:text-gold-bright">
+                      Collection
+                    </Link>
+                  ) : null}
+                  {c.wishlist_public ? (
+                    <Link href={`/collectors/${c.handle}/wishlist`} className="text-gold hover:text-gold-bright">
+                      Wishlist
+                    </Link>
+                  ) : null}
+                </div>
+                <div className="mt-3">
+                  <MessageMemberButton handle={c.handle} name={c.display_name} compact />
+                </div>
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>

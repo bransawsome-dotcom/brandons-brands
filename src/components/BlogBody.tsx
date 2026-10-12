@@ -13,7 +13,7 @@ function inline(text: string, keyBase: string): ReactNode[] {
   while ((m = re.exec(text))) {
     if (m.index > last) out.push(text.slice(last, m.index));
     const [, label, href] = m;
-    const cls = "font-semibold text-[#5CC4F2] underline decoration-[#5CC4F2]/40 underline-offset-2 hover:text-white";
+    const cls = "font-semibold text-gold underline decoration-[#5CC4F2]/40 underline-offset-2 hover:text-ink";
     out.push(
       href.startsWith("/") || href.startsWith("https://brandonsbrands17.com") ? (
         <Link key={`${keyBase}-${i++}`} href={href.replace("https://brandonsbrands17.com", "") || "/"} className={cls}>
@@ -42,10 +42,10 @@ export default function BlogBody({ paragraphs }: { paragraphs: string[] }) {
     } else blocks.push(p);
   }
   return (
-    <div className="mt-8 space-y-6 text-base leading-8 text-slate-300">
+    <div className="mt-8 space-y-6 text-base leading-8 text-ink/80">
       {blocks.map((p, i) =>
         Array.isArray(p) ? (
-          <ul key={i} className="list-disc space-y-2 pl-6 marker:text-[#D9A43A]">
+          <ul key={i} className="list-disc space-y-2 pl-6 marker:text-gold">
             {p.map((item, j) => (
               <li key={j}>{inline(item, `${i}-${j}`)}</li>
             ))}
@@ -54,7 +54,7 @@ export default function BlogBody({ paragraphs }: { paragraphs: string[] }) {
           // A paragraph that is just a video link plays in place.
           <VideoEmbed key={i} embed={videoEmbed(p.trim())!} title="Video" />
         ) : p.startsWith("## ") ? (
-          <h2 key={i} className="pt-4 text-2xl font-semibold tracking-[-0.02em] text-white">
+          <h2 key={i} className="pt-4 text-2xl font-semibold tracking-[-0.02em] text-ink">
             {p.slice(3)}
           </h2>
         ) : (

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function InboxPage() {
   return (
-    <Suspense fallback={<div className="p-10 text-center text-slate-300">Loading inbox…</div>}>
+    <Suspense fallback={<div className="p-10 text-center text-ink/80">Loading inbox…</div>}>
       <InboxView />
     </Suspense>
   );

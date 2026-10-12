@@ -49,15 +49,15 @@ export default function VersionPicker({
   if (error || (versions && !versions.length)) return null;
 
   return (
-    <div className={`space-y-2 text-sm text-slate-300 ${className}`}>
+    <div className={`space-y-2 text-sm text-ink/80 ${className}`}>
       <label htmlFor="watch-version" className="block">
-        Version <span className="text-slate-500">(pick the exact one for the right photo and prices)</span>
+        Version <span className="text-muted">(pick the exact one for the right photo and prices)</span>
       </label>
       {versions === null ? (
-        <div className="flex items-center justify-between gap-3 rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3">
+        <div className="flex items-center justify-between gap-3 rounded-md border border-hairline bg-raised px-4 py-3">
           <span className="bb-skeleton h-3 w-40 rounded-full" aria-hidden />
-          <span className="text-xs text-slate-400">Finding versions of {model}…</span>
-          <button type="button" onClick={() => onChoose(null)} className="text-xs font-semibold text-[#D9A43A] hover:text-[#e1b54a]">
+          <span className="text-xs text-muted">Finding versions of {model}…</span>
+          <button type="button" onClick={() => onChoose(null)} className="text-xs font-semibold text-gold hover:text-gold-bright">
             Skip
           </button>
         </div>
@@ -71,7 +71,7 @@ export default function VersionPicker({
             if (v === "__any") onChoose(null);
             else if (v !== "") onChoose(versions[Number(v)]);
           }}
-          className="w-full rounded-3xl border border-[#D9A43A]/40 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-[#D9A43A]"
+          className="w-full rounded-md border border-gold/40 bg-raised px-4 py-3 text-ink outline-none transition focus:border-gold"
         >
           <option value="">Choose a version ({versions.length})</option>
           {versions.map((v, i) => (

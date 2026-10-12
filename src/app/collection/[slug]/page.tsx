@@ -133,35 +133,35 @@ export default function WatchDetailsPage() {
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6 sm:py-12">
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl">
+      <div className="rounded border border-hairline bg-surface p-6 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl">
         <div className="grid gap-6 lg:grid-cols-2">
-          <div className="bb-shine h-96 w-full overflow-hidden rounded-lg bg-slate-950/90">
+          <div className="bb-shine h-96 w-full overflow-hidden rounded-lg bg-raised">
             {watch.image_url ? (
               <img src={watch.image_url} referrerPolicy="no-referrer" onError={(e) => { e.currentTarget.style.visibility = "hidden"; }} alt={`${watch.brand} ${watch.model}`} className="h-full w-full object-cover" />
             ) : (
-              <div className="flex h-full items-center justify-center text-slate-400">No image</div>
+              <div className="flex h-full items-center justify-center text-muted">No image</div>
             )}
           </div>
           <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-blue-300">{watch.brand}</p>
-            <h1 className="mt-2 text-4xl font-bold text-white">{watch.model}</h1>
-            {watch.reference_number ? <p className="mt-2 text-sm text-slate-300">Reference: <span className="font-semibold text-white">{watch.reference_number}</span></p> : null}
+            <p className="text-sm uppercase tracking-[0.3em] text-gold">{watch.brand}</p>
+            <h1 className="mt-2 text-4xl font-bold text-ink">{watch.model}</h1>
+            {watch.reference_number ? <p className="mt-2 text-sm text-ink/80">Reference: <span className="font-semibold text-ink">{watch.reference_number}</span></p> : null}
 
             {!editing ? (
               <>
-                <p className="mt-4 text-sm text-slate-300">{watch.notes || "No notes."}</p>
+                <p className="mt-4 text-sm text-ink/80">{watch.notes || "No notes."}</p>
                 {watch.condition ? (
-                  <p className="mt-2 text-sm text-slate-300"><span className="font-semibold text-white">Condition:</span> {watch.condition}</p>
+                  <p className="mt-2 text-sm text-ink/80"><span className="font-semibold text-ink">Condition:</span> {watch.condition}</p>
                 ) : null}
                 <div className="mt-3 flex flex-wrap gap-2">
                   {provenanceLabels(watch).length ? (
                     provenanceLabels(watch).map((label) => (
-                      <span key={label} className="rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-200">
+                      <span key={label} className="rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-800">
                         ✓ {label}
                       </span>
                     ))
                   ) : (
-                    <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-400">No box or papers recorded</span>
+                    <span className="rounded-full border border-hairline bg-surface px-3 py-1 text-xs text-muted">No box or papers recorded</span>
                   )}
                 </div>
                 <div className="mt-6">
@@ -171,7 +171,7 @@ export default function WatchDetailsPage() {
                   <button
                     type="button"
                     onClick={handleEditToggle}
-                    className="mt-3 text-sm font-semibold text-[#D9A43A] hover:text-[#e1b54a]"
+                    className="mt-3 text-sm font-semibold text-gold hover:text-gold-bright"
                   >
                     + Add what you paid
                   </button>
@@ -182,73 +182,73 @@ export default function WatchDetailsPage() {
                       type="button"
                       onClick={handleRefreshValue}
                       disabled={refreshing}
-                      className="rounded-full border border-[#D9A43A]/50 bg-[#D9A43A]/10 px-5 py-2 text-sm font-semibold text-[#D9A43A] transition hover:bg-[#D9A43A]/20 disabled:opacity-60"
+                      className="rounded-full border border-gold/50 bg-gold/10 px-5 py-2 text-sm font-semibold text-gold transition hover:bg-gold/20 disabled:opacity-60"
                     >
                       {refreshing ? "Checking prices…" : watch.value_updated_at ? "Refresh value" : "Auto-fill details & prices"}
                     </button>
-                    {refreshMessage ? <span className="text-sm text-slate-300">{refreshMessage}</span> : null}
+                    {refreshMessage ? <span className="text-sm text-ink/80">{refreshMessage}</span> : null}
                   </div>
                 ) : null}
                 <div className="mt-6 flex gap-3">
-                  <button onClick={handleEditToggle} className="rounded-full bg-[#D9A43A] px-5 py-3 text-sm font-semibold">Edit</button>
-                  <button onClick={handleDelete} className="rounded-full bg-white/5 px-5 py-3 text-sm font-semibold text-white">Delete</button>
-                  <button onClick={() => router.push('/collection')} className="rounded-full px-5 py-3 text-sm font-semibold bg-white/5 text-white">Back</button>
+                  <button onClick={handleEditToggle} className="rounded-full bg-gold px-5 py-3 text-sm font-semibold">Edit</button>
+                  <button onClick={handleDelete} className="rounded-full bg-surface px-5 py-3 text-sm font-semibold text-ink">Delete</button>
+                  <button onClick={() => router.push('/collection')} className="rounded-full px-5 py-3 text-sm font-semibold bg-surface text-ink">Back</button>
                 </div>
               </>
             ) : (
               <form onSubmit={handleSave} className="mt-4 grid gap-4">
-                <label className="text-sm text-slate-300">
+                <label className="text-sm text-ink/80">
                   Brand
-                  <input name="brand" value={form.brand as string || ""} onChange={handleChange} className="mt-1 w-full rounded-lg border border-white/10 bg-slate-950/90 px-3 py-2 text-white" />
+                  <input name="brand" value={form.brand as string || ""} onChange={handleChange} className="mt-1 w-full rounded-lg border border-hairline bg-raised px-3 py-2 text-ink" />
                 </label>
-                <label className="text-sm text-slate-300">
+                <label className="text-sm text-ink/80">
                   Model
-                  <input name="model" value={form.model as string || ""} onChange={handleChange} className="mt-1 w-full rounded-lg border border-white/10 bg-slate-950/90 px-3 py-2 text-white" />
+                  <input name="model" value={form.model as string || ""} onChange={handleChange} className="mt-1 w-full rounded-lg border border-hairline bg-raised px-3 py-2 text-ink" />
                 </label>
-                <label className="text-sm text-slate-300">
+                <label className="text-sm text-ink/80">
                   Reference Number
-                  <input name="reference_number" value={form.reference_number as string || ""} onChange={handleChange} className="mt-1 w-full rounded-lg border border-white/10 bg-slate-950/90 px-3 py-2 text-white" />
+                  <input name="reference_number" value={form.reference_number as string || ""} onChange={handleChange} className="mt-1 w-full rounded-lg border border-hairline bg-raised px-3 py-2 text-ink" />
                 </label>
-                <label className="text-sm text-slate-300">
+                <label className="text-sm text-ink/80">
                   Upload Photo
-                  <input type="file" accept="image/*" onChange={handleFileChange} className="mt-1 w-full cursor-pointer rounded-lg border border-white/10 bg-slate-950/90 px-3 py-2 text-white" />
+                  <input type="file" accept="image/*" onChange={handleFileChange} className="mt-1 w-full cursor-pointer rounded-lg border border-hairline bg-raised px-3 py-2 text-ink" />
                 </label>
-                <label className="text-sm text-slate-300">
+                <label className="text-sm text-ink/80">
                   Purchase Price (what you paid)
-                  <input name="purchase_price" inputMode="decimal" value={form.purchase_price as string || ""} onChange={handleChange} placeholder="e.g. 10500" className="mt-1 w-full rounded-lg border border-white/10 bg-slate-950/90 px-3 py-2 text-white" />
+                  <input name="purchase_price" inputMode="decimal" value={form.purchase_price as string || ""} onChange={handleChange} placeholder="e.g. 10500" className="mt-1 w-full rounded-lg border border-hairline bg-raised px-3 py-2 text-ink" />
                 </label>
-                <label className="text-sm text-slate-300">
+                <label className="text-sm text-ink/80">
                   Estimated Value
-                  <input name="estimated_value" value={form.estimated_value as string || ""} onChange={handleChange} className="mt-1 w-full rounded-lg border border-white/10 bg-slate-950/90 px-3 py-2 text-white" />
+                  <input name="estimated_value" value={form.estimated_value as string || ""} onChange={handleChange} className="mt-1 w-full rounded-lg border border-hairline bg-raised px-3 py-2 text-ink" />
                 </label>
-                <label className="text-sm text-slate-300">
+                <label className="text-sm text-ink/80">
                   Purchase Date
-                  <input type="date" name="purchase_date" value={form.purchase_date as string || ""} onChange={handleChange} className="mt-1 w-full rounded-lg border border-white/10 bg-slate-950/90 px-3 py-2 text-white" />
+                  <input type="date" name="purchase_date" value={form.purchase_date as string || ""} onChange={handleChange} className="mt-1 w-full rounded-lg border border-hairline bg-raised px-3 py-2 text-ink" />
                 </label>
-                <label className="text-sm text-slate-300">
+                <label className="text-sm text-ink/80">
                   Condition
-                  <input name="condition" value={form.condition as string || ""} onChange={handleChange} className="mt-1 w-full rounded-lg border border-white/10 bg-slate-950/90 px-3 py-2 text-white" />
+                  <input name="condition" value={form.condition as string || ""} onChange={handleChange} className="mt-1 w-full rounded-lg border border-hairline bg-raised px-3 py-2 text-ink" />
                 </label>
                 <ProvenanceFields value={provenance} onChange={setProvenance} />
-                <label className="text-sm text-slate-300">
+                <label className="text-sm text-ink/80">
                   Photo URL
-                  <input name="image_url" value={form.image_url as string || ""} onChange={handleChange} className="mt-1 w-full rounded-lg border border-white/10 bg-slate-950/90 px-3 py-2 text-white" />
+                  <input name="image_url" value={form.image_url as string || ""} onChange={handleChange} className="mt-1 w-full rounded-lg border border-hairline bg-raised px-3 py-2 text-ink" />
                 </label>
-                <label className="text-sm text-slate-300">
+                <label className="text-sm text-ink/80">
                   Notes
-                  <textarea name="notes" value={form.notes as string || ""} onChange={handleChange} className="mt-1 w-full rounded-lg border border-white/10 bg-slate-950/90 px-3 py-2 text-white" rows={4} />
+                  <textarea name="notes" value={form.notes as string || ""} onChange={handleChange} className="mt-1 w-full rounded-lg border border-hairline bg-raised px-3 py-2 text-ink" rows={4} />
                 </label>
                 <div className="flex gap-3">
-                  <button type="submit" className="rounded-full bg-[#D9A43A] px-5 py-3 text-sm font-semibold">Save</button>
-                  <button type="button" onClick={handleEditToggle} className="rounded-full bg-white/5 px-5 py-3 text-sm font-semibold text-white">Cancel</button>
+                  <button type="submit" className="rounded-full bg-gold px-5 py-3 text-sm font-semibold">Save</button>
+                  <button type="button" onClick={handleEditToggle} className="rounded-full bg-surface px-5 py-3 text-sm font-semibold text-ink">Cancel</button>
                 </div>
               </form>
             )}
           </div>
         </div>
         {!editing && (watch.details?.summary || watch.details?.movement || watch.details?.sources?.length) ? (
-          <div className="mt-8 border-t border-white/10 pt-6">
-            <p className="mb-4 text-xs uppercase tracking-[0.3em] text-blue-300">Details &amp; prices</p>
+          <div className="mt-8 border-t border-hairline pt-6">
+            <p className="mb-4 text-xs uppercase tracking-[0.3em] text-gold">Details &amp; prices</p>
             <WatchValuePanel watch={watch} />
           </div>
         ) : null}

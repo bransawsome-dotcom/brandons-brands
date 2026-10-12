@@ -32,7 +32,7 @@ export default function ListPrivacyStatus({ userId }: { userId: string }) {
   const wish = Boolean(profile?.wishlist_public);
   const link = (kind: "collection" | "wishlist", label: string) =>
     profile ? (
-      <Link href={`/collectors/${profile.handle}/${kind}`} className="text-[#D9A43A] hover:text-[#e1b54a]">
+      <Link href={`/collectors/${profile.handle}/${kind}`} className="text-gold hover:text-gold-bright">
         {label}
       </Link>
     ) : (
@@ -41,8 +41,8 @@ export default function ListPrivacyStatus({ userId }: { userId: string }) {
   const settings = (
     <>
       {" "}
-      Change this on your <Link href="/collection" className="text-blue-200 hover:text-blue-100">Collection</Link> and{" "}
-      <Link href="/wishlist" className="text-blue-200 hover:text-blue-100">Wishlist</Link> pages.
+      Change this on your <Link href="/collection" className="text-gold hover:text-gold">Collection</Link> and{" "}
+      <Link href="/wishlist" className="text-gold hover:text-gold">Wishlist</Link> pages.
     </>
   );
 

@@ -102,55 +102,55 @@ export default function WatchValueTrackerPage() {
     <div className="mx-auto w-full max-w-5xl px-0 py-4 sm:px-6 sm:py-10">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
 
-      <section className="rounded-[2rem] border border-white/10 bg-gradient-to-br from-[#0E3A63]/60 via-slate-950/80 to-black/40 p-6 sm:p-10">
-        <p className="text-xs uppercase tracking-[0.35em] text-blue-300">Free collection tools</p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-[-0.02em] text-white sm:text-5xl">Free watch value tracker</h1>
-        <p className="mt-4 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
+      <section className="rounded-md border border-hairline bg-surface p-6 sm:p-10">
+        <p className="text-xs uppercase tracking-[0.35em] text-gold">Free collection tools</p>
+        <h1 className="mt-3 text-3xl font-semibold tracking-[-0.02em] text-ink sm:text-5xl">Free watch value tracker</h1>
+        <p className="mt-4 max-w-2xl text-base leading-7 text-ink/80 sm:text-lg">
           Find out what your watches are worth and watch your collection&apos;s value over time. Add a watch in seconds, get daily estimated values, and set
           price alerts for the watches you want next.
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
-          <Link href="/signup" className="rounded-full bg-[#D9A43A] px-6 py-3 text-sm font-semibold text-black hover:bg-[#e1b54a]">
+          <Link href="/signup" className="rounded-full bg-gold px-6 py-3 text-sm font-semibold text-on-gold hover:bg-gold-bright">
             Start tracking free
           </Link>
-          <Link href="/collection" className="rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-slate-100 hover:bg-white/5">
+          <Link href="/collection" className="rounded-full border border-hairline px-6 py-3 text-sm font-semibold text-ink hover:bg-surface">
             I have an account
           </Link>
         </div>
       </section>
 
       <section aria-labelledby="features" className="mt-8">
-        <h2 id="features" className="px-1 text-2xl font-semibold text-white">What the watch price tracker does</h2>
+        <h2 id="features" className="px-1 text-2xl font-semibold text-ink">What the watch price tracker does</h2>
         <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((f) => (
-            <li key={f.title} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
+            <li key={f.title} className="rounded-md border border-hairline bg-surface p-5">
               <p className="text-2xl" aria-hidden>
                 {f.icon}
               </p>
-              <h3 className="mt-2 text-lg font-semibold text-white">{f.title}</h3>
-              <p className="mt-2 text-sm leading-6 text-slate-300">{f.text}</p>
+              <h3 className="mt-2 text-lg font-semibold text-ink">{f.title}</h3>
+              <p className="mt-2 text-sm leading-6 text-ink/80">{f.text}</p>
             </li>
           ))}
         </ul>
       </section>
 
-      <section aria-labelledby="faq" className="mt-10 rounded-[2rem] border border-white/10 bg-white/5 p-6 sm:p-8">
-        <h2 id="faq" className="text-2xl font-semibold text-white">Questions</h2>
-        <dl className="mt-4 divide-y divide-white/10">
+      <section aria-labelledby="faq" className="mt-10 rounded-md border border-hairline bg-surface p-6 sm:p-8">
+        <h2 id="faq" className="text-2xl font-semibold text-ink">Questions</h2>
+        <dl className="mt-4 divide-y divide-hairline">
           {FAQS.map((f) => (
             <div key={f.q} className="py-4">
-              <dt className="font-semibold text-white">{f.q}</dt>
-              <dd className="mt-1 text-sm leading-6 text-slate-300">{f.a}</dd>
+              <dt className="font-semibold text-ink">{f.q}</dt>
+              <dd className="mt-1 text-sm leading-6 text-ink/80">{f.a}</dd>
             </div>
           ))}
         </dl>
-        <p className="mt-4 text-xs text-slate-500">Estimated market values are for information only and are not appraisals or financial advice.</p>
+        <p className="mt-4 text-xs text-muted">Estimated market values are for information only and are not appraisals or financial advice.</p>
       </section>
 
-      <p className="mt-8 px-1 text-sm text-slate-400">
-        New to collecting? Read <Link href="/learn/how-to-start-a-watch-collection" className="text-blue-300 hover:text-blue-200">how to start a watch collection</Link>,{" "}
-        <Link href="/learn/are-watches-a-good-investment" className="text-blue-300 hover:text-blue-200">are watches a good investment?</Link> and{" "}
-        <Link href="/learn/buying-pre-owned-watches-safely" className="text-blue-300 hover:text-blue-200">buying pre-owned watches safely</Link>.
+      <p className="mt-8 px-1 text-sm text-muted">
+        New to collecting? Read <Link href="/learn/how-to-start-a-watch-collection" className="text-gold hover:text-gold">how to start a watch collection</Link>,{" "}
+        <Link href="/learn/are-watches-a-good-investment" className="text-gold hover:text-gold">are watches a good investment?</Link> and{" "}
+        <Link href="/learn/buying-pre-owned-watches-safely" className="text-gold hover:text-gold">buying pre-owned watches safely</Link>.
       </p>
     </div>
   );

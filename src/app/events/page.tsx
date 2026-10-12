@@ -34,13 +34,13 @@ export default async function EventsPage() {
   return (
     <div className="mx-auto w-full max-w-4xl px-0 py-4 sm:px-6 sm:py-10">
       {jsonLd.length ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} /> : null}
-      <section className="rounded-[2rem] border border-white/10 bg-white/5 p-5 sm:p-8">
-        <p className="text-xs uppercase tracking-[0.35em] text-blue-300">Events</p>
-        <h1 className="mt-2 text-3xl font-semibold text-white sm:text-4xl">Upcoming watch events</h1>
-        <p className="mt-2 text-sm leading-6 text-slate-300">
+      <section className="rounded-md border border-hairline bg-surface p-5 sm:p-8">
+        <p className="text-xs uppercase tracking-[0.35em] text-gold">Events</p>
+        <h1 className="mt-2 text-3xl font-semibold text-ink sm:text-4xl">Upcoming watch events</h1>
+        <p className="mt-2 text-sm leading-6 text-ink/80">
           Microbrand watch fairs, watch shows and collector meetups worth knowing about, near New Jersey and around the world. These events are run by
           their own organizers, not by Brandon&apos;s Brands: get tickets and RSVP on each event&apos;s own site. Going? Tell other collectors in the{" "}
-          <Link href="/forum?subject=clubs" className="text-[#D9A43A] hover:text-[#e1b54a]">
+          <Link href="/forum?subject=clubs" className="text-gold hover:text-gold-bright">
             Watch Clubs & Meetups forum
           </Link>
           .

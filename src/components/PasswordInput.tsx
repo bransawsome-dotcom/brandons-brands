@@ -14,7 +14,7 @@ export default function PasswordInput({ className = "", ...props }: Omit<InputHT
         aria-label={show ? "Hide password" : "Show password"}
         aria-pressed={show}
         title={show ? "Hide password" : "Show password"}
-        className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-slate-400 transition hover:bg-white/10 hover:text-white"
+        className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-muted transition hover:bg-surface hover:text-ink"
       >
         {show ? (
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>

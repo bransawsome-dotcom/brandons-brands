@@ -7,7 +7,7 @@ import { isModerator } from "@/lib/forum";
 import { eventsSinceIso, eventWhen, splitEvents, type SiteEvent } from "@/lib/events";
 
 const input =
-  "w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-2.5 text-sm text-white outline-none transition focus:border-blue-400/70";
+  "w-full rounded border border-hairline bg-raised px-4 py-2.5 text-sm text-ink outline-none transition focus:border-gold/70";
 
 // Upcoming and recent watch events run by other organizers (tickets and RSVPs are on each event's own site),
 // plus an "Add event" form for moderators.
@@ -68,29 +68,29 @@ export default function EventsView({ initial }: { initial: SiteEvent[] }) {
   const { upcoming, past } = splitEvents(events);
 
   const card = (e: SiteEvent, isPast: boolean) => (
-    <li key={e.id} id={e.id} className="scroll-mt-24 rounded-[1.75rem] border border-white/10 bg-white/5 p-5">
-      <p className="text-xs uppercase tracking-[0.2em] text-[#D9A43A]">{eventWhen(e)}</p>
-      <h2 className="mt-1 text-xl font-semibold text-white">{e.title}</h2>
-      <p className="mt-1 text-sm text-slate-300">{e.online ? "Online" : e.location ?? "New Jersey"}</p>
-      {e.description ? <p className="mt-3 whitespace-pre-line text-sm leading-6 text-slate-300">{e.description}</p> : null}
+    <li key={e.id} id={e.id} className="scroll-mt-24 rounded-md border border-hairline bg-surface p-5">
+      <p className="text-xs uppercase tracking-[0.2em] text-gold">{eventWhen(e)}</p>
+      <h2 className="mt-1 text-xl font-semibold text-ink">{e.title}</h2>
+      <p className="mt-1 text-sm text-ink/80">{e.online ? "Online" : e.location ?? "New Jersey"}</p>
+      {e.description ? <p className="mt-3 whitespace-pre-line text-sm leading-6 text-ink/80">{e.description}</p> : null}
       <div className="mt-4 flex flex-wrap items-center gap-2 text-sm">
         {e.link ? (
           <a
             href={e.link}
             target="_blank"
             rel="noopener noreferrer"
-            className={isPast ? "rounded-full border border-white/15 px-3 py-1.5 text-blue-200 hover:bg-white/10" : "rounded-full bg-[#D9A43A] px-4 py-2 font-semibold text-black hover:bg-[#e1b54a]"}
+            className={isPast ? "rounded-full border border-hairline px-3 py-1.5 text-gold hover:bg-surface" : "rounded-full bg-gold px-4 py-2 font-semibold text-on-gold hover:bg-gold-bright"}
           >
             {isPast ? "Event site ↗" : "Details & RSVP on the event site ↗"}
           </a>
         ) : null}
         {!isPast ? (
-          <a href={`/events/${e.id}/ics`} className="rounded-full border border-white/15 px-3 py-1.5 text-slate-200 hover:bg-white/10">
+          <a href={`/events/${e.id}/ics`} className="rounded-full border border-hairline px-3 py-1.5 text-ink hover:bg-surface">
             📅 Add to calendar
           </a>
         ) : null}
         {mod ? (
-          <button type="button" onClick={() => void remove(e)} className="ml-auto text-xs text-slate-500 hover:text-rose-300">
+          <button type="button" onClick={() => void remove(e)} className="ml-auto text-xs text-muted hover:text-rose-700">
             Delete
           </button>
         ) : null}
@@ -101,10 +101,10 @@ export default function EventsView({ initial }: { initial: SiteEvent[] }) {
   return (
     <>
       {mod ? (
-        <form onSubmit={add} className="mt-6 grid gap-3 rounded-[2rem] border border-[#D9A43A]/30 bg-[#D9A43A]/5 p-5">
-          <p className="text-sm font-semibold text-[#D9A43A]">Add an event (only moderators see this)</p>
+        <form onSubmit={add} className="mt-6 grid gap-3 rounded-md border border-gold/30 bg-gold/5 p-5">
+          <p className="text-sm font-semibold text-gold">Add an event (only moderators see this)</p>
           <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required maxLength={120} className={input} placeholder="Title, e.g. Windup Watch Fair NYC" />
-          <label className="flex items-center gap-2 text-sm text-slate-300">
+          <label className="flex items-center gap-2 text-sm text-ink/80">
             <input type="checkbox" checked={form.allDay} onChange={(e) => setForm({ ...form, allDay: e.target.checked })} className="h-4 w-4" /> All day or several days (no set time)
           </label>
           {form.allDay ? (
@@ -122,26 +122,26 @@ export default function EventsView({ initial }: { initial: SiteEvent[] }) {
           <input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} maxLength={160} className={input} placeholder="Place, e.g. Center415, 415 Fifth Ave, New York, NY" />
           <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} maxLength={2000} rows={3} className={input} placeholder="What to expect (optional)" />
           <input value={form.link} onChange={(e) => setForm({ ...form, link: e.target.value })} className={input} required placeholder="Event's own website for tickets or RSVP (https://…)" />
-          <label className="flex items-center gap-2 text-sm text-slate-300">
+          <label className="flex items-center gap-2 text-sm text-ink/80">
             <input type="checkbox" checked={form.online} onChange={(e) => setForm({ ...form, online: e.target.checked })} className="h-4 w-4" /> Online event
           </label>
-          {error ? <p className="text-sm text-rose-300">{error}</p> : null}
-          <button type="submit" className="justify-self-start rounded-full bg-[#D9A43A] px-5 py-2 text-sm font-semibold text-black">
+          {error ? <p className="text-sm text-rose-700">{error}</p> : null}
+          <button type="submit" className="justify-self-start rounded-full bg-gold px-5 py-2 text-sm font-semibold text-on-gold">
             Add event
           </button>
         </form>
       ) : null}
-      <h2 className="mt-8 px-1 text-lg font-semibold text-white">Upcoming</h2>
+      <h2 className="mt-8 px-1 text-lg font-semibold text-ink">Upcoming</h2>
       {upcoming.length ? (
         <ul className="mt-3 grid gap-4">{upcoming.map((e) => card(e, false))}</ul>
       ) : (
-        <p className="mt-3 rounded-[1.75rem] border border-white/10 bg-white/5 p-5 text-sm text-slate-300">
+        <p className="mt-3 rounded-md border border-hairline bg-surface p-5 text-sm text-ink/80">
           No upcoming events listed right now. Sign up for the newsletter below to hear about the next watch fair.
         </p>
       )}
       {past.length ? (
         <>
-          <h2 className="mt-8 px-1 text-lg font-semibold text-white">Recent</h2>
+          <h2 className="mt-8 px-1 text-lg font-semibold text-ink">Recent</h2>
           <ul className="mt-3 grid gap-4 opacity-80">{past.map((e) => card(e, true))}</ul>
         </>
       ) : null}

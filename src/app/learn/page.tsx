@@ -19,6 +19,13 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: "Learn About Watches | Brandon's Brands", description: DESCRIPTION },
 };
 
+// The small editorial label on each card.
+function kindOf(slug: string, category: string): string {
+  if (/glossary|terms/.test(slug)) return "Glossary";
+  if (category === "Watch History" || category === "Collecting & Community" || /trends|vs-/.test(slug)) return "Journal";
+  return "Guide";
+}
+
 export default function LearnPage() {
   const jsonLd = {
     "@context": "https://schema.org",
@@ -36,45 +43,47 @@ export default function LearnPage() {
   return (
     <div className="mx-auto w-full max-w-7xl px-0 py-4 sm:px-6 sm:py-12 lg:px-16">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
-      <section className="rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">
-        <p className="text-xs uppercase tracking-[0.35em] text-blue-300">Learn</p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-white sm:text-5xl">Learn about watches</h1>
-        <p className="mt-4 max-w-2xl text-base leading-7 text-slate-300">
+      <header className="px-4 pt-6 sm:px-0 sm:pt-0">
+        <span aria-hidden className="block h-px w-10 bg-gold" />
+        <p className="mt-4 text-xs uppercase tracking-[0.3em] text-gold">The Library</p>
+        <h1 className="mt-3 font-display text-5xl font-semibold uppercase leading-[0.95] text-ink sm:text-7xl">
+          Learn about <span className="font-light text-gold">watches</span>
+        </h1>
+        <p className="mt-5 max-w-2xl font-serif text-xl italic leading-8 text-ink/80 sm:text-2xl">
           Buying guides, watch types, how watches work and the history behind the icons, from Brandon Volosov and the Brandon&apos;s Brands
           community. Whether you&apos;re buying your first watch or your fiftieth, start here.
         </p>
-        <nav aria-label="Guide categories" className="mt-5 flex flex-wrap gap-2">
+        <nav aria-label="Guide categories" className="mt-7 flex flex-wrap gap-2">
           {LEARN_CATEGORIES.map((c) => (
-            <a key={c.name} href={`#${c.name.toLowerCase().replace(/\s+/g, "-")}`} className="rounded-full border border-white/15 px-4 py-2 text-sm text-slate-200 hover:bg-white/5">
-              {c.icon} {c.name}
+            <a
+              key={c.name}
+              href={`#${c.name.toLowerCase().replace(/\s+/g, "-")}`}
+              className="inline-flex min-h-10 items-center rounded-full border border-hairline-strong px-4 text-[11px] uppercase tracking-[0.18em] text-ink transition hover:border-gold hover:text-gold"
+            >
+              {c.name}
             </a>
           ))}
         </nav>
-      </section>
+      </header>
 
       {LEARN_CATEGORIES.map((c) => {
         const guides = learnGuides.filter((g) => g.category === c.name);
         if (!guides.length) return null;
         return (
-          <section key={c.name} id={c.name.toLowerCase().replace(/\s+/g, "-")} className="mt-10 scroll-mt-6">
-            <h2 className="text-2xl font-semibold text-white">
-              <span aria-hidden className="mr-2">
-                {c.icon}
-              </span>
-              {c.name}
-            </h2>
-            <p className="mt-1 text-sm text-slate-400">{c.blurb}</p>
-            <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <section key={c.name} id={c.name.toLowerCase().replace(/\s+/g, "-")} className="mt-14 scroll-mt-6 px-4 sm:px-0">
+            <div className="flex flex-wrap items-end justify-between gap-3 border-b border-hairline pb-4">
+              <h2 className="font-display text-3xl font-semibold uppercase text-ink sm:text-4xl">{c.name}</h2>
+              <p className="max-w-md text-sm text-muted">{c.blurb}</p>
+            </div>
+            <ul className="grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
               {guides.map((g) => (
-                <li key={g.slug}>
-                  <Link
-                    href={`/learn/${g.slug}`}
-                    className="group flex h-full flex-col rounded-[1.75rem] border border-white/10 bg-slate-950/70 p-6 transition hover:-translate-y-0.5 hover:border-[#D9A43A]/40"
-                  >
-                    <h3 className="text-lg font-semibold text-white">{g.title}</h3>
-                    <p className="mt-2 flex-1 text-sm leading-6 text-slate-300">{g.description}</p>
-                    <span className="mt-4 inline-flex items-center gap-1 self-start text-xs font-semibold uppercase tracking-[0.15em] text-[#D9A43A]">
-                      Read · {g.minutes} min <span aria-hidden className="transition group-hover:translate-x-1">→</span>
+                <li key={g.slug} className="border-b border-hairline">
+                  <Link href={`/learn/${g.slug}`} className="group flex h-full flex-col py-6">
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-gold">{kindOf(g.slug, g.category)}</span>
+                    <h3 className="mt-3 font-display text-2xl font-semibold uppercase leading-tight text-ink transition group-hover:text-gold">{g.title}</h3>
+                    <p className="mt-3 flex-1 text-sm leading-6 text-ink/80">{g.description}</p>
+                    <span className="mt-4 text-[11px] uppercase tracking-[0.2em] text-muted">
+                      {g.minutes} min read <span aria-hidden className="ml-1 inline-block text-gold transition group-hover:translate-x-1">→</span>
                     </span>
                   </Link>
                 </li>
@@ -84,15 +93,15 @@ export default function LearnPage() {
         );
       })}
 
-      <section className="mt-10 rounded-[1.75rem] border border-white/10 bg-white/5 p-6 text-center">
-        <p className="text-lg font-semibold text-white">Have a question these guides don&apos;t answer?</p>
-        <p className="mt-1 text-sm text-slate-300">Ask the community in the forum, or see which watches made Brandon&apos;s Favorites.</p>
+      <section className="mt-14 rounded-md border border-hairline bg-surface p-6 text-center sm:p-10">
+        <p className="font-serif text-2xl italic text-ink">Have a question these guides don&apos;t answer?</p>
+        <p className="mt-1 text-sm text-ink/80">Ask the community in the forum, or see which watches made Brandon&apos;s Favorites.</p>
         <div className="mt-4 flex flex-wrap justify-center gap-3">
-          <Link href="/forum?subject=buying-advice" className="rounded-full border border-[#3FB4EC]/40 bg-gradient-to-b from-[#1A7DBF] to-[#0E5A8F] px-5 py-2.5 text-sm font-semibold text-white hover:from-[#2290D6] hover:to-[#136AA6]">
+          <Link href="/forum?subject=buying-advice" className="rounded-full border border-hairline-strong bg-raised px-5 py-2.5 text-sm font-semibold text-ink hover:border-gold hover:bg-surface">
             Ask in the forum
           </Link>
-          <Link href="/favorites" className="rounded-full border border-white/15 px-5 py-2.5 text-sm font-semibold text-slate-200 hover:bg-white/5">
-            ⭐ Brandon&apos;s Favorites
+          <Link href="/favorites" className="rounded-full border border-hairline px-5 py-2.5 text-sm font-semibold text-ink hover:bg-surface">
+            Brandon&apos;s Favorites
           </Link>
         </div>
       </section>

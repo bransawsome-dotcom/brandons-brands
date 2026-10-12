@@ -32,7 +32,7 @@ const initialForm = {
 const priorityOptions = ["High", "Medium", "Low"] as const;
 
 const inputClass =
-  "w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-blue-400/70";
+  "w-full rounded-md border border-hairline bg-raised px-4 py-3 text-ink outline-none transition focus:border-gold/70";
 
 function hostOf(url: string) {
   try {
@@ -288,12 +288,12 @@ export default function WishlistPage() {
 
   return (
     <div className="mx-auto w-full max-w-7xl px-3 py-8 sm:px-6 sm:py-14 lg:px-16 overflow-x-hidden">
-      <div className="rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">
+      <div className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-8">
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-blue-300">Wishlist</p>
-            <h1 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-white sm:text-5xl">Luxury watch wishlist.</h1>
-            <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
+            <p className="text-sm uppercase tracking-[0.3em] text-gold">Wishlist</p>
+            <h1 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-ink sm:text-5xl">Luxury watch wishlist.</h1>
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-ink/80 sm:text-base">
               Pick a brand and model. The photo, specs, today&apos;s retail price and market value fill in automatically.
             </p>
           </div>
@@ -301,13 +301,13 @@ export default function WishlistPage() {
           <ShareButton kind="wishlist" />
           <PublicListToggle kind="wishlist" />
           <dl className="grid grid-cols-2 gap-3 text-center sm:min-w-[260px]">
-            <div className="flex min-w-0 flex-col justify-between rounded-2xl border border-white/10 bg-black/20 px-2 py-3 sm:px-3">
-              <dt className="whitespace-nowrap text-[10px] uppercase tracking-[0.1em] text-slate-400 sm:text-[11px] sm:tracking-[0.18em]">Watches</dt>
-              <dd className="mt-1 whitespace-nowrap text-sm font-semibold tabular-nums min-[360px]:text-lg sm:text-xl text-white">{wishlist.length}</dd>
+            <div className="flex min-w-0 flex-col justify-between rounded border border-hairline bg-surface px-2 py-3 sm:px-3">
+              <dt className="whitespace-nowrap text-[10px] uppercase tracking-[0.1em] text-muted sm:text-[11px] sm:tracking-[0.18em]">Watches</dt>
+              <dd className="mt-1 whitespace-nowrap text-sm font-semibold tabular-nums min-[360px]:text-lg sm:text-xl text-ink">{wishlist.length}</dd>
             </div>
-            <div className="flex min-w-0 flex-col justify-between rounded-2xl border border-white/10 bg-black/20 px-2 py-3 sm:px-3">
-              <dt className="whitespace-nowrap text-[10px] uppercase tracking-[0.1em] text-slate-400 sm:text-[11px] sm:tracking-[0.18em]">Market value</dt>
-              <dd className="mt-1 whitespace-nowrap text-sm font-semibold tabular-nums min-[360px]:text-lg sm:text-xl text-[#D9A43A]">{totalValue ? formatUsd(totalValue) : "—"}</dd>
+            <div className="flex min-w-0 flex-col justify-between rounded border border-hairline bg-surface px-2 py-3 sm:px-3">
+              <dt className="whitespace-nowrap text-[10px] uppercase tracking-[0.1em] text-muted sm:text-[11px] sm:tracking-[0.18em]">Market value</dt>
+              <dd className="mt-1 whitespace-nowrap text-sm font-semibold tabular-nums min-[360px]:text-lg sm:text-xl text-gold">{totalValue ? formatUsd(totalValue) : "—"}</dd>
             </div>
           </dl>
           </div>
@@ -318,15 +318,15 @@ export default function WishlistPage() {
             <WishlistScanner onAdd={addScannedItems} />
           </div>
         ) : (
-          <p className="mb-6 rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-slate-300">
-            <a href="/login" className="font-semibold text-[#D9A43A] hover:text-[#e1b54a]">Log in</a> to auto-fill photos, details and prices, or scan a photo of your wishlist.
+          <p className="mb-6 rounded border border-hairline bg-surface px-4 py-3 text-sm text-ink/80">
+            <a href="/login" className="font-semibold text-gold hover:text-gold-bright">Log in</a> to auto-fill photos, details and prices, or scan a photo of your wishlist.
           </p>
         )}
 
-        <form id="add-wishlist" onSubmit={handleSubmit} className="grid gap-6 rounded-[1.75rem] border border-white/10 bg-black/30 p-5 sm:p-6">
+        <form id="add-wishlist" onSubmit={handleSubmit} className="grid gap-6 rounded-md border border-hairline bg-surface p-5 sm:p-6">
           <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-blue-300">{editingId ? "Edit wishlist watch" : "Add to wishlist"}</p>
-            <p className="mt-1 text-sm text-slate-400">Choose from the lists, or type a watch that isn&apos;t listed.</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-gold">{editingId ? "Edit wishlist watch" : "Add to wishlist"}</p>
+            <p className="mt-1 text-sm text-muted">Choose from the lists, or type a watch that isn&apos;t listed.</p>
           </div>
           <div className="grid gap-6 lg:grid-cols-2">
             <Combobox
@@ -365,7 +365,7 @@ export default function WishlistPage() {
           {versionFor ? <VersionPicker key={`${versionFor.brand}|${versionFor.model}`} brand={versionFor.brand} model={versionFor.model} onChoose={chooseVersion} /> : null}
 
           <div className="grid gap-6 lg:grid-cols-2 lg:items-end">
-            <label className="space-y-2 text-sm text-slate-300">
+            <label className="space-y-2 text-sm text-ink/80">
               Reference (optional)
               <input name="reference_number" value={form.reference_number} onChange={handleChange} className={inputClass} placeholder="15510ST" />
             </label>
@@ -374,7 +374,7 @@ export default function WishlistPage() {
                 type="button"
                 onClick={() => runLookup()}
                 disabled={lookingUp}
-                className="rounded-full border border-[#D9A43A]/50 bg-[#D9A43A]/10 px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-[#D9A43A] transition hover:bg-[#D9A43A]/20 disabled:opacity-60"
+                className="rounded-full border border-gold/50 bg-gold/10 px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-gold transition hover:bg-gold/20 disabled:opacity-60"
               >
                 {lookingUp ? "Looking up…" : lookup ? "Look up again" : "Auto-fill details & prices"}
               </button>
@@ -382,7 +382,7 @@ export default function WishlistPage() {
           </div>
 
           {lookup ? (
-            <div className="flex gap-4 rounded-3xl border border-emerald-400/20 bg-emerald-500/5 p-4 text-sm text-slate-200">
+            <div className="flex gap-4 rounded-md border border-emerald-400/20 bg-emerald-500/5 p-4 text-sm text-ink">
               {lookup.image_url ? (
                 <img
                   src={lookup.image_url}
@@ -391,28 +391,28 @@ export default function WishlistPage() {
                   onError={(e) => {
                     e.currentTarget.style.display = "none";
                   }}
-                  className="h-24 w-24 shrink-0 rounded-2xl bg-white object-contain p-1 sm:h-28 sm:w-28"
+                  className="h-24 w-24 shrink-0 rounded bg-surface object-contain p-1 sm:h-28 sm:w-28"
                 />
               ) : null}
               <div className="min-w-0">
-                <p className="font-semibold text-white">
+                <p className="font-semibold text-ink">
                   {lookup.brand} {lookup.model}
                   {lookup.reference_number ? ` · Ref. ${lookup.reference_number}` : ""}
                 </p>
-                <p className="mt-1 text-slate-300">
-                  Retail today: <span className="text-white">{formatUsd(lookup.current_retail_price)}</span> · Market value:{" "}
-                  <span className="text-white">{formatUsd(lookup.market_value)}</span>
+                <p className="mt-1 text-ink/80">
+                  Retail today: <span className="text-ink">{formatUsd(lookup.current_retail_price)}</span> · Market value:{" "}
+                  <span className="text-ink">{formatUsd(lookup.market_value)}</span>
                 </p>
                 {[lookup.case_size_mm, lookup.case_material, lookup.movement].filter(Boolean).length ? (
-                  <p className="mt-1 text-slate-400">{[lookup.case_size_mm, lookup.case_material, lookup.movement].filter(Boolean).join(" · ")}</p>
+                  <p className="mt-1 text-muted">{[lookup.case_size_mm, lookup.case_material, lookup.movement].filter(Boolean).join(" · ")}</p>
                 ) : null}
-                <p className="mt-2 text-xs text-slate-500">Saved with the watch when you click {editingId ? "Save" : "Add to Wishlist"}.</p>
+                <p className="mt-2 text-xs text-muted">Saved with the watch when you click {editingId ? "Save" : "Add to Wishlist"}.</p>
               </div>
             </div>
           ) : null}
 
           <div className="grid gap-6 lg:grid-cols-2">
-            <label className="space-y-2 text-sm text-slate-300">
+            <label className="space-y-2 text-sm text-ink/80">
               Priority
               <select name="priority" value={form.priority} onChange={handleChange} className={inputClass}>
                 {priorityOptions.map((option) => (
@@ -422,25 +422,25 @@ export default function WishlistPage() {
                 ))}
               </select>
             </label>
-            <label className="space-y-2 text-sm text-slate-300">
+            <label className="space-y-2 text-sm text-ink/80">
               Target price (what you&apos;d pay)
               <input name="target_price" value={form.target_price} onChange={handleChange} type="number" step="0.01" className={inputClass} placeholder="42000" />
-              <span className="block text-xs text-slate-500">Turn on 🔔 Price alert on the watch to get notified when it&apos;s listed at or below this price.</span>
+              <span className="block text-xs text-muted">Turn on 🔔 Price alert on the watch to get notified when it&apos;s listed at or below this price.</span>
             </label>
           </div>
 
-          <label className="space-y-2 text-sm text-slate-300">
+          <label className="space-y-2 text-sm text-ink/80">
             Notes
             <textarea name="notes" value={form.notes} onChange={handleChange} rows={3} className={inputClass} placeholder="Why this watch is a future must-have" />
           </label>
 
-          {message ? <div className="rounded-3xl bg-white/5 px-4 py-3 text-sm text-amber-300">{message}</div> : null}
+          {message ? <div className="rounded-md bg-surface px-4 py-3 text-sm text-amber-800">{message}</div> : null}
 
           <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
             <button
               type="submit"
               disabled={lookingUp}
-              className="w-full rounded-full bg-[#D9A43A] px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-black shadow-[0_20px_60px_rgba(217,164,58,0.22)] transition hover:-translate-y-0.5 hover:bg-[#e1b54a] disabled:opacity-60"
+              className="w-full rounded-full bg-gold px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-on-gold shadow-[0_10px_30px_rgba(43,38,32,0.08)] transition hover:-translate-y-0.5 hover:bg-gold-bright disabled:opacity-60"
             >
               {lookingUp ? "Looking up…" : editingId ? "Save" : "Add to Wishlist"}
             </button>
@@ -451,7 +451,7 @@ export default function WishlistPage() {
                   resetForm();
                   setMessage(null);
                 }}
-                className="rounded-full border border-white/15 px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-200 hover:bg-white/5"
+                className="rounded-full border border-hairline px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-ink hover:bg-surface"
               >
                 Cancel
               </button>
@@ -463,8 +463,8 @@ export default function WishlistPage() {
       <section className="mt-12">
         <div className="mb-8 grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
           <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-blue-300">Your wishlist</p>
-            <h2 className="mt-3 text-3xl font-semibold text-white">Future watch ambitions.</h2>
+            <p className="text-sm uppercase tracking-[0.3em] text-gold">Your wishlist</p>
+            <h2 className="mt-3 text-3xl font-semibold text-ink">Future watch ambitions.</h2>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search wishlist" className={inputClass} />
@@ -479,19 +479,19 @@ export default function WishlistPage() {
           </div>
         </div>
 
-        {alertMessage ? <div className="mb-6 rounded-3xl bg-white/5 px-4 py-3 text-sm text-amber-300">{alertMessage}</div> : null}
+        {alertMessage ? <div className="mb-6 rounded-md bg-surface px-4 py-3 text-sm text-amber-800">{alertMessage}</div> : null}
         {loading ? (
           <SkeletonCards label="Loading wishlist" />
         ) : !wishlist.length ? (
-          <div className="rounded-[2rem] border border-dashed border-white/10 bg-white/5 p-12 text-center text-slate-300">
+          <div className="rounded-md border border-dashed border-hairline bg-surface p-12 text-center text-ink/80">
             <div className="text-4xl">⭐</div>
-            <h3 className="mt-4 text-lg font-semibold text-white">Your wishlist is empty.</h3>
-            <p className="mt-2 text-sm text-slate-300">Save watches you&apos;d like to own in the future.</p>
+            <h3 className="mt-4 text-lg font-semibold text-ink">Your wishlist is empty.</h3>
+            <p className="mt-2 text-sm text-ink/80">Save watches you&apos;d like to own in the future.</p>
             <div className="mt-6">
               <button
                 type="button"
                 onClick={() => document.getElementById("add-wishlist")?.scrollIntoView({ behavior: "smooth" })}
-                className="inline-flex items-center gap-2 rounded-full bg-[#D9A43A] px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-black"
+                className="inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-on-gold"
               >
                 <span>➕</span>
                 <span>Add Your First Wishlist Item</span>
@@ -512,10 +512,10 @@ export default function WishlistPage() {
                 <article
                   key={item.id}
                   id={`w-${item.id}`}
-                  className="scroll-mt-6 flex flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-[0_25px_70px_rgba(0,0,0,0.28)] backdrop-blur-xl"
+                  className="scroll-mt-6 flex flex-col overflow-hidden rounded-md border border-hairline bg-surface shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl"
                 >
                   {item.image_url ? (
-                    <div className="bb-shine flex h-56 items-center justify-center bg-white p-4">
+                    <div className="bb-shine flex h-56 items-center justify-center bg-surface p-4">
                       <img
                         src={item.image_url}
                         alt={`${item.brand} ${item.model}`}
@@ -530,37 +530,37 @@ export default function WishlistPage() {
                   <div className="flex flex-1 flex-col p-6">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <p className="text-xs uppercase tracking-[0.25em] text-blue-300">{item.priority} priority</p>
-                        <h3 className="mt-2 text-2xl font-semibold text-white">
+                        <p className="text-xs uppercase tracking-[0.25em] text-gold">{item.priority} priority</p>
+                        <h3 className="mt-2 text-2xl font-semibold text-ink">
                           {item.brand} {item.model}
                         </h3>
-                        {item.reference_number ? <p className="mt-1 text-sm text-slate-400">Ref. {item.reference_number}</p> : null}
+                        {item.reference_number ? <p className="mt-1 text-sm text-muted">Ref. {item.reference_number}</p> : null}
                       </div>
-                      <span className="shrink-0 rounded-full border border-[#D9A43A]/20 bg-[#D9A43A]/10 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-[#D9A43A]">
+                      <span className="shrink-0 rounded-full border border-gold/20 bg-gold/10 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-gold">
                         Wishlist
                       </span>
                     </div>
 
                     <dl className="mt-5 grid grid-cols-3 gap-2 text-center">
-                      <div className="rounded-2xl border border-white/10 bg-black/30 p-2">
-                        <dt className="text-[10px] uppercase tracking-[0.15em] text-slate-400">Market value</dt>
-                        <dd className="mt-1 font-semibold text-[#D9A43A]">{formatUsd(item.current_market_price)}</dd>
+                      <div className="rounded border border-hairline bg-surface p-2">
+                        <dt className="text-[10px] uppercase tracking-[0.15em] text-muted">Market value</dt>
+                        <dd className="mt-1 font-semibold text-gold">{formatUsd(item.current_market_price)}</dd>
                       </div>
-                      <div className="rounded-2xl border border-white/10 bg-black/30 p-2">
-                        <dt className="text-[10px] uppercase tracking-[0.15em] text-slate-400">Retail today</dt>
-                        <dd className="mt-1 font-semibold text-white">{formatUsd(item.retail_price)}</dd>
+                      <div className="rounded border border-hairline bg-surface p-2">
+                        <dt className="text-[10px] uppercase tracking-[0.15em] text-muted">Retail today</dt>
+                        <dd className="mt-1 font-semibold text-ink">{formatUsd(item.retail_price)}</dd>
                       </div>
-                      <div className="rounded-2xl border border-white/10 bg-black/30 p-2">
-                        <dt className="text-[10px] uppercase tracking-[0.15em] text-slate-400">Your target</dt>
-                        <dd className="mt-1 font-semibold text-white">{formatUsd(item.target_price)}</dd>
+                      <div className="rounded border border-hairline bg-surface p-2">
+                        <dt className="text-[10px] uppercase tracking-[0.15em] text-muted">Your target</dt>
+                        <dd className="mt-1 font-semibold text-ink">{formatUsd(item.target_price)}</dd>
                       </div>
                     </dl>
-                    {range ? <p className="mt-2 text-xs text-slate-400">Market range {range}</p> : null}
+                    {range ? <p className="mt-2 text-xs text-muted">Market range {range}</p> : null}
 
-                    {specs ? <p className="mt-4 text-sm text-slate-300">{specs}</p> : null}
-                    {d.year_introduced ? <p className="mt-1 text-xs text-slate-400">Introduced {d.year_introduced}</p> : null}
-                    {d.summary ? <p className="mt-3 text-sm leading-6 text-slate-300">{d.summary}</p> : null}
-                    {item.notes ? <p className="mt-3 text-sm leading-6 text-slate-200">📝 {item.notes}</p> : null}
+                    {specs ? <p className="mt-4 text-sm text-ink/80">{specs}</p> : null}
+                    {d.year_introduced ? <p className="mt-1 text-xs text-muted">Introduced {d.year_introduced}</p> : null}
+                    {d.summary ? <p className="mt-3 text-sm leading-6 text-ink/80">{d.summary}</p> : null}
+                    {item.notes ? <p className="mt-3 text-sm leading-6 text-ink">📝 {item.notes}</p> : null}
                     <OfferStatus kind="wishlist" />
 
                     {canAutoFill ? (
@@ -575,14 +575,14 @@ export default function WishlistPage() {
                     ) : null}
 
                     {item.value_updated_at || d.sources?.length ? (
-                      <p className="mt-3 text-xs leading-5 text-slate-500">
+                      <p className="mt-3 text-xs leading-5 text-muted">
                         {item.value_updated_at ? `Prices checked ${new Date(item.value_updated_at).toLocaleDateString("en-US")} · updated daily. ` : ""}
                         Estimates from public listings.
                         {d.sources?.length ? " Sources: " : ""}
                         {d.sources?.slice(0, 3).map((url, i) => (
                           <span key={url}>
                             {i ? ", " : ""}
-                            <a href={url} target="_blank" rel="noreferrer" className="underline hover:text-slate-300">
+                            <a href={url} target="_blank" rel="noreferrer" className="underline hover:text-ink/80">
                               {hostOf(url)}
                             </a>
                           </span>
@@ -594,7 +594,7 @@ export default function WishlistPage() {
                       <button
                         type="button"
                         onClick={() => handleEdit(item)}
-                        className="rounded-3xl border border-[#D9A43A]/20 bg-[#D9A43A]/10 px-3 py-3 text-sm font-semibold text-[#D9A43A] transition hover:bg-[#D9A43A]/20"
+                        className="rounded-md border border-gold/20 bg-gold/10 px-3 py-3 text-sm font-semibold text-gold transition hover:bg-gold/20"
                       >
                         Edit
                       </button>
@@ -603,7 +603,7 @@ export default function WishlistPage() {
                           type="button"
                           onClick={() => handleRefresh(item)}
                           disabled={refreshing}
-                          className="rounded-3xl border border-blue-400/30 bg-blue-500/10 px-3 py-3 text-sm font-semibold text-blue-200 transition hover:bg-blue-500/20 disabled:opacity-60"
+                          className="rounded-md border border-gold/30 bg-gold/10 px-3 py-3 text-sm font-semibold text-gold transition hover:bg-gold/20 disabled:opacity-60"
                         >
                           {refreshing ? "Updating…" : item.value_updated_at ? "Refresh value" : "Auto-fill"}
                         </button>
@@ -611,7 +611,7 @@ export default function WishlistPage() {
                       <button
                         type="button"
                         onClick={() => handleDelete(item.id)}
-                        className="rounded-3xl border border-rose-500/80 bg-rose-500/10 px-3 py-3 text-sm font-semibold text-rose-200 transition hover:bg-rose-500/20"
+                        className="rounded-md border border-rose-500/80 bg-rose-500/10 px-3 py-3 text-sm font-semibold text-rose-700 transition hover:bg-rose-500/20"
                       >
                         Delete
                       </button>
@@ -622,7 +622,7 @@ export default function WishlistPage() {
             })}
           </div>
         ) : (
-          <div className="rounded-[2rem] border border-dashed border-white/10 bg-white/5 p-12 text-center text-slate-300">
+          <div className="rounded-md border border-dashed border-hairline bg-surface p-12 text-center text-ink/80">
             No wishlist items matched your search or filter.
           </div>
         )}

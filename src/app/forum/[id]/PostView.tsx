@@ -37,7 +37,7 @@ import {
 } from "@/lib/forum";
 
 const input =
-  "w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-blue-400/70";
+  "w-full rounded border border-hairline bg-raised px-4 py-3 text-ink outline-none transition focus:border-gold/70";
 
 const MAX_INDENT = 4;
 
@@ -53,7 +53,7 @@ function linkify(text: string): React.ReactNode[] {
         <a
           href={internal ? url.replace("https://brandonsbrands17.com", "") || "/" : url}
           {...(internal ? {} : { target: "_blank", rel: "noopener noreferrer nofollow" })}
-          className="break-all font-semibold text-[#5CC4F2] underline-offset-2 hover:underline"
+          className="break-all font-semibold text-gold underline-offset-2 hover:underline"
         >
           {url}
         </a>
@@ -75,7 +75,7 @@ function Avatar({ name }: { name: string }) {
     .slice(0, 2)
     .toUpperCase();
   return (
-    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#D9A43A] to-amber-700 text-xs font-bold text-black">
+    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-gold to-amber-700 text-xs font-bold text-on-gold">
       {initials || "?"}
     </div>
   );
@@ -127,21 +127,21 @@ function ReplyBox({
               className={input}
             />
             <PhotoPicker photos={photos} onChange={setPhotos} compact />
-            {error ? <p className="text-sm text-rose-300">{error}</p> : null}
+            {error ? <p className="text-sm text-rose-700">{error}</p> : null}
             <div className="flex items-center gap-3">
               <button
                 type="submit"
                 disabled={busy || (!body.trim() && !photos.length)}
-                className="rounded-full bg-[#D9A43A] px-5 py-2 text-sm font-semibold text-black hover:bg-[#e1b54a] disabled:opacity-50"
+                className="rounded-full bg-gold px-5 py-2 text-sm font-semibold text-on-gold hover:bg-gold-bright disabled:opacity-50"
               >
                 {busy ? "Posting…" : "Post"}
               </button>
               {onCancel ? (
-                <button type="button" onClick={onCancel} className="text-sm text-slate-400 hover:text-white">
+                <button type="button" onClick={onCancel} className="text-sm text-muted hover:text-ink">
                   Cancel
                 </button>
               ) : null}
-              <span className="ml-auto text-xs text-slate-500">as {authorName}</span>
+              <span className="ml-auto text-xs text-muted">as {authorName}</span>
             </div>
           </form>
         );
@@ -203,7 +203,7 @@ export default function PostView() {
     const el = document.getElementById(window.location.hash.slice(1));
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "center" });
-      el.classList.add("bg-[#D9A43A]/10", "rounded-xl");
+      el.classList.add("bg-gold/10", "rounded-xl");
     }
   }, [comments.length]);
 
@@ -217,12 +217,12 @@ export default function PostView() {
   }, [comments]);
 
   if (loading) return <SkeletonPost label="Loading discussion" />;
-  if (error) return <div className="p-10 text-center text-amber-200">{error}</div>;
+  if (error) return <div className="p-10 text-center text-amber-800">{error}</div>;
   if (!post)
     return (
-      <div className="p-10 text-center text-slate-300">
+      <div className="p-10 text-center text-ink/80">
         This discussion was removed or doesn&apos;t exist.{" "}
-        <Link href="/forum" className="font-semibold text-[#D9A43A]">
+        <Link href="/forum" className="font-semibold text-gold">
           Back to the forum
         </Link>
       </div>
@@ -277,30 +277,30 @@ export default function PostView() {
     const replies = children.get(c.id) ?? [];
     const canDelete = userId === c.user_id || moderator;
     return (
-      <li key={c.id} id={`c-${c.id}`} className={`scroll-mt-24 ${depth > 0 && depth <= MAX_INDENT ? "border-l border-white/10 pl-4 sm:pl-5" : ""}`}>
+      <li key={c.id} id={`c-${c.id}`} className={`scroll-mt-24 ${depth > 0 && depth <= MAX_INDENT ? "border-l border-hairline pl-4 sm:pl-5" : ""}`}>
         <div className="flex gap-3 py-3">
           <Avatar name={c.author_name} />
           <div className="min-w-0 flex-1">
-            <p className="text-xs text-slate-400">
-              <span className="font-semibold text-white">{c.author_name}</span>
+            <p className="text-xs text-muted">
+              <span className="font-semibold text-ink">{c.author_name}</span>
               {c.user_id === post.user_id ? (
-                <span className="ml-2 rounded-full bg-blue-500/20 px-2 py-0.5 text-[10px] uppercase tracking-[0.15em] text-blue-200">Author</span>
+                <span className="ml-2 rounded-full bg-gold/20 px-2 py-0.5 text-[10px] uppercase tracking-[0.15em] text-gold">Author</span>
               ) : null}{" "}
               · {timeAgo(c.created_at)}
             </p>
-            {c.body !== "📷" || !c.images?.length ? <p className="mt-1 whitespace-pre-wrap break-words text-sm leading-6 text-slate-200">{c.body}</p> : null}
+            {c.body !== "📷" || !c.images?.length ? <p className="mt-1 whitespace-pre-wrap break-words text-sm leading-6 text-ink">{c.body}</p> : null}
             <PhotoGallery photos={c.images} alt={`Photo from ${c.author_name}`} small className="mt-2" />
             <div className="mt-1 flex gap-4 text-xs">
-              <button type="button" onClick={() => setReplyTo(replyTo === c.id ? null : c.id)} className="font-semibold text-[#D9A43A] hover:text-[#e1b54a]">
+              <button type="button" onClick={() => setReplyTo(replyTo === c.id ? null : c.id)} className="font-semibold text-gold hover:text-gold-bright">
                 Reply
               </button>
               {userId && c.user_id !== userId ? (
-                <Link href={messageHref(c.user_id, c.author_name)} className="text-slate-400 hover:text-white">
+                <Link href={messageHref(c.user_id, c.author_name)} className="text-muted hover:text-ink">
                   Message
                 </Link>
               ) : null}
               {canDelete ? (
-                <button type="button" onClick={() => handleDeleteComment(c.id)} className="text-slate-500 hover:text-rose-300">
+                <button type="button" onClick={() => handleDeleteComment(c.id)} className="text-muted hover:text-rose-700">
                   Delete
                 </button>
               ) : null}
@@ -326,25 +326,25 @@ export default function PostView() {
 
   return (
     <div className="mx-auto w-full max-w-4xl px-3 py-8 sm:px-6 sm:py-14">
-      <nav className="mb-4 text-sm text-slate-400">
-        <Link href="/forum" className="hover:text-white">
+      <nav className="mb-4 text-sm text-muted">
+        <Link href="/forum" className="hover:text-ink">
           Forum
         </Link>{" "}
         /{" "}
         {sParent ? (
           <>
-            <Link href={`/forum?subject=${sParent.slug}`} className="hover:text-white">
+            <Link href={`/forum?subject=${sParent.slug}`} className="hover:text-ink">
               {sParent.name}
             </Link>{" "}
             /{" "}
           </>
         ) : null}
-        <Link href={`/forum?subject=${post.subject}`} className="hover:text-white">
+        <Link href={`/forum?subject=${post.subject}`} className="hover:text-ink">
           {s.name}
         </Link>
       </nav>
 
-      <article className="rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">
+      <article className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-8">
         {editing ? (
           <form onSubmit={saveEdit} className="grid gap-4">
             <SubjectSelect
@@ -358,30 +358,30 @@ export default function PostView() {
             <textarea value={edit.body} onChange={(e) => setEdit({ ...edit, body: e.target.value })} maxLength={BODY_MAX} rows={8} className={input} required />
             <PhotoPicker photos={edit.images} onChange={(images) => setEdit((cur) => ({ ...cur, images }))} />
             <div className="flex gap-3">
-              <button type="submit" className="rounded-full bg-[#D9A43A] px-5 py-2.5 text-sm font-semibold text-black hover:bg-[#e1b54a]">
+              <button type="submit" className="rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-on-gold hover:bg-gold-bright">
                 Save
               </button>
-              <button type="button" onClick={() => setEditing(false)} className="rounded-full border border-white/15 px-5 py-2.5 text-sm text-slate-200">
+              <button type="button" onClick={() => setEditing(false)} className="rounded-full border border-hairline px-5 py-2.5 text-sm text-ink">
                 Cancel
               </button>
             </div>
           </form>
         ) : (
           <>
-            <p className="text-xs uppercase tracking-[0.25em] text-blue-300">
+            <p className="text-xs uppercase tracking-[0.25em] text-gold">
               {s.icon} {sParent ? `${sParent.name} › ` : ""}
               {s.name}
             </p>
-            <h1 className="mt-2 text-2xl font-semibold text-white sm:text-4xl">{post.title}</h1>
+            <h1 className="mt-2 text-2xl font-semibold text-ink sm:text-4xl">{post.title}</h1>
             <div className="mt-4 flex items-center gap-3">
               <Avatar name={post.author_name} />
-              <p className="text-sm text-slate-400">
-                <span className="font-semibold text-white">{post.author_name}</span> · {timeAgo(post.created_at)}
+              <p className="text-sm text-muted">
+                <span className="font-semibold text-ink">{post.author_name}</span> · {timeAgo(post.created_at)}
                 {post.updated_at ? " · edited" : ""}
                 {userId && post.user_id !== userId ? (
                   <>
                     {" · "}
-                    <Link href={messageHref(post.user_id, post.author_name)} className="text-[#D9A43A] hover:text-[#e1b54a]">
+                    <Link href={messageHref(post.user_id, post.author_name)} className="text-gold hover:text-gold-bright">
                       Message
                     </Link>
                   </>
@@ -393,18 +393,18 @@ export default function PostView() {
               const first = (post.body.match(/https:\/\/[^\s)]+/g) ?? []).map((u) => videoEmbed(u)).find(Boolean);
               return first ? <VideoEmbed embed={first} title={post.title} className="mt-5" /> : null;
             })()}
-            <p className="mt-5 whitespace-pre-wrap break-words text-base leading-7 text-slate-200">{linkify(post.body)}</p>
+            <p className="mt-5 whitespace-pre-wrap break-words text-base leading-7 text-ink">{linkify(post.body)}</p>
             <PhotoGallery photos={post.images} alt={post.title} className="mt-5" />
             <div className="mt-6 flex flex-wrap items-center gap-3 text-sm">
               <FollowButton postId={post.id} label="discussion" />
             {canManagePost ? (
               <>
                 {userId === post.user_id ? (
-                  <button type="button" onClick={startEdit} className="rounded-full border border-white/15 px-4 py-2 text-slate-200 hover:bg-white/5">
+                  <button type="button" onClick={startEdit} className="rounded-full border border-hairline px-4 py-2 text-ink hover:bg-surface">
                     Edit
                   </button>
                 ) : null}
-                <button type="button" onClick={handleDeletePost} className="rounded-full border border-rose-500/60 px-4 py-2 text-rose-200 hover:bg-rose-500/10">
+                <button type="button" onClick={handleDeletePost} className="rounded-full border border-rose-500/60 px-4 py-2 text-rose-700 hover:bg-rose-500/10">
                   Delete{moderator && userId !== post.user_id ? " (moderator)" : ""}
                 </button>
               </>
@@ -415,17 +415,17 @@ export default function PostView() {
       </article>
       {post.subject === "for-sale" || post.subject === "seeking-to-buy" ? <SalesDisclaimer className="mt-4" /> : null}
 
-      <section className="mt-8 rounded-[2rem] border border-white/10 bg-white/5 p-5 sm:p-8">
-        <h2 className="text-lg font-semibold text-white">
+      <section className="mt-8 rounded-md border border-hairline bg-surface p-5 sm:p-8">
+        <h2 className="text-lg font-semibold text-ink">
           {comments.length} {comments.length === 1 ? "reply" : "replies"}
         </h2>
         <div className="mt-4">
           <ReplyBox placeholder="Join the discussion…" onSubmit={(body, name, images) => handleComment(body, name, null, images)} />
         </div>
         {topLevel.length ? (
-          <ul className="mt-4 divide-y divide-white/5">{topLevel.map((c) => renderComment(c, 0))}</ul>
+          <ul className="mt-4 divide-y divide-hairline">{topLevel.map((c) => renderComment(c, 0))}</ul>
         ) : (
-          <p className="mt-6 text-sm text-slate-400">No replies yet. Be the first to weigh in.</p>
+          <p className="mt-6 text-sm text-muted">No replies yet. Be the first to weigh in.</p>
         )}
       </section>
 

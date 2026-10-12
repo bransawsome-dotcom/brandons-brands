@@ -39,7 +39,7 @@ export default function NewsletterSignup({ source, compact = false, className = 
         <strong className="text-ink">pre-owned watch buying checklist</strong> free.
       </p>
       {state === "done" || state === "already" ? (
-        <p className="mt-4 rounded-2xl bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
+        <p className="mt-4 rounded bg-emerald-500/10 px-4 py-3 text-sm text-emerald-800">
           {state === "done" ? "You're in! Check your inbox for the welcome email and your free checklist." : "You're already subscribed. Thanks!"}
         </p>
       ) : (
@@ -67,7 +67,7 @@ export default function NewsletterSignup({ source, compact = false, className = 
           </button>
         </form>
       )}
-      {error ? <p className="mt-2 text-sm text-rose-300">{error}</p> : null}
+      {error ? <p className="mt-2 text-sm text-rose-700">{error}</p> : null}
       <p className="mt-3 text-[11px] text-muted">One email a week. Unsubscribe anytime with one click. We never sell your email.</p>
     </section>
   );

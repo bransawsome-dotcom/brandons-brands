@@ -17,14 +17,14 @@ export default async function NewsletterPage({ searchParams }: { searchParams: P
     <div className="mx-auto w-full max-w-3xl px-0 py-4 sm:px-6 sm:py-10">
       <h1 className="sr-only">Brandon&apos;s Brands weekly watch newsletter</h1>
       {unsubscribed ? (
-        <p className="mb-6 rounded-2xl bg-white/5 px-5 py-4 text-slate-200">You&apos;ve been unsubscribed. Sorry to see you go! You can sign up again below anytime.</p>
+        <p className="mb-6 rounded bg-surface px-5 py-4 text-ink">You&apos;ve been unsubscribed. Sorry to see you go! You can sign up again below anytime.</p>
       ) : null}
-      {failed ? <p className="mb-6 rounded-2xl bg-rose-500/10 px-5 py-4 text-rose-200">That unsubscribe link didn&apos;t work. Email us and we&apos;ll remove you.</p> : null}
+      {failed ? <p className="mb-6 rounded bg-rose-500/10 px-5 py-4 text-rose-700">That unsubscribe link didn&apos;t work. Email us and we&apos;ll remove you.</p> : null}
       <NewsletterSignup source="newsletter-page" />
-      <p className="mt-6 px-1 text-sm text-slate-400">
-        Meanwhile: read the <Link href="/blog" className="text-blue-300 hover:text-blue-200">blog</Link>, browse{" "}
-        <Link href="/favorites" className="text-blue-300 hover:text-blue-200">Brandon&apos;s Favorites</Link> or{" "}
-        <Link href="/collection" className="text-blue-300 hover:text-blue-200">track your collection</Link>.
+      <p className="mt-6 px-1 text-sm text-muted">
+        Meanwhile: read the <Link href="/blog" className="text-gold hover:text-gold">blog</Link>, browse{" "}
+        <Link href="/favorites" className="text-gold hover:text-gold">Brandon&apos;s Favorites</Link> or{" "}
+        <Link href="/collection" className="text-gold hover:text-gold">track your collection</Link>.
       </p>
     </div>
   );

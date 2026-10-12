@@ -65,11 +65,11 @@ export default function PublicListToggle({ kind }: { kind: "collection" | "wishl
   };
 
   return (
-    <div className={`rounded-2xl border p-4 text-left sm:max-w-sm ${on ? "border-emerald-400/30 bg-emerald-500/5" : "border-white/10 bg-black/20"}`}>
+    <div className={`rounded border p-4 text-left sm:max-w-sm ${on ? "border-emerald-400/30 bg-emerald-500/5" : "border-hairline bg-surface"}`}>
       <div className="flex items-center justify-between gap-4">
         <div className="min-w-0">
-          <p className="text-sm font-semibold text-white">{on ? "🌐 Public" : "🔒 Private"} {kind}</p>
-          <p className="mt-0.5 text-xs leading-5 text-slate-400">
+          <p className="text-sm font-semibold text-ink">{on ? "🌐 Public" : "🔒 Private"} {kind}</p>
+          <p className="mt-0.5 text-xs leading-5 text-muted">
             {on
               ? `Anyone can see it and search engines can find it. ${kind === "collection" ? "Each watch shows a Make an offer button" : "Each watch shows an Offer to sell button"} for visitors.`
               : `Only you can see it. Make it public to show it off and ${kind === "collection" ? "get offers to buy your watches" : "get offers from people selling the watches you want"}.`}
@@ -82,20 +82,20 @@ export default function PublicListToggle({ kind }: { kind: "collection" | "wishl
           aria-label={`Make ${kind} public`}
           disabled={busy}
           onClick={() => (on ? toggle() : setConfirming(true))}
-          className={`relative h-7 w-12 shrink-0 rounded-full transition disabled:opacity-50 ${on ? "bg-emerald-500" : "bg-white/15"}`}
+          className={`relative h-7 w-12 shrink-0 rounded-full transition disabled:opacity-50 ${on ? "bg-emerald-500" : "bg-hairline"}`}
         >
-          <span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all ${on ? "left-6" : "left-1"}`} />
+          <span className={`absolute top-1 h-5 w-5 rounded-full bg-surface shadow transition-all ${on ? "left-6" : "left-1"}`} />
         </button>
       </div>
       {on ? (
         <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
-          <Link href={path} className="min-w-0 truncate font-semibold text-emerald-200 underline-offset-2 hover:underline">
+          <Link href={path} className="min-w-0 truncate font-semibold text-emerald-800 underline-offset-2 hover:underline">
             brandonsbrands17.com{path}
           </Link>
-          <button type="button" onClick={copy} className="rounded-full border border-white/15 px-2.5 py-1 text-slate-200 hover:bg-white/10">
+          <button type="button" onClick={copy} className="rounded-full border border-hairline px-2.5 py-1 text-ink hover:bg-surface">
             {copied ? "Copied" : "Copy link"}
           </button>
-          <Link href={path} className="rounded-full border border-white/15 px-2.5 py-1 text-slate-200 hover:bg-white/10">
+          <Link href={path} className="rounded-full border border-hairline px-2.5 py-1 text-ink hover:bg-surface">
             See what visitors see →
           </Link>
           <a
@@ -103,18 +103,18 @@ export default function PublicListToggle({ kind }: { kind: "collection" | "wishl
             target="_blank"
             rel="noopener"
             title="A Story-size picture of your list to post on Instagram or TikTok"
-            className="rounded-full border border-[#D9A43A]/50 px-2.5 py-1 font-semibold text-[#D9A43A] hover:bg-[#D9A43A]/10"
+            className="rounded-full border border-gold/50 px-2.5 py-1 font-semibold text-gold hover:bg-gold/10"
           >
             📲 Story card
           </a>
         </div>
       ) : null}
-      <p className="mt-2 text-[11px] leading-4 text-slate-500">
-        Shown as <span className="text-slate-300">{profile.display_name}</span> (change it on the{" "}
-        <Link href="/account" className="text-blue-300 hover:text-blue-200">Account page</Link>). Prices you paid, dates, notes and your
+      <p className="mt-2 text-[11px] leading-4 text-muted">
+        Shown as <span className="text-ink/80">{profile.display_name}</span> (change it on the{" "}
+        <Link href="/account" className="text-gold hover:text-gold">Account page</Link>). Prices you paid, dates, notes and your
         email are never public.
       </p>
-      {error ? <p className="mt-2 text-xs text-rose-300">{error}</p> : null}
+      {error ? <p className="mt-2 text-xs text-rose-700">{error}</p> : null}
 
       {confirming && typeof document !== "undefined"
         ? createPortal(
@@ -125,15 +125,15 @@ export default function PublicListToggle({ kind }: { kind: "collection" | "wishl
           aria-labelledby="go-public-title"
           onClick={(e) => e.target === e.currentTarget && setConfirming(false)}
         >
-          <div className="w-full max-w-md rounded-[1.75rem] border border-white/10 bg-[#0B1626] p-6 text-left shadow-[0_30px_90px_rgba(0,0,0,0.6)]">
-            <p className="text-xs uppercase tracking-[0.25em] text-blue-300">Make it public?</p>
-            <h2 id="go-public-title" className="mt-2 text-xl font-semibold text-white">
+          <div className="w-full max-w-md rounded-md border border-hairline bg-surface p-6 text-left shadow-[0_10px_30px_rgba(43,38,32,0.08)]">
+            <p className="text-xs uppercase tracking-[0.25em] text-gold">Make it public?</p>
+            <h2 id="go-public-title" className="mt-2 text-xl font-semibold text-ink">
               Your {kind} will be visible to everyone
             </h2>
-            <ul className="mt-4 space-y-2.5 text-sm leading-6 text-slate-300">
-              <li>🌐 Anyone can see it at <span className="break-all font-semibold text-emerald-200">brandonsbrands17.com{path}</span>.</li>
+            <ul className="mt-4 space-y-2.5 text-sm leading-6 text-ink/80">
+              <li>🌐 Anyone can see it at <span className="break-all font-semibold text-emerald-800">brandonsbrands17.com{path}</span>.</li>
               <li>
-                🔎 Search engines like Google can list it. They usually take <span className="text-white">a few days to a few weeks</span> to
+                🔎 Search engines like Google can list it. They usually take <span className="text-ink">a few days to a few weeks</span> to
                 pick up new pages, so share your link to get it seen sooner.
               </li>
               {kind === "collection" ? (
@@ -142,7 +142,7 @@ export default function PublicListToggle({ kind }: { kind: "collection" | "wishl
                 <li>🤝 Each watch gets an Offer to sell button, so people who have one can offer it to you. Offers come to your Inbox and email.</li>
               )}
               <li>
-                🔒 It shows as <span className="text-white">{profile.display_name}</span>. Prices you paid, dates, notes and your email stay
+                🔒 It shows as <span className="text-ink">{profile.display_name}</span>. Prices you paid, dates, notes and your email stay
                 private.
               </li>
               <li>↩️ You can switch it back to private at any time.</li>
@@ -152,14 +152,14 @@ export default function PublicListToggle({ kind }: { kind: "collection" | "wishl
                 type="button"
                 onClick={toggle}
                 disabled={busy}
-                className="rounded-full bg-emerald-500 px-5 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-black transition hover:bg-emerald-400 disabled:opacity-60"
+                className="rounded-full bg-emerald-500 px-5 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-on-gold transition hover:bg-emerald-400 disabled:opacity-60"
               >
                 Make it public
               </button>
               <button
                 type="button"
                 onClick={() => setConfirming(false)}
-                className="rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-slate-200 hover:bg-white/5"
+                className="rounded-full border border-hairline px-5 py-3 text-sm font-semibold text-ink hover:bg-surface"
               >
                 Keep private
               </button>

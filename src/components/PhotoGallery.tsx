@@ -28,7 +28,7 @@ export default function PhotoGallery({ photos, alt, small = false, className = "
             key={i}
             type="button"
             onClick={() => setOpen(i)}
-            className={`overflow-hidden rounded-2xl border border-white/10 bg-black/30 ${one ? "" : "aspect-square"}`}
+            className={`overflow-hidden rounded border border-hairline bg-surface ${one ? "" : "aspect-square"}`}
             aria-label={`Open photo ${i + 1} of ${photos.length}`}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -40,11 +40,11 @@ export default function PhotoGallery({ photos, alt, small = false, className = "
         <div role="dialog" aria-modal="true" className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4" onClick={() => setOpen(null)}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={photos[open]} alt={`${alt} (photo ${open + 1})`} className="max-h-full max-w-full rounded-xl object-contain" />
-          <button type="button" onClick={() => setOpen(null)} className="absolute right-4 top-4 rounded-full bg-white/10 px-3 py-1.5 text-sm text-white hover:bg-white/20">
+          <button type="button" onClick={() => setOpen(null)} className="absolute right-4 top-4 rounded-full bg-surface px-3 py-1.5 text-sm text-ink hover:bg-hairline">
             ✕ Close
           </button>
           {photos.length > 1 ? (
-            <p className="absolute bottom-4 left-0 right-0 text-center text-sm text-slate-300">
+            <p className="absolute bottom-4 left-0 right-0 text-center text-sm text-ink/80">
               {open + 1} / {photos.length} · tap outside to close
             </p>
           ) : null}

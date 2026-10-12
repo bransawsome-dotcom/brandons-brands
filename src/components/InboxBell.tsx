@@ -91,7 +91,7 @@ export default function InboxBell() {
         aria-label={total ? `Inbox, ${total} unread` : "Inbox"}
         aria-expanded={open}
         className={`relative flex h-10 w-10 items-center justify-center rounded-full border transition ${
-          pathname?.startsWith("/inbox") ? "border-blue-400/30 bg-blue-500/20 text-blue-200" : "border-white/10 bg-white/5 text-slate-200 hover:bg-white/10"
+          pathname?.startsWith("/inbox") ? "border-gold/30 bg-gold/20 text-gold" : "border-hairline bg-surface text-ink hover:bg-surface"
         }`}
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -99,41 +99,41 @@ export default function InboxBell() {
           <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" />
         </svg>
         {total ? (
-          <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#D9A43A] px-1 text-[11px] font-bold text-black">
+          <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1 text-[11px] font-bold text-on-gold">
             {total > 99 ? "99+" : total}
           </span>
         ) : null}
       </button>
 
       {open ? (
-        <div className="absolute left-0 z-50 mt-2 w-[min(22rem,calc(100vw-3rem))] sm:left-auto sm:right-0 overflow-hidden rounded-2xl border border-white/10 bg-slate-950/95 text-left shadow-[0_20px_60px_rgba(0,0,0,0.5)] backdrop-blur-xl">
-          <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
-            <p className="text-sm font-semibold text-white">Inbox</p>
-            <Link href="/inbox?folder=messages" onClick={() => setOpen(false)} className="text-xs text-slate-300 hover:text-white">
-              Messages{counts.messages ? <span className="ml-1 rounded-full bg-[#D9A43A] px-1.5 text-[10px] font-bold text-black">{counts.messages}</span> : null}
+        <div className="absolute left-0 z-50 mt-2 w-[min(22rem,calc(100vw-3rem))] sm:left-auto sm:right-0 overflow-hidden rounded border border-hairline bg-raised text-left shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl">
+          <div className="flex items-center justify-between border-b border-hairline px-4 py-3">
+            <p className="text-sm font-semibold text-ink">Inbox</p>
+            <Link href="/inbox?folder=messages" onClick={() => setOpen(false)} className="text-xs text-ink/80 hover:text-ink">
+              Messages{counts.messages ? <span className="ml-1 rounded-full bg-gold px-1.5 text-[10px] font-bold text-on-gold">{counts.messages}</span> : null}
             </Link>
           </div>
           <ul className="max-h-80 overflow-y-auto">
             {recent === null ? (
-              <li className="px-4 py-6 text-center text-sm text-slate-400">Loading…</li>
+              <li className="px-4 py-6 text-center text-sm text-muted">Loading…</li>
             ) : !recent.length ? (
-              <li className="px-4 py-6 text-center text-sm text-slate-400">No notifications yet.</li>
+              <li className="px-4 py-6 text-center text-sm text-muted">No notifications yet.</li>
             ) : (
               recent.map((n) => (
                 <li key={n.id}>
-                  <button type="button" onClick={() => openNotification(n)} className="flex w-full gap-3 px-4 py-3 text-left hover:bg-white/5">
-                    <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${n.read_at ? "bg-transparent" : "bg-[#D9A43A]"}`} />
+                  <button type="button" onClick={() => openNotification(n)} className="flex w-full gap-3 px-4 py-3 text-left hover:bg-surface">
+                    <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${n.read_at ? "bg-transparent" : "bg-gold"}`} />
                     <span className="min-w-0">
-                      <span className={`block text-sm ${n.read_at ? "text-slate-300" : "font-semibold text-white"}`}>{n.title}</span>
-                      {n.body ? <span className="mt-0.5 block truncate text-xs text-slate-400">{n.body}</span> : null}
-                      <span className="mt-0.5 block text-[11px] text-slate-500">{timeAgo(n.created_at)}</span>
+                      <span className={`block text-sm ${n.read_at ? "text-ink/80" : "font-semibold text-ink"}`}>{n.title}</span>
+                      {n.body ? <span className="mt-0.5 block truncate text-xs text-muted">{n.body}</span> : null}
+                      <span className="mt-0.5 block text-[11px] text-muted">{timeAgo(n.created_at)}</span>
                     </span>
                   </button>
                 </li>
               ))
             )}
           </ul>
-          <Link href="/inbox" onClick={() => setOpen(false)} className="block border-t border-white/10 px-4 py-3 text-center text-sm font-semibold text-[#D9A43A] hover:bg-white/5">
+          <Link href="/inbox" onClick={() => setOpen(false)} className="block border-t border-hairline px-4 py-3 text-center text-sm font-semibold text-gold hover:bg-surface">
             Open inbox
           </Link>
         </div>

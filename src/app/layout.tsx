@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import AuthProvider from "@/components/AuthProvider";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import AskBrandon from "@/components/AskBrandon";
+import MobileTabBar from "@/components/MobileTabBar";
 import { Analytics } from "@vercel/analytics/next";
 import { SITE_URL } from "@/lib/site";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -30,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${displayFont.variable} ${textFont.variable} ${serifFont.variable} h-full antialiased bg-[var(--background)]`}>
-      <body className="min-h-screen bg-[var(--background)] text-ink">
+      <body className="min-h-screen bg-[var(--background)] pb-16 text-ink md:pb-0">
         <AuthProvider>
           <SiteHeader />
           <div className="mx-auto w-full max-w-[1320px] px-3 py-6 sm:px-5 sm:py-8 lg:px-8">
@@ -40,6 +42,8 @@ export default function RootLayout({
           </div>
           <ScrollReveal />
           <SiteFooter />
+          <AskBrandon />
+          <MobileTabBar />
         </AuthProvider>
         {/* Vercel Web Analytics: page views per page/post, no cookies. Enable it in the Vercel project's Analytics tab. */}
         <Analytics />

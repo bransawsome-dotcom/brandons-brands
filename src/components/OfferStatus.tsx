@@ -43,16 +43,16 @@ export default function OfferStatus({ kind }: { kind: "collection" | "wishlist" 
     <Link
       href={`/collectors/${profile.handle}/${kind}`}
       onClick={(e) => e.stopPropagation()}
-      className="relative z-10 mt-3 flex items-center justify-between gap-2 rounded-full border border-[#D9A43A]/40 bg-[#D9A43A]/10 px-4 py-2 text-xs font-semibold text-[#D9A43A] transition hover:bg-[#D9A43A]/20"
+      className="relative z-10 mt-3 flex items-center justify-between gap-2 rounded-full border border-gold/40 bg-gold/10 px-4 py-2 text-xs font-semibold text-gold transition hover:bg-gold/20"
       title={`Visitors see a ${label} button on this watch`}
     >
       <span>
         {kind === "collection" ? "💰" : "🤝"} {label} is on for visitors
       </span>
-      <span className="shrink-0 text-[11px] font-normal text-[#e8c477]">See it →</span>
+      <span className="shrink-0 text-[11px] font-normal text-gold">See it →</span>
     </Link>
   ) : (
-    <p className="relative z-10 mt-3 rounded-full border border-white/10 bg-black/20 px-4 py-2 text-xs text-slate-400">
+    <p className="relative z-10 mt-3 rounded-full border border-hairline bg-surface px-4 py-2 text-xs text-muted">
       🔒 Make your {kind} public (above) to add a {label} button for visitors
     </p>
   );

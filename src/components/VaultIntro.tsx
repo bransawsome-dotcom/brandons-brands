@@ -215,7 +215,7 @@ export default function VaultIntro() {
                 }
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/logo-256.webp" alt="" draggable={false} className="h-full w-full drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]" />
+                <img src="/logo-256.webp" alt="" draggable={false} className="h-full w-full drop-shadow-[0_10px_30px_rgba(43,38,32,0.08)]" />
               </div>
             );
           })}
@@ -224,7 +224,7 @@ export default function VaultIntro() {
         {/* Hinge on the left. */}
         <div className="absolute left-[1%] top-[30%] h-[40%] w-[5%] rounded-md" style={{ background: "linear-gradient(90deg,#334155,#e2e8f0 45%,#64748b)" }} />
       </div>
-      <p className="absolute bottom-8 left-0 right-0 text-center text-[11px] uppercase tracking-[0.3em] text-slate-400">Opening your vault · tap to skip</p>
+      <p className="absolute bottom-8 left-0 right-0 text-center text-[11px] uppercase tracking-[0.3em] text-muted">Opening your vault · tap to skip</p>
     </div>
   );
 }

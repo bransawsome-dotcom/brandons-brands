@@ -109,7 +109,7 @@ export default function ShareButton({ kind }: { kind: ShareKind }) {
         type="button"
         onClick={toggleOpen}
         aria-expanded={open}
-        className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
+        className="inline-flex items-center gap-2 rounded-full border border-hairline bg-surface px-4 py-2.5 text-sm font-semibold text-ink transition hover:bg-surface"
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
           <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
@@ -120,20 +120,20 @@ export default function ShareButton({ kind }: { kind: ShareKind }) {
       </button>
 
       {open ? (
-        <div className="absolute right-0 z-40 mt-2 w-[min(24rem,calc(100vw-2rem))] rounded-2xl border border-white/10 bg-slate-950/95 p-4 text-left text-sm shadow-[0_20px_60px_rgba(0,0,0,0.5)] backdrop-blur-xl">
-          <p className="font-semibold text-white">Share your {label.noun}</p>
+        <div className="absolute right-0 z-40 mt-2 w-[min(24rem,calc(100vw-2rem))] rounded border border-hairline bg-raised p-4 text-left text-sm shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl">
+          <p className="font-semibold text-ink">Share your {label.noun}</p>
           {!userId ? (
-            <p className="mt-2 text-slate-300">
-              <Link href="/signup" className="font-semibold text-[#D9A43A]">
+            <p className="mt-2 text-ink/80">
+              <Link href="/signup" className="font-semibold text-gold">
                 Create an account
               </Link>{" "}
               to share your {label.noun} with a link.
             </p>
           ) : link === undefined ? (
-            <p className="mt-2 text-slate-400">Loading…</p>
+            <p className="mt-2 text-muted">Loading…</p>
           ) : (
             <>
-              <p className="mt-1 text-xs leading-5 text-slate-400">
+              <p className="mt-1 text-xs leading-5 text-muted">
                 Anyone with the link can view a read-only page of your {label.noun}: photos, models, values, and box &amp; papers. They can&apos;t
                 change anything, and your email stays private.
               </p>
@@ -143,17 +143,17 @@ export default function ShareButton({ kind }: { kind: ShareKind }) {
                   { key: "show_paid" as const, title: label.paid, hint: label.paidHint },
                   { key: "show_notes" as const, title: "Show my notes", hint: "Your private notes on each watch" },
                 ].map((o) => (
-                  <label key={o.key} className="flex cursor-pointer items-start gap-3 rounded-xl border border-white/10 bg-white/5 px-3 py-2">
+                  <label key={o.key} className="flex cursor-pointer items-start gap-3 rounded-xl border border-hairline bg-surface px-3 py-2">
                     <input
                       type="checkbox"
                       checked={options[o.key]}
                       onChange={(e) => changeOption({ [o.key]: e.target.checked })}
                       disabled={busy}
-                      className="mt-0.5 h-4 w-4 accent-[#D9A43A]"
+                      className="mt-0.5 h-4 w-4 accent-gold"
                     />
                     <span>
-                      <span className="block text-white">{o.title}</span>
-                      <span className="block text-xs text-slate-400">{o.hint}</span>
+                      <span className="block text-ink">{o.title}</span>
+                      <span className="block text-xs text-muted">{o.hint}</span>
                     </span>
                   </label>
                 ))}
@@ -165,15 +165,15 @@ export default function ShareButton({ kind }: { kind: ShareKind }) {
                     readOnly
                     value={shareUrl(link.token)}
                     onFocus={(e) => e.currentTarget.select()}
-                    className="w-full rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-xs text-slate-200"
+                    className="w-full rounded-xl border border-hairline bg-surface px-3 py-2 text-xs text-ink"
                     aria-label="Share link"
                   />
                   <div className="flex flex-wrap gap-2">
-                    <button type="button" onClick={copy} className="rounded-full bg-[#D9A43A] px-4 py-2 text-xs font-semibold text-black hover:bg-[#e1b54a]">
+                    <button type="button" onClick={copy} className="rounded-full bg-gold px-4 py-2 text-xs font-semibold text-on-gold hover:bg-gold-bright">
                       Copy link
                     </button>
                     {canNativeShare ? (
-                      <button type="button" onClick={nativeShare} className="rounded-full border border-white/15 px-4 py-2 text-xs font-semibold text-white hover:bg-white/5">
+                      <button type="button" onClick={nativeShare} className="rounded-full border border-hairline px-4 py-2 text-xs font-semibold text-ink hover:bg-surface">
                         Send…
                       </button>
                     ) : null}
@@ -181,11 +181,11 @@ export default function ShareButton({ kind }: { kind: ShareKind }) {
                       href={shareUrl(link.token)}
                       target="_blank"
                       rel="noreferrer"
-                      className="rounded-full border border-white/15 px-4 py-2 text-xs font-semibold text-white hover:bg-white/5"
+                      className="rounded-full border border-hairline px-4 py-2 text-xs font-semibold text-ink hover:bg-surface"
                     >
                       Preview
                     </a>
-                    <button type="button" onClick={turnOff} disabled={busy} className="ml-auto rounded-full px-3 py-2 text-xs font-semibold text-rose-300 hover:bg-rose-500/10">
+                    <button type="button" onClick={turnOff} disabled={busy} className="ml-auto rounded-full px-3 py-2 text-xs font-semibold text-rose-700 hover:bg-rose-500/10">
                       Stop sharing
                     </button>
                   </div>
@@ -195,14 +195,14 @@ export default function ShareButton({ kind }: { kind: ShareKind }) {
                   type="button"
                   onClick={turnOn}
                   disabled={busy}
-                  className="mt-3 w-full rounded-full bg-[#D9A43A] px-4 py-2.5 text-sm font-semibold text-black hover:bg-[#e1b54a] disabled:opacity-60"
+                  className="mt-3 w-full rounded-full bg-gold px-4 py-2.5 text-sm font-semibold text-on-gold hover:bg-gold-bright disabled:opacity-60"
                 >
                   {busy ? "Creating link…" : "Create share link"}
                 </button>
               )}
             </>
           )}
-          {status ? <p className={`mt-2 text-xs ${status.ok ? "text-emerald-300" : "text-rose-300"}`}>{status.text}</p> : null}
+          {status ? <p className={`mt-2 text-xs ${status.ok ? "text-emerald-800" : "text-rose-700"}`}>{status.text}</p> : null}
         </div>
       ) : null}
     </div>

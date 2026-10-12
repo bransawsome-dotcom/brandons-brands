@@ -1,25 +1,25 @@
 @import "tailwindcss";
 
-/* Brandon's Brands, dark luxury look: near-black ground, warm ivory ink, champagne gold.
+/* Brandon's Brands, cream luxury look: warm cream ground, espresso ink, bronze accent.
    Fonts (self-hosted, SIL Open Font License): Barlow Condensed for display, Instrument Sans for text,
    Cormorant Garamond for italic accents. Loaded in src/app/fonts.ts. */
 :root {
-  --background: #0b0b0c;
-  --foreground: #f2ede4;
-  --ground: #0b0b0c;
-  --surface: #141416;
-  --raised: #1c1c1f;
-  --hairline: #2e2c28;
-  --hairline-strong: #6e675c;
-  --ink: #f2ede4;
-  --muted: #a39c8f;
-  --gold: #c9a45c;
-  --gold-bright: #e6c27a;
-  --on-gold: #0b0b0c;
+  --background: #f1ece3;
+  --foreground: #2b2620;
+  --ground: #f1ece3;
+  --surface: #e8e1d5;
+  --raised: #f8f5ef;
+  --hairline: #d8cebe;
+  --hairline-strong: #9d9382;
+  --ink: #2b2620;
+  --muted: #6a6155;
+  --gold: #7a5c30;
+  --gold-bright: #9c7a45;
+  --on-gold: #f8f5ef;
 }
 
 /* Cream (light) look from the reference design, used on the header, footer and homepage.
-   Everything inside .theme-cream picks up these colors; other pages keep the dark tokens above. */
+   Cream is now the site default (see :root); .theme-cream is kept so components can force it. */
 .theme-cream {
   --ground: #f1ece3;
   --surface: #e8e1d5;
@@ -195,7 +195,7 @@ body {
 /* Shimmering loading placeholders (Skeleton). */
 @keyframes bb-skeleton { from { background-position: 150% 0; } to { background-position: -50% 0; } }
 .bb-skeleton {
-  background: linear-gradient(100deg, rgba(255, 255, 255, 0.05) 30%, rgba(255, 255, 255, 0.13) 50%, rgba(255, 255, 255, 0.05) 70%);
+  background: linear-gradient(100deg, rgba(43, 38, 32, 0.05) 30%, rgba(43, 38, 32, 0.11) 50%, rgba(43, 38, 32, 0.05) 70%);
   background-size: 200% 100%;
   animation: bb-skeleton 1.4s ease-in-out infinite;
 }
@@ -227,3 +227,24 @@ body {
   .bb-shine::after { display: none; }
   ::view-transition-old(bb-page), ::view-transition-new(bb-page) { animation: none; }
 }
+
+/* Collector medallions: the bezel turns a quarter-hour when hovered or focused. */
+.bb-medal-bezel {
+  transform-box: view-box;
+  transform-origin: 100px 100px;
+  transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.group:hover .bb-medal-bezel,
+.group:focus-visible .bb-medal-bezel,
+.group:focus-within .bb-medal-bezel {
+  transform: rotate(90deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .bb-medal-bezel { transition: none; }
+}
+
+/* Welcome tour step fade */
+.bb-tour-step{animation:bb-tour-in .45s cubic-bezier(0.22,1,0.36,1)}
+@keyframes bb-tour-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.bb-tour-step{animation:none}}
+dialog[open]{animation:bb-tour-in .35s cubic-bezier(0.22,1,0.36,1)}

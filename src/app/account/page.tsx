@@ -42,21 +42,21 @@ export default function AccountPage() {
   return (
     <div className="mx-auto w-full max-w-7xl px-0 py-4 sm:px-6 sm:py-14 lg:px-16">
       <div className="grid gap-6 sm:gap-8 lg:grid-cols-[320px_1fr]">
-        <section className="rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">
+        <section className="rounded-md border border-hairline bg-surface p-6 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-8">
           <div className="flex flex-col items-center gap-5 text-center sm:gap-6">
-            <div className="flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-blue-500/20 via-slate-800 to-slate-900 shadow-[0_20px_60px_rgba(30,58,138,0.35)]">
-              <span className="text-4xl font-semibold text-white">{initials}</span>
+            <div className="flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-gold/10 via-surface to-surface shadow-[0_10px_30px_rgba(43,38,32,0.08)]">
+              <span className="text-4xl font-semibold text-ink">{initials}</span>
             </div>
             <div>
-              <p className="text-sm uppercase tracking-[0.3em] text-blue-300">Account</p>
-              <h1 className="mt-3 break-all text-3xl font-semibold text-white">{loading ? "" : displayName}</h1>
+              <p className="text-sm uppercase tracking-[0.3em] text-gold">Account</p>
+              <h1 className="mt-3 break-all text-3xl font-semibold text-ink">{loading ? "" : displayName}</h1>
               {registered ? (
-                <p className="mt-2 text-sm text-slate-400">
+                <p className="mt-2 text-sm text-muted">
                   Registered member{memberSince ? ` since ${memberSince}` : ""}
                 </p>
               ) : null}
             </div>
-            <p className="text-sm leading-6 text-slate-300">
+            <p className="text-sm leading-6 text-ink/80">
               {registered && user
                 ? <ListPrivacyStatus userId={user.id} />
                 : "You're browsing as a guest. Create an account to keep your collection and wishlist safe across devices."}
@@ -64,23 +64,23 @@ export default function AccountPage() {
           </div>
         </section>
 
-        <section className="rounded-[2rem] border border-white/10 bg-white/5 p-4 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">
+        <section className="rounded-md border border-hairline bg-surface p-4 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-8">
           <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
-            <div className="rounded-[1.75rem] border border-white/10 bg-black/30 p-5 sm:p-6">
-              <p className="text-sm uppercase tracking-[0.3em] text-blue-300">Total Watches</p>
-              <p className="mt-4 text-5xl font-semibold text-white">{watchCount}</p>
-              <p className="mt-3 text-sm text-slate-400">A refined record of your luxury timepieces.</p>
+            <div className="rounded-md border border-hairline bg-surface p-5 sm:p-6">
+              <p className="text-sm uppercase tracking-[0.3em] text-gold">Total Watches</p>
+              <p className="mt-4 text-5xl font-semibold text-ink">{watchCount}</p>
+              <p className="mt-3 text-sm text-muted">A refined record of your luxury timepieces.</p>
             </div>
-            <div className="rounded-[1.75rem] border border-white/10 bg-black/30 p-5 sm:p-6">
-              <p className="text-sm uppercase tracking-[0.3em] text-blue-300">Wishlist</p>
-              <p className="mt-4 text-5xl font-semibold text-white">{wishlistCount}</p>
-              <p className="mt-3 text-sm text-slate-400">Dream pieces you plan to acquire next.</p>
+            <div className="rounded-md border border-hairline bg-surface p-5 sm:p-6">
+              <p className="text-sm uppercase tracking-[0.3em] text-gold">Wishlist</p>
+              <p className="mt-4 text-5xl font-semibold text-ink">{wishlistCount}</p>
+              <p className="mt-3 text-sm text-muted">Dream pieces you plan to acquire next.</p>
             </div>
           </div>
 
-          <div className="mt-6 rounded-[1.75rem] border border-white/10 bg-black/30 p-4 sm:mt-8 sm:p-6">
-            <h2 className="text-lg font-semibold text-white">Settings</h2>
-            <div className="mt-4 space-y-4 text-sm text-slate-300">
+          <div className="mt-6 rounded-md border border-hairline bg-surface p-4 sm:mt-8 sm:p-6">
+            <h2 className="text-lg font-semibold text-ink">Settings</h2>
+            <div className="mt-4 space-y-4 text-sm text-ink/80">
               {registered ? (
                 <>
                   <EditableNameRow
@@ -103,21 +103,21 @@ export default function AccountPage() {
                   />
                 </>
               ) : null}
-              <div className="flex flex-col gap-1 rounded-3xl bg-white/5 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-                <span className="font-medium text-white">Email</span>
+              <div className="flex flex-col gap-1 rounded-md bg-surface px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                <span className="font-medium text-ink">Email</span>
                 <span className="min-w-0 break-words sm:text-right [overflow-wrap:anywhere]">{user?.email ?? "—"}</span>
               </div>
-              <div className="flex flex-col gap-1 rounded-3xl bg-white/5 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-                <span className="font-medium text-white">User ID</span>
+              <div className="flex flex-col gap-1 rounded-md bg-surface px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                <span className="font-medium text-ink">User ID</span>
                 <span className="min-w-0 break-all text-xs sm:text-right">{user?.id ?? "—"}</span>
               </div>
               <ChangePassword />
-              <div className="flex items-center justify-between rounded-3xl bg-white/5 px-4 py-3">
-                <span className="font-medium text-white">Auth</span>
+              <div className="flex items-center justify-between rounded-md bg-surface px-4 py-3">
+                <span className="font-medium text-ink">Auth</span>
                 <button
                   type="button"
                   onClick={signOut}
-                  className="rounded-full bg-[#D9A43A] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-[#e1b54a]"
+                  className="rounded-full bg-gold px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-on-gold transition hover:bg-gold-bright"
                 >
                   Logout
                 </button>
@@ -130,8 +130,8 @@ export default function AccountPage() {
               />
               <TextMessageSettings />
               {guestMode ? (
-                <div className="flex items-center justify-between rounded-3xl bg-white/5 px-4 py-3">
-                  <span className="font-medium text-white">Guest Data</span>
+                <div className="flex items-center justify-between rounded-md bg-surface px-4 py-3">
+                  <span className="font-medium text-ink">Guest Data</span>
                   <button
                     type="button"
                     onClick={() => {
@@ -140,7 +140,7 @@ export default function AccountPage() {
                       setWatchCount(0);
                       setWishlistCount(0);
                     }}
-                    className="rounded-full border border-white/10 bg-slate-900/70 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white transition hover:bg-slate-800"
+                    className="rounded-full border border-hairline bg-raised px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-ink transition hover:bg-surface"
                   >
                     Clear Guest Data
                   </button>
@@ -149,7 +149,7 @@ export default function AccountPage() {
             </div>
           </div>
 
-          {message ? <p className="mt-6 rounded-3xl bg-white/5 px-4 py-3 text-sm text-amber-300">{message}</p> : null}
+          {message ? <p className="mt-6 rounded-md bg-surface px-4 py-3 text-sm text-amber-800">{message}</p> : null}
         </section>
       </div>
     </div>

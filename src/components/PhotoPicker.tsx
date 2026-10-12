@@ -48,14 +48,14 @@ export default function PhotoPicker({
       {photos.length ? (
         <div className="flex flex-wrap gap-2">
           {photos.map((src, i) => (
-            <div key={i} className={`relative ${size} overflow-hidden rounded-xl border border-white/10`}>
+            <div key={i} className={`relative ${size} overflow-hidden rounded-xl border border-hairline`}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={src} alt={`Photo ${i + 1}`} className="h-full w-full object-cover" />
               <button
                 type="button"
                 onClick={() => onChange(photos.filter((_, j) => j !== i))}
                 aria-label={`Remove photo ${i + 1}`}
-                className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/75 text-xs text-white hover:bg-rose-600"
+                className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/75 text-xs text-ink hover:bg-rose-600"
               >
                 ✕
               </button>
@@ -64,13 +64,13 @@ export default function PhotoPicker({
         </div>
       ) : null}
       {photos.length < max ? (
-        <label className={`inline-flex cursor-pointer items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm text-slate-200 hover:bg-white/5 ${busy ? "opacity-60" : ""}`}>
+        <label className={`inline-flex cursor-pointer items-center gap-2 rounded-full border border-hairline px-4 py-2 text-sm text-ink hover:bg-surface ${busy ? "opacity-60" : ""}`}>
           <span aria-hidden>📷</span>
           {busy ? "Adding…" : photos.length ? "Add another photo" : "Add photos"}
           <input ref={inputRef} type="file" accept="image/*" multiple className="sr-only" disabled={busy} onChange={(e) => void add(e.target.files)} />
         </label>
       ) : null}
-      {error ? <p className="text-xs text-rose-300">{error}</p> : null}
+      {error ? <p className="text-xs text-rose-700">{error}</p> : null}
     </div>
   );
 }

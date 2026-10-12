@@ -24,14 +24,14 @@ export function provenanceFrom(w: Partial<Record<keyof Provenance, unknown>>): P
 function Toggle({ label, hint, checked, onChange }: { label: string; hint?: string; checked: boolean; onChange: (v: boolean) => void }) {
   return (
     <label
-      className={`flex cursor-pointer items-start gap-3 rounded-2xl border px-4 py-3 text-sm transition ${
-        checked ? "border-[#D9A43A]/60 bg-[#D9A43A]/10 text-white" : "border-white/10 bg-slate-950/70 text-slate-300 hover:border-white/20"
+      className={`flex cursor-pointer items-start gap-3 rounded border px-4 py-3 text-sm transition ${
+        checked ? "border-gold/60 bg-gold/10 text-ink" : "border-hairline bg-raised text-ink/80 hover:border-hairline-strong"
       }`}
     >
-      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="mt-0.5 h-4 w-4 accent-[#D9A43A]" />
+      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="mt-0.5 h-4 w-4 accent-gold" />
       <span>
         <span className="font-semibold">{label}</span>
-        {hint ? <span className="block text-xs text-slate-400">{hint}</span> : null}
+        {hint ? <span className="block text-xs text-muted">{hint}</span> : null}
       </span>
     </label>
   );
@@ -41,8 +41,8 @@ function Toggle({ label, hint, checked, onChange }: { label: string; hint?: stri
 export default function ProvenanceFields({ value, onChange }: { value: Provenance; onChange: (next: Provenance) => void }) {
   const set = (patch: Partial<Provenance>) => onChange({ ...value, ...patch });
   return (
-    <fieldset className="space-y-3 rounded-2xl border border-white/10 bg-black/20 p-4">
-      <legend className="px-1 text-sm text-slate-300">Box, papers &amp; authentication</legend>
+    <fieldset className="space-y-3 rounded border border-hairline bg-surface p-4">
+      <legend className="px-1 text-sm text-ink/80">Box, papers &amp; authentication</legend>
       <div className="grid gap-3 grid-cols-[repeat(auto-fit,minmax(170px,1fr))]">
         <Toggle label="Original box" checked={value.has_box} onChange={(v) => set({ has_box: v })} />
         <Toggle label="Original papers" hint="Warranty card / certificate" checked={value.has_papers} onChange={(v) => set({ has_papers: v })} />

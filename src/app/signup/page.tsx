@@ -104,19 +104,19 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-surface text-ink">
       <main className="mx-auto flex min-h-screen w-full max-w-3xl flex-col justify-center px-6 py-16 sm:px-10 lg:px-16">
-        <div className="rounded-[2rem] border border-white/10 bg-white/5 p-10 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl">
+        <div className="rounded-md border border-hairline bg-surface p-10 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl">
           <div className="mb-8 space-y-4">
-            <p className="text-sm uppercase tracking-[0.35em] text-blue-300">Create Account</p>
-            <h1 className="text-4xl font-semibold text-white">Join Brandon&apos;s Brands</h1>
-            <p className="max-w-2xl text-sm leading-7 text-slate-300">
+            <p className="text-sm uppercase tracking-[0.35em] text-gold">Create Account</p>
+            <h1 className="text-4xl font-semibold text-ink">Join Brandon&apos;s Brands</h1>
+            <p className="max-w-2xl text-sm leading-7 text-ink/80">
               Create a secure watch collection profile and keep your luxury wishlist private.
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="grid gap-6">
-            <label className="space-y-2 text-sm text-slate-300">
+            <label className="space-y-2 text-sm text-ink/80">
               Name or customer number
               <input
                 type="text"
@@ -125,66 +125,66 @@ export default function SignupPage() {
                 required
                 maxLength={40}
                 autoComplete="name"
-                className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-blue-400/70"
+                className="w-full rounded-md border border-hairline bg-raised px-4 py-3 text-ink outline-none transition focus:border-gold/70"
                 placeholder="e.g. Jane Smith or customer #1042"
               />
-              <span className="block text-xs text-slate-500">This is shown on your account. You can change it later.</span>
+              <span className="block text-xs text-muted">This is shown on your account. You can change it later.</span>
             </label>
-            <label className="space-y-2 text-sm text-slate-300">
+            <label className="space-y-2 text-sm text-ink/80">
               Email
               <input
                 type="email"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 required
-                className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-blue-400/70"
+                className="w-full rounded-md border border-hairline bg-raised px-4 py-3 text-ink outline-none transition focus:border-gold/70"
                 placeholder="name@example.com"
               />
             </label>
-            <label className="space-y-2 text-sm text-slate-300">
+            <label className="space-y-2 text-sm text-ink/80">
               Password
               <PasswordInput
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 required
-                className="w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-blue-400/70"
+                className="w-full rounded-md border border-hairline bg-raised px-4 py-3 text-ink outline-none transition focus:border-gold/70"
                 placeholder="Create a password"
               />
             </label>
 
-            <fieldset className="space-y-3 rounded-3xl border border-white/10 bg-slate-950/50 p-4">
-              <legend className="px-2 text-xs uppercase tracking-[0.2em] text-blue-300">Disclaimer & consent</legend>
-              <label className="flex items-start gap-3 text-sm leading-6 text-slate-300">
+            <fieldset className="space-y-3 rounded-md border border-hairline bg-raised p-4">
+              <legend className="px-2 text-xs uppercase tracking-[0.2em] text-gold">Disclaimer & consent</legend>
+              <label className="flex items-start gap-3 text-sm leading-6 text-ink/80">
                 <input
                   type="checkbox"
                   checked={agreeTerms}
                   onChange={(e) => setAgreeTerms(e.target.checked)}
                   required
-                  className="mt-1 h-5 w-5 shrink-0 accent-[#D9A43A]"
+                  className="mt-1 h-5 w-5 shrink-0 accent-gold"
                 />
                 <span>
                   {TERMS_CONSENT}{" "}
-                  <a href="/terms" target="_blank" className="font-semibold text-blue-200 underline hover:text-white">
+                  <a href="/terms" target="_blank" className="font-semibold text-gold underline hover:text-ink">
                     Read the Terms
                   </a>
                 </span>
               </label>
-              <label className="flex items-start gap-3 text-sm leading-6 text-slate-300">
+              <label className="flex items-start gap-3 text-sm leading-6 text-ink/80">
                 <input
                   type="checkbox"
                   checked={agreeEmail}
                   onChange={(e) => setAgreeEmail(e.target.checked)}
                   required
-                  className="mt-1 h-5 w-5 shrink-0 accent-[#D9A43A]"
+                  className="mt-1 h-5 w-5 shrink-0 accent-gold"
                 />
                 <span>{EMAIL_SHARE_CONSENT} Your email is never shown on your public collection, wishlist or forum posts.</span>
               </label>
-              <label className="flex items-start gap-3 text-sm leading-6 text-slate-300">
+              <label className="flex items-start gap-3 text-sm leading-6 text-ink/80">
                 <input
                   type="checkbox"
                   checked={wantsNewsletter}
                   onChange={(e) => setWantsNewsletter(e.target.checked)}
-                  className="mt-1 h-5 w-5 shrink-0 accent-[#D9A43A]"
+                  className="mt-1 h-5 w-5 shrink-0 accent-gold"
                 />
                 <span>
                   Optional: send me the free weekly newsletter (new videos, meetups, watches for sale) and the pre-owned buying checklist. Unsubscribe anytime.
@@ -192,18 +192,18 @@ export default function SignupPage() {
               </label>
             </fieldset>
 
-            {message ? <div className="rounded-3xl bg-white/5 px-4 py-3 text-sm text-amber-300">{message}</div> : null}
+            {message ? <div className="rounded-md bg-surface px-4 py-3 text-sm text-amber-800">{message}</div> : null}
 
             <button
               type="submit"
               disabled={submitting}
-              className="rounded-full bg-[#D9A43A] px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-[#e1b54a] disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-full bg-gold px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-on-gold transition hover:bg-gold-bright disabled:cursor-not-allowed disabled:opacity-60"
             >
               {submitting ? "Creating account…" : "Sign Up"}
             </button>
 
-            <p className="text-sm text-slate-400">
-              Already have an account? <a href="/login" className="font-semibold text-white hover:text-blue-200">Login instead</a>.
+            <p className="text-sm text-muted">
+              Already have an account? <a href="/login" className="font-semibold text-ink hover:text-gold">Login instead</a>.
             </p>
           </form>
         </div>

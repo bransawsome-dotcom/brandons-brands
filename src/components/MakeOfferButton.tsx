@@ -9,7 +9,7 @@ import supabase from "@/lib/supabaseClient";
 import { accountName } from "@/lib/account";
 
 const input =
-  "w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-blue-400/70";
+  "w-full rounded border border-hairline bg-raised px-4 py-3 text-ink outline-none transition focus:border-gold/70";
 
 const CONDITIONS = ["New / unworn", "Excellent", "Very good", "Good", "Fair"];
 const SETS = ["Full set (box & papers)", "Box only", "Papers only", "Watch only"];
@@ -88,8 +88,8 @@ export default function MakeOfferButton({
         }}
         className={`w-full rounded-full px-5 py-3 text-sm font-semibold uppercase tracking-[0.15em] transition ${
           sell
-            ? "border border-[#3FB4EC]/40 bg-gradient-to-b from-[#1A7DBF] to-[#0E5A8F] text-white hover:from-[#2290D6] hover:to-[#136AA6]"
-            : "bg-[#D9A43A] text-black hover:bg-[#e1b54a]"
+            ? "border border-hairline-strong bg-raised text-ink hover:border-gold hover:bg-surface"
+            : "bg-gold text-on-gold hover:bg-gold-bright"
         }`}
       >
         {sell ? "Offer to sell" : "Make an offer"}
@@ -104,34 +104,34 @@ export default function MakeOfferButton({
           aria-label={sell ? `Offer to sell a ${watchLabel}` : `Make an offer on ${watchLabel}`}
           onClick={(e) => e.target === e.currentTarget && setOpen(false)}
         >
-          <div className="max-h-[92vh] w-full max-w-md overflow-y-auto rounded-[1.75rem] border border-white/10 bg-[#0B1626] p-5 shadow-[0_30px_90px_rgba(0,0,0,0.6)] sm:p-6">
+          <div className="max-h-[92vh] w-full max-w-md overflow-y-auto rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(43,38,32,0.08)] sm:p-6">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <p className="text-xs uppercase tracking-[0.25em] text-blue-300">{sell ? "Offer to sell" : "Make an offer"}</p>
-                <h2 className="mt-1 text-lg font-semibold text-white">{watchLabel}</h2>
+                <p className="text-xs uppercase tracking-[0.25em] text-gold">{sell ? "Offer to sell" : "Make an offer"}</p>
+                <h2 className="mt-1 text-lg font-semibold text-ink">{watchLabel}</h2>
               </div>
-              <button type="button" onClick={() => setOpen(false)} aria-label="Close" className="shrink-0 rounded-full px-2 text-xl text-slate-400 hover:text-white">
+              <button type="button" onClick={() => setOpen(false)} aria-label="Close" className="shrink-0 rounded-full px-2 text-xl text-muted hover:text-ink">
                 ×
               </button>
             </div>
 
             {sent ? (
               <div className="mt-5 space-y-4">
-                <p className="rounded-2xl bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
+                <p className="rounded bg-emerald-500/10 px-4 py-3 text-sm text-emerald-800">
                   {sell
                     ? `Your offer to sell was sent. If they're interested, they'll reply to ${email}.`
                     : `Your offer was sent. If the owner is interested, they'll reply to ${email}.`}
                 </p>
-                <button type="button" onClick={() => setOpen(false)} className="w-full rounded-full border border-white/15 px-5 py-3 text-sm font-semibold text-slate-200 hover:bg-white/5">
+                <button type="button" onClick={() => setOpen(false)} className="w-full rounded-full border border-hairline px-5 py-3 text-sm font-semibold text-ink hover:bg-surface">
                   Done
                 </button>
               </div>
             ) : (
               <form onSubmit={submit} className="mt-5 space-y-3">
-                <label className="block space-y-1.5 text-sm text-slate-300">
+                <label className="block space-y-1.5 text-sm text-ink/80">
                   {sell ? "Your asking price (US dollars)" : "Your offer (US dollars)"}
                   <span className="relative block">
-                    <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">$</span>
+                    <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted">$</span>
                     <input
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
@@ -144,7 +144,7 @@ export default function MakeOfferButton({
                 </label>
                 {sell ? (
                   <div className="grid grid-cols-2 gap-3">
-                    <label className="block space-y-1.5 text-sm text-slate-300">
+                    <label className="block space-y-1.5 text-sm text-ink/80">
                       Condition
                       <select value={condition} onChange={(e) => setCondition(e.target.value)} required className={input}>
                         <option value="" disabled>
@@ -155,7 +155,7 @@ export default function MakeOfferButton({
                         ))}
                       </select>
                     </label>
-                    <label className="block space-y-1.5 text-sm text-slate-300">
+                    <label className="block space-y-1.5 text-sm text-ink/80">
                       Comes with
                       <select value={set} onChange={(e) => setSet(e.target.value)} required className={input}>
                         <option value="" disabled>
@@ -168,15 +168,15 @@ export default function MakeOfferButton({
                     </label>
                   </div>
                 ) : null}
-                <label className="block space-y-1.5 text-sm text-slate-300">
+                <label className="block space-y-1.5 text-sm text-ink/80">
                   Your name
                   <input value={name} onChange={(e) => setName(e.target.value)} required maxLength={80} autoComplete="name" className={input} />
                 </label>
-                <label className="block space-y-1.5 text-sm text-slate-300">
+                <label className="block space-y-1.5 text-sm text-ink/80">
                   Your email
                   <input value={email} onChange={(e) => setEmail(e.target.value)} required type="email" autoComplete="email" className={input} />
                 </label>
-                <label className="block space-y-1.5 text-sm text-slate-300">
+                <label className="block space-y-1.5 text-sm text-ink/80">
                   Message (optional)
                   <textarea
                     value={message}
@@ -197,17 +197,17 @@ export default function MakeOfferButton({
                   className="absolute left-[-9999px] h-0 w-0 opacity-0"
                   name="website"
                 />
-                <p className="text-xs leading-5 text-slate-400">
+                <p className="text-xs leading-5 text-muted">
                   {sell
                     ? "By sending, you agree that they'll see your name, email and message so they can reply."
                     : "By sending, you agree that the owner sees your name, email and message so they can reply."}
                 </p>
                 <SalesDisclaimer />
-                {error ? <p className="rounded-2xl bg-rose-500/10 px-3 py-2 text-sm text-rose-200">{error}</p> : null}
+                {error ? <p className="rounded bg-rose-500/10 px-3 py-2 text-sm text-rose-700">{error}</p> : null}
                 <button
                   type="submit"
                   disabled={sending}
-                  className="w-full rounded-full bg-[#D9A43A] px-5 py-3 text-sm font-semibold uppercase tracking-[0.15em] text-black transition hover:bg-[#e1b54a] disabled:opacity-60"
+                  className="w-full rounded-full bg-gold px-5 py-3 text-sm font-semibold uppercase tracking-[0.15em] text-on-gold transition hover:bg-gold-bright disabled:opacity-60"
                 >
                   {sending ? "Sending…" : sell ? "Send offer to sell" : "Send offer"}
                 </button>

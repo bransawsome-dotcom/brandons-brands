@@ -13,8 +13,8 @@ import { socials } from "@/lib/socials";
 // Moderators review Claude's weekly blog + social drafts here: edit, publish to /blog, and copy each social post.
 
 const input =
-  "w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-2.5 text-sm font-normal normal-case tracking-normal text-white outline-none transition focus:border-blue-400/70";
-const label = "block space-y-1 text-xs font-semibold uppercase tracking-[0.15em] text-slate-400";
+  "w-full rounded border border-hairline bg-raised px-4 py-2.5 text-sm font-normal normal-case tracking-normal text-ink outline-none transition focus:border-gold/70";
+const label = "block space-y-1 text-xs font-semibold uppercase tracking-[0.15em] text-muted";
 
 type Platform = "instagram" | "tiktok" | "youtube" | "facebook";
 const PLATFORMS: { key: Platform; name: string; icon: string; fields: { key: string; label: string; rows: number }[] }[] = [
@@ -87,7 +87,7 @@ function CopyButton({ text }: { text: string }) {
           setTimeout(() => setDone(false), 1500);
         });
       }}
-      className="rounded-full border border-white/15 px-3 py-1 text-xs font-semibold text-slate-200 hover:bg-white/10 disabled:opacity-40"
+      className="rounded-full border border-hairline px-3 py-1 text-xs font-semibold text-ink hover:bg-surface disabled:opacity-40"
     >
       {done ? "Copied ✓" : "Copy"}
     </button>
@@ -230,13 +230,13 @@ export default function BlogDraftsPage() {
     await load(out.id);
   }
 
-  if (loading || mod === null) return <p className="px-2 py-10 text-slate-400">Loading…</p>;
+  if (loading || mod === null) return <p className="px-2 py-10 text-muted">Loading…</p>;
   if (!mod)
     return (
-      <div className="mx-auto max-w-xl rounded-[2rem] border border-white/10 bg-white/5 p-8 text-center">
-        <h1 className="text-2xl font-semibold text-white">Drafts are for the site team</h1>
-        <p className="mt-2 text-slate-300">Only moderators can review blog and social media drafts.</p>
-        <Link href="/blog" className="mt-4 inline-block text-blue-300 hover:text-blue-200">
+      <div className="mx-auto max-w-xl rounded-md border border-hairline bg-surface p-8 text-center">
+        <h1 className="text-2xl font-semibold text-ink">Drafts are for the site team</h1>
+        <p className="mt-2 text-ink/80">Only moderators can review blog and social media drafts.</p>
+        <Link href="/blog" className="mt-4 inline-block text-gold hover:text-gold">
           Read the blog →
         </Link>
       </div>
@@ -247,10 +247,10 @@ export default function BlogDraftsPage() {
 
   return (
     <div className="mx-auto w-full max-w-7xl px-0 py-4 sm:px-6 sm:py-8">
-      <section className="rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">
-        <p className="text-xs uppercase tracking-[0.35em] text-blue-300">Content studio</p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-[-0.02em] text-white sm:text-4xl">Blog & social drafts</h1>
-        <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-300">
+      <section className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-8">
+        <p className="text-xs uppercase tracking-[0.35em] text-gold">Content studio</p>
+        <h1 className="mt-2 text-3xl font-semibold tracking-[-0.02em] text-ink sm:text-4xl">Blog & social drafts</h1>
+        <p className="mt-2 max-w-3xl text-sm leading-6 text-ink/80">
           Every Monday at 6 AM (Eastern), Claude researches and writes a new blog post in Brandon&apos;s voice, plus Instagram, TikTok, YouTube and
           Facebook versions, and saves them here as drafts. Nothing goes live until you press Publish. Social posts aren&apos;t posted for you: copy
           each one and paste it into the app, then tick &ldquo;Posted&rdquo;.
@@ -267,15 +267,15 @@ export default function BlogDraftsPage() {
             type="button"
             onClick={() => void generate()}
             disabled={Boolean(busy)}
-            className="shrink-0 rounded-full bg-[#D9A43A] px-5 py-2.5 text-sm font-semibold text-black hover:bg-[#e1b54a] disabled:opacity-50"
+            className="shrink-0 rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-on-gold hover:bg-gold-bright disabled:opacity-50"
           >
             ✍️ Write a new draft now
           </button>
         </div>
-        {busy ? <p className="mt-3 animate-pulse text-sm text-blue-200">{busy}</p> : null}
-        {note ? <p className={`mt-3 text-sm ${note.ok ? "text-emerald-300" : "text-rose-300"}`}>{note.text}</p> : null}
+        {busy ? <p className="mt-3 animate-pulse text-sm text-gold">{busy}</p> : null}
+        {note ? <p className={`mt-3 text-sm ${note.ok ? "text-emerald-800" : "text-rose-700"}`}>{note.text}</p> : null}
         {setupMissing ? (
-          <p className="mt-3 rounded-xl bg-amber-400/10 px-3 py-2 text-sm text-amber-100">The drafts table isn&apos;t set up in the database yet.</p>
+          <p className="mt-3 rounded-xl bg-amber-400/10 px-3 py-2 text-sm text-amber-800">The drafts table isn&apos;t set up in the database yet.</p>
         ) : null}
       </section>
 
@@ -285,8 +285,8 @@ export default function BlogDraftsPage() {
             { title: "Drafts", list: drafts },
             { title: "Published", list: published },
           ].map((g) => (
-            <div key={g.title} className="rounded-[1.5rem] border border-white/10 bg-white/5 p-3">
-              <p className="px-2 pb-2 text-xs uppercase tracking-[0.2em] text-slate-400">
+            <div key={g.title} className="rounded-md border border-hairline bg-surface p-3">
+              <p className="px-2 pb-2 text-xs uppercase tracking-[0.2em] text-muted">
                 {g.title} ({g.list.length})
               </p>
               {g.list.length ? (
@@ -296,16 +296,16 @@ export default function BlogDraftsPage() {
                       <button
                         type="button"
                         onClick={() => choose(p)}
-                        className={`w-full rounded-xl px-3 py-2 text-left text-sm transition ${p.id === selectedId ? "bg-[#1A7DBF]/40 text-white" : "text-slate-300 hover:bg-white/5"}`}
+                        className={`w-full rounded-xl px-3 py-2 text-left text-sm transition ${p.id === selectedId ? "bg-gold/40 text-ink" : "text-ink/80 hover:bg-surface"}`}
                       >
                         <span className="line-clamp-2 font-semibold">{p.title}</span>
-                        <span className="text-xs text-slate-400">{formatPostDate(p.status === "published" ? p.post_date : p.created_at.slice(0, 10))}</span>
+                        <span className="text-xs text-muted">{formatPostDate(p.status === "published" ? p.post_date : p.created_at.slice(0, 10))}</span>
                       </button>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="px-2 text-sm text-slate-500">None yet.</p>
+                <p className="px-2 text-sm text-muted">None yet.</p>
               )}
             </div>
           ))}
@@ -313,31 +313,31 @@ export default function BlogDraftsPage() {
 
         {selected && edit ? (
           <div className="min-w-0 space-y-6">
-            <section className="rounded-[2rem] border border-white/10 bg-white/5 p-5 sm:p-7">
+            <section className="rounded-md border border-hairline bg-surface p-5 sm:p-7">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <span
-                  className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.15em] ${selected.status === "published" ? "bg-emerald-500/20 text-emerald-200" : "bg-amber-400/20 text-amber-100"}`}
+                  className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.15em] ${selected.status === "published" ? "bg-emerald-500/20 text-emerald-800" : "bg-amber-400/20 text-amber-800"}`}
                 >
                   {selected.status === "published" ? "Published" : "Draft"}
                 </span>
                 <div className="flex flex-wrap gap-2">
-                  <button type="button" onClick={() => setPreview((v) => !v)} className="rounded-full border border-white/15 px-4 py-2 text-sm text-slate-200 hover:bg-white/10">
+                  <button type="button" onClick={() => setPreview((v) => !v)} className="rounded-full border border-hairline px-4 py-2 text-sm text-ink hover:bg-surface">
                     {preview ? "Edit" : "Preview"}
                   </button>
                   <button
                     type="button"
                     onClick={() => void save()}
                     disabled={Boolean(busy) || !dirty}
-                    className="rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10 disabled:opacity-40"
+                    className="rounded-full border border-hairline px-4 py-2 text-sm font-semibold text-ink hover:bg-surface disabled:opacity-40"
                   >
                     Save
                   </button>
                   {selected.status === "published" ? (
                     <>
-                      <Link href={`/blog/${selected.slug}`} target="_blank" className="rounded-full border border-white/15 px-4 py-2 text-sm text-blue-200 hover:bg-white/10">
+                      <Link href={`/blog/${selected.slug}`} target="_blank" className="rounded-full border border-hairline px-4 py-2 text-sm text-gold hover:bg-surface">
                         View live ↗
                       </Link>
-                      <button type="button" onClick={() => void save("draft")} disabled={Boolean(busy)} className="rounded-full border border-white/15 px-4 py-2 text-sm text-slate-200 hover:bg-white/10">
+                      <button type="button" onClick={() => void save("draft")} disabled={Boolean(busy)} className="rounded-full border border-hairline px-4 py-2 text-sm text-ink hover:bg-surface">
                         Unpublish
                       </button>
                     </>
@@ -346,7 +346,7 @@ export default function BlogDraftsPage() {
                       type="button"
                       onClick={() => void save("published")}
                       disabled={Boolean(busy)}
-                      className="rounded-full bg-[#D9A43A] px-5 py-2 text-sm font-semibold text-black hover:bg-[#e1b54a] disabled:opacity-50"
+                      className="rounded-full bg-gold px-5 py-2 text-sm font-semibold text-on-gold hover:bg-gold-bright disabled:opacity-50"
                     >
                       Publish to blog
                     </button>
@@ -356,8 +356,8 @@ export default function BlogDraftsPage() {
 
               {preview ? (
                 <div className="mt-6">
-                  <p className="text-xs uppercase tracking-[0.25em] text-[#D9A43A]">{edit.category}</p>
-                  <h2 className="mt-2 text-3xl font-semibold text-white">{edit.title}</h2>
+                  <p className="text-xs uppercase tracking-[0.25em] text-gold">{edit.category}</p>
+                  <h2 className="mt-2 text-3xl font-semibold text-ink">{edit.title}</h2>
                   <BlogBody paragraphs={edit.body.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean)} />
                 </div>
               ) : (
@@ -370,7 +370,7 @@ export default function BlogDraftsPage() {
                     <label className={label}>
                       Web address
                       <input value={edit.slug} onChange={(e) => change({ slug: e.target.value })} maxLength={80} className={input} />
-                      <span className="block normal-case tracking-normal text-slate-500">brandonsbrands17.com/blog/{slugify(edit.slug || edit.title)}</span>
+                      <span className="block normal-case tracking-normal text-muted">brandonsbrands17.com/blog/{slugify(edit.slug || edit.title)}</span>
                     </label>
                     <label className={label}>
                       Category
@@ -391,18 +391,18 @@ export default function BlogDraftsPage() {
                   </label>
                   <label className={label}>
                     Post
-                    <span className="block normal-case tracking-normal text-slate-500">
+                    <span className="block normal-case tracking-normal text-muted">
                       Leave a blank line between paragraphs. Start a line with ## for a subheading. Links: [words](/learn/guide-name).
                     </span>
                     <textarea value={edit.body} onChange={(e) => change({ body: e.target.value })} rows={22} className={`${input} font-mono text-[13px] leading-6`} />
                   </label>
                   {selected.sources?.length ? (
-                    <details className="text-sm text-slate-400">
-                      <summary className="cursor-pointer text-slate-300">Sources Claude used ({selected.sources.length})</summary>
+                    <details className="text-sm text-muted">
+                      <summary className="cursor-pointer text-ink/80">Sources Claude used ({selected.sources.length})</summary>
                       <ul className="mt-2 space-y-1">
                         {selected.sources.map((s) => (
                           <li key={s.url}>
-                            <a href={s.url} target="_blank" rel="noopener noreferrer" className="break-all text-blue-300 hover:text-blue-200">
+                            <a href={s.url} target="_blank" rel="noopener noreferrer" className="break-all text-gold hover:text-gold">
                               {s.title || s.url}
                             </a>
                           </li>
@@ -414,9 +414,9 @@ export default function BlogDraftsPage() {
               )}
             </section>
 
-            <section className="rounded-[2rem] border border-white/10 bg-white/5 p-5 sm:p-7">
-              <h2 className="text-xl font-semibold text-white">Social media drafts</h2>
-              <p className="mt-1 text-sm text-slate-400">Edit, copy and paste into each app. Publish the blog post first so the links work. Remember to Save after editing.</p>
+            <section className="rounded-md border border-hairline bg-surface p-5 sm:p-7">
+              <h2 className="text-xl font-semibold text-ink">Social media drafts</h2>
+              <p className="mt-1 text-sm text-muted">Edit, copy and paste into each app. Publish the blog post first so the links work. Remember to Save after editing.</p>
               <div className="mt-5 grid gap-5 xl:grid-cols-2">
                 {PLATFORMS.map((pl) => {
                   const values = (edit.social[pl.key] ?? {}) as Record<string, string | undefined>;
@@ -428,19 +428,19 @@ export default function BlogDraftsPage() {
                     .filter(Boolean)
                     .join("\n\n");
                   return (
-                    <div key={pl.key} className="rounded-[1.5rem] border border-white/10 bg-slate-950/60 p-4">
+                    <div key={pl.key} className="rounded-md border border-hairline bg-raised p-4">
                       <div className="flex flex-wrap items-center justify-between gap-2">
-                        <p className="font-semibold text-white">
+                        <p className="font-semibold text-ink">
                           <span aria-hidden>{pl.icon}</span> {pl.name}
                         </p>
                         <div className="flex items-center gap-2">
                           <CopyButton text={all} />
                           {account ? (
-                            <a href={account.url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-300 hover:text-blue-200">
+                            <a href={account.url} target="_blank" rel="noopener noreferrer" className="text-xs text-gold hover:text-gold">
                               Open ↗
                             </a>
                           ) : null}
-                          <label className="flex items-center gap-1 text-xs text-slate-300">
+                          <label className="flex items-center gap-1 text-xs text-ink/80">
                             <input type="checkbox" checked={posted} onChange={() => void togglePosted(pl.key)} className="h-4 w-4 accent-emerald-400" />
                             Posted
                           </label>
@@ -450,7 +450,7 @@ export default function BlogDraftsPage() {
                         {pl.fields.map((f) => (
                           <div key={f.key}>
                             <div className="mb-1 flex items-center justify-between">
-                              <span className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">{f.label}</span>
+                              <span className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">{f.label}</span>
                               <CopyButton text={values[f.key] ?? ""} />
                             </div>
                             <textarea
@@ -470,24 +470,24 @@ export default function BlogDraftsPage() {
 
             <div className="flex justify-end">
               {confirmDelete ? (
-                <span className="flex items-center gap-3 text-sm text-slate-300">
+                <span className="flex items-center gap-3 text-sm text-ink/80">
                   Delete this post for good?
-                  <button type="button" onClick={() => void remove()} className="rounded-full bg-rose-500/80 px-4 py-1.5 font-semibold text-white hover:bg-rose-500">
+                  <button type="button" onClick={() => void remove()} className="rounded-full bg-rose-500/80 px-4 py-1.5 font-semibold text-ink hover:bg-rose-500">
                     Delete
                   </button>
-                  <button type="button" onClick={() => setConfirmDelete(false)} className="text-slate-400 hover:text-white">
+                  <button type="button" onClick={() => setConfirmDelete(false)} className="text-muted hover:text-ink">
                     Cancel
                   </button>
                 </span>
               ) : (
-                <button type="button" onClick={() => setConfirmDelete(true)} className="text-sm text-slate-500 hover:text-rose-300">
+                <button type="button" onClick={() => setConfirmDelete(true)} className="text-sm text-muted hover:text-rose-700">
                   Delete this post
                 </button>
               )}
             </div>
           </div>
         ) : (
-          <div className="rounded-[2rem] border border-white/10 bg-white/5 p-8 text-slate-300">
+          <div className="rounded-md border border-hairline bg-surface p-8 text-ink/80">
             No drafts yet. The first one arrives Monday morning, or press &ldquo;Write a new draft now&rdquo;.
           </div>
         )}

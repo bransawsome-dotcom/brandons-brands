@@ -31,13 +31,13 @@ export default function PriceAlertEmailSetting({
   };
 
   return (
-    <div className="rounded-3xl border border-white/10 bg-black/20 p-4">
+    <div className="rounded-md border border-hairline bg-surface p-4">
       <div className="flex items-center justify-between gap-4">
         <div className="min-w-0">
-          <p className="font-medium text-white">{title}</p>
-          <p className="mt-1 text-xs leading-5 text-slate-400">
+          <p className="font-medium text-ink">{title}</p>
+          <p className="mt-1 text-xs leading-5 text-muted">
             {description}{" "}
-            <span className="text-slate-300">{user.email}</span>.
+            <span className="text-ink/80">{user.email}</span>.
           </p>
         </div>
         <button
@@ -47,12 +47,12 @@ export default function PriceAlertEmailSetting({
           aria-label={title.replace(/^\S+\s/, "")}
           disabled={saving}
           onClick={toggle}
-          className={`relative h-7 w-12 shrink-0 rounded-full transition disabled:opacity-50 ${on ? "bg-[#1A7DBF]" : "bg-white/15"}`}
+          className={`relative h-7 w-12 shrink-0 rounded-full transition disabled:opacity-50 ${on ? "bg-gold" : "bg-hairline"}`}
         >
-          <span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all ${on ? "left-6" : "left-1"}`} />
+          <span className={`absolute top-1 h-5 w-5 rounded-full bg-surface shadow transition-all ${on ? "left-6" : "left-1"}`} />
         </button>
       </div>
-      {error ? <p className="mt-2 text-xs text-rose-300">{error}</p> : null}
+      {error ? <p className="mt-2 text-xs text-rose-700">{error}</p> : null}
     </div>
   );
 }

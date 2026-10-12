@@ -6,7 +6,7 @@ import PasswordInput from "@/components/PasswordInput";
 import supabase from "@/lib/supabaseClient";
 
 const input =
-  "w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-blue-400/70";
+  "w-full rounded border border-hairline bg-raised px-4 py-3 text-ink outline-none transition focus:border-gold/70";
 
 // Account setting: change password. Asks for the current password first so an unattended,
 // logged-in device can't be used to take over the account.
@@ -56,11 +56,11 @@ export default function ChangePassword() {
   };
 
   return (
-    <div className="rounded-3xl bg-white/5 px-4 py-3">
+    <div className="rounded-md bg-surface px-4 py-3">
       <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <div className="min-w-0">
-          <p className="font-medium text-white">Password</p>
-          <p className="text-xs text-slate-500">Change the password you use to log in</p>
+          <p className="font-medium text-ink">Password</p>
+          <p className="text-xs text-muted">Change the password you use to log in</p>
         </div>
         {!open ? (
           <button
@@ -69,7 +69,7 @@ export default function ChangePassword() {
               setOpen(true);
               setStatus(null);
             }}
-            className="shrink-0 rounded-full border border-[#D9A43A]/40 bg-[#D9A43A]/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-[#D9A43A] transition hover:bg-[#D9A43A]/20"
+            className="shrink-0 rounded-full border border-gold/40 bg-gold/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-gold transition hover:bg-gold/20"
           >
             Change password
           </button>
@@ -78,11 +78,11 @@ export default function ChangePassword() {
 
       {open ? (
         <form onSubmit={submit} className="mt-4 space-y-3">
-          <label className="block space-y-1.5 text-sm text-slate-300">
+          <label className="block space-y-1.5 text-sm text-ink/80">
             Current password
             <PasswordInput value={current} onChange={(e) => setCurrent(e.target.value)} required autoComplete="current-password" className={input} />
           </label>
-          <label className="block space-y-1.5 text-sm text-slate-300">
+          <label className="block space-y-1.5 text-sm text-ink/80">
             New password
             <PasswordInput
               value={next}
@@ -93,7 +93,7 @@ export default function ChangePassword() {
               className={input}
             />
           </label>
-          <label className="block space-y-1.5 text-sm text-slate-300">
+          <label className="block space-y-1.5 text-sm text-ink/80">
             Confirm new password
             <PasswordInput
               value={confirm}
@@ -104,12 +104,12 @@ export default function ChangePassword() {
               className={input}
             />
           </label>
-          {status?.kind === "error" ? <p className="rounded-2xl bg-rose-500/10 px-3 py-2 text-sm text-rose-200">{status.text}</p> : null}
+          {status?.kind === "error" ? <p className="rounded bg-rose-500/10 px-3 py-2 text-sm text-rose-700">{status.text}</p> : null}
           <div className="flex flex-wrap items-center gap-3 pt-1">
             <button
               type="submit"
               disabled={saving}
-              className="rounded-full bg-[#D9A43A] px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.15em] text-black transition hover:bg-[#e1b54a] disabled:opacity-60"
+              className="rounded-full bg-gold px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.15em] text-on-gold transition hover:bg-gold-bright disabled:opacity-60"
             >
               {saving ? "Saving…" : "Save new password"}
             </button>
@@ -120,14 +120,14 @@ export default function ChangePassword() {
                 reset();
                 setStatus(null);
               }}
-              className="text-xs text-slate-400 hover:text-white"
+              className="text-xs text-muted hover:text-ink"
             >
               Cancel
             </button>
           </div>
         </form>
       ) : null}
-      {status?.kind === "ok" ? <p className="mt-3 rounded-2xl bg-emerald-500/10 px-3 py-2 text-sm text-emerald-200">{status.text}</p> : null}
+      {status?.kind === "ok" ? <p className="mt-3 rounded bg-emerald-500/10 px-3 py-2 text-sm text-emerald-800">{status.text}</p> : null}
     </div>
   );
 }

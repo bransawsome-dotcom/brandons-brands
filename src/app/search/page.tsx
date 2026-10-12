@@ -21,9 +21,9 @@ function WatchCard({ w, kind }: { w: WatchHit; kind: "collection" | "wishlist" }
     <li>
       <Link
         href={`/collectors/${w.handle}/${kind}`}
-        className="flex h-full items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/70 p-3 transition hover:border-[#3FB4EC]/50"
+        className="flex h-full items-center gap-3 rounded border border-hairline bg-raised p-3 transition hover:border-gold/50"
       >
-        <span className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white">
+        <span className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-surface">
           {w.image_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={w.image_url} alt={`${w.brand} ${w.model}`} referrerPolicy="no-referrer" loading="lazy" className="h-full w-full object-contain" />
@@ -34,10 +34,10 @@ function WatchCard({ w, kind }: { w: WatchHit; kind: "collection" | "wishlist" }
           )}
         </span>
         <span className="min-w-0">
-          <span className="block text-[10px] uppercase tracking-[0.2em] text-blue-300">{w.brand}</span>
-          <span className="block truncate font-semibold text-white">{w.model}</span>
-          {w.reference_number ? <span className="block truncate text-xs text-slate-400">Ref. {w.reference_number}</span> : null}
-          <span className="mt-0.5 block truncate text-xs text-[#D9A43A]">
+          <span className="block text-[10px] uppercase tracking-[0.2em] text-gold">{w.brand}</span>
+          <span className="block truncate font-semibold text-ink">{w.model}</span>
+          {w.reference_number ? <span className="block truncate text-xs text-muted">Ref. {w.reference_number}</span> : null}
+          <span className="mt-0.5 block truncate text-xs text-gold">
             {kind === "collection" ? "In" : "On"} {w.display_name}&apos;s {kind} · {kind === "collection" ? "Make an offer" : "Offer to sell"} →
           </span>
         </span>
@@ -50,9 +50,9 @@ function Section({ title, count, children }: { title: string; count: number; chi
   if (!count) return null;
   return (
     <section className="mt-8">
-      <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold text-white">
+      <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold text-ink">
         {title}
-        <span className="rounded-full bg-white/10 px-2 py-0.5 text-xs font-semibold text-slate-300">{count}</span>
+        <span className="rounded-full bg-surface px-2 py-0.5 text-xs font-semibold text-ink/80">{count}</span>
       </h2>
       {children}
     </section>
@@ -69,9 +69,9 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
 
   return (
     <div className="mx-auto w-full max-w-6xl px-0 py-4 sm:px-6 sm:py-10">
-      <section className="rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">
-        <p className="text-xs uppercase tracking-[0.35em] text-blue-300">Search</p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-[-0.02em] text-white sm:text-4xl">Search Brandon&apos;s Brands</h1>
+      <section className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-8">
+        <p className="text-xs uppercase tracking-[0.35em] text-gold">Search</p>
+        <h1 className="mt-2 text-3xl font-semibold tracking-[-0.02em] text-ink sm:text-4xl">Search Brandon&apos;s Brands</h1>
         <form action="/search" method="get" role="search" className="mt-5 flex gap-2">
           <label htmlFor="site-search" className="sr-only">
             Search
@@ -83,20 +83,20 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
             defaultValue={q}
             autoFocus={!q}
             placeholder="Watches, brands, collectors, forum names…"
-            className="min-w-0 flex-1 rounded-full border border-white/10 bg-slate-950/90 px-5 py-3 text-white outline-none transition focus:border-blue-400/70"
+            className="min-w-0 flex-1 rounded-full border border-hairline bg-raised px-5 py-3 text-ink outline-none transition focus:border-gold/70"
           />
-          <button type="submit" className="shrink-0 rounded-full bg-[#D9A43A] px-5 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-black hover:bg-[#e1b54a]">
+          <button type="submit" className="shrink-0 rounded-full bg-gold px-5 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-on-gold hover:bg-gold-bright">
             Search
           </button>
         </form>
-        <p className="mt-3 text-xs leading-5 text-slate-400">
+        <p className="mt-3 text-xs leading-5 text-muted">
           Searches watches in public collections and wishlists, members&apos; public names, forum discussions and forum names, Brandon&apos;s
           favorites, the blog and site pages.
         </p>
         {!q ? (
           <div className="mt-4 flex flex-wrap gap-2">
             {SUGGESTIONS.map((s) => (
-              <Link key={s} href={`/search?q=${encodeURIComponent(s)}`} className="rounded-full border border-white/15 px-3 py-1.5 text-xs text-slate-200 hover:bg-white/5">
+              <Link key={s} href={`/search?q=${encodeURIComponent(s)}`} className="rounded-full border border-hairline px-3 py-1.5 text-xs text-ink hover:bg-surface">
                 {s}
               </Link>
             ))}
@@ -106,9 +106,9 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
 
       {r ? (
         <>
-          <p className="mt-6 px-1 text-sm text-slate-400">
+          <p className="mt-6 px-1 text-sm text-muted">
             {total ? `${total} result${total === 1 ? "" : "s"} for ` : "No results for "}
-            <span className="font-semibold text-white">“{r.query}”</span>
+            <span className="font-semibold text-ink">“{r.query}”</span>
             {total ? "" : ". Try a brand, model or name, or check the spelling."}
           </p>
 
@@ -136,9 +136,9 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                   <li key={f.id}>
                     <Link
                       href={f.post_id ? `/forum/${f.post_id}` : "/favorites"}
-                      className="flex h-full items-center gap-3 rounded-2xl border border-[#3FB4EC]/25 bg-[#0E5A8F]/10 p-3 transition hover:border-[#3FB4EC]/60"
+                      className="flex h-full items-center gap-3 rounded border border-gold/25 bg-gold/10 p-3 transition hover:border-gold/60"
                     >
-                      <span className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white">
+                      <span className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-surface">
                         {f.image_url ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={f.image_url} alt={`${f.brand} ${f.model}`} referrerPolicy="no-referrer" loading="lazy" className="h-full w-full object-cover" />
@@ -149,9 +149,9 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                         )}
                       </span>
                       <span className="min-w-0">
-                        <span className="block text-[10px] uppercase tracking-[0.2em] text-blue-300">⭐ {f.brand}</span>
-                        <span className="block truncate font-semibold text-white">{f.model}</span>
-                        {info ? <span className="block text-xs text-[#5CC4F2]">{info.label} · discussion →</span> : null}
+                        <span className="block text-[10px] uppercase tracking-[0.2em] text-gold">⭐ {f.brand}</span>
+                        <span className="block truncate font-semibold text-ink">{f.model}</span>
+                        {info ? <span className="block text-xs text-gold">{info.label} · discussion →</span> : null}
                       </span>
                     </Link>
                   </li>
@@ -163,21 +163,21 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
           <Section title="Collectors" count={r.people.length}>
             <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {r.people.map((p) => (
-                <li key={p.handle} className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-950/70 p-4">
+                <li key={p.handle} className="flex items-center justify-between gap-3 rounded border border-hairline bg-raised p-4">
                   <div className="min-w-0">
-                    <p className="truncate font-semibold text-white">{p.display_name}</p>
+                    <p className="truncate font-semibold text-ink">{p.display_name}</p>
                     <p className="mt-1 flex flex-wrap gap-x-3 text-xs">
                       {p.collection_public ? (
-                        <Link href={`/collectors/${p.handle}/collection`} className="text-[#D9A43A] hover:text-[#e1b54a]">
+                        <Link href={`/collectors/${p.handle}/collection`} className="text-gold hover:text-gold-bright">
                           Collection
                         </Link>
                       ) : null}
                       {p.wishlist_public ? (
-                        <Link href={`/collectors/${p.handle}/wishlist`} className="text-blue-200 hover:text-white">
+                        <Link href={`/collectors/${p.handle}/wishlist`} className="text-gold hover:text-ink">
                           Wishlist
                         </Link>
                       ) : null}
-                      {!p.collection_public && !p.wishlist_public ? <span className="text-slate-500">Member</span> : null}
+                      {!p.collection_public && !p.wishlist_public ? <span className="text-muted">Member</span> : null}
                     </p>
                   </div>
                   <MessageMemberButton handle={p.handle} name={p.display_name} compact />
@@ -189,17 +189,17 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
           <Section title="Forum names" count={r.authors.length}>
             <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {r.authors.map((a) => (
-                <li key={`${a.user_id}-${a.author_name}`} className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-950/70 p-4">
+                <li key={`${a.user_id}-${a.author_name}`} className="flex items-center justify-between gap-3 rounded border border-hairline bg-raised p-4">
                   <div className="min-w-0">
-                    <p className="truncate font-semibold text-white">{a.author_name}</p>
-                    <p className="text-xs text-slate-400">
+                    <p className="truncate font-semibold text-ink">{a.author_name}</p>
+                    <p className="text-xs text-muted">
                       {a.posts} forum post{a.posts === 1 ? "" : "s"}
                     </p>
                   </div>
                   <Link
                     href={`/inbox?to=${encodeURIComponent(a.user_id)}&name=${encodeURIComponent(a.author_name)}`}
                     rel="nofollow"
-                    className="inline-flex shrink-0 items-center gap-2 rounded-full border border-[#3FB4EC]/40 bg-gradient-to-b from-[#1A7DBF] to-[#0E5A8F] px-4 py-2 text-sm font-semibold text-white hover:from-[#2290D6] hover:to-[#136AA6]"
+                    className="inline-flex shrink-0 items-center gap-2 rounded-full border border-hairline-strong bg-raised px-4 py-2 text-sm font-semibold text-ink hover:border-gold hover:bg-surface"
                   >
                     <span aria-hidden>✉️</span> Message
                   </Link>
@@ -212,12 +212,12 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
             <ul className="space-y-2">
               {r.posts.map((p) => (
                 <li key={p.id}>
-                  <Link href={`/forum/${p.id}`} className="block rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 transition hover:border-[#3FB4EC]/50">
-                    <span className="block font-semibold text-white">
+                  <Link href={`/forum/${p.id}`} className="block rounded border border-hairline bg-raised px-4 py-3 transition hover:border-gold/50">
+                    <span className="block font-semibold text-ink">
                       {isFavoritesPost(p.subject) ? "⭐ " : "💬 "}
                       {p.title}
                     </span>
-                    <span className="text-xs text-slate-400">by {p.author_name}</span>
+                    <span className="text-xs text-muted">by {p.author_name}</span>
                   </Link>
                 </li>
               ))}
@@ -228,9 +228,9 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
             <ul className="space-y-2">
               {r.blog.map((b) => (
                 <li key={b.href}>
-                  <Link href={b.href} className="block rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 hover:border-[#3FB4EC]/50">
-                    <span className="block font-semibold text-white">{b.title}</span>
-                    <span className="text-sm text-slate-400">{b.text}</span>
+                  <Link href={b.href} className="block rounded border border-hairline bg-raised px-4 py-3 hover:border-gold/50">
+                    <span className="block font-semibold text-ink">{b.title}</span>
+                    <span className="text-sm text-muted">{b.text}</span>
                   </Link>
                 </li>
               ))}
@@ -241,9 +241,9 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
             <ul className="grid gap-3 sm:grid-cols-2">
               {r.pages.map((pg) => (
                 <li key={pg.href}>
-                  <Link href={pg.href} className="block rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 hover:border-[#3FB4EC]/50">
-                    <span className="block font-semibold text-white">{pg.title}</span>
-                    <span className="text-sm text-slate-400">{pg.text}</span>
+                  <Link href={pg.href} className="block rounded border border-hairline bg-raised px-4 py-3 hover:border-gold/50">
+                    <span className="block font-semibold text-ink">{pg.title}</span>
+                    <span className="text-sm text-muted">{pg.text}</span>
                   </Link>
                 </li>
               ))}

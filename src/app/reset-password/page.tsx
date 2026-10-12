@@ -74,24 +74,24 @@ export default function ResetPasswordPage() {
   };
 
   const inputClass =
-    "w-full rounded-3xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-blue-400/70";
+    "w-full rounded-md border border-hairline bg-raised px-4 py-3 text-ink outline-none transition focus:border-gold/70";
 
   return (
-    <div className="min-h-screen text-white">
+    <div className="min-h-screen text-ink">
       <main className="mx-auto flex min-h-[70vh] w-full max-w-3xl flex-col justify-center px-6 py-16 sm:px-10 lg:px-16">
-        <div className="rounded-[2rem] border border-white/10 bg-white/5 p-10 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl">
+        <div className="rounded-md border border-hairline bg-surface p-10 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl">
           <div className="mb-8 space-y-4">
-            <p className="text-sm uppercase tracking-[0.35em] text-blue-300">Member Access</p>
-            <h1 className="text-4xl font-semibold text-white">Choose a new password</h1>
+            <p className="text-sm uppercase tracking-[0.35em] text-gold">Member Access</p>
+            <h1 className="text-4xl font-semibold text-ink">Choose a new password</h1>
           </div>
 
           {done ? (
-            <div className="rounded-3xl bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
+            <div className="rounded-md bg-emerald-500/10 px-4 py-3 text-sm text-emerald-800">
               Password updated. Taking you to your dashboard…
             </div>
           ) : ready ? (
             <form onSubmit={handleSubmit} className="grid gap-6">
-              <label className="space-y-2 text-sm text-slate-300">
+              <label className="space-y-2 text-sm text-ink/80">
                 New password
                 <PasswordInput
                   value={password}
@@ -102,7 +102,7 @@ export default function ResetPasswordPage() {
                   placeholder="At least 8 characters"
                 />
               </label>
-              <label className="space-y-2 text-sm text-slate-300">
+              <label className="space-y-2 text-sm text-ink/80">
                 Confirm new password
                 <PasswordInput
                   value={confirm}
@@ -114,27 +114,27 @@ export default function ResetPasswordPage() {
                 />
               </label>
 
-              {error ? <div className="rounded-3xl bg-rose-500/10 px-4 py-3 text-sm text-rose-200">{error}</div> : null}
+              {error ? <div className="rounded-md bg-rose-500/10 px-4 py-3 text-sm text-rose-700">{error}</div> : null}
 
               <button
                 type="submit"
                 disabled={submitting}
-                className="rounded-full bg-[#D9A43A] px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-[#e1b54a] disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-full bg-gold px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-on-gold transition hover:bg-gold-bright disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {submitting ? "Saving…" : "Save new password"}
               </button>
             </form>
           ) : expired ? (
             <div className="space-y-6">
-              <div className="rounded-3xl bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
+              <div className="rounded-md bg-rose-500/10 px-4 py-3 text-sm text-rose-700">
                 This reset link is invalid or has expired. Request a new one.
               </div>
-              <Link href="/forgot-password" className="text-sm font-semibold text-white hover:text-blue-200">
+              <Link href="/forgot-password" className="text-sm font-semibold text-ink hover:text-gold">
                 Send a new reset link
               </Link>
             </div>
           ) : (
-            <p className="text-sm text-slate-300">Checking your reset link…</p>
+            <p className="text-sm text-ink/80">Checking your reset link…</p>
           )}
         </div>
       </main>

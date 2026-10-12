@@ -44,34 +44,34 @@ export default function PollCard({ poll, className = "" }: { poll: Poll; classNa
         onClick={() => void vote(i)}
         disabled={busy || !poll.active}
         aria-pressed={mine}
-        className={`group relative flex min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border text-left transition ${
-          mine ? "border-[#D9A43A] bg-[#D9A43A]/10" : "border-white/10 bg-slate-950/60 hover:border-[#3FB4EC]/60"
+        className={`group relative flex min-w-0 flex-1 flex-col overflow-hidden rounded border text-left transition ${
+          mine ? "border-gold bg-gold/10" : "border-hairline bg-raised hover:border-gold/60"
         }`}
       >
         {image ? (
-          <span className="flex h-36 items-center justify-center bg-white p-2 sm:h-44">
+          <span className="flex h-36 items-center justify-center bg-surface p-2 sm:h-44">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={image} alt={label} referrerPolicy="no-referrer" loading="lazy" className="h-full w-full object-contain" />
           </span>
         ) : null}
         <span className="relative block p-3">
-          {voted ? <span className="absolute inset-y-0 left-0 bg-[#1A7DBF]/25" style={{ width: `${pct(n)}%` }} aria-hidden /> : null}
+          {voted ? <span className="absolute inset-y-0 left-0 bg-gold/25" style={{ width: `${pct(n)}%` }} aria-hidden /> : null}
           <span className="relative flex items-center justify-between gap-2">
-            <span className="font-semibold text-white">{label}</span>
-            {voted ? <span className="text-sm font-semibold text-[#D9A43A]">{pct(n)}%</span> : null}
+            <span className="font-semibold text-ink">{label}</span>
+            {voted ? <span className="text-sm font-semibold text-gold">{pct(n)}%</span> : null}
           </span>
-          {mine ? <span className="relative text-xs text-[#D9A43A]">Your pick ✓</span> : null}
+          {mine ? <span className="relative text-xs text-gold">Your pick ✓</span> : null}
         </span>
       </button>
     );
   };
 
   return (
-    <article id={poll.id} className={`scroll-mt-24 rounded-[2rem] border border-white/10 bg-white/5 p-5 sm:p-6 ${className}`}>
-      <p className="text-xs uppercase tracking-[0.3em] text-blue-300">Which would you pick?</p>
-      <h3 className="mt-1 text-xl font-semibold text-white">{poll.question}</h3>
+    <article id={poll.id} className={`scroll-mt-24 rounded-md border border-hairline bg-surface p-5 sm:p-6 ${className}`}>
+      <p className="text-xs uppercase tracking-[0.3em] text-gold">Which would you pick?</p>
+      <h3 className="mt-1 text-xl font-semibold text-ink">{poll.question}</h3>
       <div className="mt-4 flex gap-3">{[side(0), side(1)]}</div>
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-muted">
         <span>
           {!poll.active ? "Voting closed · " : ""}
           {voted || !poll.active ? `${total} vote${total === 1 ? "" : "s"}` : "Tap a watch to vote and see the results"}
@@ -84,7 +84,7 @@ export default function PollCard({ poll, className = "" }: { poll: Poll; classNa
               setTimeout(() => setCopied(false), 1500);
             });
           }}
-          className="rounded-full border border-white/15 px-3 py-1 text-slate-200 hover:bg-white/10"
+          className="rounded-full border border-hairline px-3 py-1 text-ink hover:bg-surface"
         >
           {copied ? "Link copied" : "Share poll"}
         </button>

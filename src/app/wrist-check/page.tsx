@@ -12,10 +12,10 @@ export const metadata: Metadata = {
 export default function WristCheckPage() {
   return (
     <div className="mx-auto w-full max-w-6xl px-0 py-4 sm:px-6 sm:py-10">
-      <section className="rounded-[2rem] border border-white/10 bg-white/5 p-5 sm:p-8">
-        <p className="text-xs uppercase tracking-[0.35em] text-blue-300">Wrist Check</p>
-        <h1 className="mt-2 text-3xl font-semibold text-white sm:text-4xl">What&apos;s on your wrist today?</h1>
-        <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-300">
+      <section className="rounded-md border border-hairline bg-surface p-5 sm:p-8">
+        <p className="text-xs uppercase tracking-[0.35em] text-gold">Wrist Check</p>
+        <h1 className="mt-2 text-3xl font-semibold text-ink sm:text-4xl">What&apos;s on your wrist today?</h1>
+        <p className="mt-2 max-w-3xl text-sm leading-6 text-ink/80">
           Post a wrist shot of the watch you&apos;re wearing and see what everyone else picked today. Every week Brandon chooses a Wrist Check of the Week to feature on
           the site, in the newsletter and on his socials.
         </p>

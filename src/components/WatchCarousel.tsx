@@ -131,30 +131,30 @@ export default function WatchCarousel({ watches, className = "" }: { watches: Ca
               onKeyDown={(e) => {
                 if (e.key === "Enter") router.push(w.href);
               }}
-              className="absolute inset-0 flex flex-col overflow-hidden rounded-[1.25rem] border border-[#D9A43A]/30 bg-slate-950/85 shadow-[0_18px_50px_rgba(0,0,0,0.45)] outline-none focus-visible:ring-2 focus-visible:ring-[#D9A43A]"
+              className="absolute inset-0 flex flex-col overflow-hidden rounded border border-gold/30 bg-raised shadow-[0_10px_30px_rgba(43,38,32,0.08)] outline-none focus-visible:ring-2 focus-visible:ring-gold"
               style={{ transform: `rotateY(${i * step}deg) translateZ(${size.radius}px)`, backfaceVisibility: "hidden" }}
             >
-              <div className="bb-shine relative min-h-0 flex-1 overflow-hidden bg-black">
+              <div className="bb-shine relative min-h-0 flex-1 overflow-hidden bg-surface">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={w.image} alt="" draggable={false} className="absolute inset-0 h-full w-full object-cover" />
-                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-slate-950/90 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-surface to-transparent" />
               </div>
               <div className="px-2 pb-2 pt-1 text-center">
-                <p className="truncate text-[10px] uppercase tracking-[0.15em] text-[#D9A43A]">{w.brand}</p>
-                <p className="truncate text-xs font-semibold text-white">{w.model}</p>
+                <p className="truncate text-[10px] uppercase tracking-[0.15em] text-gold">{w.brand}</p>
+                <p className="truncate text-xs font-semibold text-ink">{w.model}</p>
               </div>
             </div>
           ))}
         </div>
       </div>
-      <div className="mt-1 flex items-center justify-center gap-3 text-xs text-slate-400">
-        <button type="button" onClick={() => nudge(1)} aria-label="Spin left" className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 text-base text-slate-200 hover:border-[#D9A43A]/60 hover:text-[#D9A43A]">
+      <div className="mt-1 flex items-center justify-center gap-3 text-xs text-muted">
+        <button type="button" onClick={() => nudge(1)} aria-label="Spin left" className="flex h-8 w-8 items-center justify-center rounded-full border border-hairline text-base text-ink hover:border-gold/60 hover:text-gold">
           ‹
         </button>
         <p>
-          <span className="text-[#D9A43A]">⭐ Brandon&apos;s Favorites</span> · drag to spin, tap a watch to see it
+          <span className="text-gold">⭐ Brandon&apos;s Favorites</span> · drag to spin, tap a watch to see it
         </p>
-        <button type="button" onClick={() => nudge(-1)} aria-label="Spin right" className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 text-base text-slate-200 hover:border-[#D9A43A]/60 hover:text-[#D9A43A]">
+        <button type="button" onClick={() => nudge(-1)} aria-label="Spin right" className="flex h-8 w-8 items-center justify-center rounded-full border border-hairline text-base text-ink hover:border-gold/60 hover:text-gold">
           ›
         </button>
       </div>

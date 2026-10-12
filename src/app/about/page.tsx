@@ -75,6 +75,14 @@ const offerings = [
   },
 ];
 
+// "A Collector's House": the four ways in, shown as a timeline.
+const house = [
+  { n: "01", title: "Discover", text: "Reviews, first looks and hidden-gem microbrands, picked by Brandon and shared every week.", href: "/blog", cta: "Read the latest" },
+  { n: "02", title: "Collect", text: "Log the watches you own and the ones you want, with photos, box and papers and estimated values.", href: "/collection", cta: "Start your collection" },
+  { n: "03", title: "Share", text: "Show your wrist, join a club, talk shop in the forum and meet collectors who get it.", href: "/forum", cta: "Join the conversation" },
+  { n: "04", title: "Contact", text: "Ask Brandon a question, suggest a watch to review or reach out about a collaboration.", href: "#contact", cta: "Get in touch" },
+];
+
 const faqs = [
   {
     q: "What is Brandon's Brands?",
@@ -151,31 +159,32 @@ export default function AboutPage() {
     <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-16">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
 
-      <article className="rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8 lg:p-10">
-        <nav aria-label="Breadcrumb" className="mb-6 text-xs text-slate-400">
+      <article className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-8 lg:p-10">
+        <nav aria-label="Breadcrumb" className="mb-6 text-xs text-muted">
           <ol className="flex items-center gap-2">
             <li>
-              <Link href="/" className="hover:text-blue-200">Home</Link>
+              <Link href="/" className="hover:text-gold">Home</Link>
             </li>
             <li aria-hidden>›</li>
-            <li aria-current="page" className="text-slate-300">About Us</li>
+            <li aria-current="page" className="text-ink/80">About Us</li>
           </ol>
         </nav>
 
         {/* Intro */}
         <header className="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
           <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-blue-300">About Us</p>
-            <h1 className="mt-3 text-4xl font-semibold tracking-[-0.03em] text-white sm:text-5xl">
-              About Brandon&apos;s Brands
+            <span aria-hidden className="block h-px w-10 bg-gold" />
+            <p className="mt-4 text-xs uppercase tracking-[0.3em] text-gold">About Us</p>
+            <h1 className="mt-3 font-display text-5xl font-semibold uppercase leading-[0.95] tracking-[-0.01em] text-ink sm:text-7xl">
+              About Brandon&apos;s <span className="font-light text-gold">Brands</span>
             </h1>
-            <p className="mt-4 text-xl font-medium text-[#D9A43A] sm:text-2xl">Beyond the Brand. Behind the Craftsmanship.</p>
+            <p className="mt-5 font-serif text-2xl italic text-ink/80 sm:text-3xl">Beyond the Brand. Behind the Craftsmanship.</p>
           </div>
           {/* The logo with its gold seconds hand sweeping in real time. */}
           <div role="img" aria-label="Brandon's Brands luxury watch logo" className="mx-auto">
             <LogoMark
               src="/logo-dial-1024.webp"
-              className="block h-56 w-56 drop-shadow-[0_0_60px_rgba(59,130,246,0.35)] sm:h-72 sm:w-72 lg:h-80 lg:w-80"
+              className="block h-56 w-56 drop-shadow-[0_10px_30px_rgba(43,38,32,0.08)] sm:h-72 sm:w-72 lg:h-80 lg:w-80"
               handWidth={1}
             />
           </div>
@@ -183,12 +192,12 @@ export default function AboutPage() {
 
         {/* Meet Brandon */}
         <section aria-labelledby="meet-brandon" className="mt-10 max-w-3xl">
-          <h2 id="meet-brandon" className="text-2xl font-semibold text-white sm:text-3xl">Meet Brandon Volosov</h2>
-          <div className="mt-5 space-y-5 text-base leading-8 text-slate-300">
+          <h2 id="meet-brandon" className="text-2xl font-semibold text-ink sm:text-3xl">Meet Brandon Volosov</h2>
+          <div className="mt-5 space-y-5 text-base leading-8 text-ink/80">
             <p>
               For Brandon Volosov, a watch is more than an accessory—it&apos;s an expression of craftsmanship, creativity, and personal
               style. His passion for{" "}
-              <strong className="font-semibold text-white">horology—the art and science of timekeeping—</strong>is rooted in an
+              <strong className="font-semibold text-ink">horology—the art and science of timekeeping—</strong>is rooted in an
               appreciation for the details: the movement inside the case, the finish of a dial, the balance of a design, and the
               inspiration behind it.
             </p>
@@ -209,16 +218,48 @@ export default function AboutPage() {
           </div>
         </section>
 
+        {/* A Collector's House */}
+        <section aria-labelledby="collectors-house" className="mt-14 border-t border-hairline pt-10">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
+            <div>
+              <p className="text-xs uppercase tracking-[0.3em] text-gold">How it works</p>
+              <h2 id="collectors-house" className="mt-3 font-display text-4xl font-semibold uppercase leading-none text-ink sm:text-5xl">
+                A Collector&apos;s <span className="font-light text-gold">House</span>
+              </h2>
+              <p className="mt-4 font-serif text-xl italic leading-8 text-ink/80">
+                Not a shop and not a brand. A home for people who love watches, with four ways in.
+              </p>
+            </div>
+            <ol className="relative">
+              <span aria-hidden className="absolute bottom-6 left-[19px] top-6 w-px bg-hairline-strong sm:left-[23px]" />
+              {house.map((h) => (
+                <li key={h.n} className="relative grid grid-cols-[40px_minmax(0,1fr)] gap-5 pb-8 last:pb-0 sm:grid-cols-[48px_minmax(0,1fr)] sm:gap-7">
+                  <span className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gold bg-raised font-display text-sm font-semibold text-gold sm:h-12 sm:w-12 sm:text-base">
+                    {h.n}
+                  </span>
+                  <div className="pt-1 sm:pt-2">
+                    <h3 className="font-display text-2xl font-semibold uppercase tracking-[0.04em] text-ink sm:text-3xl">{h.title}</h3>
+                    <p className="mt-2 max-w-xl text-base leading-7 text-ink/80">{h.text}</p>
+                    <Link href={h.href} className="mt-3 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-[0.2em] text-gold hover:text-gold-bright">
+                      {h.cta} <span aria-hidden>→</span>
+                    </Link>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
         {/* Microbrands */}
         <section
           aria-labelledby="microbrands"
-          className="mt-12 rounded-[1.75rem] border border-blue-400/20 bg-gradient-to-br from-[#0E3A63]/60 to-black/30 p-6 sm:p-8 lg:p-10"
+          className="mt-12 rounded-md border border-gold/20 bg-surface p-6 sm:p-8 lg:p-10"
         >
-          <h2 id="microbrands" className="text-2xl font-semibold text-white sm:text-3xl">Why Microbrands Matter</h2>
-          <blockquote className="mt-5 border-l-4 border-[#D9A43A] pl-4 text-lg font-medium italic leading-8 text-white sm:text-xl">
+          <h2 id="microbrands" className="text-2xl font-semibold text-ink sm:text-3xl">Why Microbrands Matter</h2>
+          <blockquote className="mt-5 border-l-4 border-gold pl-4 text-lg font-medium italic leading-8 text-ink sm:text-xl">
             Exceptional watches deserve attention—not just recognizable names.
           </blockquote>
-          <div className="mt-6 max-w-3xl space-y-5 text-base leading-8 text-slate-200">
+          <div className="mt-6 max-w-3xl space-y-5 text-base leading-8 text-ink">
             <p>
               Brandon believes smaller independent watchmakers deserve the same thoughtful attention and appreciation as established
               luxury houses. His interest in microbrands comes from a desire to look beyond familiar labels and explore different
@@ -234,13 +275,13 @@ export default function AboutPage() {
               understanding of what makes a timepiece meaningful.
             </p>
           </div>
-          <p className="mt-6 text-lg font-semibold text-[#D9A43A]">Because the name on the dial is only the beginning of the story.</p>
+          <p className="mt-6 text-lg font-semibold text-gold">Because the name on the dial is only the beginning of the story.</p>
         </section>
 
         {/* Shared passion */}
         <section aria-labelledby="shared-passion" className="mt-12 max-w-3xl">
-          <h2 id="shared-passion" className="text-2xl font-semibold text-white sm:text-3xl">A Shared Passion for Watches</h2>
-          <div className="mt-5 space-y-5 text-base leading-8 text-slate-300">
+          <h2 id="shared-passion" className="text-2xl font-semibold text-ink sm:text-3xl">A Shared Passion for Watches</h2>
+          <div className="mt-5 space-y-5 text-base leading-8 text-ink/80">
             <p>
               Brandon&apos;s Brands is about more than showcasing timepieces. It&apos;s about creating a welcoming place to learn, ask
               questions, exchange perspectives, and enjoy the discovery process.
@@ -251,33 +292,33 @@ export default function AboutPage() {
               knowledge of movements—just curiosity and an appreciation for watches.
             </p>
           </div>
-          <p className="mt-6 text-xl font-semibold leading-8 text-white">
+          <p className="mt-6 text-xl font-semibold leading-8 text-ink">
             Welcome to Brandon&apos;s Brands.{" "}
-            <span className="text-blue-200">Discover the makers. Explore the details. Find what speaks to you.</span>
+            <span className="text-gold">Discover the makers. Explore the details. Find what speaks to you.</span>
           </p>
         </section>
 
         {/* Brandon's Favorites */}
         <section
           aria-labelledby="favorites"
-          className="mt-12 rounded-[1.75rem] border border-[#3FB4EC]/30 bg-gradient-to-br from-[#1A7DBF]/20 via-slate-950/60 to-[#D9A43A]/10 p-6 sm:p-8"
+          className="mt-12 rounded-md border border-gold/30 bg-gradient-to-br from-gold/20 via-surface to-gold/10 p-6 sm:p-8"
         >
-          <p className="text-xs uppercase tracking-[0.3em] text-blue-300">⭐ Brandon&apos;s Favorites</p>
-          <h2 id="favorites" className="mt-2 text-2xl font-semibold text-white sm:text-3xl">The watches Brandon loves</h2>
-          <p className="mt-3 max-w-2xl text-base leading-7 text-slate-300">
+          <p className="text-xs uppercase tracking-[0.3em] text-gold">⭐ Brandon&apos;s Favorites</p>
+          <h2 id="favorites" className="mt-2 text-2xl font-semibold text-ink sm:text-3xl">The watches Brandon loves</h2>
+          <p className="mt-3 max-w-2xl text-base leading-7 text-ink/80">
             See Brandon&apos;s favorite watches, each with his review or reel, and talk about them with other collectors in the Brandon&apos;s
             Favorites forum folder.
           </p>
           <div className="mt-5 grid gap-3 sm:flex sm:flex-wrap">
             <Link
               href="/favorites"
-              className="inline-flex justify-center text-center rounded-full bg-[#D9A43A] px-4 py-3 text-xs sm:text-sm font-semibold uppercase tracking-[0.08em] text-black sm:px-6 sm:tracking-[0.15em] hover:bg-[#e1b54a]"
+              className="inline-flex justify-center text-center rounded-full bg-gold px-4 py-3 text-xs sm:text-sm font-semibold uppercase tracking-[0.08em] text-on-gold sm:px-6 sm:tracking-[0.15em] hover:bg-gold-bright"
             >
               See the favorites
             </Link>
             <Link
               href={`/forum?subject=${FAVORITES_SUBJECT}`}
-              className="inline-flex justify-center text-center rounded-full border border-[#3FB4EC]/40 bg-gradient-to-b from-[#1A7DBF] to-[#0E5A8F] px-4 py-3 text-xs sm:text-sm font-semibold uppercase tracking-[0.08em] text-white sm:px-6 sm:tracking-[0.15em] hover:from-[#2290D6] hover:to-[#136AA6]"
+              className="inline-flex justify-center text-center rounded-full border border-hairline-strong bg-raised px-4 py-3 text-xs sm:text-sm font-semibold uppercase tracking-[0.08em] text-ink sm:px-6 sm:tracking-[0.15em] hover:border-gold hover:bg-surface"
             >
               <span className="sm:hidden">Favorites forum</span>
               <span className="hidden sm:inline">Brandon&apos;s Favorites forum</span>
@@ -287,13 +328,13 @@ export default function AboutPage() {
 
         {/* What we do */}
         <section aria-labelledby="what-we-do" className="mt-12">
-          <h2 id="what-we-do" className="text-2xl font-semibold text-white sm:text-3xl">What you&apos;ll find here</h2>
+          <h2 id="what-we-do" className="text-2xl font-semibold text-ink sm:text-3xl">What you&apos;ll find here</h2>
           <div className="mt-6 grid gap-5 sm:grid-cols-2">
             {offerings.map((o) => (
-              <div key={o.title} className="flex flex-col rounded-[1.75rem] border border-white/10 bg-slate-950/80 p-6">
-                <h3 className="text-xl font-semibold text-white">{o.title}</h3>
-                <p className="mt-3 flex-1 text-sm leading-7 text-slate-300">{o.text}</p>
-                <Link href={o.href} className="mt-5 inline-flex items-center gap-1 self-start text-sm font-semibold uppercase tracking-[0.15em] text-[#D9A43A] hover:text-[#e1b54a]">
+              <div key={o.title} className="flex flex-col rounded-md border border-hairline bg-raised p-6">
+                <h3 className="text-xl font-semibold text-ink">{o.title}</h3>
+                <p className="mt-3 flex-1 text-sm leading-7 text-ink/80">{o.text}</p>
+                <Link href={o.href} className="mt-5 inline-flex items-center gap-1 self-start text-sm font-semibold uppercase tracking-[0.15em] text-gold hover:text-gold-bright">
                   {o.cta} <span aria-hidden>→</span>
                 </Link>
               </div>
@@ -303,10 +344,10 @@ export default function AboutPage() {
 
         {/* Follow */}
         <section aria-labelledby="follow" className="mt-12">
-          <h2 id="follow" className="text-2xl font-semibold text-white sm:text-3xl">Follow Brandon&apos;s Brands</h2>
-          <p className="mt-3 max-w-2xl text-base leading-7 text-slate-300">
+          <h2 id="follow" className="text-2xl font-semibold text-ink sm:text-3xl">Follow Brandon&apos;s Brands</h2>
+          <p className="mt-3 max-w-2xl text-base leading-7 text-ink/80">
             Catch new reviews and watch culture on your favorite platform, or read longer stories on the{" "}
-            <Link href="/blog" className="text-[#D9A43A] hover:text-[#e1b54a]">Brandon&apos;s Brands blog</Link>.
+            <Link href="/blog" className="text-gold hover:text-gold-bright">Brandon&apos;s Brands blog</Link>.
           </p>
           <ul className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {socials.map((s) => (
@@ -315,10 +356,10 @@ export default function AboutPage() {
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex h-full w-full min-w-0 flex-col rounded-2xl border border-[#3FB4EC]/40 bg-gradient-to-b from-[#1A7DBF] to-[#0E5A8F] px-3 py-3 text-white sm:px-5 transition hover:from-[#2290D6] hover:to-[#136AA6]"
+                  className="flex h-full w-full min-w-0 flex-col rounded border border-hairline-strong bg-raised px-3 py-3 text-ink sm:px-5 transition hover:border-gold hover:bg-surface"
                 >
                   <span className="text-sm font-semibold">{s.name}</span>
-                  <span className="truncate text-[11px] text-blue-100 sm:text-xs">{s.handle}</span>
+                  <span className="truncate text-[11px] text-gold sm:text-xs">{s.handle}</span>
                 </a>
               </li>
             ))}
@@ -327,37 +368,37 @@ export default function AboutPage() {
 
         {/* FAQ */}
         <section aria-labelledby="faq" className="mt-12">
-          <h2 id="faq" className="text-2xl font-semibold text-white sm:text-3xl">Frequently asked questions</h2>
-          <div className="mt-6 divide-y divide-white/10 rounded-[1.5rem] border border-white/10 bg-black/20">
+          <h2 id="faq" className="text-2xl font-semibold text-ink sm:text-3xl">Frequently asked questions</h2>
+          <div className="mt-6 divide-y divide-hairline rounded-md border border-hairline bg-surface">
             {faqs.map((f) => (
               <details key={f.q} className="group p-5 sm:p-6">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-white">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-ink">
                   <h3>{f.q}</h3>
-                  <span aria-hidden className="text-blue-300 transition group-open:rotate-45">+</span>
+                  <span aria-hidden className="text-gold transition group-open:rotate-45">+</span>
                 </summary>
-                <p className="mt-3 text-sm leading-7 text-slate-300">{f.a}</p>
+                <p className="mt-3 text-sm leading-7 text-ink/80">{f.a}</p>
               </details>
             ))}
           </div>
         </section>
 
         {/* Contact */}
-        <section aria-labelledby="contact-heading" id="contact" className="mt-12 rounded-[1.75rem] border border-[#D9A43A]/30 bg-gradient-to-br from-[#D9A43A]/10 via-transparent to-[#1A7DBF]/15 p-6 text-center sm:p-10">
-          <h2 id="contact-heading" className="text-2xl font-semibold text-white sm:text-3xl">Get in touch</h2>
-          <p className="mx-auto mt-3 max-w-xl text-base leading-7 text-slate-300">
+        <section aria-labelledby="contact-heading" id="contact" className="mt-12 rounded-md border border-gold/30 bg-gradient-to-br from-gold/10 via-transparent to-gold/15 p-6 text-center sm:p-10">
+          <h2 id="contact-heading" className="text-2xl font-semibold text-ink sm:text-3xl">Get in touch</h2>
+          <p className="mx-auto mt-3 max-w-xl text-base leading-7 text-ink/80">
             Questions, collaborations, review requests or just want to talk watches? We&apos;d love to hear from you.
           </p>
           <a
             href={`mailto:${collabEmail}?subject=${encodeURIComponent("Hello from brandonsbrands17.com")}`}
-            className="mt-7 inline-flex rounded-full bg-[#D9A43A] px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-black shadow-[0_10px_40px_rgba(217,164,58,0.3)] transition hover:bg-[#e1b54a]"
+            className="mt-7 inline-flex rounded-full bg-gold px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-on-gold shadow-[0_10px_30px_rgba(43,38,32,0.08)] transition hover:bg-gold-bright"
           >
             Contact Us
           </a>
-          <p className="mt-4 text-sm text-slate-400">
+          <p className="mt-4 text-sm text-muted">
             Or email{" "}
-            <a href={`mailto:${collabEmail}`} className="text-[#D9A43A] hover:text-[#e1b54a]">{collabEmail}</a>
+            <a href={`mailto:${collabEmail}`} className="text-gold hover:text-gold-bright">{collabEmail}</a>
             {" · "}
-            <Link href="/inbox" className="text-blue-300 hover:text-blue-200">message us on the site</Link>
+            <Link href="/inbox" className="text-gold hover:text-gold">message us on the site</Link>
           </p>
         </section>
       </article>

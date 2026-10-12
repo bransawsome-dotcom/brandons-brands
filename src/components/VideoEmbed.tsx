@@ -4,7 +4,7 @@ import type { Embed } from "@/lib/video";
 export default function VideoEmbed({ embed, title, className = "" }: { embed: Embed; title: string; className?: string }) {
   return (
     <div
-      className={`relative mx-auto w-full overflow-hidden rounded-2xl bg-black ${embed.vertical ? "max-w-[340px]" : ""} ${className}`}
+      className={`relative mx-auto w-full overflow-hidden rounded bg-surface ${embed.vertical ? "max-w-[340px]" : ""} ${className}`}
       style={{ aspectRatio: embed.vertical ? (embed.platform === "Instagram" ? "9 / 15" : "9 / 16") : "16 / 9" }}
     >
       <iframe

@@ -62,17 +62,17 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   return (
     <div className="mx-auto w-full max-w-4xl px-0 py-4 sm:px-6 sm:py-12">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
-      <article className="rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-10">
-        <Link href="/blog" className="text-sm text-blue-300 transition hover:text-blue-200">
+      <article className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-10">
+        <Link href="/blog" className="text-sm text-gold transition hover:text-gold">
           ← All posts
         </Link>
-        <p className="mt-6 text-xs uppercase tracking-[0.25em] text-[#D9A43A]">
+        <p className="mt-6 text-xs uppercase tracking-[0.25em] text-gold">
           {post.category} · {formatPostDate(post.date)}
         </p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-white sm:text-5xl">{post.title}</h1>
-        <p className="mt-3 text-sm text-slate-400">
+        <h1 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-ink sm:text-5xl">{post.title}</h1>
+        <p className="mt-3 text-sm text-muted">
           By{" "}
-          <Link href="/about" className="text-slate-200 hover:text-white">
+          <Link href="/about" className="text-ink hover:text-ink">
             Brandon Volosov
           </Link>
         </p>

@@ -52,29 +52,29 @@ const SECTIONS: { heading: string; paragraphs: string[] }[] = [
 export default function TermsPage() {
   return (
     <div className="mx-auto w-full max-w-3xl px-0 py-4 sm:px-6 sm:py-10">
-      <article className="rounded-[2rem] border border-white/10 bg-white/5 p-5 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:p-8">
-        <p className="text-xs uppercase tracking-[0.35em] text-blue-300">Legal</p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-[-0.02em] text-white sm:text-4xl">Terms & Disclaimers</h1>
-        <p className="mt-2 text-sm text-slate-400">Last updated {updated}</p>
+      <article className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(43,38,32,0.08)] backdrop-blur-xl sm:p-8">
+        <p className="text-xs uppercase tracking-[0.35em] text-gold">Legal</p>
+        <h1 className="mt-2 text-3xl font-semibold tracking-[-0.02em] text-ink sm:text-4xl">Terms & Disclaimers</h1>
+        <p className="mt-2 text-sm text-muted">Last updated {updated}</p>
         {SECTIONS.map((s) => (
           <section key={s.heading} className="mt-8">
-            <h2 className="text-xl font-semibold text-white">{s.heading}</h2>
+            <h2 className="text-xl font-semibold text-ink">{s.heading}</h2>
             {s.paragraphs.map((p) => (
-              <p key={p.slice(0, 40)} className="mt-3 text-sm leading-7 text-slate-300">
+              <p key={p.slice(0, 40)} className="mt-3 text-sm leading-7 text-ink/80">
                 {p}
               </p>
             ))}
           </section>
         ))}
         <section className="mt-8">
-          <h2 className="text-xl font-semibold text-white">Contact</h2>
-          <p className="mt-3 text-sm leading-7 text-slate-300">
+          <h2 className="text-xl font-semibold text-ink">Contact</h2>
+          <p className="mt-3 text-sm leading-7 text-ink/80">
             Questions or reports:{" "}
-            <a href={`mailto:${collabEmail}`} className="text-[#D9A43A] hover:text-[#e1b54a]">
+            <a href={`mailto:${collabEmail}`} className="text-gold hover:text-gold-bright">
               {collabEmail}
             </a>
             . See also{" "}
-            <Link href="/about" className="text-blue-300 hover:text-blue-200">
+            <Link href="/about" className="text-gold hover:text-gold">
               About us
             </Link>
             .

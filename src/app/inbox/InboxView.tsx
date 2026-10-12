@@ -37,7 +37,7 @@ import {
 } from "@/lib/inbox";
 
 const input =
-  "w-full rounded-2xl border border-white/10 bg-slate-950/90 px-4 py-3 text-white outline-none transition focus:border-blue-400/70";
+  "w-full rounded border border-hairline bg-raised px-4 py-3 text-ink outline-none transition focus:border-gold/70";
 
 // The name others see on messages you send.
 function senderName(user: User | null, moderator: boolean): string {
@@ -57,11 +57,11 @@ const EMPTY_TEXT: Record<FolderKey, { icon: string; title: string; text: React.R
     text: (
       <>
         Make your{" "}
-        <Link href="/collection" className="text-[#D9A43A]">
+        <Link href="/collection" className="text-gold">
           collection
         </Link>{" "}
         public and anyone can make an offer on your watches. Make your{" "}
-        <Link href="/wishlist" className="text-[#D9A43A]">
+        <Link href="/wishlist" className="text-gold">
           wishlist
         </Link>{" "}
         public and people can offer to sell you the watches on it. Offers land here and in your email.
@@ -73,8 +73,8 @@ const EMPTY_TEXT: Record<FolderKey, { icon: string; title: string; text: React.R
     title: "No price alerts yet.",
     text: (
       <>
-        Turn on <span className="text-slate-200">🔔 Price alert</span> for a watch on your{" "}
-        <Link href="/wishlist" className="text-[#D9A43A]">
+        Turn on <span className="text-ink">🔔 Price alert</span> for a watch on your{" "}
+        <Link href="/wishlist" className="text-gold">
           wishlist
         </Link>{" "}
         and we&apos;ll tell you when it&apos;s listed at or below your target price.
@@ -86,8 +86,8 @@ const EMPTY_TEXT: Record<FolderKey, { icon: string; title: string; text: React.R
     title: "No forum alerts yet.",
     text: (
       <>
-        Replies to your posts, and new activity in discussions or subjects you <span className="text-slate-200">Follow</span> in the{" "}
-        <Link href="/forum" className="text-[#D9A43A]">
+        Replies to your posts, and new activity in discussions or subjects you <span className="text-ink">Follow</span> in the{" "}
+        <Link href="/forum" className="text-gold">
           forum
         </Link>
         , show up here.
@@ -272,14 +272,14 @@ export default function InboxView() {
 
   if (!userId) {
     return (
-      <div className="mx-auto max-w-xl px-4 py-16 text-center text-slate-300">
-        <p className="text-lg font-semibold text-white">Your inbox is for members.</p>
+      <div className="mx-auto max-w-xl px-4 py-16 text-center text-ink/80">
+        <p className="text-lg font-semibold text-ink">Your inbox is for members.</p>
         <p className="mt-2">
-          <Link href="/login" className="font-semibold text-[#D9A43A]">
+          <Link href="/login" className="font-semibold text-gold">
             Log in
           </Link>{" "}
           or{" "}
-          <Link href="/signup" className="font-semibold text-[#D9A43A]">
+          <Link href="/signup" className="font-semibold text-gold">
             create an account
           </Link>{" "}
           to get messages, forum alerts, website updates and group events.
@@ -295,8 +295,8 @@ export default function InboxView() {
   return (
     <div className="mx-auto w-full max-w-7xl px-3 py-8 sm:px-6 sm:py-14">
       <div className="mb-6">
-        <p className="text-sm uppercase tracking-[0.3em] text-blue-300">Inbox</p>
-        <h1 className="mt-2 text-3xl font-semibold text-white sm:text-4xl">Your messages &amp; alerts</h1>
+        <p className="text-sm uppercase tracking-[0.3em] text-gold">Inbox</p>
+        <h1 className="mt-2 text-3xl font-semibold text-ink sm:text-4xl">Your messages &amp; alerts</h1>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
@@ -311,15 +311,15 @@ export default function InboxView() {
                   type="button"
                   onClick={() => goFolder(f.key)}
                   aria-current={activeFolder ? "page" : undefined}
-                  className={`flex shrink-0 items-center justify-between gap-3 rounded-2xl border px-4 py-2.5 text-left text-sm transition ${
-                    activeFolder ? "border-blue-400/40 bg-blue-500/15 text-blue-100" : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"
+                  className={`flex shrink-0 items-center justify-between gap-3 rounded border px-4 py-2.5 text-left text-sm transition ${
+                    activeFolder ? "border-gold/40 bg-gold/15 text-gold" : "border-hairline bg-surface text-ink/80 hover:bg-surface"
                   }`}
                 >
                   <span className="whitespace-nowrap">
                     <span className="mr-2">{f.icon}</span>
                     {f.name}
                   </span>
-                  {count ? <span className="shrink-0 rounded-full bg-[#D9A43A] px-2 text-[11px] font-bold text-black">{count}</span> : null}
+                  {count ? <span className="shrink-0 rounded-full bg-gold px-2 text-[11px] font-bold text-on-gold">{count}</span> : null}
                 </button>
               );
             })}
@@ -327,19 +327,19 @@ export default function InboxView() {
         </aside>
 
         <div className="min-w-0">
-          {error ? <div className="rounded-[1.5rem] border border-white/10 bg-white/5 p-10 text-center text-amber-200">{error}</div> : null}
+          {error ? <div className="rounded-md border border-hairline bg-surface p-10 text-center text-amber-800">{error}</div> : null}
 
           {!error && folder !== "messages" ? (
-            <section className="rounded-[2rem] border border-white/10 bg-white/5 p-4 sm:p-6">
+            <section className="rounded-md border border-hairline bg-surface p-4 sm:p-6">
               <div className="mb-3 flex items-center justify-between gap-3 px-2">
                 <div>
-                  <h2 className="text-lg font-semibold text-white">
+                  <h2 className="text-lg font-semibold text-ink">
                     {folderInfo.icon} {folderInfo.name}
                   </h2>
-                  <p className="text-sm text-slate-400">{folderInfo.hint}</p>
+                  <p className="text-sm text-muted">{folderInfo.hint}</p>
                 </div>
                 {unreadShown.length ? (
-                  <button type="button" onClick={markShownRead} className="shrink-0 text-xs font-semibold text-[#D9A43A] hover:text-[#e1b54a]">
+                  <button type="button" onClick={markShownRead} className="shrink-0 text-xs font-semibold text-gold hover:text-gold-bright">
                     Mark all read
                   </button>
                 ) : null}
@@ -353,18 +353,18 @@ export default function InboxView() {
                 <ul className="mb-2">
                   {unreadConversations.map((c) => (
                     <li key={c.otherId}>
-                      <button type="button" onClick={() => openConversation(c.otherId)} className="flex w-full items-start gap-3 rounded-2xl px-2 py-3 text-left hover:bg-white/5">
-                        <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-[#D9A43A]" />
+                      <button type="button" onClick={() => openConversation(c.otherId)} className="flex w-full items-start gap-3 rounded px-2 py-3 text-left hover:bg-surface">
+                        <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-gold" />
                         <span className="text-lg">✉️</span>
                         <span className="min-w-0 flex-1">
-                          <span className="block text-sm font-semibold text-white">
+                          <span className="block text-sm font-semibold text-ink">
                             {c.unread} new message{c.unread === 1 ? "" : "s"} from {c.otherName}
                           </span>
-                          <span className="mt-0.5 block truncate text-sm text-slate-400">
-                            {c.last.subject ? <span className="text-slate-200">{c.last.subject} · </span> : null}
+                          <span className="mt-0.5 block truncate text-sm text-muted">
+                            {c.last.subject ? <span className="text-ink">{c.last.subject} · </span> : null}
                             {c.last.body}
                           </span>
-                          <span className="mt-1 block text-xs text-slate-500">{timeAgo(c.last.created_at)}</span>
+                          <span className="mt-1 block text-xs text-muted">{timeAgo(c.last.created_at)}</span>
                         </span>
                       </button>
                     </li>
@@ -373,23 +373,23 @@ export default function InboxView() {
               ) : null}
 
               {loading ? (
-                <p className="p-8 text-center text-slate-400">Loading…</p>
+                <p className="p-8 text-center text-muted">Loading…</p>
               ) : !shown.length && !(folder === "all" && unreadConversations.length) ? (
-                <div className="p-10 text-center text-slate-300">
+                <div className="p-10 text-center text-ink/80">
                   <div className="text-4xl">{EMPTY_TEXT[folder].icon}</div>
-                  <p className="mt-3 font-semibold text-white">{EMPTY_TEXT[folder].title}</p>
-                  <p className="mt-1 text-sm text-slate-400">{EMPTY_TEXT[folder].text}</p>
+                  <p className="mt-3 font-semibold text-ink">{EMPTY_TEXT[folder].title}</p>
+                  <p className="mt-1 text-sm text-muted">{EMPTY_TEXT[folder].text}</p>
                 </div>
               ) : (
-                <ul className="divide-y divide-white/5">
+                <ul className="divide-y divide-hairline">
                   {shown.map((n) => (
-                    <li key={n.id} className="flex items-start gap-3 rounded-2xl px-2 py-3 hover:bg-white/5">
-                      <span className={`mt-2 h-2 w-2 shrink-0 rounded-full ${n.read_at ? "bg-transparent" : "bg-[#D9A43A]"}`} />
+                    <li key={n.id} className="flex items-start gap-3 rounded px-2 py-3 hover:bg-surface">
+                      <span className={`mt-2 h-2 w-2 shrink-0 rounded-full ${n.read_at ? "bg-transparent" : "bg-gold"}`} />
                       <span className="text-lg">{KIND_ICON[n.kind] ?? "🔔"}</span>
                       <button type="button" onClick={() => openNotification(n)} className="min-w-0 flex-1 text-left">
-                        <span className={`block text-sm ${n.read_at ? "text-slate-300" : "font-semibold text-white"}`}>{n.title}</span>
-                        {n.body ? <span className="mt-0.5 block whitespace-pre-wrap text-sm text-slate-400 line-clamp-3">{n.body}</span> : null}
-                        <span className="mt-1 block text-xs text-slate-500">
+                        <span className={`block text-sm ${n.read_at ? "text-ink/80" : "font-semibold text-ink"}`}>{n.title}</span>
+                        {n.body ? <span className="mt-0.5 block whitespace-pre-wrap text-sm text-muted line-clamp-3">{n.body}</span> : null}
+                        <span className="mt-1 block text-xs text-muted">
                           {folder === "all" ? `${FOLDERS.find((f) => f.key === folderOf(n.kind))?.name} · ` : ""}
                           {timeAgo(n.created_at)}
                         </span>
@@ -398,7 +398,7 @@ export default function InboxView() {
                         type="button"
                         onClick={() => removeNotification(n.id)}
                         aria-label="Remove"
-                        className="shrink-0 rounded-full px-2 text-slate-500 opacity-60 hover:text-rose-300 hover:opacity-100"
+                        className="shrink-0 rounded-full px-2 text-muted opacity-60 hover:text-rose-700 hover:opacity-100"
                       >
                         ×
                       </button>
@@ -410,28 +410,28 @@ export default function InboxView() {
           ) : null}
 
           {!error && folder === "messages" ? (
-            <section className="grid min-h-[28rem] overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 md:grid-cols-[280px_1fr]">
-              <aside className={`border-white/10 md:border-r ${activeId ? "hidden md:block" : ""}`}>
-                <div className="border-b border-white/10 px-4 py-3 text-xs uppercase tracking-[0.2em] text-slate-400">Conversations</div>
+            <section className="grid min-h-[28rem] overflow-hidden rounded-md border border-hairline bg-surface md:grid-cols-[280px_1fr]">
+              <aside className={`border-hairline md:border-r ${activeId ? "hidden md:block" : ""}`}>
+                <div className="border-b border-hairline px-4 py-3 text-xs uppercase tracking-[0.2em] text-muted">Conversations</div>
                 <ul>
                   {showBrandStarter ? (
                     <li>
-                      <button type="button" onClick={() => openConversation(brandId!)} className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-white/5">
-                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#D9A43A] text-xs font-bold text-black">BB</span>
+                      <button type="button" onClick={() => openConversation(brandId!)} className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-surface">
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gold text-xs font-bold text-on-gold">BB</span>
                         <span>
-                          <span className="block text-sm font-semibold text-white">Message {BRAND_NAME}</span>
-                          <span className="block text-xs text-slate-400">Questions, collabs, feedback</span>
+                          <span className="block text-sm font-semibold text-ink">Message {BRAND_NAME}</span>
+                          <span className="block text-xs text-muted">Questions, collabs, feedback</span>
                         </span>
                       </button>
                     </li>
                   ) : null}
                   {toId && !conversations.some((c) => c.otherId === toId) ? (
                     <li>
-                      <button type="button" onClick={() => setActiveId(toId)} className="flex w-full items-center gap-3 bg-white/5 px-4 py-3 text-left">
-                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-xs font-bold text-white">
+                      <button type="button" onClick={() => setActiveId(toId)} className="flex w-full items-center gap-3 bg-surface px-4 py-3 text-left">
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface text-xs font-bold text-ink">
                           {(toName || "?").slice(0, 2).toUpperCase()}
                         </span>
-                        <span className="text-sm font-semibold text-white">New message to {toName || "member"}</span>
+                        <span className="text-sm font-semibold text-ink">New message to {toName || "member"}</span>
                       </button>
                     </li>
                   ) : null}
@@ -440,44 +440,44 @@ export default function InboxView() {
                       <button
                         type="button"
                         onClick={() => openConversation(c.otherId)}
-                        className={`flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-white/5 ${activeId === c.otherId ? "bg-white/5" : ""}`}
+                        className={`flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-surface ${activeId === c.otherId ? "bg-surface" : ""}`}
                       >
                         <span
                           className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
-                            c.otherName === BRAND_NAME ? "bg-[#D9A43A] text-black" : "bg-white/10 text-white"
+                            c.otherName === BRAND_NAME ? "bg-gold text-on-gold" : "bg-surface text-ink"
                           }`}
                         >
                           {c.otherName === BRAND_NAME ? "BB" : c.otherName.slice(0, 2).toUpperCase()}
                         </span>
                         <span className="min-w-0 flex-1">
                           <span className="flex items-center justify-between gap-2">
-                            <span className={`truncate text-sm ${c.unread ? "font-semibold text-white" : "text-slate-200"}`}>{c.otherName}</span>
-                            <span className="shrink-0 text-[11px] text-slate-500">{timeAgo(c.last.created_at)}</span>
+                            <span className={`truncate text-sm ${c.unread ? "font-semibold text-ink" : "text-ink"}`}>{c.otherName}</span>
+                            <span className="shrink-0 text-[11px] text-muted">{timeAgo(c.last.created_at)}</span>
                           </span>
                           <span className="flex items-center justify-between gap-2">
-                            <span className="truncate text-xs text-slate-400">
+                            <span className="truncate text-xs text-muted">
                               {c.last.sender_id === userId ? "You: " : ""}
                               {c.last.subject ? `${c.last.subject} · ` : ""}
                               {c.last.body}
                             </span>
-                            {c.unread ? <span className="shrink-0 rounded-full bg-[#D9A43A] px-1.5 text-[10px] font-bold text-black">{c.unread}</span> : null}
+                            {c.unread ? <span className="shrink-0 rounded-full bg-gold px-1.5 text-[10px] font-bold text-on-gold">{c.unread}</span> : null}
                           </span>
                         </span>
                       </button>
                     </li>
                   ))}
                   {memberHandle && memberReady?.note ? (
-                    <li className="mx-3 my-3 rounded-2xl border border-amber-300/30 bg-amber-400/10 px-4 py-3 text-sm text-amber-100">{memberReady.note}</li>
+                    <li className="mx-3 my-3 rounded border border-amber-300/30 bg-amber-400/10 px-4 py-3 text-sm text-amber-800">{memberReady.note}</li>
                   ) : null}
-                  {memberHandle && !memberReady ? <li className="px-4 py-3 text-sm text-slate-400">Finding that member…</li> : null}
-                  <li className="px-4 py-4 text-xs leading-5 text-slate-500">
-                    {conversations.length ? "Start a new conversation" : "No messages yet. Start one"} with <span className="text-slate-300">Message</span>{" "}
+                  {memberHandle && !memberReady ? <li className="px-4 py-3 text-sm text-muted">Finding that member…</li> : null}
+                  <li className="px-4 py-4 text-xs leading-5 text-muted">
+                    {conversations.length ? "Start a new conversation" : "No messages yet. Start one"} with <span className="text-ink/80">Message</span>{" "}
                     next to a member&apos;s name in the{" "}
-                    <Link href="/forum" className="text-[#D9A43A] hover:text-[#e1b54a]">
+                    <Link href="/forum" className="text-gold hover:text-gold-bright">
                       forum
                     </Link>{" "}
                     or on a public list in{" "}
-                    <Link href="/collectors" className="text-[#D9A43A] hover:text-[#e1b54a]">
+                    <Link href="/collectors" className="text-gold hover:text-gold-bright">
                       Collectors
                     </Link>
                     .
@@ -488,25 +488,25 @@ export default function InboxView() {
               <div className={`flex flex-col ${activeId ? "" : "hidden md:flex"}`}>
                 {activeId ? (
                   <>
-                    <div className="flex items-center gap-3 border-b border-white/10 px-4 py-3">
+                    <div className="flex items-center gap-3 border-b border-hairline px-4 py-3">
                       <button
                         type="button"
                         onClick={() => {
                           setActiveId(null);
                           if (toId || memberHandle) router.replace(`${pathname}?folder=messages`, { scroll: false });
                         }}
-                        className="text-slate-400 hover:text-white md:hidden"
+                        className="text-muted hover:text-ink md:hidden"
                         aria-label="Back to conversations"
                       >
                         ←
                       </button>
                       <div className="min-w-0">
-                        <p className="truncate font-semibold text-white">{activeName}</p>
-                        {threadSubject ? <p className="truncate text-xs text-slate-400">{threadSubject}</p> : null}
+                        <p className="truncate font-semibold text-ink">{activeName}</p>
+                        {threadSubject ? <p className="truncate text-xs text-muted">{threadSubject}</p> : null}
                       </div>
                     </div>
                     <div className="max-h-[28rem] flex-1 space-y-3 overflow-y-auto px-4 py-4">
-                      {!thread.length ? <p className="py-8 text-center text-sm text-slate-400">Say hello 👋</p> : null}
+                      {!thread.length ? <p className="py-8 text-center text-sm text-muted">Say hello 👋</p> : null}
                       {thread.map((m, i) => {
                         const mine = m.sender_id === userId;
                         // Show the subject when it starts or changes, not on every reply.
@@ -514,12 +514,12 @@ export default function InboxView() {
                         const showSubject = m.subject && m.subject !== prevSubject;
                         return (
                           <div key={m.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
-                            <div className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm ${mine ? "bg-[#D9A43A] text-black" : "bg-white/10 text-slate-100"}`}>
+                            <div className={`max-w-[80%] rounded px-4 py-2 text-sm ${mine ? "bg-gold text-on-gold" : "bg-surface text-ink"}`}>
                               {showSubject ? (
-                                <p className={`mb-1 text-[11px] font-bold uppercase tracking-[0.12em] ${mine ? "text-black/70" : "text-blue-200"}`}>{m.subject}</p>
+                                <p className={`mb-1 text-[11px] font-bold uppercase tracking-[0.12em] ${mine ? "text-on-gold" : "text-gold"}`}>{m.subject}</p>
                               ) : null}
                               <p className="whitespace-pre-wrap break-words">{m.body}</p>
-                              <p className={`mt-1 text-[10px] ${mine ? "text-black/60" : "text-slate-400"}`}>
+                              <p className={`mt-1 text-[10px] ${mine ? "text-on-gold" : "text-muted"}`}>
                                 {timeAgo(m.created_at)}
                                 {mine && m.read_at ? " · Read" : ""}
                               </p>
@@ -529,10 +529,10 @@ export default function InboxView() {
                       })}
                       <div ref={threadEnd} />
                     </div>
-                    <form onSubmit={handleSend} className="border-t border-white/10 p-3">
+                    <form onSubmit={handleSend} className="border-t border-hairline p-3">
                       {!thread.length ? (
-                        <div className="mb-3 rounded-2xl border border-blue-400/20 bg-blue-500/10 px-4 py-3 text-xs leading-5 text-blue-100">
-                          <span className="font-semibold text-white">Before you send:</span> messages are private between you and {activeName}. Be
+                        <div className="mb-3 rounded border border-gold/20 bg-gold/10 px-4 py-3 text-xs leading-5 text-gold">
+                          <span className="font-semibold text-ink">Before you send:</span> messages are private between you and {activeName}. Be
                           respectful, and keep personal details like your address, phone number and payment information out of messages.
                         </div>
                       ) : null}
@@ -546,7 +546,7 @@ export default function InboxView() {
                               setSendError(null);
                             }}
                             required={!thread.length}
-                            className={`${input} py-2.5 text-sm ${choice ? "" : "text-slate-400"}`}
+                            className={`${input} py-2.5 text-sm ${choice ? "" : "text-muted"}`}
                           >
                             {thread.length ? (
                               <option value={REPLY}>{threadSubject ? `Reply · ${threadSubject}` : "Reply"}</option>
@@ -579,13 +579,13 @@ export default function InboxView() {
                         ) : null}
                       </div>
                       {saleTip ? (
-                        <p className="mb-2 rounded-xl border border-amber-300/25 bg-amber-400/10 px-3 py-2 text-[11px] leading-5 text-amber-100">
+                        <p className="mb-2 rounded-xl border border-amber-300/25 bg-amber-400/10 px-3 py-2 text-[11px] leading-5 text-amber-800">
                           Buying or selling? Brandon&apos;s Brands isn&apos;t a party to sales between members, isn&apos;t responsible for them and doesn&apos;t hold or guarantee funds or verify watches.
                           Use a trusted escrow or authentication service, or meet in a safe public place, and never send money by gift card or wire to
                           someone you haven&apos;t verified.
                         </p>
                       ) : null}
-                      {sendError ? <p className="mb-2 text-sm text-rose-300">{sendError}</p> : null}
+                      {sendError ? <p className="mb-2 text-sm text-rose-700">{sendError}</p> : null}
                       <div className="flex gap-2">
                         <textarea
                           value={draft}
@@ -605,15 +605,15 @@ export default function InboxView() {
                         <button
                           type="submit"
                           disabled={sending || !draft.trim() || subjectMissing}
-                          className="shrink-0 self-end rounded-full bg-[#D9A43A] px-5 py-3 text-sm font-semibold text-black hover:bg-[#e1b54a] disabled:opacity-50"
+                          className="shrink-0 self-end rounded-full bg-gold px-5 py-3 text-sm font-semibold text-on-gold hover:bg-gold-bright disabled:opacity-50"
                         >
                           {sending ? "…" : "Send"}
                         </button>
                       </div>
-                      <p className="mt-1 text-[11px] leading-4 text-slate-500">
+                      <p className="mt-1 text-[11px] leading-4 text-muted">
                         Sending as {senderName(user, moderator)}. Enter to send, Shift+Enter for a new line. Messages between members aren&apos;t
                         checked by Brandon&apos;s Brands. Report anything inappropriate to{" "}
-                        <a href={`mailto:${collabEmail}`} className="underline hover:text-slate-300">
+                        <a href={`mailto:${collabEmail}`} className="underline hover:text-ink/80">
                           {collabEmail}
                         </a>
                         .
@@ -621,7 +621,7 @@ export default function InboxView() {
                     </form>
                   </>
                 ) : (
-                  <div className="flex flex-1 items-center justify-center p-10 text-center text-sm text-slate-400">Choose a conversation.</div>
+                  <div className="flex flex-1 items-center justify-center p-10 text-center text-sm text-muted">Choose a conversation.</div>
                 )}
               </div>
             </section>
@@ -664,18 +664,18 @@ function AnnouncementComposer({ kind, onSent }: { kind: "site_update" | "group_e
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="rounded-full border border-[#D9A43A]/50 bg-[#D9A43A]/10 px-4 py-2 text-sm font-semibold text-[#D9A43A] hover:bg-[#D9A43A]/20"
+          className="rounded-full border border-gold/50 bg-gold/10 px-4 py-2 text-sm font-semibold text-gold hover:bg-gold/20"
         >
           + Send a {label} to all members
         </button>
-        {status ? <span className={`text-sm ${status.ok ? "text-emerald-300" : "text-rose-300"}`}>{status.text}</span> : null}
+        {status ? <span className={`text-sm ${status.ok ? "text-emerald-800" : "text-rose-700"}`}>{status.text}</span> : null}
       </div>
     );
   }
 
   return (
-    <form onSubmit={submit} className="mb-4 grid gap-3 rounded-2xl border border-[#D9A43A]/30 bg-[#D9A43A]/5 p-4">
-      <p className="text-xs uppercase tracking-[0.25em] text-[#D9A43A]">New {label} · goes to every member · moderators only</p>
+    <form onSubmit={submit} className="mb-4 grid gap-3 rounded border border-gold/30 bg-gold/5 p-4">
+      <p className="text-xs uppercase tracking-[0.25em] text-gold">New {label} · goes to every member · moderators only</p>
       <input
         value={form.title}
         onChange={(e) => setForm({ ...form, title: e.target.value })}
@@ -698,12 +698,12 @@ function AnnouncementComposer({ kind, onSent }: { kind: "site_update" | "group_e
         placeholder="Optional link, e.g. /forum or https://…"
         className={input}
       />
-      {status && !status.ok ? <p className="text-sm text-rose-300">{status.text}</p> : null}
+      {status && !status.ok ? <p className="text-sm text-rose-700">{status.text}</p> : null}
       <div className="flex gap-3">
-        <button type="submit" disabled={busy} className="rounded-full bg-[#D9A43A] px-5 py-2.5 text-sm font-semibold text-black hover:bg-[#e1b54a] disabled:opacity-60">
+        <button type="submit" disabled={busy} className="rounded-full bg-gold px-5 py-2.5 text-sm font-semibold text-on-gold hover:bg-gold-bright disabled:opacity-60">
           {busy ? "Sending…" : "Send to all members"}
         </button>
-        <button type="button" onClick={() => setOpen(false)} className="rounded-full border border-white/15 px-5 py-2.5 text-sm text-slate-200">
+        <button type="button" onClick={() => setOpen(false)} className="rounded-full border border-hairline px-5 py-2.5 text-sm text-ink">
           Cancel
         </button>
       </div>
