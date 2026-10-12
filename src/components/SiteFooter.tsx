@@ -45,7 +45,7 @@ const linkCls = "text-sm text-ink/85 transition hover:text-gold-bright";
 
 export default function SiteFooter() {
   return (
-    <footer className="site-footer mt-24 border-t border-hairline bg-surface text-ink">
+    <footer className="site-footer theme-cream mt-24 border-t border-hairline bg-surface text-ink">
       <div className="mx-auto grid max-w-[1180px] gap-10 px-4 py-14 sm:grid-cols-2 sm:px-6 lg:grid-cols-[1.6fr_repeat(4,1fr)]">
         <div>
           <Link href="/" className="flex items-center gap-3" aria-label="Brandon's Brands home">

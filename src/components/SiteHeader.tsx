@@ -40,7 +40,7 @@ export default function SiteHeader() {
   };
 
   return (
-    <header className="site-header relative z-30 border-b border-hairline bg-ground text-ink">
+    <header className="site-header theme-cream relative z-30 border-b border-hairline bg-ground text-ink">
       <div className="border-b border-hairline">
         <div className={`mx-auto flex max-w-[1180px] items-center justify-between gap-4 px-4 py-2 text-muted sm:px-6 ${smallCaps}`}>
           <span className="hidden sm:inline">Luxury &amp; microbrand watch reviews</span>

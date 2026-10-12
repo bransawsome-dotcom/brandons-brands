@@ -23,7 +23,7 @@ export default function TheEdit({ watches }: { watches: EditWatch[] }) {
           <img key={shown.id} src={shown.image} alt={`${shown.brand} ${shown.model}`} className="absolute inset-0 h-full w-full object-cover animate-fade-in" />
         ) : null}
         {shown ? (
-          <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-5 pb-4 pt-12 text-[11px] uppercase tracking-[0.2em] text-ink">
+          <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-5 pb-4 pt-12 text-[11px] uppercase tracking-[0.2em] text-white">
             {shown.brand} · {shown.model}
           </figcaption>
         ) : null}

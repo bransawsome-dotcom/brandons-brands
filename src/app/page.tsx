@@ -68,7 +68,7 @@ export default async function Home() {
   };
 
   return (
-    <div className="text-ink">
+    <div className="bb-home theme-cream text-ink">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
 
       {/* Hero */}

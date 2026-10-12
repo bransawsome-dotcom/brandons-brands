@@ -18,6 +18,26 @@
   --on-gold: #0b0b0c;
 }
 
+/* Cream (light) look from the reference design, used on the header, footer and homepage.
+   Everything inside .theme-cream picks up these colors; other pages keep the dark tokens above. */
+.theme-cream {
+  --ground: #f1ece3;
+  --surface: #e8e1d5;
+  --raised: #f8f5ef;
+  --hairline: #d8cebe;
+  --hairline-strong: #9d9382;
+  --ink: #2b2620;
+  --muted: #6a6155;
+  --gold: #7a5c30;
+  --gold-bright: #9c7a45;
+  --on-gold: #f8f5ef;
+  color: var(--ink);
+}
+/* The homepage is cream from edge to edge. */
+body:has(.bb-home) {
+  background: #f1ece3;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
