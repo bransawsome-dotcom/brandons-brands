@@ -135,7 +135,7 @@ export default function WatchDetailsPage() {
     <div className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6 sm:py-12">
       <div className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-[0_30px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl">
         <div className="grid gap-6 lg:grid-cols-2">
-          <div className="h-96 w-full overflow-hidden rounded-lg bg-slate-950/90">
+          <div className="bb-shine h-96 w-full overflow-hidden rounded-lg bg-slate-950/90">
             {watch.image_url ? (
               <img src={watch.image_url} referrerPolicy="no-referrer" onError={(e) => { e.currentTarget.style.visibility = "hidden"; }} alt={`${watch.brand} ${watch.model}`} className="h-full w-full object-cover" />
             ) : (

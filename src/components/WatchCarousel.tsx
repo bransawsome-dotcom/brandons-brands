@@ -134,7 +134,7 @@ export default function WatchCarousel({ watches, className = "" }: { watches: Ca
               className="absolute inset-0 flex flex-col overflow-hidden rounded-[1.25rem] border border-[#D9A43A]/30 bg-slate-950/85 shadow-[0_18px_50px_rgba(0,0,0,0.45)] outline-none focus-visible:ring-2 focus-visible:ring-[#D9A43A]"
               style={{ transform: `rotateY(${i * step}deg) translateZ(${size.radius}px)`, backfaceVisibility: "hidden" }}
             >
-              <div className="relative min-h-0 flex-1 overflow-hidden bg-black">
+              <div className="bb-shine relative min-h-0 flex-1 overflow-hidden bg-black">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={w.image} alt="" draggable={false} className="absolute inset-0 h-full w-full object-cover" />
                 <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-slate-950/90 to-transparent" />

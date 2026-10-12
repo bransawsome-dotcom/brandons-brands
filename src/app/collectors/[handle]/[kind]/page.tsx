@@ -188,7 +188,7 @@ export default async function PublicListPage({ params }: { params: Promise<{ han
             return (
               <li key={item.id} className="flex flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-[0_25px_70px_rgba(0,0,0,0.28)]">
                 {item.image_url ? (
-                  <div className="flex h-56 items-center justify-center bg-white p-4">
+                  <div className="bb-shine flex h-56 items-center justify-center bg-white p-4">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={item.image_url} alt={`${item.brand} ${item.model} watch`} referrerPolicy="no-referrer" loading="lazy" className="h-full w-full object-contain" />
                   </div>

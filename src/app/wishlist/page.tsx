@@ -14,6 +14,7 @@ import WishlistScanner from "@/components/WishlistScanner";
 import ShareButton from "@/components/ShareButton";
 import PublicListToggle from "@/components/PublicListToggle";
 import OfferStatus from "@/components/OfferStatus";
+import { SkeletonCards } from "@/components/Skeleton";
 
 const initialForm = {
   brand: "",
@@ -457,7 +458,7 @@ export default function WishlistPage() {
 
         {alertMessage ? <div className="mb-6 rounded-3xl bg-white/5 px-4 py-3 text-sm text-amber-300">{alertMessage}</div> : null}
         {loading ? (
-          <div className="rounded-[2rem] border border-white/10 bg-white/5 p-12 text-center text-slate-300">Loading wishlist…</div>
+          <SkeletonCards label="Loading wishlist" />
         ) : !wishlist.length ? (
           <div className="rounded-[2rem] border border-dashed border-white/10 bg-white/5 p-12 text-center text-slate-300">
             <div className="text-4xl">⭐</div>
@@ -491,7 +492,7 @@ export default function WishlistPage() {
                   className="scroll-mt-6 flex flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-[0_25px_70px_rgba(0,0,0,0.28)] backdrop-blur-xl"
                 >
                   {item.image_url ? (
-                    <div className="flex h-56 items-center justify-center bg-white p-4">
+                    <div className="bb-shine flex h-56 items-center justify-center bg-white p-4">
                       <img
                         src={item.image_url}
                         alt={`${item.brand} ${item.model}`}

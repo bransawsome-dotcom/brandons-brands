@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import ForumHome from "./ForumHome";
+import { SkeletonList } from "@/components/Skeleton";
 
 export const metadata: Metadata = {
   title: "Community Forum | Brandon's Brands",
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function ForumPage() {
   return (
-    <Suspense fallback={<div className="p-10 text-center text-slate-300">Loading forum…</div>}>
+    <Suspense fallback={<div className="mx-auto w-full max-w-7xl px-3 py-8 sm:px-6"><SkeletonList label="Loading forum" /></div>}>
       <ForumHome />
     </Suspense>
   );

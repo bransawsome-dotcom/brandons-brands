@@ -1,5 +1,7 @@
 "use client";
 
+import { SkeletonList } from "@/components/Skeleton";
+
 import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -266,7 +268,7 @@ export default function InboxView() {
     setNotifications((cur) => cur.filter((n) => n.id !== id));
   };
 
-  if (authLoading) return <div className="p-10 text-center text-slate-300">Loading inbox…</div>;
+  if (authLoading) return <div className="mx-auto w-full max-w-5xl px-3 py-8"><SkeletonList label="Loading inbox" /></div>;
 
   if (!userId) {
     return (

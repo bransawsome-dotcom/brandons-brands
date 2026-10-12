@@ -1,5 +1,7 @@
 "use client";
 
+import { SkeletonPost } from "@/components/Skeleton";
+
 import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -214,7 +216,7 @@ export default function PostView() {
     return map;
   }, [comments]);
 
-  if (loading) return <div className="p-10 text-center text-slate-300">Loading discussion…</div>;
+  if (loading) return <SkeletonPost label="Loading discussion" />;
   if (error) return <div className="p-10 text-center text-amber-200">{error}</div>;
   if (!post)
     return (

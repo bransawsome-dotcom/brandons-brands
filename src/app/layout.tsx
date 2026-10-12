@@ -7,6 +7,8 @@ import Link from "next/link";
 import LogoMark from "@/components/LogoMark";
 import { Analytics } from "@vercel/analytics/next";
 import { SITE_URL } from "@/lib/site";
+import ScrollReveal from "@/components/ScrollReveal";
+import { ViewTransition } from "react";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -58,7 +60,10 @@ export default function RootLayout({
               </nav>
             </header>
 
-            <main className="flex-1">{children}</main>
+            <ViewTransition name="bb-page">
+              <main className="flex-1">{children}</main>
+            </ViewTransition>
+            <ScrollReveal />
             <SiteFooter />
           </div>
         </AuthProvider>

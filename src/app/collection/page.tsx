@@ -16,6 +16,7 @@ import Combobox from "@/components/Combobox";
 import { canonicalBrand, modelsForBrand, watchBrands } from "@/lib/watchCatalog";
 import { formatUsd, parseMoney, lookupWatchDetails, type WatchLookupResult } from "@/lib/watchAiClient";
 import { applyLookup, newWatchId } from "@/lib/watchBuild";
+import { SkeletonCards } from "@/components/Skeleton";
 
 function buildSlug(brand: string, model: string) {
   return `${brand.trim().toLowerCase()} ${model.trim().toLowerCase()}`
@@ -584,7 +585,7 @@ export default function CollectionPage() {
         ) : null}
 
         {loading ? (
-          <div className="rounded-[2rem] border border-white/10 bg-white/5 p-12 text-center text-slate-300">Loading your collection…</div>
+          <SkeletonCards label="Loading your collection" />
         ) : filteredWatches.length ? (
           <div className={view === "grid" ? "grid gap-6 md:grid-cols-2 xl:grid-cols-3" : "space-y-3"}>
             {filteredWatches.map((watch) => (
@@ -592,7 +593,7 @@ export default function CollectionPage() {
                 <Link href={`/collection/${watch.id}`} className="absolute inset-0 z-0" aria-hidden />
                 {view === "grid" ? (
                   <div className="flex flex-col relative z-10">
-                    <div className="h-[220px] w-full bg-slate-950/90 overflow-hidden md:h-64">
+                    <div className="bb-shine h-[220px] w-full bg-slate-950/90 overflow-hidden md:h-64">
                       {watch.image_url ? (
                         <img src={watch.image_url} referrerPolicy="no-referrer" onError={(e) => { e.currentTarget.style.visibility = "hidden"; }} alt={`${watch.brand} ${watch.model}`} className="h-full w-full object-cover" />
                       ) : (

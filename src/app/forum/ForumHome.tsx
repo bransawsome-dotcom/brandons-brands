@@ -1,5 +1,7 @@
 "use client";
 
+import { SkeletonList } from "@/components/Skeleton";
+
 import PhotoPicker from "@/components/PhotoPicker";
 import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
@@ -642,7 +644,7 @@ export default function ForumHome() {
           ) : null}
 
           {loading ? (
-            <div className="rounded-[1.5rem] border border-white/10 bg-white/5 p-10 text-center text-slate-300">Loading discussions…</div>
+            <SkeletonList label="Loading discussions" />
           ) : error ? (
             <div className="rounded-[1.5rem] border border-white/10 bg-white/5 p-10 text-center text-amber-200">{error}</div>
           ) : !visible.length ? (

@@ -209,7 +209,7 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
                   <button
                     type="button"
                     onClick={() => setPlaying(f.id)}
-                    className={`group relative flex h-60 w-full items-center justify-center p-4 ${f.image_url ? "bg-white" : "bg-slate-950/80"}`}
+                    className={`bb-shine group relative flex h-60 w-full items-center justify-center p-4 ${f.image_url ? "bg-white" : "bg-slate-950/80"}`}
                     aria-label={`Play Brandon's ${f.brand} ${f.model} video here`}
                   >
                     {photo}
@@ -224,7 +224,7 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
                   <a
                     href={f.link_url}
                     {...(info.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                    className={`group relative flex h-60 items-center justify-center p-4 ${f.image_url ? "bg-white" : "bg-slate-950/80"}`}
+                    className={`bb-shine group relative flex h-60 items-center justify-center p-4 ${f.image_url ? "bg-white" : "bg-slate-950/80"}`}
                     aria-label={`${info.label}: ${f.brand} ${f.model}`}
                   >
                     {photo}
