@@ -37,7 +37,7 @@ export async function lookupPrices(w: { brand: string; model: string; reference_
     `Brand: ${w.brand}`,
     `Model: ${w.model}`,
     w.reference_number ? `Reference: ${w.reference_number}` : "",
-    `Today is ${today}. Use web search: the manufacturer's current list (retail) price, and current pre-owned market prices (e.g. Chrono24, WatchCharts, recent sales). All in USD. Use null for anything you can't find; never guess.`,
+    `Today is ${today}. Use web search: the manufacturer's current list (retail) price, and current pre-owned market prices (e.g. Chrono24, WatchCharts, recent sales). All in USD. If the brand doesn't publish a price online, use the price for a NEW watch listed by an authorized retailer (e.g. Neiman Marcus, Saks, Watches of Switzerland, Mayors, Bucherer). Use null for anything you can't find; never guess.`,
   ]
     .filter(Boolean)
     .join("\n");

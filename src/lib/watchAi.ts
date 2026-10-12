@@ -104,7 +104,7 @@ const lookupSchema = {
     },
     image_candidate: {
       type: "string",
-      description: "Direct URL of the main product photo from the official product page (its og:image, or the first product gallery image), as seen with web_fetch. Empty string if not found. Never invent one.",
+      description: "Direct URL of a product photo showing this exact watch (from the official product page, else an authorized retailer or watch publication), as seen with web_fetch. Never a logo or banner. Empty string if not found. Never invent one.",
     },
   },
   required: [
@@ -129,12 +129,12 @@ export async function lookupWatch(input: {
     input.reference_number ? `Reference: ${input.reference_number}` : "",
     input.purchase_date ? `Purchased on: ${input.purchase_date}` : "Purchase date: unknown (use today's list price as the retail price).",
     `Today is ${today}.`,
-    `Use web search for prices: the manufacturer's list (retail) price at the purchase date, today's list price, and current pre-owned market prices (e.g. Chrono24, WatchCharts, recent sales). All prices in USD. Use null for anything you cannot find rather than guessing. Never invent a reference number. Also find the manufacturer's official product page for the current version of this model, open it once with web_fetch, and report its main product photo URL as image_candidate.`,
+    `Use web search for prices: the manufacturer's list (retail) price at the purchase date, today's list price, and current pre-owned market prices (e.g. Chrono24, WatchCharts, recent sales). All prices in USD. Many luxury brands (e.g. Bulgari, Chopard, Cartier, Patek Philippe) don't show prices on their own site or block automated visits: then use the price for a NEW watch listed by an authorized retailer (e.g. Neiman Marcus, Saks, Bloomingdale's, Watches of Switzerland, Mayors, Bucherer, Hodinkee Shop) and say so in retail_price_date_note. Use null for anything you cannot find rather than guessing. Never invent a reference number. Also find the manufacturer's official product page for the current version of this model, open it once with web_fetch, and report its main product photo URL as image_candidate. The photo must show the watch itself, never the brand's logo or a banner. If the brand's page can't be opened or has no product photo, use the main product photo from an authorized retailer's or a reputable watch publication's page for this exact model instead.`,
   ].filter(Boolean).join("\n");
 
   const tools = [
     { type: "web_search_20250305" as const, name: "web_search" as const, max_uses: 5 },
-    { type: "web_fetch_20250910" as const, name: "web_fetch" as const, max_uses: 2, max_content_tokens: 12000 },
+    { type: "web_fetch_20250910" as const, name: "web_fetch" as const, max_uses: 3, max_content_tokens: 12000 },
     { name: "record_watch", description: "Record the looked-up watch details and prices.", input_schema: lookupSchema },
   ];
 
@@ -254,6 +254,18 @@ export async function scanCollectionImage(base64: string, mediaType: string, kin
 
 
 // --- Product photo -----------------------------------------------------------
+// Brand sites often use their logo or a generic banner as the page's share image; never use those.
+const NOT_A_WATCH_PHOTO = /logo|icon|favicon|sprite|placeholder|default[-_]?(image|share|og)|og[-_]?default|share[-_]?image|social[-_]?share|banner|corporate|brand[-_]?mark|wordmark|monogram/i;
+
+function looksLikeWatchPhoto(url: string): boolean {
+  try {
+    const u = new URL(url);
+    return !NOT_A_WATCH_PHOTO.test(decodeURIComponent(u.pathname + u.search));
+  } catch {
+    return false;
+  }
+}
+
 // Reads the main product image (og:image / twitter:image) from the official page,
 // falling back to the price-source pages. Returns null if none can be verified.
 
@@ -306,8 +318,10 @@ async function isReachableImage(url: string): Promise<boolean> {
   const res = await fetchWithTimeout(url, { headers: { Accept: "image/*" } });
   if (!res || !res.ok) return false;
   const type = res.headers.get("content-type") ?? "";
+  const size = Number(res.headers.get("content-length") ?? 0);
   res.body?.cancel().catch(() => {});
-  return type.startsWith("image/");
+  // Tiny files are almost always logos or icons, not product photos.
+  return type.startsWith("image/") && !type.includes("svg") && !(size > 0 && size < 6000);
 }
 
 async function findProductImage(pages: string[]): Promise<string | null> {
@@ -316,7 +330,7 @@ async function findProductImage(pages: string[]): Promise<string | null> {
     if (!res || !res.ok || !(res.headers.get("content-type") ?? "").includes("html")) continue;
     const html = (await res.text()).slice(0, 400_000);
     const image = extractImageUrl(html, res.url || page);
-    if (image && image.startsWith("https://") && (await isReachableImage(image))) {
+    if (image && image.startsWith("https://") && looksLikeWatchPhoto(image) && (await isReachableImage(image))) {
       return image;
     }
   }
@@ -330,7 +344,7 @@ function registrableDomain(host: string): string {
 // The model's reported photo URL. Accepted if the server can load it, or — when the
 // brand's site blocks servers — if it's hosted on the brand's own domain.
 async function checkCandidateImage(candidate: string | undefined, officialPage: string): Promise<string | null> {
-  if (!candidate || !candidate.startsWith("https://") || !isHttpUrl(candidate)) return null;
+  if (!candidate || !candidate.startsWith("https://") || !isHttpUrl(candidate) || !looksLikeWatchPhoto(candidate)) return null;
   if (await isReachableImage(candidate)) return candidate;
   try {
     const sameBrand = registrableDomain(new URL(candidate).hostname) === registrableDomain(new URL(officialPage).hostname);
