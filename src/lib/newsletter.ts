@@ -4,7 +4,7 @@
 import { adminClient } from "@/lib/priceAlerts";
 import { loadAllPosts } from "@/lib/blogDb";
 import { latestYouTubeVideos } from "@/lib/youtube";
-import { collabEmail, socials } from "@/lib/socials";
+import { collabEmail, facebookGroup, socials } from "@/lib/socials";
 import { SITE_URL } from "@/lib/site";
 import { eventWhen, type SiteEvent } from "@/lib/events";
 
@@ -25,6 +25,7 @@ function shell(inner: string, token?: string): string {
     ${inner}
     <hr style="border:0;border-top:1px solid #1e293b;margin:28px 0 16px">
     <p style="font-size:13px;color:#94a3b8;margin:0 0 8px">Follow Brandon: ${social}</p>
+    <p style="font-size:13px;color:#94a3b8;margin:0 0 8px">Talk watches with 6,600+ collectors: <a href="${facebookGroup.url}" style="color:#D9A43A;text-decoration:none">join the ${esc(facebookGroup.name)} Facebook group</a></p>
     <p style="font-size:12px;color:#64748b;line-height:18px;margin:0">
       You're getting this because you signed up at brandonsbrands17.com. <a href="${unsub}" style="color:#94a3b8">Unsubscribe</a> anytime.
       ${address ? `<br>Brandon's Brands · ${esc(address)}` : ""}<br>Questions? <a href="mailto:${collabEmail}" style="color:#94a3b8">${collabEmail}</a>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import LogoMark from "@/components/LogoMark";
-import { collabEmail, socials } from "@/lib/socials";
+import { collabEmail, facebookGroup, socials } from "@/lib/socials";
 
 // "Connect with Brandon": the page the printed QR code opens (brandonsbrands17.com/connect).
 // Links come from src/lib/socials.ts, so updating them there updates this page without reprinting cards.
@@ -42,6 +42,13 @@ const ICONS: Record<string, React.ReactNode> = {
       <path d="M13.5 21v-7.5H16l.4-3h-2.9V8.6c0-.9.3-1.5 1.5-1.5h1.5V4.4c-.3 0-1.2-.1-2.2-.1-2.2 0-3.7 1.3-3.7 3.8v2.4H8v3h2.6V21h2.9Z" />
     </svg>
   ),
+  Group: (
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
+      <circle cx="9" cy="8" r="3" />
+      <circle cx="17" cy="9" r="2.4" />
+      <path d="M3.5 19c.6-3 2.8-4.8 5.5-4.8s4.9 1.8 5.5 4.8M14.8 14.6c.7-.3 1.4-.4 2.2-.4 2.2 0 3.9 1.5 4.4 4" />
+    </svg>
+  ),
 };
 
 const button =
@@ -80,6 +87,16 @@ export default function ConnectPage() {
             </a>
           </li>
         ))}
+        <li>
+          <a href={facebookGroup.url} target="_blank" rel="noopener noreferrer" className={button}>
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/15">{ICONS.Group}</span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-base font-semibold">Join the Facebook group</span>
+              <span className="block truncate text-xs text-blue-100">{facebookGroup.name}</span>
+            </span>
+            <span aria-hidden className="text-blue-100 transition group-hover:translate-x-0.5">↗</span>
+          </a>
+        </li>
       </ul>
 
       <p className="mt-8 text-sm text-slate-400">

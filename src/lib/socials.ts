@@ -34,4 +34,12 @@ export const socials: Social[] = [
   },
 ];
 
+// The Facebook group Brandon helps run as an admin (created by Jeffrey Thomas). Not Brandon's own account,
+// so it's kept out of `socials` (which feeds "sameAs" in structured data).
+export const facebookGroup = {
+  name: "Luxury Microbrand Watches",
+  url: "https://www.facebook.com/groups/419331496032314",
+  blurb: "A Facebook group of 6,600+ collectors sharing microbrand and independent watches. Brandon is one of its admins.",
+};
+
 export const collabEmail = "collab@brandonsbrands17.com";

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import LogoMark from "@/components/LogoMark";
-import { collabEmail, socials } from "@/lib/socials";
+import { collabEmail, facebookGroup, socials } from "@/lib/socials";
 import { SALES_DISCLAIMER } from "@/lib/legal";
 
 export default function SiteFooter() {
@@ -38,6 +38,8 @@ export default function SiteFooter() {
             <Link href="/polls" className="text-[#D9A43A] transition hover:text-[#e1b54a]">Polls</Link>
             <span className="mx-2 text-slate-500">·</span>
             <Link href="/newsletter" className="text-[#D9A43A] transition hover:text-[#e1b54a]">Newsletter</Link>
+            <span className="mx-2 text-slate-500">·</span>
+            <a href={facebookGroup.url} target="_blank" rel="noreferrer" className="text-[#D9A43A] transition hover:text-[#e1b54a]">Facebook group</a>
           </p>
           </div>
         </div>

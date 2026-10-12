@@ -1,4 +1,4 @@
-import { collabEmail, socials } from "@/lib/socials";
+import { collabEmail, facebookGroup, socials } from "@/lib/socials";
 
 export default function SocialMediaPage() {
   return (
@@ -33,6 +33,19 @@ export default function SocialMediaPage() {
               </a>
             </article>
           ))}
+          <article className="flex flex-col rounded-[2rem] border border-[#D9A43A]/30 bg-slate-950/90 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.35)] transition hover:-translate-y-1 md:col-span-2">
+            <p className="text-xs uppercase tracking-[0.25em] text-[#D9A43A]">Facebook group</p>
+            <h2 className="mt-3 text-xl font-semibold text-white">{facebookGroup.name}</h2>
+            <p className="mt-4 flex-1 text-sm leading-7 text-slate-300">{facebookGroup.blurb}</p>
+            <a
+              href={facebookGroup.url}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-6 inline-flex self-start rounded-full bg-[#D9A43A] px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-[#e1b54a]"
+            >
+              Join the group
+            </a>
+          </article>
         </div>
 
         <div className="mt-10 rounded-[1.75rem] border border-white/10 bg-black/30 p-6 text-slate-300">
