@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import LogoMark from "@/components/LogoMark";
+import LoopVideo from "@/components/LoopVideo";
 import VaultLink from "@/components/VaultLink";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import ShowOffCTA from "@/components/ShowOffCTA";
@@ -88,44 +88,44 @@ export default async function Home() {
     <div className="bb-home theme-cream text-ink">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
 
-      {/* Hero */}
-      <section className="grid items-center gap-10 border-b border-hairline pb-16 pt-6 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] md:gap-12 md:pb-24 md:pt-12">
-        <div className="animate-fade-in">
-          <p className="mb-5 text-xs uppercase tracking-[0.22em] text-gold">Brandon&apos;s Brands · Luxury &amp; microbrand watches</p>
-          <h1 className="font-display text-[72px] font-semibold uppercase leading-[0.84] tracking-[-0.01em] sm:text-[104px] lg:text-[128px]">
-            Discover.
-            <span className="block font-light text-gold">Collect.</span>
-            <span className="sr-only"> Luxury and microbrand watch reviews by Brandon Volosov</span>
-          </h1>
-          <p className="mt-7 max-w-xl text-lg leading-8 text-ink/85">
-            Watch reviews of luxury microbrands and independent watchmakers by Brandon Volosov. Keep your collection in a private vault, track what it&apos;s
-            worth every day, and trade notes with collectors who care as much as you do.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/signup" className="inline-flex min-h-[52px] items-center bg-gold px-7 text-xs font-semibold uppercase tracking-[0.2em] text-on-gold transition hover:bg-gold-bright">
-              Create free account
-            </Link>
-            <Link href="/collectors" className="inline-flex min-h-[52px] items-center border border-hairline-strong px-7 text-xs font-semibold uppercase tracking-[0.2em] text-ink transition hover:border-gold hover:text-gold-bright">
-              Browse collectors
-            </Link>
+      {/* Hero: full-width film of a watch movement behind the headline */}
+      <section className="relative left-1/2 -mt-6 w-screen -translate-x-1/2 overflow-hidden border-b border-hairline bg-surface sm:-mt-8">
+        <LoopVideo name="movement" poster="/redesign/video/movement-poster.webp" className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#f1ece3] via-[#f1ece3]/85 to-[#f1ece3]/20 max-md:via-[#f1ece3]/90 max-md:to-[#f1ece3]/70" aria-hidden />
+        <p className="absolute bottom-3 right-4 z-10 text-[10px] uppercase tracking-[0.12em] text-ink/55">Preview footage · Pond5 · license before launch</p>
+        <div className="relative mx-auto max-w-[1180px] px-4 pb-20 pt-16 sm:px-6 md:pb-28 md:pt-24">
+          <div className="max-w-2xl animate-fade-in">
+            <p className="mb-5 text-xs uppercase tracking-[0.22em] text-gold">Brandon&apos;s Brands · Luxury &amp; microbrand watches</p>
+            <h1 className="font-display text-[72px] font-semibold uppercase leading-[0.84] tracking-[-0.01em] sm:text-[104px] lg:text-[128px]">
+              Discover.
+              <span className="block font-light text-gold">Collect.</span>
+              <span className="sr-only"> Luxury and microbrand watch reviews by Brandon Volosov</span>
+            </h1>
+            <p className="mt-7 max-w-xl text-lg leading-8 text-ink/90">
+              Watch reviews of luxury microbrands and independent watchmakers by Brandon Volosov. Keep your collection in a private vault, track what it&apos;s
+              worth every day, and trade notes with collectors who care as much as you do.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/signup" className="inline-flex min-h-[52px] items-center bg-gold px-7 text-xs font-semibold uppercase tracking-[0.2em] text-on-gold transition hover:bg-gold-bright">
+                Create free account
+              </Link>
+              <Link href="/collectors" className="inline-flex min-h-[52px] items-center border border-hairline-strong bg-[#f1ece3]/60 px-7 text-xs font-semibold uppercase tracking-[0.2em] text-ink transition hover:border-gold hover:text-gold-bright">
+                Browse collectors
+              </Link>
+            </div>
+            <dl className="mt-10 grid max-w-xl grid-cols-3 border-t border-hairline-strong/60">
+              {[
+                ["Daily", "Value estimates"],
+                ["Weekly", "Wrist Check"],
+                ["Free", "For collectors"],
+              ].map(([big, small], i) => (
+                <div key={big} className={`pt-4 ${i ? "border-l border-hairline-strong/60 pl-4" : "pr-4"}`}>
+                  <dt className="font-serif text-3xl text-ink">{big}</dt>
+                  <dd className="mt-1 text-[11px] uppercase tracking-[0.16em] text-ink/70">{small}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
-          <dl className="mt-10 grid max-w-xl grid-cols-3 border-t border-hairline">
-            {[
-              ["Daily", "Value estimates"],
-              ["Weekly", "Wrist Check"],
-              ["Free", "For collectors"],
-            ].map(([big, small], i) => (
-              <div key={big} className={`pt-4 ${i ? "border-l border-hairline pl-4" : "pr-4"}`}>
-                <dt className="font-serif text-3xl text-ink">{big}</dt>
-                <dd className="mt-1 text-[11px] uppercase tracking-[0.16em] text-muted">{small}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-        <div className="relative mx-auto aspect-square w-full max-w-[440px] border border-hairline bg-surface p-6 sm:p-10">
-          {/* The logo is a working watch showing the visitor's local time. */}
-          <LogoMark src="/logo-dial-1024.webp" className="h-full w-full" handWidth={0.9} />
-          <p className="absolute inset-x-0 -bottom-7 text-center text-[11px] uppercase tracking-[0.2em] text-muted">Set to your local time</p>
         </div>
       </section>
 
@@ -212,8 +212,15 @@ export default async function Home() {
           ].map((c) => {
             const body = (
               <>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={c.img} alt={c.alt} width={900} height={675} loading="lazy" className="-mx-8 -mt-8 mb-7 aspect-[4/3] w-[calc(100%+4rem)] max-w-none object-cover" />
+                {c.vault ? (
+                  <div className="relative -mx-8 -mt-8 mb-7 w-[calc(100%+4rem)] max-w-none">
+                    <LoopVideo name="vault" poster="/redesign/video/vault-poster.webp" label="A bank vault door unlocks and swings open" className="aspect-[4/3] w-full object-cover" />
+                    <span className="absolute bottom-2 right-3 text-[9px] uppercase tracking-[0.12em] text-white/70">Preview footage · license before launch</span>
+                  </div>
+                ) : (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={c.img} alt={c.alt} width={900} height={675} loading="lazy" className="-mx-8 -mt-8 mb-7 aspect-[4/3] w-[calc(100%+4rem)] max-w-none object-cover" />
+                )}
                 <p className="text-[11px] uppercase tracking-[0.2em] text-gold">{c.label}</p>
                 <h3 className="mt-3 font-display text-[32px] font-semibold uppercase leading-none text-ink">{c.title}</h3>
                 <p className="mt-4 flex-1 leading-7 text-muted">{c.text}</p>
