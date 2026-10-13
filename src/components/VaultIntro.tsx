@@ -93,7 +93,11 @@ export default function VaultIntro() {
       ) : null}
 
       <p className="absolute bottom-8 left-0 right-0 text-center text-[11px] uppercase tracking-[0.3em] text-white/70">Opening your vault · tap to skip</p>
-      <p className="absolute bottom-3 right-4 text-[9px] uppercase tracking-[0.12em] text-white/40">Preview footage · license before launch</p>
+      <p className="absolute bottom-3 right-4 text-[9px] uppercase tracking-[0.12em] text-white/45">
+        <a href="https://www.pond5.com/stock-footage/item/310790989-bank-vault-door-opening-revealing-gold-bars-inside" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="hover:text-white/80">
+          Vault footage by Inmicco · Pond5
+        </a>
+      </p>
     </div>
   );
 }
