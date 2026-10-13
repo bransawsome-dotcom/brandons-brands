@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { takeVaultRequest, vaultFilm } from "@/lib/vault";
 
 // The vault intro on the Collection page, shown only right after someone clicks a Collection button:
-// the same bank-vault film as the home page plays full screen (sped up) as the heavy door swings open,
+// the same bank-vault film as the home page plays full screen (sped up; licensed Pond5 clip #310790989) as the heavy door swings open,
 // then Brandon's logo spins out of the vault toward you. Tap to skip. Never shown on a refresh, when
 // coming back from another page, or to people who ask their device to reduce motion.
 const SPEED = 2; // the 8s film plays in about 4s
@@ -81,7 +81,7 @@ export default function VaultIntro() {
       </video>
       {/* Navy and bronze grade over the film, darker at the edges. */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_35%,rgba(11,20,36,0.75)_100%)]" />
-      <div className="absolute inset-0 bg-[#1b2a41] mix-blend-color opacity-35" />
+      <div className="absolute inset-0 bg-[#1b2a41] mix-blend-color opacity-15" />
 
       {logo ? (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center" style={{ perspective: "900px" }}>
