@@ -289,7 +289,7 @@ main :is(h1, h2):not(.font-sans) {
 }
 /* Safety net for long single words in the wide capitals on narrow phones. */
 @media (max-width: 639px) {
-  main :is(h1, h2) { overflow-wrap: break-word; hyphens: auto; }
+  main :is(h1, h2) { overflow-wrap: break-word; hyphens: manual; }
 }
 
 /* Logo crystal glint: a soft band of light that crosses the dial now and then. */

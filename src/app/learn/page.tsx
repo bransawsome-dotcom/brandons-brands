@@ -46,7 +46,7 @@ export default function LearnPage() {
       <header className="px-4 pt-6 sm:px-0 sm:pt-0">
         <span aria-hidden className="block h-px w-10 bg-gold" />
         <p className="mt-4 text-xs uppercase tracking-[0.3em] text-gold">The Library</p>
-        <h1 className="mt-3 font-display text-5xl font-semibold uppercase leading-[1.05] text-ink sm:text-6xl">
+        <h1 className="mt-3 font-display text-[34px] font-semibold uppercase min-[400px]:text-[40px] leading-[1.05] text-ink sm:text-6xl">
           Learn about <span className="font-light text-gold">watches</span>
         </h1>
         <p className="mt-5 max-w-2xl font-serif text-xl italic leading-8 text-ink/80 sm:text-2xl">

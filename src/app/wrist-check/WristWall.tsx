@@ -1,6 +1,7 @@
 "use client";
 
 import { shrinkPhoto } from "@/lib/photos";
+import PhotoZoom from "@/components/PhotoZoom";
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
@@ -93,8 +94,7 @@ export default function WristWall() {
     <>
       {featured ? (
         <section className="mt-6 grid gap-5 overflow-hidden rounded-md border border-gold/40 bg-raised shadow-card p-5 sm:grid-cols-[minmax(0,320px)_1fr] sm:items-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={featured.image} alt={featured.watch ?? "Wrist Check of the Week"} className="w-full rounded object-cover" />
+          <PhotoZoom src={featured.image} alt={featured.watch ?? "Wrist Check of the Week"} className="w-full rounded object-cover" />
           <div>
             <p className="flex items-center gap-1.5 text-xs uppercase tracking-[0.3em] text-gold">
               <Glyph e="⭐" size={13} /> Wrist Check of the Week
@@ -149,8 +149,7 @@ export default function WristWall() {
         <ul className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {shots.map((s) => (
             <li key={s.id} className="overflow-hidden rounded border border-hairline bg-surface">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={s.image} alt={s.watch ?? "Wrist shot"} loading="lazy" className="aspect-square w-full object-cover" />
+              <PhotoZoom src={s.image} alt={s.watch ?? "Wrist shot"} loading="lazy" className="aspect-square w-full object-cover" />
               <div className="p-3">
                 <p className="truncate text-sm font-semibold text-ink">{s.watch ?? "Wrist check"}</p>
                 <p className="truncate text-xs text-muted">

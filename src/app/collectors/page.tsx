@@ -21,7 +21,7 @@ export default async function CollectorsPage() {
       <section className="border-b border-hairline pb-10">
         <div className="mb-4 h-0.5 w-11 bg-gold" aria-hidden />
         <p className="mb-2 text-xs uppercase tracking-[0.22em] text-gold">Community</p>
-        <h1 className="font-display text-[44px] font-semibold uppercase leading-[1.05] text-ink sm:text-[62px]">
+        <h1 className="font-display text-[34px] font-semibold uppercase leading-[1.05] text-ink min-[400px]:text-[40px] sm:text-[62px]">
           Watch <span className="font-light text-gold">collectors</span>
         </h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-ink/80">

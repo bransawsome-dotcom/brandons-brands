@@ -274,7 +274,7 @@ export default function ForumHome() {
         <div>
           <span aria-hidden className="block h-px w-10 bg-gold" />
           <p className="mt-4 text-xs uppercase tracking-[0.3em] text-gold">Forum</p>
-          <h1 className="mt-3 font-display text-5xl font-semibold uppercase leading-[1.05] text-ink sm:text-6xl">
+          <h1 className="mt-3 font-display text-[34px] font-semibold uppercase min-[400px]:text-[40px] leading-[1.05] text-ink sm:text-6xl">
             The <span className="font-serif text-[1.15em] font-normal normal-case italic tracking-normal text-gold">Salon.</span>
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-7 text-ink/80 sm:text-lg">

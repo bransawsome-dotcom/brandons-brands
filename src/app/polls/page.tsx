@@ -40,7 +40,7 @@ export default async function PollsPage() {
       <header className="px-4 sm:px-0">
         <span aria-hidden className="block h-px w-10 bg-gold" />
         <p className="mt-4 text-xs uppercase tracking-[0.3em] text-gold">Weekly polls</p>
-        <h1 className="mt-3 font-display text-5xl font-semibold uppercase leading-[1.05] text-ink sm:text-6xl">
+        <h1 className="mt-3 font-display text-[34px] font-semibold uppercase min-[400px]:text-[40px] leading-[1.05] text-ink sm:text-6xl">
           Which would you <span className="font-light text-gold">pick?</span>
         </h1>
         <p className="mt-5 max-w-2xl text-base leading-7 text-ink/80 sm:text-lg">

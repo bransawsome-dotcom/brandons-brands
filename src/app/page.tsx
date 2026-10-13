@@ -96,7 +96,7 @@ export default async function Home() {
         <div className="relative mx-auto max-w-[1180px] px-4 pb-20 pt-16 sm:px-6 md:pb-28 md:pt-24">
           <div className="max-w-2xl animate-fade-in">
             <p className="mb-5 text-xs uppercase tracking-[0.22em] text-gold">Brandon&apos;s Brands · Luxury &amp; microbrand watches</p>
-            <h1 className="font-display text-[62px] font-semibold uppercase leading-[0.84] tracking-[-0.01em] sm:text-[104px] lg:text-[128px]">
+            <h1 className="font-display text-[52px] font-semibold uppercase leading-[0.9] tracking-[-0.01em] min-[400px]:text-[58px] sm:text-[104px] lg:text-[128px]">
               Discover.
               <span className="block font-light text-gold">Collect.</span>
               <span className="sr-only"> Luxury and microbrand watch reviews by Brandon Volosov</span>
@@ -129,7 +129,59 @@ export default async function Home() {
         </div>
       </section>
 
-      <LatestVideos className="mt-20" />
+      {/* Free tools */}
+      <section id="collection" aria-labelledby="tools" className="mt-20">
+        <div className="mb-12">
+          <SectionHead id="tools" eyebrow="Free collector tools" bold="Everything you own," light="in one place" />
+        </div>
+        <div className="grid gap-6 md:grid-cols-3">
+          {[
+            { href: "/collection", vault: true, img: "/redesign/tool-vault.webp", alt: "A round steel bank vault door with its locking bolts", label: "My Collection", title: "The Vault", text: "Store each watch with photos, brand, model, purchase date, and box and papers, with an estimated value updated daily." },
+            { href: "/wishlist", img: "/redesign/tool-case.webp", alt: "Three gold chronographs on stone display stands", label: "Wishlist", title: "The Display Case", text: "Save the watches you want, get price alerts, and move them into your vault the day you buy one." },
+            { href: "/watch-value-tracker", img: "/redesign/tool-wrist.webp", alt: "A vintage steel watch on a suede strap, worn on the wrist", label: "Watch value tracker", title: "What it's worth", text: "See your collection's value over time and the watches that moved the most." },
+          ].map((c) => {
+            const body = (
+              <>
+                {c.vault ? (
+                  <div className="relative -mx-8 -mt-8 mb-7 w-[calc(100%+4rem)] max-w-none">
+                    <LoopVideo name="vault" poster="/redesign/video/vault-poster.webp" label="A bank vault door unlocks and swings open to reveal gold inside" className="aspect-[4/3] w-full object-cover" />
+                  </div>
+                ) : (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={c.img} alt={c.alt} width={900} height={675} loading="lazy" className="-mx-8 -mt-8 mb-7 aspect-[4/3] w-[calc(100%+4rem)] max-w-none object-cover" />
+                )}
+                <p className="text-[11px] uppercase tracking-[0.2em] text-gold">{c.label}</p>
+                <h3 className="mt-3 font-display text-[29px] font-semibold uppercase leading-[1.05] text-ink">{c.title}</h3>
+                <p className="mt-4 flex-1 leading-7 text-muted">{c.text}</p>
+                <span className={`mt-6 ${smallLink}`}>Open →</span>
+              </>
+            );
+            const cls = "group flex h-full flex-col overflow-hidden rounded-md border p-8 shadow-card bb-sheen transition duration-300 hover:-translate-y-1 hover:shadow-card-hover";
+            return c.vault ? (
+              <VaultLink key={c.href} href={c.href} className={cls}>
+                {body}
+              </VaultLink>
+            ) : (
+              <Link key={c.href} href={c.href} className={cls}>
+                {body}
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      <PhotoBand
+        label="Your collection deserves a home"
+        line="Every watch has a story worth keeping."
+        desktop="/redesign/table-chronograph.webp"
+        mobile="/redesign/table-chronograph-m.webp"
+        alt="A cream-dial chronograph on an olive canvas strap, lying on a wooden table"
+        small
+      />
+
+      <ShowOffCTA className="mt-16" />
+
+      <LatestVideos className="mt-24 border-t border-hairline pt-20" />
 
       {/* The Edit: Brandon's Favorites */}
       {edit.length ? (
@@ -143,15 +195,6 @@ export default async function Home() {
           <TheEdit watches={edit} />
         </section>
       ) : null}
-
-      {/* Brand line: full-width photo band */}
-      <PhotoBand
-        label="The collector's eye"
-        line="Worn, not kept."
-        desktop="/redesign/linen-moonphase.webp"
-        mobile="/redesign/linen-moonphase-m.webp"
-        alt="A moonphase watch on a brown leather strap resting on linen"
-      />
 
       {/* Community */}
       <section aria-labelledby="community" className="mt-24">
@@ -206,57 +249,7 @@ export default async function Home() {
 
       <FacebookGroupBanner className="mt-24" />
 
-      {/* Free tools */}
-      <section id="collection" aria-labelledby="tools" className="mt-24 border-t border-hairline pt-20">
-        <div className="mb-12">
-          <SectionHead id="tools" eyebrow="Free collector tools" bold="Everything you own," light="in one place" />
-        </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          {[
-            { href: "/collection", vault: true, img: "/redesign/tool-vault.webp", alt: "A round steel bank vault door with its locking bolts", label: "My Collection", title: "The Vault", text: "Store each watch with photos, brand, model, purchase date, and box and papers, with an estimated value updated daily." },
-            { href: "/wishlist", img: "/redesign/tool-case.webp", alt: "Three gold chronographs on stone display stands", label: "Wishlist", title: "The Display Case", text: "Save the watches you want, get price alerts, and move them into your vault the day you buy one." },
-            { href: "/watch-value-tracker", img: "/redesign/tool-wrist.webp", alt: "A vintage steel watch on a suede strap, worn on the wrist", label: "Watch value tracker", title: "What it's worth", text: "See your collection's value over time and the watches that moved the most." },
-          ].map((c) => {
-            const body = (
-              <>
-                {c.vault ? (
-                  <div className="relative -mx-8 -mt-8 mb-7 w-[calc(100%+4rem)] max-w-none">
-                    <LoopVideo name="vault" poster="/redesign/video/vault-poster.webp" label="A bank vault door unlocks and swings open to reveal gold inside" className="aspect-[4/3] w-full object-cover" />
-                  </div>
-                ) : (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={c.img} alt={c.alt} width={900} height={675} loading="lazy" className="-mx-8 -mt-8 mb-7 aspect-[4/3] w-[calc(100%+4rem)] max-w-none object-cover" />
-                )}
-                <p className="text-[11px] uppercase tracking-[0.2em] text-gold">{c.label}</p>
-                <h3 className="mt-3 font-display text-[29px] font-semibold uppercase leading-[1.05] text-ink">{c.title}</h3>
-                <p className="mt-4 flex-1 leading-7 text-muted">{c.text}</p>
-                <span className={`mt-6 ${smallLink}`}>Open →</span>
-              </>
-            );
-            const cls = "group flex h-full flex-col overflow-hidden rounded-md border p-8 shadow-card bb-sheen transition duration-300 hover:-translate-y-1 hover:shadow-card-hover";
-            return c.vault ? (
-              <VaultLink key={c.href} href={c.href} className={cls}>
-                {body}
-              </VaultLink>
-            ) : (
-              <Link key={c.href} href={c.href} className={cls}>
-                {body}
-              </Link>
-            );
-          })}
-        </div>
-      </section>
 
-      <PhotoBand
-        label="Your collection deserves a home"
-        line="Every watch has a story worth keeping."
-        desktop="/redesign/table-chronograph.webp"
-        mobile="/redesign/table-chronograph-m.webp"
-        alt="A cream-dial chronograph on an olive canvas strap, lying on a wooden table"
-        small
-      />
-
-      <ShowOffCTA className="mt-16" />
 
       <NewsletterSignup source="home" className="mt-16" />
     </div>

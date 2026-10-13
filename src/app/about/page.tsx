@@ -178,7 +178,7 @@ export default function AboutPage() {
           <div>
             <span aria-hidden className="block h-px w-10 bg-gold" />
             <p className="mt-4 text-xs uppercase tracking-[0.3em] text-gold">About Us</p>
-            <h1 className="mt-3 font-display text-5xl font-semibold uppercase leading-[1.05] tracking-[-0.01em] text-ink sm:text-6xl">
+            <h1 className="mt-3 font-display text-[34px] font-semibold uppercase min-[400px]:text-[40px] leading-[1.05] tracking-[-0.01em] text-ink sm:text-6xl">
               About Brandon&apos;s <span className="font-light text-gold">Brands</span>
             </h1>
             <p className="mt-5 font-serif text-2xl italic text-ink/80 sm:text-3xl">Beyond the Brand. Behind the Craftsmanship.</p>
