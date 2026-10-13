@@ -16,6 +16,7 @@ const columns: { title: string; links: { href: string; label: string; external?:
   {
     title: "Community",
     links: [
+      { href: "/community", label: "Community hub" },
       { href: "/collectors", label: "Collectors" },
       { href: "/events", label: "Events" },
       { href: "/wrist-check", label: "Wrist Check" },
@@ -27,12 +28,13 @@ const columns: { title: string; links: { href: string; label: string; external?:
   {
     title: "Tools",
     links: [
+      { href: "/demo", label: "Try a sample collection" },
       { href: "/watch-value-tracker", label: "Watch value tracker" },
       { href: "/wishlist", label: "Wishlist" },
       { href: "/newsletter", label: "Newsletter" },
       { href: "/collection", label: "Collection" },
       { href: "/learn", label: "Watch guides" },
-      { href: "/blog", label: "Blog" },
+      { href: "/blog", label: "Reviews & interviews" },
     ],
   },
   {

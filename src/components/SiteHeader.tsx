@@ -10,22 +10,23 @@ import { requestVault } from "@/lib/vault";
 
 // Site header: a navy announcement strip, then the wordmark with search and account either side, and one row of
 // page links. On phones the page links move into a menu (button on the left) and search sits on the right.
+// Five places for visitors; the personal tools live by the account link (and in the phone menu).
 const pageLinks = [
-  { href: "/collection", label: "Collection" },
+  { href: "/blog", label: "Reviews", match: ["/blog"] },
+  { href: "/favorites", label: "Hidden Gems", match: ["/favorites"] },
+  { href: "/community", label: "Community", match: ["/community", "/forum", "/wrist-check", "/events", "/collectors", "/polls", "/social"] },
+  { href: "/learn", label: "Learn", match: ["/learn"] },
+  { href: "/about", label: "About", match: ["/about"] },
+];
+const toolLinks = [
+  { href: "/collection", label: "My Collection" },
   { href: "/wishlist", label: "Wishlist" },
-  { href: "/dashboard", label: "Dashboard", signedIn: true },
-  { href: "/collectors", label: "Collectors" },
-  { href: "/forum", label: "Forum" },
-  { href: "/blog", label: "Blog" },
-  { href: "/learn", label: "Learn" },
-  { href: "/events", label: "Events" },
-  { href: "/social", label: "Social" },
-  { href: "/about", label: "About" },
+  { href: "/dashboard", label: "Dashboard" },
 ];
 
-function isActive(pathname: string | null, href: string) {
+function isActive(pathname: string | null, href: string, match?: string[]) {
   if (!pathname) return false;
-  return pathname === href || pathname.startsWith(`${href}/`);
+  return (match ?? [href]).some((m) => pathname === m || pathname.startsWith(`${m}/`));
 }
 
 const smallCaps = "whitespace-nowrap text-[12px] font-medium uppercase tracking-[0.2em]";
@@ -55,7 +56,7 @@ export default function SiteHeader() {
     router.push("/login");
   };
 
-  const links = pageLinks.filter((l) => !l.signedIn || user);
+  const links = pageLinks;
 
   return (
     <header className="site-header theme-cream relative z-30 border-b border-hairline bg-ground text-ink">
@@ -104,6 +105,14 @@ export default function SiteHeader() {
           <Link href="/search" aria-label="Search the site" className="inline-flex min-h-11 min-w-11 items-center justify-center text-ink sm:hidden">
             <SearchIcon />
           </Link>
+          <Link
+            href="/collection"
+            onClick={requestVault}
+            aria-current={isActive(pathname, "/collection") ? "page" : undefined}
+            className={`hidden min-h-11 items-center text-ink transition hover:text-gold-bright lg:inline-flex ${smallCaps}`}
+          >
+            My Collection
+          </Link>
           {guestMode && !user ? (
             <>
               <span className={`hidden text-gold sm:inline ${smallCaps}`}>Guest</span>
@@ -147,15 +156,14 @@ export default function SiteHeader() {
       </div>
 
       <nav aria-label="Main" className="hidden border-t border-hairline sm:block">
-        <ul className="mx-auto flex max-w-[1180px] flex-wrap justify-center gap-x-9 gap-y-1 px-6 py-3">
+        <ul className="mx-auto flex max-w-[1180px] flex-wrap justify-center gap-x-10 gap-y-1 px-6 py-3.5 lg:gap-x-14">
           {links.map((l) => {
-            const active = isActive(pathname, l.href);
+            const active = isActive(pathname, l.href, l.match);
             return (
               <li key={l.href}>
                 <Link
                   href={l.href}
                   aria-current={active ? "page" : undefined}
-                  onClick={l.href === "/collection" ? requestVault : undefined}
                   className={`inline-block border-b py-1 transition ${smallCaps} ${active ? "border-gold text-gold" : "border-transparent text-ink hover:text-gold-bright"}`}
                 >
                   {l.label}
@@ -163,6 +171,15 @@ export default function SiteHeader() {
               </li>
             );
           })}
+          <li className="lg:hidden">
+            <Link
+              href="/collection"
+              onClick={requestVault}
+              className={`inline-block border-b py-1 transition ${smallCaps} ${isActive(pathname, "/collection") ? "border-gold text-gold" : "border-transparent text-ink hover:text-gold-bright"}`}
+            >
+              My Collection
+            </Link>
+          </li>
         </ul>
       </nav>
 
@@ -193,9 +210,21 @@ export default function SiteHeader() {
               <li key={l.href}>
                 <Link
                   href={l.href}
+                  aria-current={isActive(pathname, l.href, l.match) ? "page" : undefined}
+                  className={`block border-b border-hairline py-3.5 font-display text-xl font-semibold uppercase tracking-[0.06em] ${isActive(pathname, l.href, l.match) ? "text-gold" : ""}`}
+                >
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+            <li className={`pt-6 text-muted ${smallCaps}`}>Your free tools</li>
+            {toolLinks.map((l) => (
+              <li key={l.href}>
+                <Link
+                  href={l.href}
                   onClick={l.href === "/collection" ? requestVault : undefined}
                   aria-current={isActive(pathname, l.href) ? "page" : undefined}
-                  className={`block border-b border-hairline py-3.5 font-display text-xl font-semibold uppercase tracking-[0.06em] ${isActive(pathname, l.href) ? "text-gold" : ""}`}
+                  className={`block border-b border-hairline py-3 text-lg ${isActive(pathname, l.href) ? "text-gold" : "text-ink"}`}
                 >
                   {l.label}
                 </Link>

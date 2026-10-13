@@ -57,11 +57,14 @@ export default async function FavoritesPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <section>
         <p className="flex items-center gap-1.5 text-xs uppercase tracking-[0.35em] text-gold">
-          <Glyph e="⭐" size={13} /> Brandon&apos;s Favorites
+          <Glyph e="⭐" size={13} /> Brandon&apos;s discoveries
         </p>
-        <h1 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-ink sm:text-5xl">The watches Brandon loves</h1>
+        <h1 className="mt-3 font-display text-5xl font-semibold uppercase leading-[1.05] text-ink sm:text-6xl">
+          Hidden <span className="font-light text-gold">Gems</span>
+          <span className="sr-only"> · Brandon&apos;s Favorites</span>
+        </h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-ink/80">
-          A personal pick of favorite watches, from the icons to the independent makers. Tap any watch to watch the reel or read the review,
+          Brandon&apos;s favorite watches, with a focus on the lesser-known makers he&apos;s discovered, each with his own take on why it stands out. A new hidden gem every Sunday. Tap any watch to watch the reel or read the review,
           then join the conversation in the{" "}
           <Link href={`/forum?subject=${FAVORITES_SUBJECT}`} className="text-gold hover:text-gold-bright">
             Brandon&apos;s Favorites forum
