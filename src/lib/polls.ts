@@ -27,6 +27,27 @@ export async function loadPolls(limit = 20): Promise<Poll[]> {
   }
 }
 
+// Vote totals for a poll, for server pages (so finished polls show their results as plain, searchable text).
+export async function loadPollResults(pollId: string): Promise<{ a: number; b: number } | null> {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) return null;
+  try {
+    const res = await fetch(`${url}/rest/v1/rpc/poll_results`, {
+      method: "POST",
+      headers: { apikey: key, Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ p_poll: pollId, p_voter: null }),
+      next: { revalidate: 300, tags: ["polls"] },
+    });
+    if (!res.ok) return null;
+    const d = (await res.json()) as { a?: number; b?: number } | { a?: number; b?: number }[];
+    const r = Array.isArray(d) ? d[0] : d;
+    return { a: Number(r?.a ?? 0), b: Number(r?.b ?? 0) };
+  } catch {
+    return null;
+  }
+}
+
 // A random id kept in this browser so visitors can vote once per poll without an account.
 export function voterId(): string {
   try {

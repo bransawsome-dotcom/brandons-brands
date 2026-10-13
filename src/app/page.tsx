@@ -131,8 +131,6 @@ export default async function Home() {
 
       <LatestVideos className="mt-20" />
 
-      {poll ? <PollCard poll={poll} className="mt-16" /> : null}
-
       {/* The Edit: Brandon's Favorites */}
       {edit.length ? (
         <section aria-labelledby="the-edit" className="mt-24 border-t border-hairline pt-20">
@@ -195,6 +193,15 @@ export default async function Home() {
             </Link>
           </article>
         </div>
+        {/* This week's poll sits with the community, below the main content. */}
+        {poll ? (
+          <div className="mt-8">
+            <PollCard poll={poll} />
+            <Link href="/polls" className={`mt-4 inline-block ${smallLink}`}>
+              Past polls and results →
+            </Link>
+          </div>
+        ) : null}
       </section>
 
       <FacebookGroupBanner className="mt-24" />
