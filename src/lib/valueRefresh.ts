@@ -3,7 +3,7 @@
 // Never import this from a client component.
 import Anthropic from "@anthropic-ai/sdk";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { getAnthropic } from "@/lib/watchAi";
+import { getAnthropic, lookupWatch } from "@/lib/watchAi";
 import { adminClient } from "@/lib/priceAlerts";
 
 const MODEL = process.env.ANTHROPIC_MODEL || "claude-sonnet-5-5";
@@ -65,11 +65,52 @@ type Row = {
   model: string;
   reference_number: string | null;
   details: Record<string, unknown> | null;
+  image_url?: string | null;
+  purchase_date?: string | null;
 };
+
+// A watch that was never filled in (no specs summary): do the full lookup (photo, specs, prices) instead of prices only,
+// so anything the page couldn't fill in at the time gets completed by the next daily run.
+async function fillOne(db: SupabaseClient, table: "watches" | "wishlist", row: Row) {
+  const now = new Date().toISOString();
+  const l = await lookupWatch({
+    brand: row.brand,
+    model: row.model,
+    reference_number: row.reference_number ?? undefined,
+    purchase_date: table === "watches" && row.purchase_date && /^\d{4}-\d{2}-\d{2}$/.test(row.purchase_date) ? row.purchase_date : undefined,
+  });
+  const details = {
+    ...(row.details ?? {}),
+    year_introduced: l.year_introduced,
+    case_size_mm: l.case_size_mm,
+    case_material: l.case_material,
+    movement: l.movement,
+    water_resistance: l.water_resistance,
+    market_value_low: l.market_value_low,
+    market_value_high: l.market_value_high,
+    summary: l.summary,
+    sources: l.sources,
+  };
+  const update: Record<string, unknown> = { value_updated_at: now, details };
+  if (!row.image_url && l.image_url) update.image_url = l.image_url;
+  const retailNow = str(l.current_retail_price);
+  const market = str(l.market_value);
+  if (table === "watches") {
+    if (retailNow) update.current_retail_price = retailNow;
+    if (market) update.estimated_value = market;
+  } else {
+    if (retailNow) update.retail_price = retailNow;
+    if (market) update.current_market_price = market;
+  }
+  await db.from(table).update(update).eq("id", row.id).eq("user_id", row.user_id);
+  return { table, id: row.id, ok: true };
+}
 
 async function refreshOne(db: SupabaseClient, table: "watches" | "wishlist", row: Row, signal: AbortSignal) {
   const now = new Date().toISOString();
   try {
+    const summary = row.details?.summary;
+    if (!(typeof summary === "string" && summary.trim())) return await fillOne(db, table, row);
     const p = await lookupPrices(row, signal);
     const update: Record<string, unknown> = { value_updated_at: now };
     if (p) {
@@ -102,16 +143,17 @@ async function refreshOne(db: SupabaseClient, table: "watches" | "wishlist", row
 export async function runValueRefresh(opts: { budgetMs: number; concurrency?: number; limit?: number }) {
   const db = adminClient();
   const dueBefore = new Date(Date.now() - 20 * 60 * 60 * 1000).toISOString();
-  const cols = "id,user_id,brand,model,reference_number,details";
+  const cols = (table: "watches" | "wishlist") =>
+    `id,user_id,brand,model,reference_number,details,image_url${table === "watches" ? ",purchase_date" : ""}`;
   const due = async (table: "watches" | "wishlist") => {
     const { data, error } = await db
       .from(table)
-      .select(cols)
+      .select(cols(table))
       .or(`value_updated_at.is.null,value_updated_at.lt.${dueBefore}`)
       .order("value_updated_at", { ascending: true, nullsFirst: true })
       .limit(opts.limit ?? 60);
     if (error) throw new Error(`${table}: ${error.message}`);
-    return ((data ?? []) as Row[]).filter((r) => r.brand && r.model).map((r) => ({ table, row: r }));
+    return ((data ?? []) as unknown as Row[]).filter((r) => r.brand && r.model).map((r) => ({ table, row: r }));
   };
   // Alternate collection and wishlist watches so both get updated each day.
   const [a, b] = await Promise.all([due("watches"), due("wishlist")]);

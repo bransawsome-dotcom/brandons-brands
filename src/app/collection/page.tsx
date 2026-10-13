@@ -4,7 +4,7 @@ import VersionPicker from "@/components/VersionPicker";
 import type { WatchVersion } from "@/lib/watchAiClient";
 
 import Link from "next/link";
-import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useMemo, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useRequireAuth } from "@/components/AuthProvider";
 import VaultIntro from "@/components/VaultIntro";
@@ -18,6 +18,7 @@ import OfferStatus from "@/components/OfferStatus";
 import Combobox from "@/components/Combobox";
 import { canonicalBrand, modelsForBrand, watchBrands } from "@/lib/watchCatalog";
 import { formatUsd, parseMoney, lookupWatchDetails, type WatchLookupResult } from "@/lib/watchAiClient";
+import { canTry, needsFill, noteTry, withRetry } from "@/lib/autoFill";
 import { applyLookup, newWatchId } from "@/lib/watchBuild";
 import { SkeletonCards } from "@/components/Skeleton";
 
@@ -224,8 +225,9 @@ export default function CollectionPage() {
       return;
     }
 
-    // Fill in details automatically on add, unless already looked up.
-    const details = lookup ?? (canAutoFill ? await runLookup() : null);
+    // Use details already looked up in the form; otherwise the watch is saved right away and fills itself in
+    // a moment later (see the automatic fill below), so nobody waits or presses Auto-fill.
+    const details = lookup;
 
     const imageUrl = photoFile ? await uploadImage(photoFile) : form.image_url || "";
     const base: Watch = {
@@ -257,8 +259,43 @@ export default function CollectionPage() {
     setPhotoFile(null);
     setPreview("");
     setLookup(null);
-    setMessage(details ? "Watch added with details and prices." : "Watch added.");
+    setMessage(details ? "Watch added with details and prices." : canAutoFill ? "Watch added. Its photo, details and prices are filling in now." : "Watch added.");
   };
+
+  // Watches that aren't filled in yet (no specs or market value) fill themselves in automatically, right after
+  // they're added and whenever the page opens, one at a time. After that the daily refresh keeps prices current.
+  const watchesRef = useRef<Watch[]>([]);
+  useEffect(() => {
+    watchesRef.current = watches;
+  }, [watches]);
+  const [fillingId, setFillingId] = useState<string | null>(null);
+  const autoTried = useRef(new Set<string>());
+  const autoBusy = useRef(false);
+  const [autoTick, setAutoTick] = useState(0);
+  useEffect(() => {
+    if (!canAutoFill || loading || autoBusy.current) return;
+    const w = watches.find((x) => needsFill(x, x.estimated_value) && !autoTried.current.has(x.id) && canTry(x.id));
+    if (!w) return;
+    autoTried.current.add(w.id);
+    noteTry(w.id);
+    autoBusy.current = true;
+    Promise.resolve().then(() => setFillingId(w.id));
+    withRetry(() =>
+      lookupWatchDetails({ brand: w.brand, model: w.model, reference_number: w.reference_number || undefined, purchase_date: w.purchase_date || undefined }),
+    )
+      .then(async (result) => {
+        const next = watchesRef.current.map((x) => (x.id === w.id ? applyLookup(x, result, { keepTypedValue: Boolean(x.estimated_value) }) : x));
+        watchesRef.current = next;
+        setWatches(next);
+        await saveCollectionData(userId, next);
+      })
+      .catch(() => {})
+      .finally(() => {
+        autoBusy.current = false;
+        setFillingId(null);
+        setAutoTick((t) => t + 1);
+      });
+  }, [watches, canAutoFill, loading, userId, autoTick]);
 
 
   const router = useRouter();
@@ -630,6 +667,12 @@ export default function CollectionPage() {
                       )}
                     </div>
                     <div className="flex flex-1 flex-col p-6">
+                      {fillingId === watch.id ? (
+                        <p role="status" className="mb-3 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-gold">
+                          <span aria-hidden className="h-2 w-2 animate-pulse rounded-full bg-gold" />
+                          Filling in photo, details and prices…
+                        </p>
+                      ) : null}
                       <p className="text-sm uppercase tracking-[0.25em] text-gold">{watch.brand}</p>
                       <h3 className="mt-2 font-display text-2xl font-semibold text-ink">{watch.model}</h3>
                       {watch.reference_number ? <p className="text-sm text-muted">Reference: {watch.reference_number}</p> : null}

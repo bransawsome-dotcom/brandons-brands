@@ -13,6 +13,7 @@ import { checkPriceNow, formatUsd, lookupWatchDetails, type WatchLookupResult } 
 import { dismissPriceMatch, listPriceMatches, setPriceAlert, type PriceMatch } from "@/lib/priceAlertsClient";
 import PriceAlertPanel from "@/components/PriceAlertPanel";
 import { applyWishlistLookup } from "@/lib/watchBuild";
+import { canTry, needsFill, noteTry, withRetry } from "@/lib/autoFill";
 import WishlistScanner from "@/components/WishlistScanner";
 import ShareButton from "@/components/ShareButton";
 import PublicListToggle from "@/components/PublicListToggle";
@@ -215,8 +216,9 @@ export default function WishlistPage() {
       (existing.reference_number || "") === form.reference_number.trim();
 
     // Fill in details automatically, unless already looked up or this is an edit of the same watch.
-    const needsLookup = !lookup && canAutoFill && !(sameWatch && existing?.value_updated_at);
-    const details = lookup ?? (needsLookup ? await runLookup() : null);
+    // If the details were already looked up in the form, use them; otherwise the watch is saved right away and
+    // fills itself in a moment later (see the automatic fill below), so nobody waits or presses Auto-fill.
+    const details = lookup;
 
     // A different watch on edit: drop the old watch's photo, prices and specs.
     const carried: Partial<WishlistItem> = sameWatch ? existing! : {};
@@ -240,23 +242,25 @@ export default function WishlistPage() {
     const wasEditing = Boolean(editingId);
     resetForm();
     setMessage(
-      wasEditing ? "Wishlist item saved." : details ? "Added to your wishlist with details, prices and a photo." : "Added to your wishlist.",
+      wasEditing ? "Wishlist item saved." : details ? "Added to your wishlist with details, prices and a photo." : "Added to your wishlist. Its photo, details and prices are filling in now.",
     );
   };
 
-  // Watches that were never filled in (no photo, specs or prices yet) fill themselves in when the page opens,
+  // Watches that aren't filled in yet (no specs or prices) fill themselves in automatically, right after they're
+  // added and whenever the page opens,
   // one at a time, so nobody has to press Auto-fill. After that the daily refresh keeps prices current.
   const autoTried = useRef(new Set<string>());
   const autoBusy = useRef(false);
   const [autoTick, setAutoTick] = useState(0);
   useEffect(() => {
     if (!canAutoFill || loading || autoBusy.current) return;
-    const item = wishlist.find((w) => !w.value_updated_at && !autoTried.current.has(w.id));
+    const item = wishlist.find((w) => needsFill(w, w.current_market_price) && !autoTried.current.has(w.id) && canTry(w.id));
     if (!item) return;
     autoTried.current.add(item.id);
+    noteTry(item.id);
     autoBusy.current = true;
     Promise.resolve().then(() => setRefreshingId(item.id));
-    lookupWatchDetails({ brand: item.brand, model: item.model, reference_number: item.reference_number || undefined })
+    withRetry(() => lookupWatchDetails({ brand: item.brand, model: item.model, reference_number: item.reference_number || undefined }))
       .then(async (result) => {
         const next = wishlistRef.current.map((w) => (w.id === item.id ? applyWishlistLookup(w, result) : w));
         wishlistRef.current = next;
@@ -563,6 +567,12 @@ export default function WishlistPage() {
                   )}
                   {/* Rows line up across cards (CSS subgrid): photo · details · offers and price alert · buttons. */}
                   <div className="min-w-0 px-6 pt-6">
+                    {refreshing ? (
+                      <p role="status" className="mb-3 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-gold">
+                        <span aria-hidden className="h-2 w-2 animate-pulse rounded-full bg-gold" />
+                        Filling in photo, details and prices…
+                      </p>
+                    ) : null}
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
                         <p className="text-xs uppercase tracking-[0.25em] text-gold">{item.priority} priority</p>
@@ -646,7 +656,7 @@ export default function WishlistPage() {
                           disabled={refreshing}
                           className="min-h-11 rounded-full border border-hairline-strong px-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-ink transition hover:border-navy disabled:opacity-60"
                         >
-                          {refreshing ? "Updating…" : item.value_updated_at ? "Refresh value" : "Auto-fill"}
+                          {refreshing ? "Filling in…" : "Refresh value"}
                         </button>
                       ) : null}
                       <button
