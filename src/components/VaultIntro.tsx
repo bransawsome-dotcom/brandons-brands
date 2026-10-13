@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import LogoMark from "@/components/LogoMark";
 import { takeVaultRequest, vaultFilm } from "@/lib/vault";
 
 // The vault intro on the Collection page, shown only right after someone clicks a Collection button:
@@ -83,14 +84,13 @@ export default function VaultIntro() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_35%,rgba(11,20,36,0.75)_100%)]" />
       <div className="absolute inset-0 bg-[#1b2a41] mix-blend-color opacity-15" />
 
-      {logo ? (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center" style={{ perspective: "900px" }}>
-          <div className="bb-vault-hero w-[min(70vw,560px)]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo-watch-1024.webp" alt="" draggable={false} className="h-auto w-full drop-shadow-[0_30px_50px_rgba(0,0,0,0.6)]" />
-          </div>
+      {/* The logo is mounted (hidden) from the start so its photo is loaded and its hands already show the
+          visitor's local time when it spins out of the vault. */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center" style={{ perspective: "900px" }}>
+        <div className={`w-[min(70vw,560px)] ${logo ? "bb-vault-hero" : "opacity-0"}`}>
+          <LogoMark variant="watch" priority className="block aspect-[1311/1134] w-full" imgClassName="drop-shadow-[0_30px_50px_rgba(0,0,0,0.6)]" />
         </div>
-      ) : null}
+      </div>
 
       <p className="absolute bottom-8 left-0 right-0 text-center text-[11px] uppercase tracking-[0.3em] text-white/70">Opening your vault · tap to skip</p>
       <p className="absolute bottom-3 right-4 text-[9px] uppercase tracking-[0.12em] text-white/45">
