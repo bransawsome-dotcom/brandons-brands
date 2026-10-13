@@ -3,6 +3,7 @@
 import { parseMoney } from "@/lib/watchAiClient";
 import ValueHistory from "@/components/ValueHistory";
 import WelcomeTour from "@/components/WelcomeTour";
+import FavoriteBrandsEditor from "@/components/FavoriteBrandsEditor";
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -117,6 +118,7 @@ export default function DashboardPage() {
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-16">
       <WelcomeTour />
+      <FavoriteBrandsEditor mode="links" className="mb-6" />
       <div>
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div className="space-y-2">

@@ -244,6 +244,33 @@ export default function WishlistPage() {
     );
   };
 
+  // Watches that were never filled in (no photo, specs or prices yet) fill themselves in when the page opens,
+  // one at a time, so nobody has to press Auto-fill. After that the daily refresh keeps prices current.
+  const autoTried = useRef(new Set<string>());
+  const autoBusy = useRef(false);
+  const [autoTick, setAutoTick] = useState(0);
+  useEffect(() => {
+    if (!canAutoFill || loading || autoBusy.current) return;
+    const item = wishlist.find((w) => !w.value_updated_at && !autoTried.current.has(w.id));
+    if (!item) return;
+    autoTried.current.add(item.id);
+    autoBusy.current = true;
+    Promise.resolve().then(() => setRefreshingId(item.id));
+    lookupWatchDetails({ brand: item.brand, model: item.model, reference_number: item.reference_number || undefined })
+      .then(async (result) => {
+        const next = wishlistRef.current.map((w) => (w.id === item.id ? applyWishlistLookup(w, result) : w));
+        wishlistRef.current = next;
+        setWishlist(next);
+        await saveWishlistData(userId, next);
+      })
+      .catch(() => {})
+      .finally(() => {
+        autoBusy.current = false;
+        setRefreshingId(null);
+        setAutoTick((t) => t + 1); // move on to the next unfilled watch
+      });
+  }, [wishlist, canAutoFill, loading, userId, autoTick]);
+
   const handleRefresh = async (item: WishlistItem) => {
     if (!canAutoFill) return;
     setRefreshingId(item.id);
@@ -502,7 +529,7 @@ export default function WishlistPage() {
             </div>
           </div>
         ) : filteredWishlist.length ? (
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-x-6 gap-y-0 md:grid-cols-2 xl:grid-cols-3">
             {filteredWishlist.map((item) => {
               const d = item.details ?? {};
               const range =
@@ -515,7 +542,7 @@ export default function WishlistPage() {
                 <article
                   key={item.id}
                   id={`w-${item.id}`}
-                  className="scroll-mt-6 flex flex-col overflow-hidden rounded-md border border-hairline bg-raised shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-card-hover"
+                  className="mb-6 grid scroll-mt-6 grid-rows-subgrid row-span-4 gap-0 overflow-hidden rounded-md border border-hairline bg-raised shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-card-hover"
                 >
                   {item.image_url ? (
                     <div className="bb-shine flex h-56 items-center justify-center bg-surface p-4">
@@ -524,13 +551,18 @@ export default function WishlistPage() {
                         alt={`${item.brand} ${item.model}`}
                         referrerPolicy="no-referrer"
                         onError={(e) => {
-                          (e.currentTarget.parentElement as HTMLElement).style.display = "none";
+                          e.currentTarget.style.visibility = "hidden";
                         }}
                         className="h-full w-full object-contain"
                       />
                     </div>
-                  ) : null}
-                  <div className="flex flex-1 flex-col p-6">
+                  ) : (
+                    <div className="flex h-56 items-center justify-center bg-surface text-muted" aria-hidden>
+                      <Glyph name="watch" size={44} />
+                    </div>
+                  )}
+                  {/* Rows line up across cards (CSS subgrid): photo · details · offers and price alert · buttons. */}
+                  <div className="min-w-0 px-6 pt-6">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
                         <p className="text-xs uppercase tracking-[0.25em] text-gold">{item.priority} priority</p>
@@ -567,6 +599,8 @@ export default function WishlistPage() {
                         <Glyph e="📝" className="mr-1.5 text-gold" />
                         {item.notes}
                       </p> : null}
+                  </div>
+                  <div className="min-w-0 px-6">
                     <OfferStatus kind="wishlist" />
 
                     {canAutoFill ? (
@@ -596,11 +630,12 @@ export default function WishlistPage() {
                       </p>
                     ) : null}
 
-                    <div className={`mt-auto grid gap-2 pt-6 ${canAutoFill ? "grid-cols-3" : "grid-cols-2"}`}>
+                  </div>
+                    <div className={`grid gap-2 self-end px-6 pb-6 pt-6 ${canAutoFill ? "grid-cols-3" : "grid-cols-2"}`}>
                       <button
                         type="button"
                         onClick={() => handleEdit(item)}
-                        className="rounded-md border border-gold/40 bg-raised shadow-card px-3 py-3 text-sm font-semibold text-gold transition hover:bg-gold/20"
+                        className="min-h-11 rounded-full border border-hairline-strong px-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-ink transition hover:border-navy"
                       >
                         Edit
                       </button>
@@ -609,7 +644,7 @@ export default function WishlistPage() {
                           type="button"
                           onClick={() => handleRefresh(item)}
                           disabled={refreshing}
-                          className="rounded-md border border-gold/40 bg-raised shadow-card px-3 py-3 text-sm font-semibold text-gold transition hover:bg-gold/20 disabled:opacity-60"
+                          className="min-h-11 rounded-full border border-hairline-strong px-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-ink transition hover:border-navy disabled:opacity-60"
                         >
                           {refreshing ? "Updating…" : item.value_updated_at ? "Refresh value" : "Auto-fill"}
                         </button>
@@ -617,12 +652,11 @@ export default function WishlistPage() {
                       <button
                         type="button"
                         onClick={() => handleDelete(item.id)}
-                        className="rounded-md border border-rose-500/80 bg-rose-500/10 px-3 py-3 text-sm font-semibold text-rose-700 transition hover:bg-rose-500/20"
+                        className="min-h-11 rounded-full px-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-rose-700 transition hover:bg-rose-500/10"
                       >
                         Delete
                       </button>
                     </div>
-                  </div>
                 </article>
               );
             })}

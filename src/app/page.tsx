@@ -212,15 +212,8 @@ export default async function Home() {
           ].map((c) => {
             const body = (
               <>
-                {c.vault ? (
-                  <div className="relative -mx-8 -mt-8 mb-7 w-[calc(100%+4rem)] max-w-none">
-                    <LoopVideo name="vault" poster="/redesign/video/vault-poster.webp" label="A bank vault door unlocks and swings open" className="aspect-[4/3] w-full object-cover" />
-                    <span className="absolute bottom-2 right-3 text-[9px] uppercase tracking-[0.12em] text-ink">Preview footage · license before launch</span>
-                  </div>
-                ) : (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={c.img} alt={c.alt} width={900} height={675} loading="lazy" className="-mx-8 -mt-8 mb-7 aspect-[4/3] w-[calc(100%+4rem)] max-w-none object-cover" />
-                )}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={c.img} alt={c.alt} width={900} height={675} loading="lazy" className="-mx-8 -mt-8 mb-7 aspect-[4/3] w-[calc(100%+4rem)] max-w-none object-cover" />
                 <p className="text-[11px] uppercase tracking-[0.2em] text-gold">{c.label}</p>
                 <h3 className="mt-3 font-display text-[29px] font-semibold uppercase leading-[1.05] text-ink">{c.title}</h3>
                 <p className="mt-4 flex-1 leading-7 text-muted">{c.text}</p>

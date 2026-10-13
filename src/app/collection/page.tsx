@@ -266,12 +266,19 @@ export default function CollectionPage() {
   return (
     <div className="mx-auto w-full max-w-7xl px-3 py-8 sm:px-6 sm:py-14 lg:px-16 overflow-x-hidden">
       <VaultIntro />
+      {/* The vault: photo band at the top of the collection, as on the reference design. */}
+      <div className="relative -mx-3 mb-10 overflow-hidden sm:mx-0 sm:rounded-md sm:shadow-card">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/redesign/tool-vault.webp" alt="A round steel bank vault door with its locking bolts" width={900} height={675} className="h-60 w-full object-cover sm:h-80 lg:h-96" />
+        <span aria-hidden className="absolute left-4 top-4 h-10 w-10 border-l border-t border-white/80" />
+        <span aria-hidden className="absolute bottom-4 right-4 h-10 w-10 border-b border-r border-white/80" />
+      </div>
       <div>
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.35em] text-gold sm:text-sm">My Collection</p>
+            <p className="text-xs uppercase tracking-[0.35em] text-gold sm:text-sm">My Collection · Member access</p>
             <h1 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-ink sm:text-5xl">
-              Build a luxury watch archive.
+              Your collection, <span className="font-serif font-normal normal-case italic tracking-normal text-gold">kept privately.</span>
             </h1>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-ink/80 sm:text-base">
               Add watches below, then browse, search and sort them in your collection.
@@ -614,7 +621,7 @@ export default function CollectionPage() {
               <div key={watch.id} className={`group relative overflow-hidden border border-hairline bg-raised transition duration-300 hover:border-gold/50 ${view === "grid" ? "rounded-md shadow-card hover:-translate-y-1 hover:shadow-card-hover" : "rounded shadow-card"}`}>
                 <Link href={`/collection/${watch.id}`} className="absolute inset-0 z-0" aria-hidden />
                 {view === "grid" ? (
-                  <div className="flex flex-col relative z-10">
+                  <div className="relative z-10 flex h-full flex-col">
                     <div className="bb-shine h-[220px] w-full bg-raised overflow-hidden md:h-64">
                       {watch.image_url ? (
                         <img src={watch.image_url} referrerPolicy="no-referrer" onError={(e) => { e.currentTarget.style.visibility = "hidden"; }} alt={`${watch.brand} ${watch.model}`} className="h-full w-full object-cover" />
@@ -622,7 +629,7 @@ export default function CollectionPage() {
                         <div className="flex h-full items-center justify-center text-muted">No image</div>
                       )}
                     </div>
-                    <div className="p-6">
+                    <div className="flex flex-1 flex-col p-6">
                       <p className="text-sm uppercase tracking-[0.25em] text-gold">{watch.brand}</p>
                       <h3 className="mt-2 font-display text-2xl font-semibold text-ink">{watch.model}</h3>
                       {watch.reference_number ? <p className="text-sm text-muted">Reference: {watch.reference_number}</p> : null}
@@ -633,6 +640,7 @@ export default function CollectionPage() {
                           ))}
                         </div>
                       ) : null}
+                      <div className="mt-auto">
                       <OfferStatus kind="collection" />
                         <div className="mt-4 border-t border-hairline pt-4">
                           <dl className="grid grid-cols-2 gap-3">
@@ -672,6 +680,7 @@ export default function CollectionPage() {
                             </button>
                           </div>
                         </div>
+                      </div>
                     </div>
 
                     {/* Mobile buttons */}

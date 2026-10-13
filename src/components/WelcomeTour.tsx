@@ -3,19 +3,19 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/components/AuthProvider";
+import { LUXURY_BRANDS, MICRO_BRANDS, saveFavoriteBrands } from "@/lib/favoriteBrands";
 
 // A four-step welcome for new members, shown once (per device) the first time they reach their dashboard.
-// The last step lets them pick favorite brands; picks are kept on this device for now.
+// The last step lets them pick favorite brands, saved to their profile (see src/lib/favoriteBrands.ts).
 const SEEN_KEY = "bb-welcome-seen";
-export const BRANDS_KEY = "bb-favorite-brands";
 
 const steps = [
   { kicker: "Discover", title: "Reviews & hidden gems", text: "Brandon's hands-on reviews, first looks and the microbrands worth knowing, new every week." },
   { kicker: "Share", title: "Wrist Check & the forum", text: "Show what's on your wrist, talk shop with fellow collectors and meet people who get it." },
   { kicker: "Collect", title: "Your collection, valued", text: "Log every watch you own and want, with box and papers, photos and estimated values." },
 ];
-const LUXURY = ["Rolex", "Omega", "Tudor", "Cartier", "Grand Seiko", "Patek Philippe", "Audemars Piguet", "IWC", "Seiko", "Longines", "Oris", "TAG Heuer"];
-const MICRO = ["Baltic", "Christopher Ward", "Farer", "Studio Underd0g", "Lorier", "Furlan Marri", "Kurono Tokyo", "Nodus"];
+const LUXURY = LUXURY_BRANDS;
+const MICRO = MICRO_BRANDS;
 
 function read(key: string): string | null {
   try {
@@ -49,7 +49,7 @@ export default function WelcomeTour() {
 
   const finish = () => {
     write(SEEN_KEY, "1");
-    if (picked.length) write(BRANDS_KEY, JSON.stringify(picked));
+    if (picked.length) void saveFavoriteBrands(picked);
     dialog.current?.close();
   };
   const toggle = (b: string) => setPicked((p) => (p.includes(b) ? p.filter((x) => x !== b) : [...p, b]));
@@ -97,7 +97,7 @@ export default function WelcomeTour() {
             <h2 id="welcome-title" className="mt-2 font-display text-4xl font-semibold uppercase leading-[1.05]">
               Pick your <span className="font-light text-gold">brands</span>
             </h2>
-            <p className="mt-3 text-sm text-ink/80">Choose the names you love. You can change these any time.</p>
+            <p className="mt-3 text-sm text-ink/80">Choose the names you love. You can change these any time on your Account page.</p>
             <p className="mt-5 text-[10px] uppercase tracking-[0.28em] text-muted">The houses</p>
             <div className="mt-2 flex flex-wrap gap-2">{LUXURY.map(chip)}</div>
             <p className="mt-5 text-[10px] uppercase tracking-[0.28em] text-muted">Microbrands</p>

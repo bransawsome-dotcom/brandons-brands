@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import LogoMark from "@/components/LogoMark";
 import CollabNote from "@/components/CollabNote";
+import OpenAskButton from "@/components/OpenAskButton";
 import { FAVORITES_SUBJECT } from "@/lib/favorites";
 import { collabEmail, socials } from "@/lib/socials";
 import { IDENTITY, SITE_URL } from "@/lib/site";
@@ -385,22 +386,28 @@ export default function AboutPage() {
         <CollabNote className="mt-12" />
 
         {/* Contact */}
-        <section aria-labelledby="contact-heading" id="contact" className="mt-12 rounded-md border border-gold/30 bg-gradient-to-br from-gold/10 via-transparent to-gold/15 p-6 text-center sm:p-10">
-          <h2 id="contact-heading" className="text-2xl font-semibold text-ink sm:text-3xl">Get in touch</h2>
+        <section aria-labelledby="contact-heading" id="contact" className="mt-12 rounded-md border p-6 text-center shadow-card bb-sheen sm:p-12">
+          <h2 id="contact-heading" className="text-3xl font-semibold text-ink sm:text-4xl">Get in touch</h2>
           <p className="mx-auto mt-3 max-w-xl text-base leading-7 text-ink/80">
             Questions, collaborations, review requests or just want to talk watches? We&apos;d love to hear from you.
           </p>
-          <a
-            href={`mailto:${collabEmail}?subject=${encodeURIComponent("Hello from brandonsbrands17.com")}`}
-            className="mt-7 inline-flex rounded-full bg-navy px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-on-navy shadow-card transition hover:bg-navy-deep"
+          <OpenAskButton
+            topic="Something else"
+            className="mt-7 inline-flex min-h-12 items-center rounded-full bg-navy px-9 text-sm font-semibold uppercase tracking-[0.2em] text-on-navy shadow-card transition hover:bg-navy-deep"
           >
-            Contact Us
-          </a>
-          <p className="mt-4 text-sm text-muted">
-            Or email{" "}
-            <a href={`mailto:${collabEmail}`} className="text-gold hover:text-gold-bright">{collabEmail}</a>
-            {" · "}
-            <Link href="/inbox" className="text-gold hover:text-gold">message us on the site</Link>
+            Contact us
+          </OpenAskButton>
+          <p className="mx-auto mt-6 max-w-xl text-base leading-7 text-ink/80">
+            <OpenAskButton topic="Something else" className="font-serif text-xl italic text-ink underline decoration-gold/60 underline-offset-4 hover:text-gold">
+              Message us on the site
+            </OpenAskButton>
+            <span className="mx-3 text-muted" aria-hidden>
+              ·
+            </span>
+            or email{" "}
+            <a href={`mailto:${collabEmail}`} className="font-medium text-gold underline-offset-4 hover:underline">
+              {collabEmail}
+            </a>
           </p>
         </section>
       </article>

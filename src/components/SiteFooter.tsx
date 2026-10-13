@@ -1,5 +1,6 @@
 import Link from "next/link";
 import LogoMark from "@/components/LogoMark";
+import OpenAskButton from "@/components/OpenAskButton";
 import { collabEmail, facebookGroup, socials } from "@/lib/socials";
 
 // Footer, navy panel: brand column plus four link columns, then the disclaimer.
@@ -8,7 +9,7 @@ const columns: { title: string; links: { href: string; label: string; external?:
     title: "About",
     links: [
       { href: "/about", label: "About us" },
-      { href: "/about#contact", label: "Contact us" },
+      { href: "ask", label: "Contact us" },
       { href: "/terms", label: "Terms" },
     ],
   },
@@ -70,7 +71,11 @@ export default function SiteFooter() {
               <ul className="space-y-3">
                 {col.links.map((l) => (
                   <li key={l.href}>
-                    {l.external ? (
+                    {l.href === "ask" ? (
+                      <OpenAskButton topic="Something else" className={`${linkCls} text-left`}>
+                        {l.label}
+                      </OpenAskButton>
+                    ) : l.external ? (
                       <a href={l.href} target="_blank" rel="noreferrer" className={linkCls}>
                         {l.label}
                       </a>

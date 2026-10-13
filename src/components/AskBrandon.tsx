@@ -2,9 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/components/AuthProvider";
 
 // "Ask Brandon": a floating pill on every page that opens a short form. Questions are emailed to Brandon.
-const TOPICS = ["Buying advice", "A listing I found", "My collection", "Collab"];
+// Any "Contact us" / "Message us" button can open the same form with openAskBrandon() (see OpenAskButton).
+const TOPICS = ["Buying advice", "A listing I found", "My collection", "Collab", "Something else"];
+export const ASK_EVENT = "bb:ask";
 const HIDE_ON = [/^\/connect/, /^\/admin/, /^\/inbox/];
 
 export default function AskBrandon() {
@@ -13,6 +16,32 @@ export default function AskBrandon() {
   const [topic, setTopic] = useState(TOPICS[0]);
   const [state, setState] = useState<"idle" | "sending" | "sent">("idle");
   const [error, setError] = useState("");
+  const [contact, setContact] = useState(false); // opened from a Contact us / Message us button
+  const { user } = useAuth();
+  const knownName = (user?.user_metadata?.account_name as string | undefined) ?? "";
+  const knownEmail = user?.email ?? "";
+
+  useEffect(() => {
+    const onAsk = (e: Event) => {
+      const d = (e as CustomEvent<{ topic?: string; contact?: boolean }>).detail ?? {};
+      setContact(Boolean(d.contact));
+      if (d.topic && TOPICS.includes(d.topic)) setTopic(d.topic);
+      setError("");
+      setState((s) => (s === "sent" ? "idle" : s));
+      dialog.current?.showModal();
+    };
+    window.addEventListener(ASK_EVENT, onAsk);
+    // Links to /about#contact or any page with #message open the form straight away.
+    const fromHash = () => {
+      if (window.location.hash === "#contact" || window.location.hash === "#message")
+        window.dispatchEvent(new CustomEvent(ASK_EVENT, { detail: { contact: true, topic: "Something else" } }));
+    };
+    window.addEventListener("hashchange", fromHash);
+    return () => {
+      window.removeEventListener(ASK_EVENT, onAsk);
+      window.removeEventListener("hashchange", fromHash);
+    };
+  }, []);
 
   useEffect(() => {
     const d = dialog.current;
@@ -24,9 +53,17 @@ export default function AskBrandon() {
     return () => d.removeEventListener("click", close);
   }, []);
 
-  if (HIDE_ON.some((r) => r.test(path))) return null;
+  // Client-side page changes to a #contact / #message link open the form too.
+  useEffect(() => {
+    if (window.location.hash !== "#contact" && window.location.hash !== "#message") return;
+    const t = window.setTimeout(() => window.dispatchEvent(new CustomEvent(ASK_EVENT, { detail: { contact: true, topic: "Something else" } })), 400);
+    return () => window.clearTimeout(t);
+  }, [path]);
+
+  const hidePill = HIDE_ON.some((r) => r.test(path));
 
   const open = () => {
+    setContact(false);
     setError("");
     if (state === "sent") setState("idle");
     dialog.current?.showModal();
@@ -57,7 +94,7 @@ export default function AskBrandon() {
 
   return (
     <>
-      <button
+      {hidePill ? null : <button
         type="button"
         onClick={open}
         aria-haspopup="dialog"
@@ -68,7 +105,7 @@ export default function AskBrandon() {
           <span className="h-2 w-2 rounded-full bg-emerald-700" />
         </span>
         <span className="font-serif text-xl italic leading-none">Ask Brandon</span>
-      </button>
+      </button>}
 
       <dialog
         ref={dialog}
@@ -80,11 +117,21 @@ export default function AskBrandon() {
             ×
           </button>
           <span aria-hidden className="block h-px w-10 bg-gold" />
-          <p className="mt-4 text-[11px] uppercase tracking-[0.3em] text-gold">Ask Brandon</p>
+          <p className="mt-4 text-[11px] uppercase tracking-[0.3em] text-gold">{contact ? "Contact us" : "Ask Brandon"}</p>
           <h2 id="ask-title" className="mt-2 font-display text-4xl font-semibold uppercase leading-[1.05]">
-            A question about <span className="font-light text-gold">watches?</span>
+            {contact ? (
+              <>
+                Send us a <span className="font-light text-gold">message</span>
+              </>
+            ) : (
+              <>
+                A question about <span className="font-light text-gold">watches?</span>
+              </>
+            )}
           </h2>
-          <p className="mt-3 font-serif text-lg italic text-ink/80">Brandon reads every message and replies by email.</p>
+          <p className="mt-3 font-serif text-lg italic text-ink/80">
+            {contact ? "It goes straight to Brandon's Brands, and we reply by email." : "Brandon reads every message and replies by email."}
+          </p>
 
           {state === "sent" ? (
             <div className="mt-6 rounded border border-hairline bg-raised p-5" role="status">
@@ -99,11 +146,11 @@ export default function AskBrandon() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="text-[11px] uppercase tracking-[0.2em] text-muted">
                   Name
-                  <input name="name" required minLength={2} maxLength={80} autoComplete="name" className={field} />
+                  <input name="name" required minLength={2} maxLength={80} autoComplete="name" defaultValue={knownName} className={field} />
                 </label>
                 <label className="text-[11px] uppercase tracking-[0.2em] text-muted">
                   Email
-                  <input name="email" type="email" required maxLength={200} autoComplete="email" className={field} />
+                  <input name="email" type="email" required maxLength={200} autoComplete="email" defaultValue={knownEmail} className={field} />
                 </label>
               </div>
               <fieldset>
@@ -125,7 +172,7 @@ export default function AskBrandon() {
                 </div>
               </fieldset>
               <label className="text-[11px] uppercase tracking-[0.2em] text-muted">
-                Your question
+                {contact ? "Your message" : "Your question"}
                 <textarea name="question" required minLength={10} maxLength={2000} rows={4} className={`${field} resize-y normal-case tracking-normal`} />
               </label>
               <input name="website" tabIndex={-1} autoComplete="off" aria-hidden className="hidden" />
@@ -139,7 +186,7 @@ export default function AskBrandon() {
                 disabled={state === "sending"}
                 className="inline-flex min-h-12 items-center justify-center rounded-full bg-navy px-6 text-xs font-semibold uppercase tracking-[0.2em] text-on-navy transition hover:bg-navy-deep disabled:opacity-60"
               >
-                {state === "sending" ? "Sending…" : "Send to Brandon"}
+                {state === "sending" ? "Sending…" : contact ? "Send message" : "Send to Brandon"}
               </button>
             </form>
           )}

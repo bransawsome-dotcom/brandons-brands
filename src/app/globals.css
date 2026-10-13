@@ -202,8 +202,8 @@ body {
 @keyframes bb-vault-spin { from { transform: rotate(0deg); } to { transform: rotate(var(--bb-turn, 300deg)); } }
 @keyframes bb-vault-bolt { from { transform: translateX(0); } to { transform: translateX(-21px); } }
 @keyframes bb-vault-door { from { transform: rotateY(0deg); } to { transform: rotateY(-112deg); } }
-@keyframes bb-vault-fade { 0%, 80% { opacity: 1; } 100% { opacity: 0; } }
-.bb-vault { animation: bb-vault-fade 2s ease-in forwards; }
+@keyframes bb-vault-fade { 0%, 86% { opacity: 1; } 100% { opacity: 0; } }
+.bb-vault { animation: bb-vault-fade 3s ease-in forwards; }
 @keyframes bb-vault-clock {
   0% { transform: translate(0, 0) scale(0.2) rotate(0deg); opacity: 0; }
   12% { opacity: 1; }
@@ -320,3 +320,12 @@ dialog.bb-drawer[open] { animation: bb-drawer-in 0.32s cubic-bezier(0.22, 1, 0.3
   background-image: linear-gradient(135deg, color-mix(in srgb, var(--gold) 20%, var(--raised)) 0%, var(--raised) 46%, color-mix(in srgb, var(--gold) 10%, var(--surface)) 100%) !important;
   border-color: color-mix(in srgb, var(--gold) 32%, transparent) !important;
 }
+
+/* Vault: Brandon's logo spins out of the open door and comes toward the viewer. */
+@keyframes bb-vault-hero {
+  0% { opacity: 0; transform: translateZ(-600px) scale(0.12) rotateY(0deg) rotateZ(-20deg); }
+  15% { opacity: 1; }
+  70% { transform: translateZ(0) scale(1) rotateY(720deg) rotateZ(0deg); }
+  100% { opacity: 1; transform: translateZ(40px) scale(1.04) rotateY(720deg); }
+}
+.bb-vault-hero { opacity: 0; transform-style: preserve-3d; animation: bb-vault-hero 1.35s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }

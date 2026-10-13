@@ -5,6 +5,7 @@ import { clearGuestStorageData, loadCollectionData, loadWishlistData } from "@/l
 import { useRequireAuth } from "@/components/AuthProvider";
 import TextMessageSettings from "@/components/TextMessageSettings";
 import PriceAlertEmailSetting from "@/components/PriceAlertEmailSetting";
+import FavoriteBrandsEditor from "@/components/FavoriteBrandsEditor";
 import ChangePassword from "@/components/ChangePassword";
 import { forumName, saveForumName } from "@/lib/forum";
 import { accountName, saveAccountName } from "@/lib/account";
@@ -41,7 +42,7 @@ export default function AccountPage() {
 
   return (
     <div className="mx-auto w-full max-w-7xl px-0 py-4 sm:px-6 sm:py-14 lg:px-16">
-      <div className="grid gap-6 sm:gap-8 lg:grid-cols-[320px_1fr]">
+      <div className="grid grid-cols-1 gap-6 break-words sm:gap-8 lg:grid-cols-[320px_1fr] [&>*]:min-w-0">
         <section>
           <div className="flex flex-col items-center gap-5 text-center sm:gap-6">
             <div className="flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-gold/10 via-surface to-surface shadow-card">
@@ -122,6 +123,7 @@ export default function AccountPage() {
                   Logout
                 </button>
               </div>
+              {registered ? <FavoriteBrandsEditor /> : null}
               <PriceAlertEmailSetting />
               <PriceAlertEmailSetting
                 metaKey="offer_email"

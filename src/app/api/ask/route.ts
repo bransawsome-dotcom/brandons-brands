@@ -5,7 +5,7 @@ import { SITE_URL } from "@/lib/site";
 export const dynamic = "force-dynamic";
 
 const EMAIL_RE = /^[^\s@<>()",;:]+@[^\s@<>()",;:]+\.[a-z]{2,}$/i;
-const ASK_TOPICS = ["Buying advice", "A listing I found", "My collection", "Collab"] as const;
+const ASK_TOPICS = ["Buying advice", "A listing I found", "My collection", "Collab", "Something else"] as const;
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 
 // A light per-server limit: 3 questions per email address every 10 minutes.
