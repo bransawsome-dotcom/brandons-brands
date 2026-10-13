@@ -75,7 +75,7 @@ export default function ValueHistory({ userId, watches, className = "" }: { user
   const since = series[0] ? new Date(`${series[0].day}T12:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "";
 
   return (
-    <section className={`rounded-md border border-hairline bg-raised p-6 shadow-[0_10px_30px_rgba(27,42,65,0.08)] ${className}`}>
+    <section className={`rounded-md border border-hairline bg-raised p-6 shadow-card ${className}`}>
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <p className="text-sm uppercase tracking-[0.25em] text-muted">Collection value over time</p>
@@ -94,7 +94,7 @@ export default function ValueHistory({ userId, watches, className = "" }: { user
           <circle cx={x(series.length - 1)} cy={y(series[series.length - 1].total)} r="5" fill="#D9A43A" />
         </svg>
       ) : (
-        <p className="mt-4 rounded border border-hairline bg-surface p-4 text-sm text-ink/80">
+        <p className="mt-4 rounded border border-hairline bg-raised shadow-card p-4 text-sm text-ink/80">
           Your chart starts today. Values refresh every day, so your collection&apos;s value trend will build here over the coming weeks.
         </p>
       )}
@@ -103,7 +103,7 @@ export default function ValueHistory({ userId, watches, className = "" }: { user
           <p className="text-xs uppercase tracking-[0.2em] text-muted">Biggest moves</p>
           <ul className="mt-2 grid gap-2 sm:grid-cols-2">
             {movers.map((m) => (
-              <li key={m.name} className="flex items-center justify-between gap-3 rounded border border-hairline bg-surface px-4 py-2 text-sm">
+              <li key={m.name} className="flex items-center justify-between gap-3 rounded border border-hairline bg-raised px-4 py-2 text-sm">
                 <span className="truncate text-ink">{m.name}</span>
                 <span className={`shrink-0 font-semibold ${m.change >= 0 ? "text-emerald-800" : "text-rose-700"}`}>{pctText(m.change)}</span>
               </li>

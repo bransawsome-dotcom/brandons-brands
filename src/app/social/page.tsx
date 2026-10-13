@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import RecentVideoCards from "@/components/RecentVideoCards";
-import { collabEmail, facebookGroup, socials } from "@/lib/socials";
+import CollabNote from "@/components/CollabNote";
+import { facebookGroup, socials } from "@/lib/socials";
 import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
   description:
     "Follow Brandon's Brands for luxury and microbrand watch reviews, unboxings and new-release first looks on Instagram, TikTok, YouTube and Facebook.",
   alternates: { canonical: "/social" },
-  openGraph: { type: "website", url: "/social", title: "Brandon's Brands on every platform", images: ["/og-image.png?v=2"] },
+  openGraph: { type: "website", url: "/social", title: "Brandon's Brands on every platform", images: ["/og-image.png?v=3"] },
 };
 
 export default function SocialMediaPage() {
@@ -50,9 +51,9 @@ export default function SocialMediaPage() {
         <h2 id="platforms" className="font-display text-3xl font-semibold uppercase text-ink sm:text-4xl">
           Follow <span className="font-light text-gold">along</span>
         </h2>
-        <div className="mt-6 grid gap-px overflow-hidden rounded-md border border-hairline bg-hairline md:grid-cols-2">
+        <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2 [&>*]:min-w-0">
           {socials.map((s) => (
-            <article key={s.name} className="flex flex-col bg-raised p-6 sm:p-8">
+            <article key={s.name} className="flex flex-col rounded-md border p-6 shadow-card bb-sheen sm:p-8">
               <p className="text-[11px] uppercase tracking-[0.25em] text-gold">{s.name}</p>
               <h3 className="mt-2 font-display text-2xl font-semibold text-ink">{s.handle}</h3>
               <p className="mt-3 flex-1 text-sm leading-7 text-ink/80">{s.blurb}</p>
@@ -66,7 +67,7 @@ export default function SocialMediaPage() {
               </a>
             </article>
           ))}
-          <article className="flex flex-col bg-surface p-6 sm:p-8 md:col-span-2">
+          <article className="flex flex-col rounded-md border p-6 shadow-card bb-sheen sm:p-8 md:col-span-2">
             <p className="text-[11px] uppercase tracking-[0.25em] text-gold">Facebook group</p>
             <h3 className="mt-2 font-display text-2xl font-semibold text-ink">{facebookGroup.name}</h3>
             <p className="mt-3 max-w-2xl flex-1 text-sm leading-7 text-ink/80">{facebookGroup.blurb}</p>
@@ -82,18 +83,7 @@ export default function SocialMediaPage() {
         </div>
       </section>
 
-      <section className="mt-14 border-t border-hairline pt-10 text-center">
-        <p className="text-xs uppercase tracking-[0.3em] text-gold">Work with Brandon&apos;s Brands</p>
-        <p className="mx-auto mt-4 max-w-2xl font-serif text-2xl italic leading-9 text-ink">
-          Brands, collectors and fellow creators: reach out about collabs, reviews and events.
-        </p>
-        <a
-          href={`mailto:${collabEmail}`}
-          className="mt-6 inline-flex min-h-11 items-center rounded-full bg-navy px-6 text-xs font-semibold uppercase tracking-[0.18em] text-on-navy transition hover:bg-navy-deep"
-        >
-          Email {collabEmail}
-        </a>
-      </section>
+      <CollabNote className="mt-14" />
     </div>
   );
 }

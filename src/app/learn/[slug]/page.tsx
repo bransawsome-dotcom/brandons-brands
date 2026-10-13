@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: `${g.title} | Brandon's Brands`,
     description: g.description,
     alternates: { canonical: path },
-    openGraph: { type: "article", url: path, title: g.title, description: g.description, images: ["/og-image.png?v=2"] },
+    openGraph: { type: "article", url: path, title: g.title, description: g.description, images: ["/og-image.png?v=3"] },
     twitter: { card: "summary_large_image", title: g.title, description: g.description },
   };
 }
@@ -71,7 +71,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
         </Link>
       </nav>
 
-      <article className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-10">
+      <article>
         <p className="text-xs uppercase tracking-[0.35em] text-gold">{g.category}</p>
         <h1 className="mt-3 text-3xl font-semibold leading-tight tracking-[-0.02em] text-ink sm:text-4xl">{g.title}</h1>
         <p className="mt-4 text-lg leading-8 text-ink/80">{g.description}</p>
@@ -102,7 +102,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
         ))}
 
         {g.related?.length ? (
-          <div className="mt-10 rounded border border-gold/25 bg-gold/10 p-5">
+          <div className="mt-10 rounded border border-gold/40 bg-raised shadow-card p-5">
             <p className="text-xs uppercase tracking-[0.25em] text-gold">Keep exploring</p>
             <ul className="mt-3 space-y-2">
               {g.related.map((r) => (

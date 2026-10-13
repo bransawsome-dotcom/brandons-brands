@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import Glyph from "@/components/Glyph";
 
 export type CarouselWatch = { id: string; brand: string; model: string; image: string; href: string };
 
@@ -131,7 +132,7 @@ export default function WatchCarousel({ watches, className = "" }: { watches: Ca
               onKeyDown={(e) => {
                 if (e.key === "Enter") router.push(w.href);
               }}
-              className="absolute inset-0 flex flex-col overflow-hidden rounded border border-gold/30 bg-raised shadow-[0_10px_30px_rgba(27,42,65,0.08)] outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              className="absolute inset-0 flex flex-col overflow-hidden rounded border border-gold/30 bg-raised shadow-card outline-none focus-visible:ring-2 focus-visible:ring-gold"
               style={{ transform: `rotateY(${i * step}deg) translateZ(${size.radius}px)`, backfaceVisibility: "hidden" }}
             >
               <div className="bb-shine relative min-h-0 flex-1 overflow-hidden bg-surface">
@@ -152,7 +153,10 @@ export default function WatchCarousel({ watches, className = "" }: { watches: Ca
           ‹
         </button>
         <p>
-          <span className="text-gold">⭐ Brandon&apos;s Favorites</span> · drag to spin, tap a watch to see it
+          <span className="text-gold">
+            <Glyph e="⭐" size={12} className="mr-1" />
+            Brandon&apos;s Favorites
+          </span> · drag to spin, tap a watch to see it
         </p>
         <button type="button" onClick={() => nudge(-1)} aria-label="Spin right" className="flex h-8 w-8 items-center justify-center rounded-full border border-hairline text-base text-ink hover:border-gold/60 hover:text-gold">
           ›

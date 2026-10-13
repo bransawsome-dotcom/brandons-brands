@@ -1,13 +1,14 @@
 import Link from "next/link";
+import Glyph from "@/components/Glyph";
 
 // "More from Brandon" panel: points readers to Brandon's reviews and the rest of the site.
 // Social media buttons live in the site footer on every page, so they aren't repeated here.
 // Used under forum discussions, guides, search and the favorites gallery.
 const LINKS = [
-  { href: "/favorites", label: "⭐ Favorites" },
-  { href: "/learn", label: "📚 Watch guides" },
-  { href: "/blog", label: "📝 Blog" },
-  { href: "/forum", label: "💬 Forum" },
+  { href: "/favorites", icon: "⭐", label: "Favorites" },
+  { href: "/learn", icon: "📚", label: "Watch guides" },
+  { href: "/blog", icon: "📝", label: "Blog" },
+  { href: "/forum", icon: "💬", label: "Forum" },
 ];
 
 export default function FollowBrandon({ className = "" }: { className?: string }) {
@@ -26,8 +27,9 @@ export default function FollowBrandon({ className = "" }: { className?: string }
           <li key={l.href}>
             <Link
               href={l.href}
-              className="flex w-full justify-center rounded-full border border-hairline bg-surface px-3 py-2 text-sm font-semibold text-ink transition hover:bg-surface"
+              className="flex w-full items-center justify-center gap-1.5 rounded-full border border-hairline bg-surface px-3 py-2 text-sm font-semibold text-ink transition hover:bg-surface"
             >
+              <Glyph e={l.icon} className="text-gold" />
               {l.label}
             </Link>
           </li>

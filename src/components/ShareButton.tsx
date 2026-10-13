@@ -120,7 +120,7 @@ export default function ShareButton({ kind }: { kind: ShareKind }) {
       </button>
 
       {open ? (
-        <div className="absolute right-0 z-40 mt-2 w-[min(24rem,calc(100vw-2rem))] rounded border border-hairline bg-raised p-4 text-left text-sm shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl">
+        <div className="absolute right-0 z-40 mt-2 w-[min(24rem,calc(100vw-2rem))] rounded border border-hairline bg-raised p-4 text-left text-sm shadow-card">
           <p className="font-semibold text-ink">Share your {label.noun}</p>
           {!userId ? (
             <p className="mt-2 text-ink/80">

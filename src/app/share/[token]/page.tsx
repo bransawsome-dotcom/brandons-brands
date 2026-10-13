@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
+import Glyph from "@/components/Glyph";
 
 // Read-only page for a shared collection or wishlist. Anyone with the link can view it.
 
@@ -122,7 +123,7 @@ export default async function SharedPage({ params }: { params: Promise<{ token: 
 
   return (
     <div className="mx-auto w-full max-w-7xl px-3 py-8 sm:px-6 sm:py-14 lg:px-16">
-      <section className="rounded-md border border-hairline bg-surface p-6 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8">
+      <section>
         <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.35em] text-gold">Shared {isCollection ? "collection" : "wishlist"}</p>
@@ -132,11 +133,11 @@ export default async function SharedPage({ params }: { params: Promise<{ token: 
             <p className="mt-3 text-sm text-muted">Read-only view shared from Brandon&apos;s Brands.</p>
           </div>
           <dl className="grid grid-cols-2 gap-3 text-center sm:min-w-[260px]">
-            <div className="rounded border border-hairline bg-surface px-3 py-3">
+            <div className="rounded border border-hairline bg-raised px-3 py-3">
               <dt className="text-[11px] uppercase tracking-[0.18em] text-muted">Watches</dt>
               <dd className="mt-1 text-xl font-semibold text-ink">{shared.items.length}</dd>
             </div>
-            <div className="rounded border border-hairline bg-surface px-3 py-3">
+            <div className="rounded border border-hairline bg-raised px-3 py-3">
               <dt className="text-[11px] uppercase tracking-[0.18em] text-muted">{isCollection ? "Est. value" : "Market value"}</dt>
               <dd className="mt-1 text-xl font-semibold text-gold">{total ? money(total) : "—"}</dd>
             </div>
@@ -169,7 +170,7 @@ export default async function SharedPage({ params }: { params: Promise<{ token: 
                   ...(shared.show_paid ? [{ label: "Target", value: money(wish.target_price) }] : []),
                 ];
             return (
-              <li key={item.id} className="flex flex-col overflow-hidden rounded-md border border-hairline bg-surface shadow-[0_10px_30px_rgba(27,42,65,0.08)]">
+              <li key={item.id} className="flex flex-col overflow-hidden rounded-md border border-hairline bg-raised shadow-card">
                 {item.image_url ? (
                   <div className="flex h-56 items-center justify-center bg-surface p-4">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -199,7 +200,7 @@ export default async function SharedPage({ params }: { params: Promise<{ token: 
                         <span className="rounded-full border border-hairline bg-surface px-2.5 py-0.5 text-[11px] text-ink">{w.condition}</span>
                       ) : null}
                       {provenance(w).map((p) => (
-                        <span key={p} className="rounded-full border border-emerald-400/30 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-800">
+                        <span key={p} className="rounded-full border border-gold/50 bg-transparent px-2.5 py-0.5 text-[11px] font-semibold text-gold">
                           ✓ {p}
                         </span>
                       ))}
@@ -208,7 +209,7 @@ export default async function SharedPage({ params }: { params: Promise<{ token: 
 
                   <dl className={`mt-4 grid gap-2 text-center ${stats.length === 3 ? "grid-cols-3" : "grid-cols-2"}`}>
                     {stats.map((s) => (
-                      <div key={s.label} className="rounded border border-hairline bg-surface p-2">
+                      <div key={s.label} className="rounded border border-hairline bg-raised p-2">
                         <dt className="text-[10px] uppercase tracking-[0.15em] text-muted">{s.label}</dt>
                         <dd className={`mt-1 font-semibold ${s.gold ? "text-gold" : "text-ink"}`}>{s.value ?? "—"}</dd>
                       </div>
@@ -217,7 +218,10 @@ export default async function SharedPage({ params }: { params: Promise<{ token: 
                   {range ? <p className="mt-2 text-xs text-muted">Market range {range}</p> : null}
                   {specs ? <p className="mt-3 text-sm text-ink/80">{specs}</p> : null}
                   {isCollection && shared.show_paid && w.purchase_date ? <p className="mt-1 text-xs text-muted">Bought {w.purchase_date}</p> : null}
-                  {shared.show_notes && item.notes ? <p className="mt-3 text-sm leading-6 text-ink">📝 {item.notes}</p> : null}
+                  {shared.show_notes && item.notes ? <p className="mt-3 text-sm leading-6 text-ink">
+                      <Glyph e="📝" className="mr-1.5 text-gold" />
+                      {item.notes}
+                    </p> : null}
                 </div>
               </li>
             );
@@ -225,7 +229,7 @@ export default async function SharedPage({ params }: { params: Promise<{ token: 
         </ul>
       )}
 
-      <div className="mt-10 rounded-md border border-gold/30 bg-gold/5 p-6 text-center">
+      <div className="mt-10 rounded-md border border-gold/40 bg-raised shadow-card p-6 text-center">
         <p className="text-lg font-semibold text-ink">Track your own watches</p>
         <p className="mt-1 text-sm text-ink/80">
           Build your collection and wishlist with photos, values and box &amp; papers, then share it with one link.

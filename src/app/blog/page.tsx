@@ -17,7 +17,7 @@ export default async function BlogPage() {
   const blogPosts = await loadAllPosts();
   return (
     <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-16">
-      <div className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8">
+      <div>
         <div className="mb-10">
           <p className="text-sm uppercase tracking-[0.3em] text-gold">The Journal</p>
           <h1 className="mt-3 text-4xl font-semibold tracking-[-0.03em] text-ink sm:text-5xl">
@@ -30,7 +30,7 @@ export default async function BlogPage() {
         </div>
 
         {blogPosts.length === 0 ? (
-          <div className="rounded-md border border-hairline bg-surface p-6 text-ink/80">
+          <div className="rounded-md border border-hairline bg-raised shadow-card p-6 text-ink/80 bb-sheen">
             <p className="text-sm uppercase tracking-[0.3em] text-gold">Coming soon</p>
             <p className="mt-3 text-base leading-7">The first post is on its way. Check back soon.</p>
           </div>
@@ -39,7 +39,7 @@ export default async function BlogPage() {
             {blogPosts.map((post) => (
               <article
                 key={post.slug}
-                className="flex flex-col rounded-md border border-hairline bg-raised p-6 shadow-[0_10px_30px_rgba(27,42,65,0.08)] transition hover:-translate-y-1"
+                className="flex flex-col rounded-md border border-hairline bg-raised p-6 shadow-card transition hover:-translate-y-1 bb-sheen"
               >
                 <p className="text-xs uppercase tracking-[0.25em] text-gold">
                   {post.category} · {formatPostDate(post.date)}

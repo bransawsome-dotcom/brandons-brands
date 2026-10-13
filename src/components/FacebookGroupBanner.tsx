@@ -3,7 +3,7 @@ import { facebookGroup } from "@/lib/socials";
 // "Join the Facebook group" banner, in the site's dark luxury style.
 export default function FacebookGroupBanner({ className = "" }: { className?: string }) {
   return (
-    <section aria-labelledby="fb-group" className={`border border-hairline bg-surface px-6 py-9 sm:px-10 ${className}`}>
+    <section aria-labelledby="fb-group" className={`rounded-md border px-6 py-9 shadow-card bb-sheen sm:px-10 ${className}`}>
       <div className="flex flex-col items-start gap-6 md:flex-row md:items-center">
         <div className="min-w-0 flex-1">
           <p className="text-[11px] uppercase tracking-[0.2em] text-gold">Facebook group · 6,600+ collectors</p>

@@ -3,13 +3,15 @@
 import { useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import supabase from "@/lib/supabaseClient";
+import Glyph from "@/components/Glyph";
 
 // Account setting: email me when a wishlist price alert finds a match (on by default).
 export default function PriceAlertEmailSetting({
   metaKey = "price_alert_email",
-  title = "🏷️ Price alert emails",
+  title = "Price alert emails",
+  icon = "🏷️",
   description = "When a wishlist watch is listed at or below your target price, it always shows in your Inbox. Also email me at",
-}: { metaKey?: string; title?: string; description?: string } = {}) {
+}: { metaKey?: string; title?: string; icon?: string; description?: string } = {}) {
   const { user, guestMode } = useAuth();
   const savedOn = (user?.user_metadata as Record<string, unknown> | undefined)?.[metaKey] !== false;
   const [override, setOverride] = useState<boolean | null>(null);
@@ -31,10 +33,12 @@ export default function PriceAlertEmailSetting({
   };
 
   return (
-    <div className="rounded-md border border-hairline bg-surface p-4">
+    <div className="rounded-md border border-hairline bg-raised shadow-card p-4">
       <div className="flex items-center justify-between gap-4">
         <div className="min-w-0">
-          <p className="font-medium text-ink">{title}</p>
+          <p className="flex items-center gap-1.5 font-medium text-ink">
+            <Glyph e={icon} className="text-gold" /> {title}
+          </p>
           <p className="mt-1 text-xs leading-5 text-muted">
             {description}{" "}
             <span className="text-ink/80">{user.email}</span>.
@@ -44,7 +48,7 @@ export default function PriceAlertEmailSetting({
           type="button"
           role="switch"
           aria-checked={on}
-          aria-label={title.replace(/^\S+\s/, "")}
+          aria-label={title}
           disabled={saving}
           onClick={toggle}
           className={`relative h-7 w-12 shrink-0 rounded-full transition disabled:opacity-50 ${on ? "bg-gold" : "bg-hairline"}`}

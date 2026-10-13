@@ -131,7 +131,7 @@ export default function TextMessageSettings() {
         />
       </label>
 
-      <label className="flex cursor-pointer items-start gap-3 rounded border border-hairline bg-surface p-3">
+      <label className="flex cursor-pointer items-start gap-3 rounded border border-hairline bg-raised shadow-card p-3">
         <input type="checkbox" checked={optIn} onChange={(e) => setOptIn(e.target.checked)} className="mt-1 h-4 w-4 shrink-0 accent-gold" />
         <span className="text-xs leading-5 text-ink/80">
           <span className="block text-sm font-semibold text-ink">Yes, text me notifications</span>

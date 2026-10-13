@@ -106,7 +106,7 @@ export default function SignupPage() {
   return (
     <div className="min-h-screen bg-surface text-ink">
       <main className="mx-auto flex min-h-screen w-full max-w-3xl flex-col justify-center px-6 py-16 sm:px-10 lg:px-16">
-        <div className="rounded-md border border-hairline bg-surface p-10 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl">
+        <div className="rounded-md border border-hairline bg-raised shadow-card p-10 shadow-card">
           <div className="mb-8 space-y-4">
             <p className="text-sm uppercase tracking-[0.35em] text-gold">Create Account</p>
             <h1 className="text-3xl font-semibold text-ink sm:text-4xl">Join Brandon&apos;s Brands</h1>

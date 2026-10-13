@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import supabase from "@/lib/supabaseClient";
 import { isModerator } from "@/lib/forum";
+import Glyph from "@/components/Glyph";
 import { eventsSinceIso, eventWhen, splitEvents, type SiteEvent } from "@/lib/events";
 
 const input =
@@ -68,7 +69,7 @@ export default function EventsView({ initial }: { initial: SiteEvent[] }) {
   const { upcoming, past } = splitEvents(events);
 
   const card = (e: SiteEvent, isPast: boolean) => (
-    <li key={e.id} id={e.id} className="scroll-mt-24 rounded-md border border-hairline bg-surface p-5">
+    <li key={e.id} id={e.id} className="scroll-mt-24 rounded-md border border-hairline bg-raised shadow-card p-5 bb-sheen">
       <p className="text-xs uppercase tracking-[0.2em] text-gold">{eventWhen(e)}</p>
       <h2 className="mt-1 text-xl font-semibold text-ink">{e.title}</h2>
       <p className="mt-1 text-sm text-ink/80">{e.online ? "Online" : e.location ?? "New Jersey"}</p>
@@ -85,8 +86,8 @@ export default function EventsView({ initial }: { initial: SiteEvent[] }) {
           </a>
         ) : null}
         {!isPast ? (
-          <a href={`/events/${e.id}/ics`} className="rounded-full border border-hairline px-3 py-1.5 text-ink hover:bg-surface">
-            📅 Add to calendar
+          <a href={`/events/${e.id}/ics`} className="inline-flex items-center gap-1.5 rounded-full border border-hairline px-3 py-1.5 text-ink hover:bg-surface">
+            <Glyph e="📅" size={14} className="text-gold" /> Add to calendar
           </a>
         ) : null}
         {mod ? (
@@ -101,7 +102,7 @@ export default function EventsView({ initial }: { initial: SiteEvent[] }) {
   return (
     <>
       {mod ? (
-        <form onSubmit={add} className="mt-6 grid gap-3 rounded-md border border-gold/30 bg-gold/5 p-5">
+        <form onSubmit={add} className="mt-6 grid gap-3 rounded-md border border-gold/40 bg-raised shadow-card p-5 bb-sheen">
           <p className="text-sm font-semibold text-gold">Add an event (only moderators see this)</p>
           <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required maxLength={120} className={input} placeholder="Title, e.g. Windup Watch Fair NYC" />
           <label className="flex items-center gap-2 text-sm text-ink/80">
@@ -135,7 +136,7 @@ export default function EventsView({ initial }: { initial: SiteEvent[] }) {
       {upcoming.length ? (
         <ul className="mt-3 grid gap-4">{upcoming.map((e) => card(e, false))}</ul>
       ) : (
-        <p className="mt-3 rounded-md border border-hairline bg-surface p-5 text-sm text-ink/80">
+        <p className="mt-3 rounded-md border border-hairline bg-raised shadow-card p-5 text-sm text-ink/80 bb-sheen">
           No upcoming events listed right now. Sign up for the newsletter below to hear about the next watch fair.
         </p>
       )}

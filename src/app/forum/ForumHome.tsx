@@ -9,6 +9,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import ForumIdentity from "@/components/ForumIdentity";
 import SalesDisclaimer from "@/components/SalesDisclaimer";
 import ForumSafety from "@/components/ForumSafety";
+import Glyph, { glyphName } from "@/components/Glyph";
 import { listFavorites, setFavoriteNotify, setFollowSubject, type Favorite } from "@/lib/inbox";
 import { NEW_SUBJECT, SubjectSelect, useSubjectTree } from "@/components/ForumSubjects";
 import { useAuth } from "@/components/AuthProvider";
@@ -259,7 +260,7 @@ export default function ForumHome() {
         }`}
       >
         <span className="min-w-0">
-          <span className="mr-2">{s.icon}</span>
+          <Glyph e={s.icon} className="mr-2 text-gold" />
           {s.name}
         </span>
         <span className="shrink-0 rounded-full bg-surface px-2 py-0.5 text-xs text-muted">{count}</span>
@@ -269,25 +270,47 @@ export default function ForumHome() {
 
   return (
     <div className="mx-auto w-full max-w-7xl px-3 py-8 sm:px-6 sm:py-14 lg:px-16">
-      <div className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <span aria-hidden className="block h-px w-10 bg-gold" />
-            <p className="mt-4 text-xs uppercase tracking-[0.3em] text-gold">Community Forum</p>
-            <h1 className="mt-3 font-display text-5xl font-semibold uppercase leading-[1.05] text-ink sm:text-6xl">
-              Talk <span className="font-light text-gold">watches.</span>
-            </h1>
-            <p className="mt-4 max-w-2xl text-sm leading-6 text-ink/80 sm:text-base">
-              Ask questions, share wrist shots, and swap buying advice with fellow collectors. Pick a topic or start a new discussion.
-            </p>
-          </div>
+      <div>
+        <div>
+          <span aria-hidden className="block h-px w-10 bg-gold" />
+          <p className="mt-4 text-xs uppercase tracking-[0.3em] text-gold">Forum</p>
+          <h1 className="mt-3 font-display text-5xl font-semibold uppercase leading-[1.05] text-ink sm:text-6xl">
+            The <span className="font-serif text-[1.15em] font-normal normal-case italic tracking-normal text-gold">Salon.</span>
+          </h1>
+          <p className="mt-4 max-w-2xl text-base leading-7 text-ink/80 sm:text-lg">
+            Questions, finds, and watches for sale or wanted. Start a conversation or join one.
+          </p>
           <button
             type="button"
             onClick={() => openComposer()}
-            className="shrink-0 rounded-full bg-navy px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-on-navy shadow-[0_10px_30px_rgba(27,42,65,0.08)] transition hover:-translate-y-0.5 hover:bg-navy-deep"
+            className="mt-6 inline-flex min-h-12 items-center bg-navy px-8 text-xs font-semibold uppercase tracking-[0.25em] text-on-navy shadow-card transition hover:bg-navy-deep"
           >
-            + New post
+            + Start a thread
           </button>
+          <nav aria-label="Filter threads" className="mt-8 flex flex-wrap gap-2.5">
+            {[
+              { label: "All", slug: "" },
+              { label: "Question", slug: "general" },
+              { label: "Find", slug: "new-releases" },
+              { label: "For sale", slug: "for-sale" },
+              { label: "Wanted", slug: "seeking-to-buy" },
+            ].map((c) => {
+              const on = subject === c.slug;
+              return (
+                <Link
+                  key={c.label}
+                  href={c.slug ? `/forum?subject=${c.slug}` : "/forum"}
+                  scroll={false}
+                  aria-current={on ? "page" : undefined}
+                  className={`inline-flex min-h-10 items-center rounded-full border px-5 text-[11px] font-semibold uppercase tracking-[0.22em] transition ${
+                    on ? "border-gold bg-gold text-on-gold" : "border-hairline-strong text-ink/80 hover:border-navy hover:text-ink"
+                  }`}
+                >
+                  {c.label}
+                </Link>
+              );
+            })}
+          </nav>
         </div>
 
         <GettingStarted onNewPost={() => openComposer()} />
@@ -297,7 +320,7 @@ export default function ForumHome() {
           <div id="new-post" className="mt-6 scroll-mt-6">
             <ForumIdentity action="start a discussion">
               {(authorName) => (
-                <form onSubmit={(e) => handlePost(e, authorName)} className="grid gap-4 rounded-md border border-hairline bg-surface p-5">
+                <form onSubmit={(e) => handlePost(e, authorName)} className="grid gap-4 rounded-md border border-hairline bg-raised shadow-card p-5 bb-sheen">
                   <div className="flex items-center justify-between gap-3">
                     <p className="text-xs uppercase tracking-[0.3em] text-gold">New discussion</p>
                     <p className="text-xs text-muted">
@@ -317,7 +340,7 @@ export default function ForumHome() {
                   </label>
 
                   {draft.subject === NEW_SUBJECT ? (
-                    <div className="grid gap-3 rounded border border-gold/30 bg-gold/5 p-4">
+                    <div className="grid gap-3 rounded border border-gold/40 bg-raised shadow-card p-4 bb-sheen">
                       <p className="text-sm font-semibold text-ink">Add a new topic or sub-folder</p>
                       <div className="flex flex-wrap gap-2">
                         {[
@@ -343,7 +366,7 @@ export default function ForumHome() {
                           <select value={newSubject.parent} onChange={(e) => setNewSubject({ ...newSubject, parent: e.target.value })} className={input}>
                             {tree.top.map((t) => (
                               <option key={t.slug} value={t.slug}>
-                                {t.icon} {t.name}
+                                {t.name}
                               </option>
                             ))}
                           </select>
@@ -435,7 +458,7 @@ export default function ForumHome() {
             onClick={() => setMenuOpen((o) => !o)}
             aria-expanded={menuOpen}
             aria-controls="forum-topics"
-            className="flex w-full items-center justify-between gap-3 rounded border border-gold/30 bg-gold/10 px-4 py-3 text-left lg:hidden"
+            className="flex w-full items-center justify-between gap-3 rounded border border-gold/40 bg-raised shadow-card px-4 py-3 text-left lg:hidden"
           >
             <span className="min-w-0">
               <span className="block text-[11px] uppercase tracking-[0.25em] text-gold">Topics</span>
@@ -459,7 +482,7 @@ export default function ForumHome() {
                     return (
                       <div key={f.subject} className="flex w-full items-center gap-1">
                         <div className="min-w-0 flex-1 [&>button]:w-full">
-                          {subjectButton({ slug: f.subject, name: d.node.name, icon: d.node.folder ? "📁" : d.node.icon })}
+                          {subjectButton({ slug: f.subject, name: d.node.name, icon: d.node.folder ? "folder" : d.node.icon })}
                         </div>
                         <button
                           type="button"
@@ -469,7 +492,7 @@ export default function ForumHome() {
                           aria-label={`${f.notify ? "Turn off" : "Turn on"} alerts for ${d.node.name}`}
                           className={`shrink-0 rounded-full px-2 py-2 text-sm transition ${f.notify ? "text-gold" : "text-muted"} hover:bg-surface`}
                         >
-                          {f.notify ? "🔔" : "🔕"}
+                          <Glyph e={f.notify ? "🔔" : "🔕"} />
                         </button>
                       </div>
                     );
@@ -479,10 +502,10 @@ export default function ForumHome() {
             ) : null}
             <p className="mb-3 px-1 text-xs uppercase tracking-[0.3em] text-gold">Topics</p>
             <nav className="flex flex-col gap-2" aria-label="Forum topics">
-              {subjectButton({ slug: "", name: "All discussions", icon: "🗂️" })}
+              {subjectButton({ slug: "", name: "All discussions", icon: "folder" })}
               {tree.top.map((s) => (
                 <div key={s.slug} className="flex flex-col gap-2">
-                  {subjectButton({ ...s, icon: s.folder || tree.children.get(s.slug)?.length ? `${openFolder === s.slug ? "📂" : "📁"}` : s.icon })}
+                  {subjectButton({ ...s, icon: s.folder || tree.children.get(s.slug)?.length ? `${openFolder === s.slug ? "folder" : "folder"}` : s.icon })}
                   {/* The open topic shows its sub-folders right under it. */}
                   {openFolder === s.slug ? (
                     <div className="flex flex-col gap-2">
@@ -537,7 +560,7 @@ export default function ForumHome() {
                 <h2 className="text-2xl font-semibold text-ink">
                   {current ? (
                     <>
-                      <span className="mr-2">{current.node.icon}</span>
+                      <Glyph e={current.node.icon} size={22} className="mr-2 text-gold" />
                       {current.node.name}
                     </>
                   ) : (
@@ -562,7 +585,7 @@ export default function ForumHome() {
               {subject === "for-sale" || subject === "seeking-to-buy" ? <SalesDisclaimer className="mt-3" /> : null}
               {subject === FAVORITES_SUBJECT ? (
                 <Link href="/favorites" className="mt-1 inline-block text-sm font-semibold text-gold hover:text-gold-bright">
-                  ⭐ See the Brandon&apos;s Favorites gallery →
+                  <Glyph name="star" className="mr-1" /> See the Brandon&apos;s Favorites gallery →
                 </Link>
               ) : null}
             </div>
@@ -593,7 +616,7 @@ export default function ForumHome() {
           ) : null}
 
           {!addingTo && openFolder === CLUBS_FOLDER && subject === CLUBS_FOLDER && !(tree.children.get(CLUBS_FOLDER) ?? []).length ? (
-            <div className="mb-4 rounded-md border border-gold/30 bg-gold/5 p-5 text-sm text-ink/80">
+            <div className="mb-4 rounded-md border border-gold/40 bg-raised shadow-card p-5 text-sm text-ink/80 bb-sheen">
               <p className="font-semibold text-ink">No clubs yet.</p>
               <p className="mt-1">Belong to a watch club or meetup group? Add it as its own folder here so members can find events and chat.</p>
               <button type="button" onClick={() => startAddSubfolder(CLUBS_FOLDER)} className="mt-3 rounded-full bg-navy px-4 py-2 text-xs font-semibold text-on-navy hover:bg-navy-deep">
@@ -603,7 +626,7 @@ export default function ForumHome() {
           ) : null}
 
           {subject === FAVORITES_SUBJECT && favWatches.length ? (
-            <div className="mb-5 rounded-md border border-gold/25 bg-gold/10 p-4 sm:p-5">
+            <div className="mb-5 rounded-md border border-gold/40 bg-raised shadow-card p-4 sm:p-5 bb-sheen">
               <div className="mb-3 flex items-center justify-between gap-3">
                 <p className="text-xs uppercase tracking-[0.25em] text-gold">From the favorites gallery</p>
                 <Link href="/favorites" className="shrink-0 text-xs font-semibold text-gold hover:text-gold-bright">
@@ -620,15 +643,15 @@ export default function ForumHome() {
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={f.image_url} alt={`${f.brand} ${f.model}`} referrerPolicy="no-referrer" loading="lazy" className="h-full w-full object-cover" />
                         ) : (
-                          <span className="text-3xl" aria-hidden>
-                            ⌚
+                          <span className="text-muted" aria-hidden>
+                            <Glyph name="watch" size={34} />
                           </span>
                         )}
                       </div>
                       <div className="p-3">
                         <p className="text-[10px] uppercase tracking-[0.2em] text-gold">{f.brand}</p>
                         <p className="mt-0.5 line-clamp-2 text-sm font-semibold leading-5 text-ink">{f.model}</p>
-                        {info ? <p className="mt-1 text-xs font-semibold text-gold">{info.icon} {info.label}</p> : null}
+                        {info ? <p className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-gold">{glyphName(info.icon) ? <Glyph e={info.icon} size={13} /> : info.icon} {info.label}</p> : null}
                       </div>
                     </>
                   );
@@ -651,18 +674,26 @@ export default function ForumHome() {
           {loading ? (
             <SkeletonList label="Loading discussions" />
           ) : error ? (
-            <div className="rounded-md border border-hairline bg-surface p-10 text-center text-amber-800">{error}</div>
+            <div className="rounded-md border border-hairline bg-raised shadow-card p-10 text-center text-amber-800 bb-sheen">{error}</div>
           ) : !visible.length ? (
-            <div className="rounded-md border border-dashed border-hairline bg-surface p-10 text-center text-ink/80">
-              <div className="text-4xl">💬</div>
-              <p className="mt-3 font-semibold text-ink">{search ? "No posts match your search." : "No discussions here yet."}</p>
+            <div className="border border-dashed border-hairline-strong px-6 py-14 text-center text-ink/80">
+              <p className="font-serif text-4xl text-ink sm:text-5xl">{search ? "No threads match" : "No threads yet"}</p>
               {!search && subject && locked.includes(subject) ? (
-                <p className="mt-2 text-sm text-muted">Only Brandon starts discussions here. When he does, you can reply and join in.</p>
+                <p className="mx-auto mt-3 max-w-md text-base leading-7 text-muted">Only Brandon starts discussions here. When he does, you can reply and join in.</p>
               ) : !search ? (
-                <button type="button" onClick={() => openComposer()} className="mt-4 rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-on-navy hover:bg-navy-deep">
-                  Start the first one
-                </button>
-              ) : null}
+                <>
+                  <p className="mx-auto mt-3 max-w-md text-base leading-7">Be the first to ask a question, share a find or list a watch.</p>
+                  <button
+                    type="button"
+                    onClick={() => openComposer()}
+                    className="mt-6 inline-flex min-h-12 items-center bg-navy px-8 text-xs font-semibold uppercase tracking-[0.25em] text-on-navy hover:bg-navy-deep"
+                  >
+                    + Start the first thread
+                  </button>
+                </>
+              ) : (
+                <p className="mt-3 text-base">Try a different word, or clear the search.</p>
+              )}
             </div>
           ) : (
             <ul className="space-y-3">
@@ -672,16 +703,16 @@ export default function ForumHome() {
                   <li key={post.id}>
                     <Link
                       href={`/forum/${post.id}`}
-                      className="group flex gap-4 rounded-md border border-hairline bg-surface p-4 transition hover:border-gold/40 hover:bg-surface sm:p-5"
+                      className="group flex gap-4 rounded-md border border-hairline bg-raised shadow-card p-4 transition hover:border-gold/40 hover:bg-surface sm:p-5 bb-sheen"
                     >
-                      <div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded bg-surface text-xl sm:flex">{s.icon}</div>
+                      <div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded border border-hairline bg-surface text-gold sm:flex"><Glyph e={s.icon} size={20} /></div>
                       <div className="min-w-0 flex-1">
                         <p className="text-xs uppercase tracking-[0.2em] text-gold">{subjectLabel(tree, post.subject)}</p>
                         <h3 className="mt-1 text-lg font-semibold text-ink group-hover:text-gold-bright">
                           {post.title}
                           {post.image_count ? (
                             <span className="ml-2 align-middle text-xs font-normal text-muted" title={`${post.image_count} photo${post.image_count === 1 ? "" : "s"}`}>
-                              📷{post.image_count > 1 ? ` ${post.image_count}` : ""}
+                              <Glyph name="camera" size={13} />{post.image_count > 1 ? ` ${post.image_count}` : ""}
                             </span>
                           ) : null}
                         </h3>
@@ -739,7 +770,7 @@ function GettingStarted({ onNewPost }: { onNewPost: () => void }) {
   };
 
   return (
-    <section className="mt-6 rounded-md border border-gold/30 bg-gold/5 p-5" aria-labelledby="forum-getting-started">
+    <section className="mt-6 rounded-md border border-gold/40 bg-raised shadow-card p-5 bb-sheen" aria-labelledby="forum-getting-started">
       <div className="flex items-center justify-between gap-3">
         <h2 id="forum-getting-started" className="text-xs uppercase tracking-[0.3em] text-gold">
           Getting started
@@ -810,7 +841,7 @@ function AddSubfolderForm({
   };
 
   return (
-    <div id="add-subfolder" className="mb-4 rounded-md border border-gold/30 bg-gold/5 p-5 text-sm">
+    <div id="add-subfolder" className="mb-4 rounded-md border border-gold/40 bg-raised shadow-card p-5 text-sm bb-sheen">
       <p className="font-semibold text-ink">Add a {thing}</p>
       <p className="mt-1 text-muted">
         Creates a new sub-folder inside {parentName}
@@ -897,7 +928,7 @@ function FavoriteControls({
             favorite.notify ? "border-emerald-400/40 bg-emerald-500/10 text-emerald-800" : "border-hairline bg-surface text-muted"
           }`}
         >
-          {favorite.notify ? "🔔 Alerts on" : "🔕 Alerts off"}
+          <Glyph e={favorite.notify ? "🔔" : "🔕"} className="mr-1" />{favorite.notify ? "Alerts on" : "Alerts off"}
         </button>
       ) : null}
     </div>

@@ -60,12 +60,14 @@ export default function AskBrandon() {
       <button
         type="button"
         onClick={open}
-        className="fixed bottom-20 right-4 z-40 inline-flex items-center gap-2 rounded-full border border-gold/40 bg-ink py-2.5 pl-3 pr-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#f1ece3] shadow-[0_12px_30px_rgba(27,42,65,0.25)] transition hover:-translate-y-0.5 md:bottom-6 md:right-6"
         aria-haspopup="dialog"
         aria-label="Ask Brandon a question"
+        className="fixed bottom-20 right-4 z-40 inline-flex items-center gap-2.5 rounded-full border border-ink/70 bg-raised py-2.5 pl-3.5 pr-5 text-ink shadow-card transition hover:-translate-y-0.5 hover:shadow-card-hover md:bottom-6 md:right-6"
       >
-        <span aria-hidden className="flex h-6 w-6 items-center justify-center rounded-full bg-gold text-[13px] normal-case tracking-normal text-on-gold">?</span>
-        Ask<span className="hidden sm:inline"> Brandon</span>
+        <span aria-hidden className="relative flex h-3.5 w-3.5 items-center justify-center rounded-full bg-emerald-700/15">
+          <span className="h-2 w-2 rounded-full bg-emerald-700" />
+        </span>
+        <span className="font-serif text-xl italic leading-none">Ask Brandon</span>
       </button>
 
       <dialog

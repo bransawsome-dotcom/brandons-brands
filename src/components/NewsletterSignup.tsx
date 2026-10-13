@@ -30,7 +30,7 @@ export default function NewsletterSignup({ source, compact = false, className = 
   return (
     <section
       aria-label="Newsletter sign-up"
-      className={`border border-hairline bg-surface ${compact ? "p-5" : "p-6 sm:p-8"} ${className}`}
+      className={`rounded-md border shadow-card bb-sheen ${compact ? "p-5" : "p-6 sm:p-8"} ${className}`}
     >
       <p className="text-xs uppercase tracking-[0.22em] text-gold">Free weekly newsletter</p>
       <h2 className={`mt-2 font-display font-semibold uppercase leading-none text-ink ${compact ? "text-2xl" : "text-[36px] sm:text-[44px]"}`}>Brandon&apos;s week <span className="font-serif font-normal normal-case italic text-gold">in watches</span></h2>

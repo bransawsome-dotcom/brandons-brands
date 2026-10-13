@@ -163,7 +163,7 @@ export default async function Home() {
             Visit the forum →
           </Link>
         </div>
-        <div className="grid border border-hairline bg-surface md:grid-cols-3">
+        <div className="grid overflow-hidden rounded-md border shadow-card bb-sheen md:grid-cols-3">
           <article className="flex flex-col border-b border-hairline md:border-b-0 md:border-r">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/redesign/wristcheck.webp" alt="A steel watch with a green dial and brown leather strap on a wrist" width={900} height={675} loading="lazy" className="aspect-[4/3] w-full object-cover" />
@@ -227,7 +227,7 @@ export default async function Home() {
                 <span className={`mt-6 ${smallLink}`}>Open →</span>
               </>
             );
-            const cls = "group flex h-full flex-col border border-hairline bg-surface p-8 transition hover:border-gold/60";
+            const cls = "group flex h-full flex-col overflow-hidden rounded-md border p-8 shadow-card bb-sheen transition duration-300 hover:-translate-y-1 hover:shadow-card-hover";
             return c.vault ? (
               <VaultLink key={c.href} href={c.href} className={cls}>
                 {body}

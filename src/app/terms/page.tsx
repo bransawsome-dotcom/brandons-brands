@@ -52,7 +52,7 @@ const SECTIONS: { heading: string; paragraphs: string[] }[] = [
 export default function TermsPage() {
   return (
     <div className="mx-auto w-full max-w-3xl px-0 py-4 sm:px-6 sm:py-10">
-      <article className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8">
+      <article>
         <p className="text-xs uppercase tracking-[0.35em] text-gold">Legal</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-[-0.02em] text-ink sm:text-4xl">Terms & Disclaimers</h1>
         <p className="mt-2 text-sm text-muted">Last updated {updated}</p>

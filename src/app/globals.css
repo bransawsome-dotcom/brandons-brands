@@ -8,8 +8,8 @@
   --foreground: #1b2a41;
   --ground: #f1ece3;
   --surface: #e6e4df;
-  --raised: #f9f7f3;
-  --hairline: #d3d1cb;
+  --raised: #fffefb;
+  --hairline: #d0cdc5;
   --hairline-strong: #8f949b;
   --ink: #1b2a41;
   --muted: #5d6570;
@@ -27,8 +27,8 @@
 .theme-cream {
   --ground: #f1ece3;
   --surface: #e6e4df;
-  --raised: #f9f7f3;
-  --hairline: #d3d1cb;
+  --raised: #fffefb;
+  --hairline: #d0cdc5;
   --hairline-strong: #8f949b;
   --ink: #1b2a41;
   --muted: #5d6570;
@@ -78,6 +78,8 @@ body:has(.bb-home) {
   --color-navy-deep: var(--navy-deep);
   --color-on-navy: var(--on-navy);
   --color-steel: var(--steel);
+  --shadow-card: 0 1px 2px rgba(27, 42, 65, 0.06), 0 12px 30px -8px rgba(27, 42, 65, 0.16);
+  --shadow-card-hover: 0 2px 4px rgba(27, 42, 65, 0.08), 0 22px 44px -12px rgba(27, 42, 65, 0.24);
   --font-sans: var(--font-text), "Helvetica Neue", Arial, sans-serif;
   --font-display: var(--font-display-face), "Times New Roman", serif;
   --font-serif: var(--font-serif-face), Garamond, "Times New Roman", serif;
@@ -288,4 +290,33 @@ main :is(h1, h2):not(.font-sans) {
 /* Safety net for long single words in the wide capitals on narrow phones. */
 @media (max-width: 639px) {
   main :is(h1, h2) { overflow-wrap: break-word; hyphens: auto; }
+}
+
+/* Logo crystal glint: a soft band of light that crosses the dial now and then. */
+.bb-glint {
+  position: absolute;
+  inset: -20%;
+  background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.38) 48%, rgba(255, 255, 255, 0.08) 54%, transparent 62%);
+  transform: translateX(-120%);
+  animation: bb-glint 7s cubic-bezier(0.45, 0, 0.25, 1) 1.2s infinite;
+  pointer-events: none;
+}
+.bb-glint-fast { animation-duration: 1.8s; animation-delay: 0s; }
+@keyframes bb-glint {
+  0% { transform: translateX(-120%); }
+  22% { transform: translateX(120%); }
+  100% { transform: translateX(120%); }
+}
+@media (prefers-reduced-motion: reduce) { .bb-glint { animation: none; opacity: 0; } }
+
+/* Phone menu panel slides in from the left. */
+dialog.bb-drawer[open] { animation: bb-drawer-in 0.32s cubic-bezier(0.22, 1, 0.36, 1); }
+@keyframes bb-drawer-in { from { transform: translateX(-100%); } to { transform: none; } }
+@media (prefers-reduced-motion: reduce) { dialog.bb-drawer[open] { animation: none; } }
+
+/* "Sheen" boxes: the soft bronze-to-cream grading from the Brandon's Favorites box, used on content cards site-wide. */
+.bb-sheen {
+  background-color: var(--raised) !important;
+  background-image: linear-gradient(135deg, color-mix(in srgb, var(--gold) 20%, var(--raised)) 0%, var(--raised) 46%, color-mix(in srgb, var(--gold) 10%, var(--surface)) 100%) !important;
+  border-color: color-mix(in srgb, var(--gold) 32%, transparent) !important;
 }

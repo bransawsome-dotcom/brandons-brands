@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   alternates: { canonical: "/learn" },
-  openGraph: { type: "website", url: "/learn", title: "Learn About Watches | Brandon's Brands", description: DESCRIPTION, images: ["/og-image.png?v=2"] },
+  openGraph: { type: "website", url: "/learn", title: "Learn About Watches | Brandon's Brands", description: DESCRIPTION, images: ["/og-image.png?v=3"] },
   twitter: { card: "summary_large_image", title: "Learn About Watches | Brandon's Brands", description: DESCRIPTION },
 };
 
@@ -93,7 +93,7 @@ export default function LearnPage() {
         );
       })}
 
-      <section className="mt-14 rounded-md border border-hairline bg-surface p-6 text-center sm:p-10">
+      <section className="mt-14 rounded-md border border-hairline bg-raised shadow-card p-6 text-center sm:p-10 bb-sheen">
         <p className="font-serif text-2xl italic text-ink">Have a question these guides don&apos;t answer?</p>
         <p className="mt-1 text-sm text-ink/80">Ask the community in the forum, or see which watches made Brandon&apos;s Favorites.</p>
         <div className="mt-4 flex flex-wrap justify-center gap-3">

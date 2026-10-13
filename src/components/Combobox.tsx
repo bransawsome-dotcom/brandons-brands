@@ -118,7 +118,7 @@ export default function Combobox({ label, name, value, options, placeholder, req
           id={`${id}-list`}
           ref={listRef}
           role="listbox"
-          className="absolute z-30 mt-1 max-h-64 w-full overflow-auto rounded border border-hairline bg-raised p-1 shadow-[0_10px_30px_rgba(27,42,65,0.08)]"
+          className="absolute z-30 mt-1 max-h-64 w-full overflow-auto rounded border border-hairline bg-raised p-1 shadow-card"
         >
           {filtered.length ? (
             filtered.map((option, i) => (

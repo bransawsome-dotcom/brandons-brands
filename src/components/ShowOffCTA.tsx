@@ -8,7 +8,7 @@ import { useAuth } from "@/components/AuthProvider";
 export default function ShowOffCTA({ className = "" }: { className?: string }) {
   const { user } = useAuth();
   return (
-    <div className={`border border-hairline bg-surface px-6 py-10 text-center ${className}`}>
+    <div className={`rounded-md border px-6 py-10 text-center shadow-card bb-sheen ${className}`}>
       <p className="font-display text-[29px] font-semibold uppercase leading-[1.05] text-ink sm:text-[36px]">Show off <span className="font-light text-gold">your own watches</span></p>
       <p className="mx-auto mt-3 max-w-2xl leading-7 text-muted">Build your collection and wishlist with photos, values and box &amp; papers. Keep them private, or choose to make them public and share them with other collectors.</p>
       <div className="mt-6 flex flex-wrap justify-center gap-3">

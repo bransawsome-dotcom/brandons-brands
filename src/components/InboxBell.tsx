@@ -106,7 +106,7 @@ export default function InboxBell() {
       </button>
 
       {open ? (
-        <div className="absolute left-0 z-50 mt-2 w-[min(22rem,calc(100vw-3rem))] sm:left-auto sm:right-0 overflow-hidden rounded border border-hairline bg-raised text-left shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl">
+        <div className="absolute left-0 z-50 mt-2 w-[min(22rem,calc(100vw-3rem))] sm:left-auto sm:right-0 overflow-hidden rounded border border-hairline bg-raised text-left shadow-card">
           <div className="flex items-center justify-between border-b border-hairline px-4 py-3">
             <p className="text-sm font-semibold text-ink">Inbox</p>
             <Link href="/inbox?folder=messages" onClick={() => setOpen(false)} className="text-xs text-ink/80 hover:text-ink">

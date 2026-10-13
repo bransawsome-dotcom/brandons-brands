@@ -44,7 +44,7 @@ export default function VaultIntro() {
       onClick={() => setShow(false)}
       role="presentation"
       aria-hidden
-      style={{ background: "radial-gradient(circle at 50% 45%, #2a313b 0%, #12161c 55%, #07090c 100%)" }}
+      style={{ background: "radial-gradient(circle at 50% 45%, #2a3d5c 0%, #15223a 55%, #0b1424 100%)" }}
     >
       <div className="relative" style={{ width: "min(84vmin, 480px)", height: "min(84vmin, 480px)", perspective: "1400px" }}>
         {/* The wall frame and the lit vault behind the door. */}
@@ -215,7 +215,7 @@ export default function VaultIntro() {
                 }
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/logo-256.webp" alt="" draggable={false} className="h-full w-full drop-shadow-[0_10px_30px_rgba(27,42,65,0.08)]" />
+                <img src="/logo-watch-512.webp" alt="" draggable={false} className="h-full w-full object-contain drop-shadow-[0_14px_28px_rgba(0,0,0,0.45)]" />
               </div>
             );
           })}

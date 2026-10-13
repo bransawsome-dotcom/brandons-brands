@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SITE_URL } from "@/lib/site";
+import Glyph from "@/components/Glyph";
 
 // Public landing page for the collection tools, written for searches like "watch value tracker",
 // "watch price tracker" and "how much is my watch worth". The tools themselves need a free account.
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
     "watch price alerts",
   ],
   alternates: { canonical: "/watch-value-tracker" },
-  openGraph: { type: "website", url: "/watch-value-tracker", title: "Free Watch Value Tracker", description: DESCRIPTION, images: ["/og-image.png?v=2"] },
+  openGraph: { type: "website", url: "/watch-value-tracker", title: "Free Watch Value Tracker", description: DESCRIPTION, images: ["/og-image.png?v=3"] },
   twitter: { card: "summary_large_image", title: "Free Watch Value Tracker", description: DESCRIPTION },
 };
 
@@ -102,7 +103,7 @@ export default function WatchValueTrackerPage() {
     <div className="mx-auto w-full max-w-5xl px-0 py-4 sm:px-6 sm:py-10">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
 
-      <section className="rounded-md border border-hairline bg-surface p-6 sm:p-10">
+      <section className="rounded-md border border-hairline bg-raised shadow-card p-6 sm:p-10 bb-sheen">
         <p className="text-xs uppercase tracking-[0.35em] text-gold">Free collection tools</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-[-0.02em] text-ink sm:text-5xl">Free watch value tracker</h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-ink/80 sm:text-lg">
@@ -123,9 +124,9 @@ export default function WatchValueTrackerPage() {
         <h2 id="features" className="px-1 text-2xl font-semibold text-ink">What the watch price tracker does</h2>
         <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((f) => (
-            <li key={f.title} className="rounded-md border border-hairline bg-surface p-5">
-              <p className="text-2xl" aria-hidden>
-                {f.icon}
+            <li key={f.title} className="rounded-md border border-hairline bg-raised shadow-card p-5 bb-sheen">
+              <p className="text-gold" aria-hidden>
+                <Glyph e={f.icon} size={26} />
               </p>
               <h3 className="mt-2 text-lg font-semibold text-ink">{f.title}</h3>
               <p className="mt-2 text-sm leading-6 text-ink/80">{f.text}</p>
@@ -134,7 +135,7 @@ export default function WatchValueTrackerPage() {
         </ul>
       </section>
 
-      <section aria-labelledby="faq" className="mt-10 rounded-md border border-hairline bg-surface p-6 sm:p-8">
+      <section aria-labelledby="faq" className="mt-10 rounded-md border border-hairline bg-raised shadow-card p-6 sm:p-8 bb-sheen">
         <h2 id="faq" className="text-2xl font-semibold text-ink">Questions</h2>
         <dl className="mt-4 divide-y divide-hairline">
           {FAQS.map((f) => (

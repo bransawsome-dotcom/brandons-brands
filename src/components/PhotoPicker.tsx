@@ -2,8 +2,9 @@
 
 import { useRef, useState } from "react";
 import { shrinkPhoto } from "@/lib/photos";
+import Glyph from "@/components/Glyph";
 
-// "📷 Add photos" button with removable thumbnails, for forum posts and replies.
+// "Add photos" button with removable thumbnails, for forum posts and replies.
 export default function PhotoPicker({
   photos,
   onChange,
@@ -65,7 +66,7 @@ export default function PhotoPicker({
       ) : null}
       {photos.length < max ? (
         <label className={`inline-flex cursor-pointer items-center gap-2 rounded-full border border-hairline px-4 py-2 text-sm text-ink hover:bg-surface ${busy ? "opacity-60" : ""}`}>
-          <span aria-hidden>📷</span>
+          <Glyph e="📷" />
           {busy ? "Adding…" : photos.length ? "Add another photo" : "Add photos"}
           <input ref={inputRef} type="file" accept="image/*" multiple className="sr-only" disabled={busy} onChange={(e) => void add(e.target.files)} />
         </label>

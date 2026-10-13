@@ -18,6 +18,7 @@ import ShareButton from "@/components/ShareButton";
 import PublicListToggle from "@/components/PublicListToggle";
 import OfferStatus from "@/components/OfferStatus";
 import { SkeletonCards } from "@/components/Skeleton";
+import Glyph from "@/components/Glyph";
 
 const initialForm = {
   brand: "",
@@ -288,7 +289,7 @@ export default function WishlistPage() {
 
   return (
     <div className="mx-auto w-full max-w-7xl px-3 py-8 sm:px-6 sm:py-14 lg:px-16 overflow-x-hidden">
-      <div className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8">
+      <div>
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.3em] text-gold">Wishlist</p>
@@ -301,11 +302,11 @@ export default function WishlistPage() {
           <ShareButton kind="wishlist" />
           <PublicListToggle kind="wishlist" />
           <dl className="grid grid-cols-2 gap-3 text-center sm:min-w-[260px]">
-            <div className="flex min-w-0 flex-col justify-between rounded border border-hairline bg-surface px-2 py-3 sm:px-3">
+            <div className="flex min-w-0 flex-col justify-between rounded border border-hairline bg-raised px-2 py-3 sm:px-3">
               <dt className="whitespace-nowrap text-[10px] uppercase tracking-[0.1em] text-muted sm:text-[11px] sm:tracking-[0.18em]">Watches</dt>
               <dd className="mt-1 whitespace-nowrap text-sm font-semibold tabular-nums min-[360px]:text-lg sm:text-xl text-ink">{wishlist.length}</dd>
             </div>
-            <div className="flex min-w-0 flex-col justify-between rounded border border-hairline bg-surface px-2 py-3 sm:px-3">
+            <div className="flex min-w-0 flex-col justify-between rounded border border-hairline bg-raised px-2 py-3 sm:px-3">
               <dt className="whitespace-nowrap text-[10px] uppercase tracking-[0.1em] text-muted sm:text-[11px] sm:tracking-[0.18em]">Market value</dt>
               <dd className="mt-1 whitespace-nowrap text-sm font-semibold tabular-nums min-[360px]:text-lg sm:text-xl text-gold">{totalValue ? formatUsd(totalValue) : "—"}</dd>
             </div>
@@ -318,12 +319,12 @@ export default function WishlistPage() {
             <WishlistScanner onAdd={addScannedItems} />
           </div>
         ) : (
-          <p className="mb-6 rounded border border-hairline bg-surface px-4 py-3 text-sm text-ink/80">
+          <p className="mb-6 rounded border border-hairline bg-raised px-4 py-3 text-sm text-ink/80">
             <a href="/login" className="font-semibold text-gold hover:text-gold-bright">Log in</a> to auto-fill photos, details and prices, or scan a photo of your wishlist.
           </p>
         )}
 
-        <form id="add-wishlist" onSubmit={handleSubmit} className="grid gap-6 rounded-md border border-hairline bg-surface p-5 sm:p-6">
+        <form id="add-wishlist" onSubmit={handleSubmit} className="grid gap-6 rounded-md border border-hairline bg-raised shadow-card p-5 sm:p-6 bb-sheen">
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-gold">{editingId ? "Edit wishlist watch" : "Add to wishlist"}</p>
             <p className="mt-1 text-sm text-muted">Choose from the lists, or type a watch that isn&apos;t listed.</p>
@@ -425,7 +426,7 @@ export default function WishlistPage() {
             <label className="space-y-2 text-sm text-ink/80">
               Target price (what you&apos;d pay)
               <input name="target_price" value={form.target_price} onChange={handleChange} type="number" step="0.01" className={inputClass} placeholder="42000" />
-              <span className="block text-xs text-muted">Turn on 🔔 Price alert on the watch to get notified when it&apos;s listed at or below this price.</span>
+              <span className="block text-xs text-muted">Turn on <Glyph e="🔔" size={12} className="text-gold" /> Price alert on the watch to get notified when it&apos;s listed at or below this price.</span>
             </label>
           </div>
 
@@ -440,7 +441,7 @@ export default function WishlistPage() {
             <button
               type="submit"
               disabled={lookingUp}
-              className="w-full rounded-full bg-navy px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-on-navy shadow-[0_10px_30px_rgba(27,42,65,0.08)] transition hover:-translate-y-0.5 hover:bg-navy-deep disabled:opacity-60"
+              className="w-full rounded-full bg-navy px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-on-navy shadow-card transition hover:-translate-y-0.5 hover:bg-navy-deep disabled:opacity-60"
             >
               {lookingUp ? "Looking up…" : editingId ? "Save" : "Add to Wishlist"}
             </button>
@@ -484,7 +485,9 @@ export default function WishlistPage() {
           <SkeletonCards label="Loading wishlist" />
         ) : !wishlist.length ? (
           <div className="rounded-md border border-dashed border-hairline bg-surface p-12 text-center text-ink/80">
-            <div className="text-4xl">⭐</div>
+            <div className="flex justify-center text-gold">
+              <Glyph e="⭐" size={36} />
+            </div>
             <h3 className="mt-4 text-lg font-semibold text-ink">Your wishlist is empty.</h3>
             <p className="mt-2 text-sm text-ink/80">Save watches you&apos;d like to own in the future.</p>
             <div className="mt-6">
@@ -493,7 +496,7 @@ export default function WishlistPage() {
                 onClick={() => document.getElementById("add-wishlist")?.scrollIntoView({ behavior: "smooth" })}
                 className="inline-flex items-center gap-2 rounded-full bg-navy px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-on-navy"
               >
-                <span>➕</span>
+                <Glyph e="➕" />
                 <span>Add Your First Wishlist Item</span>
               </button>
             </div>
@@ -512,7 +515,7 @@ export default function WishlistPage() {
                 <article
                   key={item.id}
                   id={`w-${item.id}`}
-                  className="scroll-mt-6 flex flex-col overflow-hidden rounded-md border border-hairline bg-surface shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl"
+                  className="scroll-mt-6 flex flex-col overflow-hidden rounded-md border border-hairline bg-raised shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-card-hover"
                 >
                   {item.image_url ? (
                     <div className="bb-shine flex h-56 items-center justify-center bg-surface p-4">
@@ -531,7 +534,7 @@ export default function WishlistPage() {
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
                         <p className="text-xs uppercase tracking-[0.25em] text-gold">{item.priority} priority</p>
-                        <h3 className="mt-2 text-2xl font-semibold text-ink">
+                        <h3 className="mt-2 font-display text-2xl font-semibold text-ink">
                           {item.brand} {item.model}
                         </h3>
                         {item.reference_number ? <p className="mt-1 text-sm text-muted">Ref. {item.reference_number}</p> : null}
@@ -542,15 +545,15 @@ export default function WishlistPage() {
                     </div>
 
                     <dl className="mt-5 grid grid-cols-3 gap-2 text-center">
-                      <div className="rounded border border-hairline bg-surface p-2">
+                      <div className="rounded border border-hairline bg-raised p-2">
                         <dt className="text-[10px] uppercase tracking-[0.15em] text-muted">Market value</dt>
                         <dd className="mt-1 font-semibold text-gold">{formatUsd(item.current_market_price)}</dd>
                       </div>
-                      <div className="rounded border border-hairline bg-surface p-2">
+                      <div className="rounded border border-hairline bg-raised p-2">
                         <dt className="text-[10px] uppercase tracking-[0.15em] text-muted">Retail today</dt>
                         <dd className="mt-1 font-semibold text-ink">{formatUsd(item.retail_price)}</dd>
                       </div>
-                      <div className="rounded border border-hairline bg-surface p-2">
+                      <div className="rounded border border-hairline bg-raised p-2">
                         <dt className="text-[10px] uppercase tracking-[0.15em] text-muted">Your target</dt>
                         <dd className="mt-1 font-semibold text-ink">{formatUsd(item.target_price)}</dd>
                       </div>
@@ -560,7 +563,10 @@ export default function WishlistPage() {
                     {specs ? <p className="mt-4 text-sm text-ink/80">{specs}</p> : null}
                     {d.year_introduced ? <p className="mt-1 text-xs text-muted">Introduced {d.year_introduced}</p> : null}
                     {d.summary ? <p className="mt-3 text-sm leading-6 text-ink/80">{d.summary}</p> : null}
-                    {item.notes ? <p className="mt-3 text-sm leading-6 text-ink">📝 {item.notes}</p> : null}
+                    {item.notes ? <p className="mt-3 text-sm leading-6 text-ink">
+                        <Glyph e="📝" className="mr-1.5 text-gold" />
+                        {item.notes}
+                      </p> : null}
                     <OfferStatus kind="wishlist" />
 
                     {canAutoFill ? (
@@ -594,7 +600,7 @@ export default function WishlistPage() {
                       <button
                         type="button"
                         onClick={() => handleEdit(item)}
-                        className="rounded-md border border-gold/20 bg-gold/10 px-3 py-3 text-sm font-semibold text-gold transition hover:bg-gold/20"
+                        className="rounded-md border border-gold/40 bg-raised shadow-card px-3 py-3 text-sm font-semibold text-gold transition hover:bg-gold/20"
                       >
                         Edit
                       </button>
@@ -603,7 +609,7 @@ export default function WishlistPage() {
                           type="button"
                           onClick={() => handleRefresh(item)}
                           disabled={refreshing}
-                          className="rounded-md border border-gold/30 bg-gold/10 px-3 py-3 text-sm font-semibold text-gold transition hover:bg-gold/20 disabled:opacity-60"
+                          className="rounded-md border border-gold/40 bg-raised shadow-card px-3 py-3 text-sm font-semibold text-gold transition hover:bg-gold/20 disabled:opacity-60"
                         >
                           {refreshing ? "Updating…" : item.value_updated_at ? "Refresh value" : "Auto-fill"}
                         </button>

@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import type { WishlistItem } from "@/lib/localData";
 import type { PriceMatch } from "@/lib/priceAlertsClient";
 import { formatUsd } from "@/lib/watchAiClient";
+import Glyph from "@/components/Glyph";
 
 function hasTarget(item: WishlistItem) {
   const n = parseFloat(String(item.target_price ?? "").replace(/[^0-9.]/g, ""));
@@ -53,7 +54,9 @@ export default function PriceAlertPanel({
     <div className={`mt-5 rounded border p-4 ${on ? "border-gold/40 bg-gold/15" : "border-hairline bg-surface"}`}>
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-sm font-semibold text-ink">{on ? "🔔" : "🔕"} Price alert</p>
+          <p className="flex items-center gap-1.5 text-sm font-semibold text-ink">
+            <Glyph e={on ? "🔔" : "🔕"} className="text-gold" /> Price alert
+          </p>
           <p className="mt-0.5 text-xs text-muted">
             {!target
               ? "Add a target price (Edit) to turn this on."
@@ -104,7 +107,24 @@ export default function PriceAlertPanel({
                 </button>
               </div>
               <p className="mt-1 text-xs leading-5 text-ink/80">
-                {[m.location && `📍 ${m.location}`, m.seller && m.seller !== m.marketplace ? m.seller : "", m.condition, m.box_papers].filter(Boolean).join(" · ")}
+                {[
+                  m.location ? (
+                    <>
+                      <Glyph e="📍" size={12} className="mr-0.5" />
+                      {m.location}
+                    </>
+                  ) : null,
+                  m.seller && m.seller !== m.marketplace ? m.seller : "",
+                  m.condition,
+                  m.box_papers,
+                ]
+                  .filter(Boolean)
+                  .map((part, i) => (
+                    <Fragment key={i}>
+                      {i ? " · " : ""}
+                      {part}
+                    </Fragment>
+                  ))}
               </p>
               <p className="mt-0.5 text-[11px] text-muted">Found {when(m.found_at)}</p>
             </li>

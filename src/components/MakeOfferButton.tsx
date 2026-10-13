@@ -104,7 +104,7 @@ export default function MakeOfferButton({
           aria-label={sell ? `Offer to sell a ${watchLabel}` : `Make an offer on ${watchLabel}`}
           onClick={(e) => e.target === e.currentTarget && setOpen(false)}
         >
-          <div className="max-h-[92vh] w-full max-w-md overflow-y-auto rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(27,42,65,0.08)] sm:p-6">
+          <div className="max-h-[92vh] w-full max-w-md overflow-y-auto rounded-md border border-hairline bg-raised shadow-card p-5 shadow-card sm:p-6">
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
                 <p className="text-xs uppercase tracking-[0.25em] text-gold">{sell ? "Offer to sell" : "Make an offer"}</p>

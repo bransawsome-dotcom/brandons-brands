@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description:
     "Browse public watch collections and wishlists from the Brandon's Brands community: luxury watches, microbrands and vintage pieces. Make an offer on watches in public collections.",
   alternates: { canonical: "/collectors" },
-  openGraph: { type: "website", url: "/collectors", title: "Watch Collectors on Brandon's Brands", images: ["/og-image.png?v=2"] },
+  openGraph: { type: "website", url: "/collectors", title: "Watch Collectors on Brandon's Brands", images: ["/og-image.png?v=3"] },
 };
 
 export default async function CollectorsPage() {

@@ -67,7 +67,7 @@ export default function PollCard({ poll, className = "" }: { poll: Poll; classNa
   };
 
   return (
-    <article id={poll.id} className={`scroll-mt-24 rounded-md border border-hairline bg-surface p-5 sm:p-6 ${className}`}>
+    <article id={poll.id} className={`scroll-mt-24 rounded-md border border-hairline bg-raised shadow-card p-5 sm:p-6 ${className}`}>
       <p className="text-xs uppercase tracking-[0.3em] text-gold">Which would you pick?</p>
       <h3 className="mt-1 text-xl font-semibold text-ink">{poll.question}</h3>
       <div className="mt-4 flex gap-3">{[side(0), side(1)]}</div>

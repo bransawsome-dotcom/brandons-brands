@@ -42,9 +42,9 @@ export default function AccountPage() {
   return (
     <div className="mx-auto w-full max-w-7xl px-0 py-4 sm:px-6 sm:py-14 lg:px-16">
       <div className="grid gap-6 sm:gap-8 lg:grid-cols-[320px_1fr]">
-        <section className="rounded-md border border-hairline bg-surface p-6 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8">
+        <section>
           <div className="flex flex-col items-center gap-5 text-center sm:gap-6">
-            <div className="flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-gold/10 via-surface to-surface shadow-[0_10px_30px_rgba(27,42,65,0.08)]">
+            <div className="flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-gold/10 via-surface to-surface shadow-card">
               <span className="text-3xl font-semibold text-ink sm:text-4xl">{initials}</span>
             </div>
             <div>
@@ -64,21 +64,21 @@ export default function AccountPage() {
           </div>
         </section>
 
-        <section className="rounded-md border border-hairline bg-surface p-4 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8">
+        <section>
           <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
-            <div className="rounded-md border border-hairline bg-surface p-5 sm:p-6">
+            <div className="rounded-md border border-hairline bg-raised shadow-card p-5 sm:p-6 bb-sheen">
               <p className="text-sm uppercase tracking-[0.3em] text-gold">Total Watches</p>
               <p className="mt-4 text-5xl font-semibold text-ink">{watchCount}</p>
               <p className="mt-3 text-sm text-muted">A refined record of your luxury timepieces.</p>
             </div>
-            <div className="rounded-md border border-hairline bg-surface p-5 sm:p-6">
+            <div className="rounded-md border border-hairline bg-raised shadow-card p-5 sm:p-6 bb-sheen">
               <p className="text-sm uppercase tracking-[0.3em] text-gold">Wishlist</p>
               <p className="mt-4 text-5xl font-semibold text-ink">{wishlistCount}</p>
               <p className="mt-3 text-sm text-muted">Dream pieces you plan to acquire next.</p>
             </div>
           </div>
 
-          <div className="mt-6 rounded-md border border-hairline bg-surface p-4 sm:mt-8 sm:p-6">
+          <div className="mt-6 rounded-md border border-hairline bg-raised shadow-card p-4 sm:mt-8 sm:p-6 bb-sheen">
             <h2 className="text-lg font-semibold text-ink">Settings</h2>
             <div className="mt-4 space-y-4 text-sm text-ink/80">
               {registered ? (
@@ -125,7 +125,8 @@ export default function AccountPage() {
               <PriceAlertEmailSetting />
               <PriceAlertEmailSetting
                 metaKey="offer_email"
-                title="💰 Offer emails"
+                title="Offer emails"
+                icon="💰"
                 description="When someone makes an offer on a watch in your public collection, it always shows in your Inbox. Also email me at"
               />
               <TextMessageSettings />

@@ -42,7 +42,7 @@ export function SubjectSelect({
         if (!kids.length) {
           return (
             <option key={s.slug} value={s.slug}>
-              {s.icon} {s.name}
+              {s.name}
             </option>
           );
         }
@@ -51,7 +51,7 @@ export function SubjectSelect({
             {/* Watch Brands posts go into a brand (or Miscellaneous); other subjects can also take posts directly. */}
             {s.slug !== BRANDS_FOLDER ? (
               <option value={s.slug}>
-                {s.icon} {s.name}
+                {s.name}
                 {s.slug === CLUBS_FOLDER ? " (general)" : ""}
               </option>
             ) : null}

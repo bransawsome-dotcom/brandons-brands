@@ -59,7 +59,7 @@ export default function NewsletterSendPage() {
 
   return (
     <div className="mx-auto w-full max-w-5xl px-0 py-4 sm:px-6 sm:py-8">
-      <section className="rounded-md border border-hairline bg-surface p-5 sm:p-8">
+      <section className="rounded-md border border-hairline bg-raised shadow-card p-5 sm:p-8">
         <p className="text-xs uppercase tracking-[0.35em] text-gold">Newsletter</p>
         <h1 className="mt-2 text-3xl font-semibold text-ink">Send this week&apos;s newsletter</h1>
         <p className="mt-2 text-sm leading-6 text-ink/80">

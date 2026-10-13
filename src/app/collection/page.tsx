@@ -266,7 +266,7 @@ export default function CollectionPage() {
   return (
     <div className="mx-auto w-full max-w-7xl px-3 py-8 sm:px-6 sm:py-14 lg:px-16 overflow-x-hidden">
       <VaultIntro />
-      <div className="rounded-md border border-hairline bg-surface p-6 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8">
+      <div>
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.35em] text-gold sm:text-sm">My Collection</p>
@@ -281,15 +281,15 @@ export default function CollectionPage() {
           <ShareButton kind="collection" />
           <PublicListToggle kind="collection" />
           <dl className="grid grid-cols-3 gap-2 text-center min-[360px]:gap-3 sm:min-w-[360px]">
-            <div className="flex min-w-0 flex-col justify-between rounded border border-hairline bg-surface px-2 py-3 sm:px-3">
+            <div className="flex min-w-0 flex-col justify-between rounded border border-hairline bg-raised px-2 py-3 sm:px-3">
               <dt className="whitespace-nowrap text-[10px] uppercase tracking-[0.1em] text-muted sm:text-[11px] sm:tracking-[0.18em]">Watches</dt>
               <dd className="mt-1 whitespace-nowrap text-sm font-semibold tabular-nums min-[360px]:text-lg sm:text-xl text-ink">{watches.length}</dd>
             </div>
-            <div className="flex min-w-0 flex-col justify-between rounded border border-hairline bg-surface px-2 py-3 sm:px-3">
+            <div className="flex min-w-0 flex-col justify-between rounded border border-hairline bg-raised px-2 py-3 sm:px-3">
               <dt className="whitespace-nowrap text-[10px] uppercase tracking-[0.1em] text-muted sm:text-[11px] sm:tracking-[0.18em]">Paid</dt>
               <dd className="mt-1 whitespace-nowrap text-sm font-semibold tabular-nums min-[360px]:text-lg sm:text-xl text-ink">{formatUsd(totals.paid)}</dd>
             </div>
-            <div className="flex min-w-0 flex-col justify-between rounded border border-hairline bg-surface px-2 py-3 sm:px-3">
+            <div className="flex min-w-0 flex-col justify-between rounded border border-hairline bg-raised px-2 py-3 sm:px-3">
               <dt className="whitespace-nowrap text-[10px] uppercase tracking-[0.1em] text-muted sm:text-[11px] sm:tracking-[0.18em]">Est. value</dt>
               <dd className="mt-1 whitespace-nowrap text-sm font-semibold tabular-nums min-[360px]:text-lg sm:text-xl text-gold">{formatUsd(totals.value)}</dd>
             </div>
@@ -304,12 +304,12 @@ export default function CollectionPage() {
             <CollectionScanner onAdd={addScannedWatches} />
           </div>
         ) : (
-          <p className="mb-6 rounded border border-hairline bg-surface px-4 py-3 text-sm text-ink/80">
+          <p className="mb-6 rounded border border-hairline bg-raised px-4 py-3 text-sm text-ink/80">
             <a href="/login" className="font-semibold text-gold hover:text-gold-bright">Log in</a> to auto-fill watch details and prices, or scan a photo of your collection list.
           </p>
         )}
 
-        <form id="add-watch" onSubmit={handleSubmit} className="grid gap-6 rounded-md border border-hairline bg-surface p-6">
+        <form id="add-watch" onSubmit={handleSubmit} className="grid gap-6 rounded-md border border-hairline bg-raised shadow-card p-6 bb-sheen">
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-gold">Add one watch</p>
               <p className="mt-1 text-sm text-muted">Choose a brand and model from the lists. Details, prices and a photo fill in automatically. Not listed? Just type it.</p>
@@ -519,7 +519,7 @@ export default function CollectionPage() {
             <button
               type="submit"
               disabled={lookingUp}
-              className="w-full disabled:opacity-60 rounded-full bg-navy px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-on-navy shadow-[0_10px_30px_rgba(27,42,65,0.08)] transition hover:-translate-y-0.5 hover:bg-navy-deep sm:w-auto"
+              className="w-full disabled:opacity-60 rounded-full bg-navy px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-on-navy shadow-card transition hover:-translate-y-0.5 hover:bg-navy-deep sm:w-auto"
             >
               {lookingUp ? "Looking up…" : "Add Watch"}
             </button>
@@ -557,7 +557,7 @@ export default function CollectionPage() {
 
         <p className="mb-2 text-xs uppercase tracking-[0.25em] text-muted">Search &amp; filter</p>
         {/* Search & filter your collection */}
-        <div className="mb-4 grid gap-4 rounded border border-hairline bg-surface p-4 sm:grid-cols-4">
+        <div className="mb-4 grid gap-4 rounded border border-hairline bg-raised shadow-card p-4 sm:grid-cols-4 bb-sheen">
           <div>
             <input
               value={search}
@@ -611,7 +611,7 @@ export default function CollectionPage() {
         ) : filteredWatches.length ? (
           <div className={view === "grid" ? "grid gap-6 md:grid-cols-2 xl:grid-cols-3" : "space-y-3"}>
             {filteredWatches.map((watch) => (
-              <div key={watch.id} className={`group relative overflow-hidden border border-hairline bg-surface backdrop-blur-xl transition hover:border-gold/40 ${view === "grid" ? "rounded-md shadow-[0_10px_30px_rgba(27,42,65,0.08)] hover:-translate-y-0.5 shadow-[0_10px_30px_rgba(27,42,65,0.08)]" : "rounded"}`}>
+              <div key={watch.id} className={`group relative overflow-hidden border border-hairline bg-raised transition duration-300 hover:border-gold/50 ${view === "grid" ? "rounded-md shadow-card hover:-translate-y-1 hover:shadow-card-hover" : "rounded shadow-card"}`}>
                 <Link href={`/collection/${watch.id}`} className="absolute inset-0 z-0" aria-hidden />
                 {view === "grid" ? (
                   <div className="flex flex-col relative z-10">
@@ -624,30 +624,36 @@ export default function CollectionPage() {
                     </div>
                     <div className="p-6">
                       <p className="text-sm uppercase tracking-[0.25em] text-gold">{watch.brand}</p>
-                      <h3 className="mt-2 text-2xl font-semibold text-ink">{watch.model}</h3>
+                      <h3 className="mt-2 font-display text-2xl font-semibold text-ink">{watch.model}</h3>
                       {watch.reference_number ? <p className="text-sm text-muted">Reference: {watch.reference_number}</p> : null}
                       {provenanceLabels(watch).length ? (
                         <div className="mt-2 flex flex-wrap gap-1.5">
                           {provenanceLabels(watch).map((label) => (
-                            <span key={label} className="rounded-full border border-emerald-400/30 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-800">✓ {label}</span>
+                            <span key={label} className="rounded-full border border-gold/50 bg-transparent px-2.5 py-0.5 text-[11px] font-semibold text-gold">✓ {label}</span>
                           ))}
                         </div>
                       ) : null}
                       <OfferStatus kind="collection" />
-                        <div className="mt-4 flex items-center justify-between">
-                          <div className="text-sm text-ink md:text-ink/80">
-                            <div><span className="font-semibold text-ink">Market value:</span> {formatUsd(watch.estimated_value)}</div>
-                            <div><span className="font-semibold text-ink">Retail at purchase:</span> {formatUsd(watch.retail_price)}</div>
-                          </div>
-                          <div className="flex gap-2">
-                            <Link href={`/collection/${watch.id}`} className="rounded-full bg-navy px-3 py-1 text-sm font-semibold uppercase tracking-[0.12em] text-on-navy shadow-[0_10px_30px_rgba(27,42,65,0.08)]">View</Link>
+                        <div className="mt-4 border-t border-hairline pt-4">
+                          <dl className="grid grid-cols-2 gap-3">
+                            <div>
+                              <dt className="text-[10px] uppercase tracking-[0.2em] text-muted">Market value</dt>
+                              <dd className="mt-1 font-display text-xl font-semibold text-ink">{formatUsd(watch.estimated_value)}</dd>
+                            </div>
+                            <div>
+                              <dt className="text-[10px] uppercase tracking-[0.2em] text-muted">Retail at purchase</dt>
+                              <dd className="mt-1 font-display text-xl font-semibold text-ink/80">{formatUsd(watch.retail_price)}</dd>
+                            </div>
+                          </dl>
+                          <div className="mt-4 flex gap-2">
+                            <Link href={`/collection/${watch.id}`} className="inline-flex min-h-9 items-center rounded-full bg-navy px-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-on-navy hover:bg-navy-deep">View</Link>
                             <button
                               type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 router.push(`/collection/${watch.id}`);
                               }}
-                              className="rounded-full border border-hairline bg-surface px-3 py-1 text-sm font-semibold text-ink"
+                              className="inline-flex min-h-9 items-center rounded-full border border-hairline-strong px-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-ink hover:border-navy"
                             >
                               Edit
                             </button>
@@ -660,7 +666,7 @@ export default function CollectionPage() {
                                 await deleteCollectionItem(watch.id, userId);
                                 await fetchWatches();
                               }}
-                              className="rounded-full border border-rose-500/80 bg-rose-500/10 px-3 py-1 text-sm font-semibold text-rose-700"
+                              className="ml-auto inline-flex min-h-9 items-center px-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-rose-700 hover:underline"
                             >
                               Delete
                             </button>
@@ -760,7 +766,7 @@ export default function CollectionPage() {
         {selectedWatch ? (
           <div className="fixed inset-0 z-50 flex items-center justify-center">
             <div className="absolute inset-0 bg-black/70" onClick={() => setSelectedWatch(null)} />
-            <div className="relative z-10 w-full max-w-3xl rounded border border-hairline bg-surface p-6 shadow-[0_10px_30px_rgba(27,42,65,0.08)]">
+            <div className="relative z-10 w-full max-w-3xl rounded border border-hairline bg-raised shadow-card p-6 shadow-card bb-sheen">
               <div className="grid gap-6 lg:grid-cols-2">
                 <div className="h-80 bg-raised overflow-hidden rounded-lg">
                   {selectedWatch.image_url ? (

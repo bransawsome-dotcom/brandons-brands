@@ -46,7 +46,7 @@ export default async function RecentVideoCards({ count = 4 }: { count?: number }
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Watch ${c.brand} ${c.title} on ${c.platform}`}
-            className="group relative block aspect-[9/16] overflow-hidden rounded-md border border-hairline bg-surface"
+            className="group relative block aspect-[9/16] overflow-hidden rounded-md border border-hairline bg-raised shadow-card"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img

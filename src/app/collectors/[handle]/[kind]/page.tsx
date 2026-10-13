@@ -6,6 +6,7 @@ import MakeOfferButton from "@/components/MakeOfferButton";
 import MessageMemberButton from "@/components/MessageMemberButton";
 import ShowOffCTA from "@/components/ShowOffCTA";
 import { SITE_URL } from "@/lib/site";
+import Glyph from "@/components/Glyph";
 import { loadPublicList, money, possessive, type ListKind, type PublicWatch, type PublicWish } from "@/lib/publicLists";
 
 // A member's public collection or wishlist. Anyone can view it and search engines can index it.
@@ -115,7 +116,7 @@ export default async function PublicListPage({ params }: { params: Promise<{ han
         <span className="text-ink/80">{list.display_name}</span>
       </nav>
 
-      <section className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8">
+      <section>
         <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.35em] text-gold">Public {list.kind}</p>
@@ -140,18 +141,18 @@ export default async function PublicListPage({ params }: { params: Promise<{ han
                 target="_blank"
                 rel="noopener"
                 title="Save a Story-size picture of this list to share on Instagram or TikTok"
-                className="rounded-full border border-gold/50 px-4 py-1.5 font-semibold text-gold transition hover:bg-gold/10"
+                className="inline-flex items-center gap-1.5 rounded-full border border-gold/50 px-4 py-1.5 font-semibold text-gold transition hover:bg-gold/10"
               >
-                📲 Share to Story
+                <Glyph e="📲" size={14} /> Share to Story
               </a>
             </div>
           </div>
           <dl className="grid grid-cols-2 gap-3 text-center sm:min-w-[260px]">
-            <div className="rounded border border-hairline bg-surface px-3 py-3">
+            <div className="rounded border border-hairline bg-raised px-3 py-3">
               <dt className="text-[11px] uppercase tracking-[0.18em] text-muted">Watches</dt>
               <dd className="mt-1 text-xl font-semibold text-ink">{list.items.length}</dd>
             </div>
-            <div className="rounded border border-hairline bg-surface px-3 py-3">
+            <div className="rounded border border-hairline bg-raised px-3 py-3">
               <dt className="text-[11px] uppercase tracking-[0.18em] text-muted">{isCollection ? "Est. value" : "Market value"}</dt>
               <dd className="mt-1 text-xl font-semibold text-gold">{total ? money(total) : "—"}</dd>
             </div>
@@ -186,7 +187,7 @@ export default async function PublicListPage({ params }: { params: Promise<{ han
                   { label: "Retail today", value: money(wish.retail_price) },
                 ];
             return (
-              <li key={item.id} className="flex flex-col overflow-hidden rounded-md border border-hairline bg-surface shadow-[0_10px_30px_rgba(27,42,65,0.08)]">
+              <li key={item.id} className="flex flex-col overflow-hidden rounded-md border border-hairline bg-raised shadow-card">
                 {item.image_url ? (
                   <div className="bb-shine flex h-56 items-center justify-center bg-surface p-4">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -214,7 +215,7 @@ export default async function PublicListPage({ params }: { params: Promise<{ han
                     <div className="mt-3 flex flex-wrap gap-1.5">
                       {w.condition ? <span className="rounded-full border border-hairline bg-surface px-2.5 py-0.5 text-[11px] text-ink">{w.condition}</span> : null}
                       {provenance(w).map((p) => (
-                        <span key={p} className="rounded-full border border-emerald-400/30 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-800">
+                        <span key={p} className="rounded-full border border-gold/50 bg-transparent px-2.5 py-0.5 text-[11px] font-semibold text-gold">
                           ✓ {p}
                         </span>
                       ))}
@@ -223,7 +224,7 @@ export default async function PublicListPage({ params }: { params: Promise<{ han
 
                   <dl className="mt-4 grid grid-cols-2 gap-2 text-center">
                     {stats.map((s) => (
-                      <div key={s.label} className="rounded border border-hairline bg-surface p-2">
+                      <div key={s.label} className="rounded border border-hairline bg-raised p-2">
                         <dt className="text-[10px] uppercase tracking-[0.15em] text-muted">{s.label}</dt>
                         <dd className={`mt-1 font-semibold ${s.gold ? "text-gold" : "text-ink"}`}>{s.value ?? "—"}</dd>
                       </div>

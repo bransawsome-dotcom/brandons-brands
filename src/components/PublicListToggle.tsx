@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
 import supabase from "@/lib/supabaseClient";
 import { SITE_URL } from "@/lib/site";
+import Glyph from "@/components/Glyph";
 
 type Profile = { display_name: string; handle: string; collection_public: boolean; wishlist_public: boolean };
 
@@ -65,10 +66,12 @@ export default function PublicListToggle({ kind }: { kind: "collection" | "wishl
   };
 
   return (
-    <div className={`rounded border p-4 text-left sm:max-w-sm ${on ? "border-emerald-400/30 bg-emerald-500/5" : "border-hairline bg-surface"}`}>
+    <div className={`rounded border p-4 text-left sm:max-w-sm ${on ? "border-navy/30 bg-raised shadow-card" : "border-hairline bg-surface"}`}>
       <div className="flex items-center justify-between gap-4">
         <div className="min-w-0">
-          <p className="text-sm font-semibold text-ink">{on ? "🌐 Public" : "🔒 Private"} {kind}</p>
+          <p className="flex items-center gap-1.5 text-sm font-semibold text-ink">
+            <Glyph e={on ? "🌐" : "🔒"} className="text-gold" /> {on ? "Public" : "Private"} {kind}
+          </p>
           <p className="mt-0.5 text-xs leading-5 text-muted">
             {on
               ? `Anyone can see it and search engines can find it. ${kind === "collection" ? "Each watch shows a Make an offer button" : "Each watch shows an Offer to sell button"} for visitors.`
@@ -82,14 +85,14 @@ export default function PublicListToggle({ kind }: { kind: "collection" | "wishl
           aria-label={`Make ${kind} public`}
           disabled={busy}
           onClick={() => (on ? toggle() : setConfirming(true))}
-          className={`relative h-7 w-12 shrink-0 rounded-full transition disabled:opacity-50 ${on ? "bg-emerald-500" : "bg-hairline"}`}
+          className={`relative h-7 w-12 shrink-0 rounded-full transition disabled:opacity-50 ${on ? "bg-navy" : "bg-hairline"}`}
         >
           <span className={`absolute top-1 h-5 w-5 rounded-full bg-surface shadow transition-all ${on ? "left-6" : "left-1"}`} />
         </button>
       </div>
       {on ? (
         <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
-          <Link href={path} className="min-w-0 truncate font-semibold text-emerald-800 underline-offset-2 hover:underline">
+          <Link href={path} className="min-w-0 truncate font-semibold text-navy underline-offset-2 hover:underline">
             brandonsbrands17.com{path}
           </Link>
           <button type="button" onClick={copy} className="rounded-full border border-hairline px-2.5 py-1 text-ink hover:bg-surface">
@@ -103,9 +106,9 @@ export default function PublicListToggle({ kind }: { kind: "collection" | "wishl
             target="_blank"
             rel="noopener"
             title="A Story-size picture of your list to post on Instagram or TikTok"
-            className="rounded-full border border-gold/50 px-2.5 py-1 font-semibold text-gold hover:bg-gold/10"
+            className="inline-flex items-center gap-1.5 rounded-full border border-gold/50 px-2.5 py-1 font-semibold text-gold hover:bg-gold/10"
           >
-            📲 Story card
+            <Glyph e="📲" size={14} /> Story card
           </a>
         </div>
       ) : null}
@@ -125,34 +128,52 @@ export default function PublicListToggle({ kind }: { kind: "collection" | "wishl
           aria-labelledby="go-public-title"
           onClick={(e) => e.target === e.currentTarget && setConfirming(false)}
         >
-          <div className="w-full max-w-md rounded-md border border-hairline bg-surface p-6 text-left shadow-[0_10px_30px_rgba(27,42,65,0.08)]">
+          <div className="w-full max-w-md rounded-md border border-hairline bg-raised shadow-card p-6 text-left shadow-card bb-sheen">
             <p className="text-xs uppercase tracking-[0.25em] text-gold">Make it public?</p>
             <h2 id="go-public-title" className="mt-2 text-xl font-semibold text-ink">
               Your {kind} will be visible to everyone
             </h2>
             <ul className="mt-4 space-y-2.5 text-sm leading-6 text-ink/80">
-              <li>🌐 Anyone can see it at <span className="break-all font-semibold text-emerald-800">brandonsbrands17.com{path}</span>.</li>
-              <li>
-                🔎 Search engines like Google can list it. They usually take <span className="text-ink">a few days to a few weeks</span> to
-                pick up new pages, so share your link to get it seen sooner.
+              <li className="flex gap-2.5">
+                <Glyph e="🌐" className="mt-1 text-gold" />
+                <span>Anyone can see it at <span className="break-all font-semibold text-navy">brandonsbrands17.com{path}</span>.</span>
+              </li>
+              <li className="flex gap-2.5">
+                <Glyph e="🔎" className="mt-1 text-gold" />
+                <span>
+                  Search engines like Google can list it. They usually take <span className="text-ink">a few days to a few weeks</span> to
+                  pick up new pages, so share your link to get it seen sooner.
+                </span>
               </li>
               {kind === "collection" ? (
-                <li>💰 Each watch gets a Make an offer button. Offers come to your Inbox and email.</li>
+                <li className="flex gap-2.5">
+                  <Glyph e="💰" className="mt-1 text-gold" />
+                  <span>Each watch gets a Make an offer button. Offers come to your Inbox and email.</span>
+                </li>
               ) : (
-                <li>🤝 Each watch gets an Offer to sell button, so people who have one can offer it to you. Offers come to your Inbox and email.</li>
+                <li className="flex gap-2.5">
+                  <Glyph e="🤝" className="mt-1 text-gold" />
+                  <span>Each watch gets an Offer to sell button, so people who have one can offer it to you. Offers come to your Inbox and email.</span>
+                </li>
               )}
-              <li>
-                🔒 It shows as <span className="text-ink">{profile.display_name}</span>. Prices you paid, dates, notes and your email stay
-                private.
+              <li className="flex gap-2.5">
+                <Glyph e="🔒" className="mt-1 text-gold" />
+                <span>
+                  It shows as <span className="text-ink">{profile.display_name}</span>. Prices you paid, dates, notes and your email stay
+                  private.
+                </span>
               </li>
-              <li>↩️ You can switch it back to private at any time.</li>
+              <li className="flex gap-2.5">
+                <Glyph e="↩️" className="mt-1 text-gold" />
+                <span>You can switch it back to private at any time.</span>
+              </li>
             </ul>
             <div className="mt-6 flex flex-wrap gap-3">
               <button
                 type="button"
                 onClick={toggle}
                 disabled={busy}
-                className="rounded-full bg-emerald-500 px-5 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-white transition hover:bg-emerald-400 disabled:opacity-60"
+                className="rounded-full bg-navy px-5 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-white transition hover:bg-emerald-400 disabled:opacity-60"
               >
                 Make it public
               </button>

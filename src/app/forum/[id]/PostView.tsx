@@ -8,10 +8,12 @@ import { useParams, useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
 import FollowBrandon from "@/components/FollowBrandon";
 import ForumIdentity from "@/components/ForumIdentity";
-import SalesDisclaimer from "@/components/SalesDisclaimer";
+import ReportListing from "@/components/ReportListing";
+import { FORUM_DISCLAIMER } from "@/components/ForumSafety";
 import VideoEmbed from "@/components/VideoEmbed";
 import PhotoPicker from "@/components/PhotoPicker";
 import PhotoGallery from "@/components/PhotoGallery";
+import Glyph from "@/components/Glyph";
 import { videoEmbed } from "@/lib/video";
 import FollowButton from "@/components/FollowButton";
 import { SubjectSelect, useSubjectTree } from "@/components/ForumSubjects";
@@ -344,7 +346,7 @@ export default function PostView() {
         </Link>
       </nav>
 
-      <article className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8">
+      <article>
         {editing ? (
           <form onSubmit={saveEdit} className="grid gap-4">
             <SubjectSelect
@@ -369,7 +371,8 @@ export default function PostView() {
         ) : (
           <>
             <p className="text-xs uppercase tracking-[0.25em] text-gold">
-              {s.icon} {sParent ? `${sParent.name} › ` : ""}
+              <Glyph e={s.icon} size={13} className="mr-1.5" />
+              {sParent ? `${sParent.name} › ` : ""}
               {s.name}
             </p>
             <h1 className="mt-2 text-2xl font-semibold text-ink sm:text-4xl">{post.title}</h1>
@@ -409,13 +412,22 @@ export default function PostView() {
                 </button>
               </>
             ) : null}
+            {userId !== post.user_id ? (
+              <span className="ml-auto">
+                <ReportListing postId={post.id} title={post.title} listing={post.subject === "for-sale" || post.subject === "seeking-to-buy"} />
+              </span>
+            ) : null}
             </div>
           </>
         )}
       </article>
-      {post.subject === "for-sale" || post.subject === "seeking-to-buy" ? <SalesDisclaimer className="mt-4" /> : null}
+      {post.subject === "for-sale" || post.subject === "seeking-to-buy" ? (
+        <p role="note" className="mt-4 border border-hairline-strong bg-raised px-5 py-4 text-sm leading-6 text-ink/80">
+          {FORUM_DISCLAIMER}
+        </p>
+      ) : null}
 
-      <section className="mt-8 rounded-md border border-hairline bg-surface p-5 sm:p-8">
+      <section className="mt-8 rounded-md border border-hairline bg-raised shadow-card p-5 sm:p-8">
         <h2 className="text-lg font-semibold text-ink">
           {comments.length} {comments.length === 1 ? "reply" : "replies"}
         </h2>

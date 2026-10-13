@@ -20,7 +20,7 @@ export default function ForumIdentity({ children, action = "post" }: { children:
 
   if (!user) {
     return (
-      <div className="rounded border border-hairline bg-surface px-4 py-4 text-sm text-ink/80">
+      <div className="rounded border border-hairline bg-raised px-4 py-4 text-sm text-ink/80">
         {guestMode ? "Guest mode can read the forum. " : ""}
         <Link href="/login" className="font-semibold text-gold hover:text-gold-bright">
           Log in
@@ -51,7 +51,7 @@ export default function ForumIdentity({ children, action = "post" }: { children:
   };
 
   return (
-    <form onSubmit={handleSave} className="space-y-3 rounded border border-gold/30 bg-gold/5 p-4">
+    <form onSubmit={handleSave} className="space-y-3 rounded border border-gold/40 bg-raised shadow-card p-4">
       <p className="text-sm font-semibold text-ink">Choose your forum name</p>
       <p className="text-xs text-muted">This is shown on everything you post. Your email stays private.</p>
       <div className="flex flex-col gap-3 sm:flex-row">

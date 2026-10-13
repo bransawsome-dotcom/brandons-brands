@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import LogoMark from "@/components/LogoMark";
+import CollabNote from "@/components/CollabNote";
 import { FAVORITES_SUBJECT } from "@/lib/favorites";
 import { collabEmail, socials } from "@/lib/socials";
 import { IDENTITY, SITE_URL } from "@/lib/site";
+import Glyph from "@/components/Glyph";
 
 const TITLE = "About Brandon's Brands | Brandon Volosov & Watch Microbrands";
 const DESCRIPTION =
@@ -37,14 +39,14 @@ export const metadata: Metadata = {
     siteName: "Brandon's Brands",
     title: "About Brandon's Brands",
     description: DESCRIPTION,
-    images: [{ url: "/og-image.png?v=2", width: 1200, height: 630, alt: "Brandon's Brands: watches worth knowing" }],
+    images: [{ url: "/og-image.png?v=3", width: 1200, height: 630, alt: "Brandon's Brands: watches worth knowing" }],
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
     title: "About Brandon's Brands",
     description: DESCRIPTION,
-    images: ["/og-image.png?v=2"],
+    images: ["/og-image.png?v=3"],
   },
 };
 
@@ -115,7 +117,7 @@ export default function AboutPage() {
         "@id": `${SITE_URL}/#website`,
         name: "Brandon's Brands",
         url: SITE_URL,
-        image: `${SITE_URL}/og-image.png`,
+        image: `${SITE_URL}/og-image.png?v=3`,
         slogan: "Discover. Collect. Showcase the world's finest watches.",
         description: IDENTITY,
         creator: { "@id": `${SITE_URL}/about#brandon` },
@@ -159,7 +161,7 @@ export default function AboutPage() {
     <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-16">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
 
-      <article className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8 lg:p-10">
+      <article>
         <nav aria-label="Breadcrumb" className="mb-6 text-xs text-muted">
           <ol className="flex items-center gap-2">
             <li>
@@ -182,11 +184,7 @@ export default function AboutPage() {
           </div>
           {/* The logo with its gold seconds hand sweeping in real time. */}
           <div role="img" aria-label="Brandon's Brands luxury watch logo" className="mx-auto">
-            <LogoMark
-              src="/logo-dial-1024.webp"
-              className="block h-56 w-56 drop-shadow-[0_10px_30px_rgba(27,42,65,0.08)] sm:h-72 sm:w-72 lg:h-80 lg:w-80"
-              handWidth={1}
-            />
+            <LogoMark variant="watch" priority className="block w-64 sm:w-80" />
           </div>
         </header>
 
@@ -220,10 +218,10 @@ export default function AboutPage() {
 
         {/* A Collector's House */}
         <section aria-labelledby="collectors-house" className="mt-14 border-t border-hairline pt-10">
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] lg:gap-12">
             <div>
               <p className="text-xs uppercase tracking-[0.3em] text-gold">How it works</p>
-              <h2 id="collectors-house" className="mt-3 font-display text-4xl font-semibold uppercase leading-[1.05] text-ink sm:text-5xl">
+              <h2 id="collectors-house" className="mt-3 font-display text-4xl font-semibold uppercase leading-[1.05] text-ink sm:text-[44px]">
                 A Collector&apos;s <span className="font-light text-gold">House</span>
               </h2>
               <p className="mt-4 font-serif text-xl italic leading-8 text-ink/80">
@@ -303,7 +301,9 @@ export default function AboutPage() {
           aria-labelledby="favorites"
           className="mt-12 rounded-md border border-gold/30 bg-gradient-to-br from-gold/20 via-surface to-gold/10 p-6 sm:p-8"
         >
-          <p className="text-xs uppercase tracking-[0.3em] text-gold">⭐ Brandon&apos;s Favorites</p>
+          <p className="flex items-center gap-1.5 text-xs uppercase tracking-[0.3em] text-gold">
+            <Glyph e="⭐" size={13} /> Brandon&apos;s Favorites
+          </p>
           <h2 id="favorites" className="mt-2 text-2xl font-semibold text-ink sm:text-3xl">The watches Brandon loves</h2>
           <p className="mt-3 max-w-2xl text-base leading-7 text-ink/80">
             See Brandon&apos;s favorite watches, each with his review or reel, and talk about them with other collectors in the Brandon&apos;s
@@ -331,7 +331,7 @@ export default function AboutPage() {
           <h2 id="what-we-do" className="text-2xl font-semibold text-ink sm:text-3xl">What you&apos;ll find here</h2>
           <div className="mt-6 grid gap-5 sm:grid-cols-2">
             {offerings.map((o) => (
-              <div key={o.title} className="flex flex-col rounded-md border border-hairline bg-raised p-6">
+              <div key={o.title} className="flex flex-col rounded-md border border-hairline bg-raised p-6 shadow-card bb-sheen">
                 <h3 className="text-xl font-semibold text-ink">{o.title}</h3>
                 <p className="mt-3 flex-1 text-sm leading-7 text-ink/80">{o.text}</p>
                 <Link href={o.href} className="mt-5 inline-flex items-center gap-1 self-start text-sm font-semibold uppercase tracking-[0.15em] text-gold hover:text-gold-bright">
@@ -369,7 +369,7 @@ export default function AboutPage() {
         {/* FAQ */}
         <section aria-labelledby="faq" className="mt-12">
           <h2 id="faq" className="text-2xl font-semibold text-ink sm:text-3xl">Frequently asked questions</h2>
-          <div className="mt-6 divide-y divide-hairline rounded-md border border-hairline bg-surface">
+          <div className="mt-6 divide-y divide-hairline rounded-md border border-hairline bg-raised shadow-card">
             {faqs.map((f) => (
               <details key={f.q} className="group p-5 sm:p-6">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-base font-semibold text-ink">
@@ -382,6 +382,8 @@ export default function AboutPage() {
           </div>
         </section>
 
+        <CollabNote className="mt-12" />
+
         {/* Contact */}
         <section aria-labelledby="contact-heading" id="contact" className="mt-12 rounded-md border border-gold/30 bg-gradient-to-br from-gold/10 via-transparent to-gold/15 p-6 text-center sm:p-10">
           <h2 id="contact-heading" className="text-2xl font-semibold text-ink sm:text-3xl">Get in touch</h2>
@@ -390,7 +392,7 @@ export default function AboutPage() {
           </p>
           <a
             href={`mailto:${collabEmail}?subject=${encodeURIComponent("Hello from brandonsbrands17.com")}`}
-            className="mt-7 inline-flex rounded-full bg-navy px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-on-navy shadow-[0_10px_30px_rgba(27,42,65,0.08)] transition hover:bg-navy-deep"
+            className="mt-7 inline-flex rounded-full bg-navy px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-on-navy shadow-card transition hover:bg-navy-deep"
           >
             Contact Us
           </a>

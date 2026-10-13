@@ -20,9 +20,9 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Brandon's Brands",
     locale: "en_US",
-    images: [{ url: "/og-image.png?v=2", width: 1200, height: 630, alt: "Brandon's Brands: watches worth knowing" }],
+    images: [{ url: "/og-image.png?v=3", width: 1200, height: 630, alt: "Brandon's Brands: watches worth knowing" }],
   },
-  twitter: { card: "summary_large_image", images: ["/og-image.png?v=2"] },
+  twitter: { card: "summary_large_image", images: ["/og-image.png?v=3"] },
 };
 
 export default function RootLayout({

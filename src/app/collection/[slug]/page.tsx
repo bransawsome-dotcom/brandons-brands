@@ -133,7 +133,7 @@ export default function WatchDetailsPage() {
 
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6 sm:py-12">
-      <div className="rounded border border-hairline bg-surface p-6 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl">
+      <div className="rounded border border-hairline bg-raised shadow-card p-6 shadow-card">
         <div className="grid gap-6 lg:grid-cols-2">
           <div className="bb-shine h-96 w-full overflow-hidden rounded-lg bg-raised">
             {watch.image_url ? (
@@ -156,7 +156,7 @@ export default function WatchDetailsPage() {
                 <div className="mt-3 flex flex-wrap gap-2">
                   {provenanceLabels(watch).length ? (
                     provenanceLabels(watch).map((label) => (
-                      <span key={label} className="rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-800">
+                      <span key={label} className="rounded-full border border-gold/50 bg-transparent px-3 py-1 text-xs font-semibold text-gold">
                         ✓ {label}
                       </span>
                     ))

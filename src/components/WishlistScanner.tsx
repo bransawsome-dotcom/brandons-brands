@@ -79,7 +79,7 @@ export default function WishlistScanner({ onAdd }: { onAdd: (items: WishlistItem
   const input = "w-full rounded-xl border border-hairline bg-raised px-3 py-2 text-sm text-ink outline-none focus:border-gold/70";
 
   return (
-    <div className="rounded-md border border-gold/30 bg-gold/5 p-5 sm:p-6">
+    <div className="rounded-md border border-gold/40 bg-raised shadow-card p-5 sm:p-6">
       <p className="text-xs uppercase tracking-[0.3em] text-gold">Scan a list</p>
       <h2 className="mt-2 text-xl font-semibold text-ink">Add your whole wishlist from one photo</h2>
       <p className="mt-2 text-sm leading-6 text-ink/80">
@@ -108,7 +108,7 @@ export default function WishlistScanner({ onAdd }: { onAdd: (items: WishlistItem
             <span className="w-24">Priority</span>
           </div>
           {rows.map((row, i) => (
-            <div key={i} className="grid gap-2 rounded border border-hairline bg-surface p-3 sm:grid-cols-[auto_1fr_1fr_1fr_1fr_auto] sm:items-center">
+            <div key={i} className="grid gap-2 rounded border border-hairline bg-raised shadow-card p-3 sm:grid-cols-[auto_1fr_1fr_1fr_1fr_auto] sm:items-center">
               <input
                 type="checkbox"
                 checked={row.selected}

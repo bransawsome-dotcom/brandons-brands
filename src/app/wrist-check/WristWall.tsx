@@ -6,6 +6,7 @@ import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react"
 import { useAuth } from "@/components/AuthProvider";
 import supabase from "@/lib/supabaseClient";
 import { isModerator } from "@/lib/forum";
+import Glyph from "@/components/Glyph";
 
 type Shot = { id: string; user_id: string; display_name: string; image: string; watch: string | null; caption: string | null; featured_at: string | null; created_at: string };
 
@@ -91,11 +92,13 @@ export default function WristWall() {
   return (
     <>
       {featured ? (
-        <section className="mt-6 grid gap-5 overflow-hidden rounded-md border border-gold/40 bg-gold/5 p-5 sm:grid-cols-[minmax(0,320px)_1fr] sm:items-center">
+        <section className="mt-6 grid gap-5 overflow-hidden rounded-md border border-gold/40 bg-raised shadow-card p-5 sm:grid-cols-[minmax(0,320px)_1fr] sm:items-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={featured.image} alt={featured.watch ?? "Wrist Check of the Week"} className="w-full rounded object-cover" />
           <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-gold">⭐ Wrist Check of the Week</p>
+            <p className="flex items-center gap-1.5 text-xs uppercase tracking-[0.3em] text-gold">
+              <Glyph e="⭐" size={13} /> Wrist Check of the Week
+            </p>
             <h2 className="mt-2 text-2xl font-semibold text-ink">{featured.watch ?? "This week's pick"}</h2>
             <p className="mt-1 text-sm text-ink/80">Posted by {featured.display_name}</p>
             {featured.caption ? <p className="mt-3 text-sm leading-6 text-ink/80">&ldquo;{featured.caption}&rdquo;</p> : null}
@@ -104,7 +107,7 @@ export default function WristWall() {
       ) : null}
 
       {user ? (
-        <form onSubmit={post} className="mt-6 grid gap-3 rounded-md border border-hairline bg-surface p-5">
+        <form onSubmit={post} className="mt-6 grid gap-3 rounded-md border border-hairline bg-raised shadow-card p-5">
           <p className="font-semibold text-ink">Post today&apos;s wrist shot</p>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
             <label className="flex h-40 w-full shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded border border-dashed border-hairline-strong bg-raised text-sm text-muted sm:w-40">
@@ -112,7 +115,9 @@ export default function WristWall() {
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={photo} alt="Your wrist shot" className="h-full w-full object-cover" />
               ) : (
-                <span>📸 Choose photo</span>
+                <span className="inline-flex items-center gap-1.5">
+                  <Glyph e="📸" /> Choose photo
+                </span>
               )}
               <input type="file" accept="image/*" onChange={(e) => void pick(e)} className="hidden" />
             </label>
@@ -128,7 +133,7 @@ export default function WristWall() {
           </button>
         </form>
       ) : (
-        <p className="mt-6 rounded-md border border-hairline bg-surface p-5 text-sm text-ink/80">
+        <p className="mt-6 rounded-md border border-hairline bg-raised shadow-card p-5 text-sm text-ink/80">
           <Link href="/login?next=/wrist-check" className="font-semibold text-gold hover:text-gold-bright">
             Log in
           </Link>{" "}
@@ -155,8 +160,8 @@ export default function WristWall() {
                 {mod || s.user_id === user?.id ? (
                   <div className="mt-2 flex gap-3 text-[11px]">
                     {mod ? (
-                      <button type="button" onClick={() => void feature(s)} className="text-gold hover:text-gold-bright">
-                        ⭐ Wrist of the Week
+                      <button type="button" onClick={() => void feature(s)} className="inline-flex items-center gap-1 text-gold hover:text-gold-bright">
+                        <Glyph e="⭐" size={12} /> Wrist of the Week
                       </button>
                     ) : null}
                     <button type="button" onClick={() => void remove(s)} className="text-muted hover:text-rose-700">

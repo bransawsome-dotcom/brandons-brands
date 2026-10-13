@@ -1,6 +1,7 @@
 "use client";
 
 import { SkeletonList } from "@/components/Skeleton";
+import Glyph from "@/components/Glyph";
 
 import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -73,7 +74,7 @@ const EMPTY_TEXT: Record<FolderKey, { icon: string; title: string; text: React.R
     title: "No price alerts yet.",
     text: (
       <>
-        Turn on <span className="text-ink">🔔 Price alert</span> for a watch on your{" "}
+        Turn on <span className="inline-flex items-center gap-1 text-ink"><Glyph e="🔔" className="text-gold" /> Price alert</span> for a watch on your{" "}
         <Link href="/wishlist" className="text-gold">
           wishlist
         </Link>{" "}
@@ -157,7 +158,7 @@ export default function InboxView() {
       .then((r) => {
         if (!live) return;
         if (!r) setMember({ handle: memberHandle, id: null, name: "", note: "That member couldn't be found. They may have changed their public name." });
-        else if (r.user_id === userId) setMember({ handle: memberHandle, id: null, name: r.display_name, note: "That's your own public list. 🙂" });
+        else if (r.user_id === userId) setMember({ handle: memberHandle, id: null, name: r.display_name, note: "That's your own public list." });
         else setMember({ handle: memberHandle, id: r.user_id, name: r.display_name });
       })
       .catch((err) => live && setMember({ handle: memberHandle, id: null, name: "", note: err instanceof Error ? err.message : "Couldn't find that member." }));
@@ -316,7 +317,7 @@ export default function InboxView() {
                   }`}
                 >
                   <span className="whitespace-nowrap">
-                    <span className="mr-2">{f.icon}</span>
+                    <Glyph e={f.icon} className="mr-2" />
                     {f.name}
                   </span>
                   {count ? <span className="shrink-0 rounded-full bg-navy px-2 text-[11px] font-bold text-on-navy">{count}</span> : null}
@@ -327,14 +328,16 @@ export default function InboxView() {
         </aside>
 
         <div className="min-w-0">
-          {error ? <div className="rounded-md border border-hairline bg-surface p-10 text-center text-amber-800">{error}</div> : null}
+          {error ? <div className="rounded-md border border-hairline bg-raised shadow-card p-10 text-center text-amber-800">{error}</div> : null}
 
           {!error && folder !== "messages" ? (
-            <section className="rounded-md border border-hairline bg-surface p-4 sm:p-6">
+            <section className="rounded-md border border-hairline bg-raised shadow-card p-4 sm:p-6">
               <div className="mb-3 flex items-center justify-between gap-3 px-2">
                 <div>
                   <h2 className="text-lg font-semibold text-ink">
-                    {folderInfo.icon} {folderInfo.name}
+                    <span className="inline-flex items-center gap-2">
+                      <Glyph e={folderInfo.icon} size={18} className="text-gold" /> {folderInfo.name}
+                    </span>
                   </h2>
                   <p className="text-sm text-muted">{folderInfo.hint}</p>
                 </div>
@@ -355,7 +358,7 @@ export default function InboxView() {
                     <li key={c.otherId}>
                       <button type="button" onClick={() => openConversation(c.otherId)} className="flex w-full items-start gap-3 rounded px-2 py-3 text-left hover:bg-surface">
                         <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-gold" />
-                        <span className="text-lg">✉️</span>
+                        <span className="mt-0.5 text-gold"><Glyph e="✉️" size={18} /></span>
                         <span className="min-w-0 flex-1">
                           <span className="block text-sm font-semibold text-ink">
                             {c.unread} new message{c.unread === 1 ? "" : "s"} from {c.otherName}
@@ -376,7 +379,7 @@ export default function InboxView() {
                 <p className="p-8 text-center text-muted">Loading…</p>
               ) : !shown.length && !(folder === "all" && unreadConversations.length) ? (
                 <div className="p-10 text-center text-ink/80">
-                  <div className="text-4xl">{EMPTY_TEXT[folder].icon}</div>
+                  <div className="flex justify-center text-gold"><Glyph e={EMPTY_TEXT[folder].icon} size={36} /></div>
                   <p className="mt-3 font-semibold text-ink">{EMPTY_TEXT[folder].title}</p>
                   <p className="mt-1 text-sm text-muted">{EMPTY_TEXT[folder].text}</p>
                 </div>
@@ -385,7 +388,7 @@ export default function InboxView() {
                   {shown.map((n) => (
                     <li key={n.id} className="flex items-start gap-3 rounded px-2 py-3 hover:bg-surface">
                       <span className={`mt-2 h-2 w-2 shrink-0 rounded-full ${n.read_at ? "bg-transparent" : "bg-gold"}`} />
-                      <span className="text-lg">{KIND_ICON[n.kind] ?? "🔔"}</span>
+                      <span className="mt-0.5 text-gold"><Glyph e={KIND_ICON[n.kind] ?? "🔔"} size={18} /></span>
                       <button type="button" onClick={() => openNotification(n)} className="min-w-0 flex-1 text-left">
                         <span className={`block text-sm ${n.read_at ? "text-ink/80" : "font-semibold text-ink"}`}>{n.title}</span>
                         {n.body ? <span className="mt-0.5 block whitespace-pre-wrap text-sm text-muted line-clamp-3">{n.body}</span> : null}
@@ -410,7 +413,7 @@ export default function InboxView() {
           ) : null}
 
           {!error && folder === "messages" ? (
-            <section className="grid min-h-[28rem] overflow-hidden rounded-md border border-hairline bg-surface md:grid-cols-[280px_1fr]">
+            <section className="grid min-h-[28rem] overflow-hidden rounded-md border border-hairline bg-raised shadow-card md:grid-cols-[280px_1fr]">
               <aside className={`border-hairline md:border-r ${activeId ? "hidden md:block" : ""}`}>
                 <div className="border-b border-hairline px-4 py-3 text-xs uppercase tracking-[0.2em] text-muted">Conversations</div>
                 <ul>
@@ -506,7 +509,7 @@ export default function InboxView() {
                       </div>
                     </div>
                     <div className="max-h-[28rem] flex-1 space-y-3 overflow-y-auto px-4 py-4">
-                      {!thread.length ? <p className="py-8 text-center text-sm text-muted">Say hello 👋</p> : null}
+                      {!thread.length ? <p className="py-8 text-center text-sm text-muted"><span className="inline-flex items-center gap-1.5">Say hello <Glyph e="👋" /></span></p> : null}
                       {thread.map((m, i) => {
                         const mine = m.sender_id === userId;
                         // Show the subject when it starts or changes, not on every reply.
@@ -531,7 +534,7 @@ export default function InboxView() {
                     </div>
                     <form onSubmit={handleSend} className="border-t border-hairline p-3">
                       {!thread.length ? (
-                        <div className="mb-3 rounded border border-gold/20 bg-gold/10 px-4 py-3 text-xs leading-5 text-gold">
+                        <div className="mb-3 rounded border border-gold/40 bg-raised shadow-card px-4 py-3 text-xs leading-5 text-gold">
                           <span className="font-semibold text-ink">Before you send:</span> messages are private between you and {activeName}. Be
                           respectful, and keep personal details like your address, phone number and payment information out of messages.
                         </div>
@@ -674,7 +677,7 @@ function AnnouncementComposer({ kind, onSent }: { kind: "site_update" | "group_e
   }
 
   return (
-    <form onSubmit={submit} className="mb-4 grid gap-3 rounded border border-gold/30 bg-gold/5 p-4">
+    <form onSubmit={submit} className="mb-4 grid gap-3 rounded border border-gold/40 bg-raised shadow-card p-4">
       <p className="text-xs uppercase tracking-[0.25em] text-gold">New {label} · goes to every member · moderators only</p>
       <input
         value={form.title}

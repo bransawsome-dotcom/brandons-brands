@@ -11,6 +11,7 @@ import type { Watch } from "@/lib/localData";
 import { isAllowedLink, linkInfo, type Favorite } from "@/lib/favorites";
 import { videoEmbed } from "@/lib/video";
 import VideoEmbed from "@/components/VideoEmbed";
+import Glyph, { glyphName } from "@/components/Glyph";
 
 const input =
   "w-full rounded border border-hairline bg-raised px-4 py-3 text-ink outline-none transition focus:border-gold/70";
@@ -144,7 +145,7 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
   return (
     <>
       {moderator ? (
-        <div className="mt-6 flex flex-wrap items-center gap-3 rounded border border-gold/30 bg-gold/5 px-4 py-3 text-sm">
+        <div className="mt-6 flex flex-wrap items-center gap-3 rounded border border-gold/40 bg-raised shadow-card px-4 py-3 text-sm">
           <span className="text-gold">Only you see this · editing the gallery</span>
           <button
             type="button"
@@ -160,9 +161,9 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
             type="button"
             onClick={() => void pickNow()}
             disabled={Boolean(picking?.endsWith("minutes."))}
-            className="rounded-full border border-gold/50 px-4 py-2 font-semibold text-gold hover:bg-gold/10 disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 rounded-full border border-gold/50 px-4 py-2 font-semibold text-gold hover:bg-gold/10 disabled:opacity-50"
           >
-            ⭐ Pick this week&apos;s favorite now
+            <Glyph e="⭐" size={14} /> Pick this week&apos;s favorite now
           </button>
           <Link href={`/forum?subject=${FAVORITES_SUBJECT}`} className="text-gold hover:text-ink">
             Post about one in the forum →
@@ -195,12 +196,12 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
               // eslint-disable-next-line @next/next/no-img-element
               <img src={f.image_url} alt={`${f.brand} ${f.model}`} referrerPolicy="no-referrer" loading="lazy" className="h-full w-full object-contain" />
             ) : (
-              <span className="text-5xl" aria-hidden>
-                ⌚
+              <span className="text-gold" aria-hidden>
+                <Glyph e="⌚" size={48} />
               </span>
             );
             return (
-              <li key={f.id} className="flex flex-col overflow-hidden rounded-md border border-hairline bg-surface shadow-[0_10px_30px_rgba(27,42,65,0.08)]">
+              <li key={f.id} className="flex flex-col overflow-hidden rounded-md border border-hairline bg-raised shadow-card">
                 {embed && playing === f.id ? (
                   <div className="bg-surface p-3">
                     <VideoEmbed embed={embed} title={`Brandon's ${f.brand} ${f.model} video`} />
@@ -229,7 +230,8 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
                   >
                     {photo}
                     <span className="absolute bottom-3 right-3 rounded-full bg-black/70 px-3 py-1 text-xs font-semibold text-ink opacity-90 transition group-hover:bg-gold">
-                      {info.icon} {info.label}
+                      {glyphName(info.icon) ? <Glyph e={info.icon} size={12} className="mr-1" /> : `${info.icon} `}
+                      {info.label}
                     </span>
                   </a>
                 ) : (
@@ -241,7 +243,7 @@ export default function FavoritesView({ initial }: { initial: Favorite[] }) {
                   {f.reference_number ? <p className="text-sm text-muted">Ref. {f.reference_number}</p> : null}
                   {f.note ? <p className="mt-3 text-sm leading-6 text-ink/80">{f.note}</p> : null}
                   {f.features ? (
-                    <details className="group mt-3 rounded border border-hairline bg-surface px-4 py-3 text-sm">
+                    <details className="group mt-3 rounded border border-hairline bg-raised px-4 py-3 text-sm">
                       <summary className="cursor-pointer list-none font-semibold text-gold marker:hidden">
                         <span className="group-open:hidden">What I love about it ▾</span>
                         <span className="hidden group-open:inline">What I love about it ▴</span>

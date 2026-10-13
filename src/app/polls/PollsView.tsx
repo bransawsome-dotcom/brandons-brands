@@ -64,7 +64,7 @@ export default function PollsView({ initial }: { initial: Poll[] }) {
   return (
     <>
       {mod ? (
-        <form onSubmit={create} className="mt-6 grid gap-3 rounded-md border border-gold/30 bg-gold/5 p-5">
+        <form onSubmit={create} className="mt-6 grid gap-3 rounded-md border border-gold/40 bg-raised shadow-card p-5">
           <p className="text-sm font-semibold text-gold">New poll (only moderators see this)</p>
           <input value={form.question} onChange={(e) => setForm({ ...form, question: e.target.value })} maxLength={140} required className={input} placeholder="Question" />
           <div className="grid gap-3 sm:grid-cols-2">
@@ -98,7 +98,7 @@ export default function PollsView({ initial }: { initial: Poll[] }) {
           ))}
         </div>
       ) : (
-        <p className="mt-6 rounded-md border border-hairline bg-surface p-6 text-ink/80">The first poll is coming soon.</p>
+        <p className="mt-6 rounded-md border border-hairline bg-raised shadow-card p-6 text-ink/80">The first poll is coming soon.</p>
       )}
     </>
   );

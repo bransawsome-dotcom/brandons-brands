@@ -4,6 +4,7 @@ import MessageMemberButton from "@/components/MessageMemberButton";
 import FollowBrandon from "@/components/FollowBrandon";
 import { isFavoritesPost, siteSearch, type WatchHit } from "@/lib/search";
 import { linkInfo } from "@/lib/favorites";
+import Glyph from "@/components/Glyph";
 
 // Site search: keywords, watches in public collections and wishlists, members' public names and forum names.
 
@@ -28,8 +29,8 @@ function WatchCard({ w, kind }: { w: WatchHit; kind: "collection" | "wishlist" }
             // eslint-disable-next-line @next/next/no-img-element
             <img src={w.image_url} alt={`${w.brand} ${w.model}`} referrerPolicy="no-referrer" loading="lazy" className="h-full w-full object-contain" />
           ) : (
-            <span aria-hidden className="text-2xl">
-              ⌚
+            <span aria-hidden className="text-gold">
+              <Glyph e="⌚" size={28} />
             </span>
           )}
         </span>
@@ -69,7 +70,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
 
   return (
     <div className="mx-auto w-full max-w-6xl px-0 py-4 sm:px-6 sm:py-10">
-      <section className="rounded-md border border-hairline bg-surface p-5 shadow-[0_10px_30px_rgba(27,42,65,0.08)] backdrop-blur-xl sm:p-8">
+      <section>
         <p className="text-xs uppercase tracking-[0.35em] text-gold">Search</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-[-0.02em] text-ink sm:text-4xl">Search Brandon&apos;s Brands</h1>
         <form action="/search" method="get" role="search" className="mt-5 flex gap-2">
@@ -136,20 +137,22 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                   <li key={f.id}>
                     <Link
                       href={f.post_id ? `/forum/${f.post_id}` : "/favorites"}
-                      className="flex h-full items-center gap-3 rounded border border-gold/25 bg-gold/10 p-3 transition hover:border-gold/60"
+                      className="flex h-full items-center gap-3 rounded border border-gold/40 bg-raised shadow-card p-3 transition hover:border-gold/60 bb-sheen"
                     >
                       <span className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-surface">
                         {f.image_url ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={f.image_url} alt={`${f.brand} ${f.model}`} referrerPolicy="no-referrer" loading="lazy" className="h-full w-full object-cover" />
                         ) : (
-                          <span aria-hidden className="text-2xl">
-                            ⭐
+                          <span aria-hidden className="text-gold">
+                            <Glyph e="⭐" size={28} />
                           </span>
                         )}
                       </span>
                       <span className="min-w-0">
-                        <span className="block text-[10px] uppercase tracking-[0.2em] text-gold">⭐ {f.brand}</span>
+                        <span className="flex items-center gap-1 text-[10px] uppercase tracking-[0.2em] text-gold">
+                          <Glyph e="⭐" size={11} /> {f.brand}
+                        </span>
                         <span className="block truncate font-semibold text-ink">{f.model}</span>
                         {info ? <span className="block text-xs text-gold">{info.label} · discussion →</span> : null}
                       </span>
@@ -201,7 +204,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                     rel="nofollow"
                     className="inline-flex shrink-0 items-center gap-2 rounded-full border border-hairline-strong bg-raised px-4 py-2 text-sm font-semibold text-ink hover:border-gold hover:bg-surface"
                   >
-                    <span aria-hidden>✉️</span> Message
+                    <Glyph e="✉️" /> Message
                   </Link>
                 </li>
               ))}
@@ -214,7 +217,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                 <li key={p.id}>
                   <Link href={`/forum/${p.id}`} className="block rounded border border-hairline bg-raised px-4 py-3 transition hover:border-gold/50">
                     <span className="block font-semibold text-ink">
-                      {isFavoritesPost(p.subject) ? "⭐ " : "💬 "}
+                      <Glyph e={isFavoritesPost(p.subject) ? "⭐" : "💬"} className="mr-1.5 text-gold" />
                       {p.title}
                     </span>
                     <span className="text-xs text-muted">by {p.author_name}</span>

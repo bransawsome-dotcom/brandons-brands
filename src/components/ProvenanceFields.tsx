@@ -41,7 +41,7 @@ function Toggle({ label, hint, checked, onChange }: { label: string; hint?: stri
 export default function ProvenanceFields({ value, onChange }: { value: Provenance; onChange: (next: Provenance) => void }) {
   const set = (patch: Partial<Provenance>) => onChange({ ...value, ...patch });
   return (
-    <fieldset className="space-y-3 rounded border border-hairline bg-surface p-4">
+    <fieldset className="space-y-3 rounded border border-hairline bg-raised shadow-card p-4">
       <legend className="px-1 text-sm text-ink/80">Box, papers &amp; authentication</legend>
       <div className="grid gap-3 grid-cols-[repeat(auto-fit,minmax(170px,1fr))]">
         <Toggle label="Original box" checked={value.has_box} onChange={(v) => set({ has_box: v })} />
