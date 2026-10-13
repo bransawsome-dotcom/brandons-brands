@@ -16,14 +16,14 @@ export default function TheEdit({ watches }: { watches: EditWatch[] }) {
   };
 
   return (
-    <div className="grid items-start gap-10 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-14">
-      <figure className="bb-shine relative m-0 aspect-[4/5] overflow-hidden border border-hairline bg-surface">
+    <div className="grid grid-cols-1 items-start gap-10 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-14 [&>*]:min-w-0">
+      <figure className="bb-shine relative m-0 aspect-[4/5] overflow-hidden rounded-md border shadow-card bb-sheen">
         {shown?.image ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img key={shown.id} src={shown.image} alt={`${shown.brand} ${shown.model}`} className="absolute inset-0 h-full w-full object-cover animate-fade-in" />
+          <img key={shown.id} src={shown.image} alt={`${shown.brand} ${shown.model}`} className="absolute inset-0 h-full w-full object-contain p-6 pb-14 animate-fade-in sm:p-10 sm:pb-16" />
         ) : null}
         {shown ? (
-          <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-5 pb-4 pt-12 text-[11px] uppercase tracking-[0.2em] text-ink">
+          <figcaption className="absolute inset-x-0 bottom-0 px-5 pb-4 text-[11px] uppercase tracking-[0.2em] text-muted">
             {shown.brand} · {shown.model}
           </figcaption>
         ) : null}
@@ -35,17 +35,17 @@ export default function TheEdit({ watches }: { watches: EditWatch[] }) {
               href={w.href}
               onMouseEnter={() => pick(w)}
               onFocus={() => pick(w)}
-              className="group flex items-baseline gap-5 py-3.5 text-ink sm:gap-7"
+              className="group flex items-baseline gap-4 py-3.5 text-ink sm:gap-7"
             >
               <span className="w-7 shrink-0 text-[11px] tracking-[0.12em] text-muted">{String(i + 1).padStart(2, "0")}</span>
               <span
-                className={`min-w-0 flex-1 truncate font-serif text-[26px] leading-tight transition sm:text-[34px] ${
+                className={`min-w-0 flex-1 break-words font-serif text-[22px] leading-snug transition sm:truncate sm:text-[34px] sm:leading-tight ${
                   shown?.id === w.id ? "italic text-gold-bright" : "group-hover:text-gold-bright"
                 }`}
               >
                 {w.model}
               </span>
-              <span className="shrink-0 text-[11px] uppercase tracking-[0.2em] text-muted">{w.brand}</span>
+              <span className="hidden shrink-0 text-[11px] uppercase tracking-[0.2em] text-muted sm:inline">{w.brand}</span>
             </Link>
           </li>
         ))}
