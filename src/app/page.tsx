@@ -92,7 +92,7 @@ export default async function Home() {
       <section className="relative left-1/2 -mt-6 w-screen -translate-x-1/2 overflow-hidden border-b border-hairline bg-surface sm:-mt-8">
         <LoopVideo name="movement" poster="/redesign/video/movement-poster.webp" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#f1ece3] via-[#f1ece3]/85 to-[#f1ece3]/20 max-md:via-[#f1ece3]/90 max-md:to-[#f1ece3]/70" aria-hidden />
-        <p className="absolute bottom-3 right-4 z-10 text-[10px] uppercase tracking-[0.12em] text-ink/55">Preview footage · Pond5 · license before launch</p>
+        <p className="absolute bottom-3 right-4 z-10 text-[10px] uppercase tracking-[0.12em] text-ink/45">Film · Pond5</p>
         <div className="relative mx-auto max-w-[1180px] px-4 pb-20 pt-16 sm:px-6 md:pb-28 md:pt-24">
           <div className="max-w-2xl animate-fade-in">
             <p className="mb-5 text-xs uppercase tracking-[0.22em] text-gold">Brandon&apos;s Brands · Luxury &amp; microbrand watches</p>
