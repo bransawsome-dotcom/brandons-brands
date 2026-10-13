@@ -111,7 +111,55 @@ export default async function Home() {
         </div>
       </section>
 
-      <LatestVideos className="mt-20" />
+      {/* Free tools */}
+      <section id="collection" aria-labelledby="tools" className="mt-20">
+        <div className="mb-12">
+          <SectionHead id="tools" eyebrow="Free collector tools" bold="Everything you own," light="in one place" />
+          <p className="mt-4 max-w-xl text-lg leading-7 text-ink/80">
+            Free with an account. Want to see it first?{" "}
+            <Link href="/demo" className="text-gold underline decoration-gold/50 underline-offset-4 hover:text-gold-bright">
+              Open a sample collection
+            </Link>
+            , no sign-up needed.
+          </p>
+        </div>
+        <div className="grid gap-6 md:grid-cols-3">
+          {[
+            { href: "/collection", vault: true, img: "/redesign/tool-vault.webp", alt: "A round steel bank vault door with its locking bolts", label: "My Collection", title: "The Vault", text: "Store each watch with photos, brand, model, purchase date, and box and papers, with an estimated value updated daily." },
+            { href: "/wishlist", img: "/redesign/tool-case.webp", alt: "Three gold chronographs on stone display stands", label: "Wishlist", title: "The Display Case", text: "Save the watches you want, get price alerts, and move them into your vault the day you buy one." },
+            { href: "/watch-value-tracker", img: "/redesign/tool-wrist.webp", alt: "A vintage steel watch on a suede strap, worn on the wrist", label: "Watch value tracker", title: "What it's worth", text: "See your collection's value over time and the watches that moved the most." },
+          ].map((c) => {
+            const body = (
+              <>
+                {c.vault ? (
+                  <div className="relative -mx-8 -mt-8 mb-7 w-[calc(100%+4rem)] max-w-none">
+                    <LoopVideo name="vault" poster="/redesign/video/vault-poster.webp" label="A bank vault door unlocks and swings open to reveal gold inside" className="aspect-[4/3] w-full object-cover" />
+                  </div>
+                ) : (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={c.img} alt={c.alt} width={900} height={675} loading="lazy" className="-mx-8 -mt-8 mb-7 aspect-[4/3] w-[calc(100%+4rem)] max-w-none object-cover" />
+                )}
+                <p className="text-[11px] uppercase tracking-[0.2em] text-gold">{c.label}</p>
+                <h3 className="mt-3 font-display text-[29px] font-semibold uppercase leading-[1.05] text-ink">{c.title}</h3>
+                <p className="mt-4 flex-1 leading-7 text-muted">{c.text}</p>
+                <span className={`mt-6 ${smallLink}`}>Open →</span>
+              </>
+            );
+            const cls = "group flex h-full flex-col overflow-hidden rounded-md border p-8 shadow-card bb-sheen transition duration-300 hover:-translate-y-1 hover:shadow-card-hover";
+            return c.vault ? (
+              <VaultLink key={c.href} href={c.href} className={cls}>
+                {body}
+              </VaultLink>
+            ) : (
+              <Link key={c.href} href={c.href} className={cls}>
+                {body}
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      <LatestVideos className="mt-24 border-t border-hairline pt-20" />
 
       {interview ? (
         <Link
@@ -206,53 +254,6 @@ export default async function Home() {
       </section>
 
 
-      {/* Free tools */}
-      <section id="collection" aria-labelledby="tools" className="mt-24 border-t border-hairline pt-20">
-        <div className="mb-12">
-          <SectionHead id="tools" eyebrow="Free collector tools" bold="Everything you own," light="in one place" />
-          <p className="mt-4 max-w-xl text-lg leading-7 text-ink/80">
-            Free with an account. Want to see it first?{" "}
-            <Link href="/demo" className="text-gold underline decoration-gold/50 underline-offset-4 hover:text-gold-bright">
-              Open a sample collection
-            </Link>
-            , no sign-up needed.
-          </p>
-        </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          {[
-            { href: "/collection", vault: true, img: "/redesign/tool-vault.webp", alt: "A round steel bank vault door with its locking bolts", label: "My Collection", title: "The Vault", text: "Store each watch with photos, brand, model, purchase date, and box and papers, with an estimated value updated daily." },
-            { href: "/wishlist", img: "/redesign/tool-case.webp", alt: "Three gold chronographs on stone display stands", label: "Wishlist", title: "The Display Case", text: "Save the watches you want, get price alerts, and move them into your vault the day you buy one." },
-            { href: "/watch-value-tracker", img: "/redesign/tool-wrist.webp", alt: "A vintage steel watch on a suede strap, worn on the wrist", label: "Watch value tracker", title: "What it's worth", text: "See your collection's value over time and the watches that moved the most." },
-          ].map((c) => {
-            const body = (
-              <>
-                {c.vault ? (
-                  <div className="relative -mx-8 -mt-8 mb-7 w-[calc(100%+4rem)] max-w-none">
-                    <LoopVideo name="vault" poster="/redesign/video/vault-poster.webp" label="A bank vault door unlocks and swings open to reveal gold inside" className="aspect-[4/3] w-full object-cover" />
-                  </div>
-                ) : (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={c.img} alt={c.alt} width={900} height={675} loading="lazy" className="-mx-8 -mt-8 mb-7 aspect-[4/3] w-[calc(100%+4rem)] max-w-none object-cover" />
-                )}
-                <p className="text-[11px] uppercase tracking-[0.2em] text-gold">{c.label}</p>
-                <h3 className="mt-3 font-display text-[29px] font-semibold uppercase leading-[1.05] text-ink">{c.title}</h3>
-                <p className="mt-4 flex-1 leading-7 text-muted">{c.text}</p>
-                <span className={`mt-6 ${smallLink}`}>Open →</span>
-              </>
-            );
-            const cls = "group flex h-full flex-col overflow-hidden rounded-md border p-8 shadow-card bb-sheen transition duration-300 hover:-translate-y-1 hover:shadow-card-hover";
-            return c.vault ? (
-              <VaultLink key={c.href} href={c.href} className={cls}>
-                {body}
-              </VaultLink>
-            ) : (
-              <Link key={c.href} href={c.href} className={cls}>
-                {body}
-              </Link>
-            );
-          })}
-        </div>
-      </section>
 
       <NewsletterSignup source="home" className="mt-16" />
     </div>
