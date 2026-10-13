@@ -315,7 +315,8 @@ export default function CollectionPage() {
           <div>
             <p className="text-xs uppercase tracking-[0.35em] text-gold sm:text-sm">My Collection · Member access</p>
             <h1 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-ink sm:text-5xl">
-              Your collection, <span className="font-serif font-normal normal-case italic tracking-normal text-gold">kept privately.</span>
+              Your collection,
+              <span className="mt-1 block font-serif font-normal normal-case italic tracking-normal text-gold">kept privately or made public.</span>
             </h1>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-ink/80 sm:text-base">
               Add watches below, then browse, search and sort them in your collection.

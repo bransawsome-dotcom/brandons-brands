@@ -329,3 +329,6 @@ dialog.bb-drawer[open] { animation: bb-drawer-in 0.32s cubic-bezier(0.22, 1, 0.3
   100% { opacity: 1; transform: translateZ(40px) scale(1.04) rotateY(720deg); }
 }
 .bb-vault-hero { opacity: 0; transform-style: preserve-3d; animation: bb-vault-hero 1.35s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
+
+/* Live logo: seconds hands keep the right time but stop sweeping when reduce motion is on. */
+@media (prefers-reduced-motion: reduce) { .bb-live-sec { animation-play-state: paused !important; } }

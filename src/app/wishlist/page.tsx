@@ -323,8 +323,11 @@ export default function WishlistPage() {
       <div>
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-gold">Wishlist</p>
-            <h1 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-ink sm:text-5xl">Luxury watch wishlist.</h1>
+            <p className="text-xs uppercase tracking-[0.35em] text-gold sm:text-sm">My Wishlist · Luxury watches</p>
+            <h1 className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-ink sm:text-5xl">
+              Your wishlist,
+              <span className="mt-1 block font-serif font-normal normal-case italic tracking-normal text-gold">kept privately or made public.</span>
+            </h1>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-ink/80 sm:text-base">
               Pick a brand and model. The photo, specs, today&apos;s retail price and market value fill in automatically.
             </p>
