@@ -2,6 +2,7 @@
 
 import { shrinkPhoto } from "@/lib/photos";
 import PhotoZoom from "@/components/PhotoZoom";
+import { createPost, forumName } from "@/lib/forum";
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/components/AuthProvider";
@@ -73,6 +74,23 @@ export default function WristWall() {
       .insert({ user_id: user.id, image: photo, watch: watch.trim() || null, caption: caption.trim() || null });
     setBusy(false);
     if (err) return setError(err.message.includes("3 wrist shots") ? "You can post up to 3 wrist shots a day." : err.message);
+    // Also share it in the forum's Wrist Shots folder, so people can comment on it there.
+    // Best effort: if this fails, the wrist shot itself is already posted.
+    try {
+      const meta = (user.user_metadata ?? {}) as Record<string, unknown>;
+      const fallback = typeof meta.account_name === "string" ? meta.account_name : "";
+      const author = (forumName(user) || fallback || "Collector").trim().slice(0, 40).padEnd(2, ".");
+      const w = watch.trim();
+      await createPost({
+        subject: "wrist-shots",
+        title: w ? `Wrist check: ${w}` : "Wrist check",
+        body: [caption.trim(), "Shared from Wrist Check."].filter(Boolean).join("\n\n"),
+        author_name: author,
+        images: [photo],
+      });
+    } catch {
+      /* the wrist shot is posted either way */
+    }
     setPhoto(null);
     setWatch("");
     setCaption("");
@@ -126,7 +144,7 @@ export default function WristWall() {
               <textarea value={caption} onChange={(e) => setCaption(e.target.value)} maxLength={280} rows={3} className={input} placeholder="Say something about it (optional)" />
             </div>
           </div>
-          <p className="text-[11px] text-muted">Only post photos you took. Your public name is shown with it. Up to 3 a day.</p>
+          <p className="text-[11px] text-muted">Only post photos you took. Your public name is shown with it, and itOnly post photos you took. Your public name is shown with it. Up to 3 a day.apos;s also shared in the forumOnly post photos you took. Your public name is shown with it. Up to 3 a day.apos;s Wrist Shots folder. Up to 3 a day.</p>
           {error ? <p className="text-sm text-rose-700">{error}</p> : null}
           <button type="submit" disabled={!photo || busy} className="justify-self-start rounded-full bg-navy px-5 py-2 text-sm font-semibold text-on-navy disabled:opacity-40">
             {busy ? "Posting…" : "Post wrist shot"}
