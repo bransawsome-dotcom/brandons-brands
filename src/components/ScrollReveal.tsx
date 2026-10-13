@@ -27,7 +27,8 @@ export default function ScrollReveal() {
           io.unobserve(el);
         }
       },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
+      // threshold 0: a section taller than the screen (long forum lists on a phone) still counts as in view.
+      { rootMargin: "0px 0px -6% 0px", threshold: 0 },
     );
     const scan = () => {
       for (const el of document.querySelectorAll<HTMLElement>(TARGETS)) {
@@ -46,7 +47,12 @@ export default function ScrollReveal() {
     });
     const main = document.querySelector("main");
     if (main) mo.observe(main, { childList: true, subtree: true });
+    // Safety net: anything still hidden after a few seconds is shown, so content can never stay invisible.
+    const failsafe = window.setTimeout(() => {
+      for (const el of document.querySelectorAll<HTMLElement>(".bb-reveal:not(.bb-in)")) el.classList.add("bb-in");
+    }, 3500);
     return () => {
+      window.clearTimeout(failsafe);
       io.disconnect();
       mo.disconnect();
       window.clearTimeout(t);
