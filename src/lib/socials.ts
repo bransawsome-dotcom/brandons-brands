@@ -28,8 +28,8 @@ export const socials: Social[] = [
   },
   {
     name: "Facebook",
-    handle: "Brandon Volosov",
-    url: "https://www.facebook.com/profile.php?id=61595164920422",
+    handle: "Brandon's Brands",
+    url: "https://www.facebook.com/profile.php?id=61595018145265",
     blurb: "Updates, photos and news from Brandon's Brands.",
   },
 ];
