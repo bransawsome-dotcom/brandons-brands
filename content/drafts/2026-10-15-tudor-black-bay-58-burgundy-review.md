@@ -8,7 +8,6 @@ A Tudor color that waited 30 years to happen. 🍷
 
 The Black Bay 58 Burgundy is based on a 1990s Submariner prototype that never made it to production.
 39mm, 200m water resistance, and a METAS Master Chronometer movement inside.
-[BRANDON: one line on how it wears for you]
 
 Full review on the blog — link in bio.
 
@@ -34,7 +33,7 @@ Full review: https://brandonsbrands17.com/blog/tudor-black-bay-58-burgundy-revie
 
 ## Facebook
 
-Tudor based the new Black Bay 58 Burgundy on a 1990s Submariner prototype that never went into production, and gave it a METAS Master Chronometer movement. I expanded my 15-second reel into a full review: specs, history, and how it wears. Read it here: https://brandonsbrands17.com/blog/tudor-black-bay-58-burgundy-review
+Tudor based the new Black Bay 58 Burgundy on a 1990s Submariner prototype that never went into production, and gave it a METAS Master Chronometer movement. I expanded my 15-second reel into a full review: the specs, the history and what's new inside. Read it here: https://brandonsbrands17.com/blog/tudor-black-bay-58-burgundy-review
 
 ## Reel idea
 
