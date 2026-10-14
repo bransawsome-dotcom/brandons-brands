@@ -6,7 +6,7 @@ After the PR is merged, change the status to `published`. Add new rows at the bo
 
 | Publish (Thu) | Format | Post idea | Built from | Status |
 | --- | --- | --- | --- | --- |
-| 2026-10-15 | Hands-on review | Tudor Black Bay 58 Burgundy: the 15-second review, expanded | Tudor BB58 reel | planned |
+| 2026-10-15 | Hands-on review | Tudor Black Bay 58 Burgundy: the 15-second review, expanded | Tudor BB58 reel | drafted |
 | 2026-10-22 | Collector story | Unboxing the Kurono Tokyo Malachite anniversary model | Kurono unboxing reel | planned |
 | 2026-10-29 | Founder interview | Three quick questions with Nicola, founder of Echo/Neutra | Echo/Neutra Q&A reel (4,892 views) | planned |
 | 2026-11-05 | First look | Longines Spirit Pilot Flyback Chronograph, hands-on | Longines reel | planned |
