@@ -61,9 +61,27 @@ export default function LoginPage() {
             <p className="text-sm uppercase tracking-[0.35em] text-gold">Member Access</p>
             <h1 className="text-3xl font-semibold text-ink sm:text-4xl">Login to Brandon&apos;s Brands</h1>
             <p className="max-w-2xl text-sm leading-7 text-ink/80">
-              Secure access for your private watch collection, wishlist, and account dashboard.
+              Your watch collection, wishlist and dashboard, in one place.
             </p>
           </div>
+
+          {/* Most visitors who reach this page don't have an account yet, so lead with joining. */}
+          <section className="mb-8 rounded-md border border-gold/40 bg-surface p-5 sm:p-6">
+            <h2 className="text-lg font-semibold text-ink">New here? Membership is free.</h2>
+            <ul className="mt-3 space-y-1.5 text-sm leading-6 text-ink/80">
+              <li>• Track your watch collection and what it&apos;s worth, from a photo</li>
+              <li>• Keep a wishlist and get an email when a price drops</li>
+              <li>• Post Wrist Checks, vote in polls and join the forum</li>
+            </ul>
+            <a
+              href="/signup"
+              className="mt-4 inline-block rounded-full bg-gold px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-navy transition hover:bg-gold-bright"
+            >
+              Create a free account
+            </a>
+          </section>
+
+          <p className="mb-4 text-sm font-semibold text-ink">Already a member? Log in.</p>
 
           <form onSubmit={handleSubmit} className="grid gap-6">
             <label className="space-y-2 text-sm text-ink/80">
