@@ -18,6 +18,27 @@ export type BlogPost = {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "windup-nyc-2026-recap-what-brandon-saw",
+    title: "What I Saw at Windup Watch Fair NYC 2026",
+    date: "2026-10-21",
+    category: "Event recap",
+    excerpt:
+      "Three days, dozens of independent brands and a lot of colorful dials. Here are the watches that stood out to me at Windup NYC 2026.",
+    body: [
+      "[BRANDON: one or two sentences in your own words: which day(s) you went, who you went with (The Watch Collective of NJ?), and the first thing you noticed when you walked in.]",
+      "Windup Watch Fair took over Center415 on Fifth Avenue from October 16 to 18, right in the middle of New York Watch Week. It's free and open to everyone, and it's built for trying watches on: dozens of brands, mostly independents and microbrands, with the founders often standing right behind the table. If you missed it, this is the next best thing.",
+      "## The watches that stood out",
+      "[BRANDON: your 3–5 picks, one short paragraph each, most unusual first. For each: brand and model, what caught your eye, how it wore on the wrist, and the price if you know it. Link each one to its reel when it's posted.]",
+      "## New watches that made news this week",
+      "A few releases had people talking all week. MING showed the Donut Jelly, a playful watch with a pink-and-red center dial, priced at $649 and debuted at Windup. Brew's Metric Chrono Taxi brings New York taxi yellow and a checkerboard pattern to its chronograph for $495, launching October 19. And Grandeur USA brought its TorQ Mechanical, a skeletonized 35mm tonneau watch in forged carbon or tantalum with a bracelet inspired by tire treads.",
+      "[BRANDON: did you see any of these in person? If so, add one line on each; if not, delete this note.]",
+      "## What I noticed about the fair",
+      "[BRANDON: one or two things that surprised you: a trend you kept seeing (colors, small sizes, titanium?), a founder conversation you enjoyed, or the strap bar and panels.]",
+      "If you went too, I'd love to see what was on your wrist: post it on the [Wrist Check wall](/wrist-check) and you might be the Wrist Check of the Week. Planning ahead for next year? My [Windup guide](/blog/windup-watch-fair-2026-nyc-guide-to-oct-16-18-at-center415) covers how the fair works.",
+      "Want to see these watches move? The Windup reels are on Instagram at @brandonsbrands17. Brands and collectors who want to collaborate can reach me at collab@brandonsbrands17.com.",
+    ],
+  },
+  {
     slug: "tudor-black-bay-58-burgundy-review",
     title: "Tudor Black Bay 58 Burgundy: The 15-Second Review, Expanded",
     date: "2026-10-15",
