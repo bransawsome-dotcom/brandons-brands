@@ -18,4 +18,4 @@ After the PR is merged, change the status to `published`. Add new rows at the bo
 | 2026-12-17 | Collector story | Founders Fest: the award night | Founders Fest reel | planned |
 | 2026-12-24 | Collector story | Road trip to Lancaster, PA | Lancaster post | planned |
 | 2026-12-31 | Guide | Brandon's watches of the year, 2026 | Year of posts | planned |
-| 2026-10-21 | Event recap | What I saw at Windup Watch Fair NYC 2026 | Windup reels | drafted (PR pending) |
+| 2026-10-21 | Event recap | What I saw at Windup Watch Fair NYC 2026 | Windup reels | drafted (PR #3) |
