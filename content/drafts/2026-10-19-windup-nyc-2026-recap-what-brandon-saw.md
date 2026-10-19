@@ -1,9 +1,8 @@
-# Social drafts — Windup NYC 2026 recap (publish Wed 2026-10-21)
+# Social drafts — Windup NYC 2026 recap (published Mon 2026-10-19)
 
 Blog link: https://brandonsbrands17.com/blog/windup-nyc-2026-recap-what-brandon-saw
 
-Before publishing: replace every `[BRANDON: ...]` note in the post (src/lib/blogPosts.ts) with Brandon's own words,
-or delete the note. Fill the `[PICK]` spots below with his actual picks.
+Published without Brandon's personal picks. Fill the `[PICK]` spots in the captions below for each reel.
 
 ## Linking every Windup reel to the recap
 
@@ -46,13 +45,13 @@ Full recap: https://brandonsbrands17.com/blog/windup-nyc-2026-recap-what-brandon
 
 On Oct 12 a Facebook post sent 13 visitors to the site in one day, the best day of the week. Post one link per post.
 
-**Post 1 — Wednesday Oct 21 (recap goes live):**
+**Post 1 — today (recap is live):**
 
-Three days at Windup Watch Fair NYC, dozens of independent brands, and a lot of colorful dials. I wrote up the
-watches that stood out to me, including [PICK], plus the new releases everyone was talking about during New York
-Watch Week. Read it here: https://brandonsbrands17.com/blog/windup-nyc-2026-recap-what-brandon-saw
+Three days at Windup Watch Fair NYC, dozens of independent brands, and a lot of colorful dials, from MING's pink
+Donut Jelly to Brew's taxi-yellow chronograph. Here's the recap of the fair and the new releases everyone was
+talking about during New York Watch Week: https://brandonsbrands17.com/blog/windup-nyc-2026-recap-what-brandon-saw
 
-**Post 2 — Friday Oct 23 (Wrist Check):**
+**Post 2 — Wednesday Oct 21 (Wrist Check):**
 
 What's on your wrist this weekend? Post a photo on the Brandon's Brands Wrist Check wall and you could be the
 Wrist Check of the Week, featured on the site, in the newsletter and on my socials:
