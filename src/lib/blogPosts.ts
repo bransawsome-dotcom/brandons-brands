@@ -18,6 +18,24 @@ export type BlogPost = {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "windup-nyc-2026-recap-what-brandon-saw",
+    title: "Windup Watch Fair NYC 2026: The Recap",
+    date: "2026-10-19",
+    category: "Event recap",
+    excerpt:
+      "Windup NYC 2026 filled Center415 with independent and microbrand watches. Here's what the fair was like and the new releases people talked about.",
+    body: [
+      "Windup Watch Fair took over Center415 on Fifth Avenue from October 16 to 18, right in the middle of New York Watch Week. It's free and open to everyone, and it's built for trying watches on: dozens of brands, mostly independents and microbrands, often with the founders standing right behind the table. If you missed it, here's the quick version.",
+      "## What the fair is like",
+      "Windup is all about handling the watches, not looking at them through glass. Alongside the brand tables there are panel talks with journalists and designers, watchmaking demonstrations, strap-change bars and meetups after hours. Brands on the list this year included Bremont, Christopher Ward, Oris, Baltic, Farer, Formex, Lorier, Nezumi, Serica, Spinnaker, Squale and Yema, plus a separate area for everyday-carry gear.",
+      "## New watches that made news",
+      "A few releases had people talking all week. MING showed the Donut Jelly, a playful watch with a pink-and-red center dial, priced at $649 and debuted at Windup. Brew's Metric Chrono Taxi brings New York taxi yellow and a checkerboard pattern to its chronograph for $495, launching October 19. And Grandeur USA brought its TorQ Mechanical, a skeletonized 35mm tonneau watch in forged carbon or tantalum with a bracelet inspired by tire treads.",
+      "The big theme: color and personality. From pink dials to taxi yellow, independent brands are having fun, and that is exactly what makes a fair like Windup worth the trip.",
+      "If you went, I'd love to see what was on your wrist: post it on the [Wrist Check wall](/wrist-check) and you might be the Wrist Check of the Week. Planning ahead for next year? The [Windup guide](/blog/windup-watch-fair-2026-nyc-guide-to-oct-16-18-at-center415) covers how the fair works.",
+      "Want to see the watches move? Follow along on Instagram at @brandonsbrands17. Brands and collectors who want to collaborate can reach me at collab@brandonsbrands17.com.",
+    ],
+  },
+  {
     slug: "tudor-black-bay-58-burgundy-review",
     title: "Tudor Black Bay 58 Burgundy: The 15-Second Review, Expanded",
     date: "2026-10-15",
