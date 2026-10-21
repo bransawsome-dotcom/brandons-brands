@@ -18,6 +18,30 @@ export type BlogPost = {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "kurono-tokyo-malachite-anniversary-unboxing",
+    title: "Unboxing the Kurono Tokyo Malachite Anniversary Watch",
+    date: "2026-10-22",
+    category: "Collector story",
+    excerpt:
+      "Unboxing Kurono Tokyo's 2026 anniversary Malachite: a 37mm steel dress watch with a real stone dial. What's inside and how that dial gets made.",
+    body: [
+      "Kurono Tokyo's 2026 anniversary watch is a slim 37mm steel dress watch with a dial cut from real malachite, and I got to open one up on camera. Here's what this watch is, why that green dial is so hard to make, and who I think it's for.",
+      "## What it is",
+      "Kurono Tokyo is the brand from Japanese watchmaker Hajime Asaoka, and the brand calls this piece the Special Projects Malachite, or 'Kujaku-ishi' in Japanese. Kujaku-ishi means 'peacock stone,' because the bands in malachite look like the eye pattern on a peacock's feathers. Kurono describes the watch as a personal study by Asaoka exploring the beauty of natural stone.",
+      "It went on sale online on May 28, 2026, in just two order windows, with a strict limit of one watch per customer. The price was $1,850 before VAT and duties, and Kurono's page notes US buyers also owe a baseline tariff of about 10% when the package arrives. Deliveries were expected from July 2026. Both windows are now closed, and Kurono says it's a one-off release that won't be repeated.",
+      "## That malachite dial",
+      "The dial is the whole story here. The center is natural malachite, and it's surrounded by a brass outer ring finished in a hand-mixed green copper pigment called rokusho (verdigris in English). Together they form a domed, convex dial. Kurono's point is that the pigment and the stone share the same copper roots, so the two greens belong together.",
+      "Making it isn't easy. Malachite grows in round clusters called nodules, so Kurono says each nodule is X-rayed to find its 'eye' before a single cut is made. Only about 2 out of every 10 dials make it through, and the ones Asaoka picks himself carry his vermillion seal on the dial as proof. In his words: 'I did not want to simply use a raw fragment as is. Instead, I wanted to imbue it with my own perspective as a watchmaker.' Every stone is different, so no two dials look the same.",
+      "A couple of small details I love: the hour markers are Kanji Eto characters from the Japanese zodiac, and the tips of the minute and seconds hands are bent by hand to follow the curve of the dial and the glass.",
+      "## The specs",
+      "The case is 37mm of high-polished 316L stainless steel, just 7mm thick on its own and about 11.5mm with the domed sapphire box crystal. Water resistance is 5 ATM, so think splashes, not swimming. Inside is a Miyota 90S5 automatic movement with 24 jewels, beating at 28,800 vibrations per hour with about 40 hours of power reserve. It comes on a calf leather strap with a 20mm lug width that tapers to 16mm at the buckle, and it's made in Japan.",
+      "Those are classic dress-watch proportions. And because every piece of malachite has its own pattern of bands, the dial in my reel is one of a kind: no other watch from this release looks exactly like it.",
+      "## Who it's for",
+      "If you love natural materials and hand-finished details, this was a rare chance to get a real stone dial from a respected Japanese watchmaker for $1,850. If you want something for the pool or the gym, the 5 ATM rating and leather strap say look elsewhere. Since the order windows are closed and Kurono won't make it again, the secondhand market is the only way to get one now.",
+      "Want to see the stone up close? The unboxing reel is on Instagram at @brandonsbrands17. Brands and collectors who want to collaborate can reach me at collab@brandonsbrands17.com.",
+    ],
+  },
+  {
     slug: "windup-nyc-2026-recap-what-brandon-saw",
     title: "Windup Watch Fair NYC 2026: The Recap",
     date: "2026-10-19",
