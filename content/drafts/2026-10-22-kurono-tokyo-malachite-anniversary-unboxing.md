@@ -2,7 +2,7 @@
 
 Blog link: https://brandonsbrands17.com/blog/kurono-tokyo-malachite-anniversary-unboxing
 
-Before posting: confirm Kurono Tokyo's Instagram handle — [BRANDON: confirm Kurono's handle, likely @kuronotokyo — not verified].
+Kurono Tokyo's website lists no Instagram account, so the caption uses the #kuronotokyo hashtag instead of tagging a handle.
 
 ## Instagram (reel caption)
 
@@ -12,8 +12,6 @@ Kurono Tokyo's 2026 anniversary Malachite: 37mm, 7mm thin, and only about 2 in 1
 Every dial is different. Each nodule is X-rayed before it's cut.
 
 Full unboxing story on the blog — link in bio.
-
-@kuronotokyo
 
 #watchfam #watchcollector #watchesofinstagram #kuronotokyo #hajimeasaoka #malachite #japanesewatches #dresswatch
 
@@ -36,7 +34,7 @@ Full story: https://brandonsbrands17.com/blog/kurono-tokyo-malachite-anniversary
 ## Facebook
 
 Kurono Tokyo cuts the dial of its 2026 anniversary watch from real malachite, and only about 2 out of every 10
-dials make it through. I unboxed one, and wrote up the full story of the dial, the specs and how it wears:
+dials make it through. I unboxed one, and wrote up the full story of the dial and the specs:
 https://brandonsbrands17.com/blog/kurono-tokyo-malachite-anniversary-unboxing
 
 ## Reel idea
