@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
       // Private or member-only areas.
-      disallow: ["/api/", "/account", "/inbox", "/share/", "/auth/", "/reset-password", "/forgot-password"],
+      disallow: ["/api/", "/account", "/inbox", "/share/", "/auth/", "/reset-password", "/forgot-password", "/traffic"],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
     host: SITE_URL,
