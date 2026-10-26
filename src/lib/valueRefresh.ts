@@ -133,10 +133,21 @@ async function refreshOne(db: SupabaseClient, table: "watches" | "wishlist", row
     await db.from(table).update(update).eq("id", row.id).eq("user_id", row.user_id);
     return { table, id: row.id, ok: Boolean(p) };
   } catch (err) {
-    // Mark it checked anyway so one failure doesn't block the rest tomorrow.
-    await db.from(table).update({ value_updated_at: now }).eq("id", row.id).eq("user_id", row.user_id);
-    return { table, id: row.id, ok: false, error: err instanceof Error ? err.message.slice(0, 160) : "error" };
+    const error = err instanceof Error ? err.message.slice(0, 160) : "error";
+    // A problem with the API account itself (no credit, bad key, rate limit) isn't this watch's fault:
+    // leave the date alone so the page doesn't say "Prices checked today" and the next run tries again.
+    if (!isAccountError(err)) {
+      // Mark it checked anyway so one bad watch doesn't block the rest tomorrow.
+      await db.from(table).update({ value_updated_at: now }).eq("id", row.id).eq("user_id", row.user_id);
+    }
+    return { table, id: row.id, ok: false, error, account: isAccountError(err) };
   }
+}
+
+function isAccountError(err: unknown) {
+  const status = (err as { status?: number })?.status;
+  const msg = err instanceof Error ? err.message : String(err);
+  return status === 401 || status === 403 || status === 429 || /credit balance|api key|ANTHROPIC_API_KEY|billing/i.test(msg);
 }
 
 // Refresh the watches whose values are oldest, within a time budget.
@@ -167,7 +178,10 @@ export async function runValueRefresh(opts: { budgetMs: number; concurrency?: nu
   const worker = async () => {
     while (queue.length && Date.now() - started < opts.budgetMs) {
       const job = queue.shift()!;
-      results.push(await refreshOne(db, job.table, job.row, AbortSignal.timeout(80_000)));
+      const r = await refreshOne(db, job.table, job.row, AbortSignal.timeout(80_000));
+      results.push(r);
+      // The API account can't be used right now: stop instead of failing every remaining watch.
+      if ("account" in r && r.account) queue.length = 0;
     }
   };
   await Promise.all(Array.from({ length: opts.concurrency ?? 5 }, worker));

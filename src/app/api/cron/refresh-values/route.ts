@@ -16,6 +16,8 @@ export async function GET(request: Request) {
       refreshed: results.filter((r) => r.ok).length,
       failed: results.filter((r) => !r.ok).length,
       remaining,
+      // The first error, so a failed run says why in the logs.
+      error: (results.find((r) => !r.ok) as { error?: string } | undefined)?.error ?? null,
     };
     console.log("value refresh", JSON.stringify(summary));
     return Response.json(summary);
