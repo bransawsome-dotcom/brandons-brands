@@ -7,6 +7,7 @@ import MobileTabBar from "@/components/MobileTabBar";
 import { Analytics } from "@vercel/analytics/next";
 import { SITE_URL } from "@/lib/site";
 import ScrollReveal from "@/components/ScrollReveal";
+import UtmTracker from "@/components/UtmTracker";
 import { ViewTransition } from "react";
 import { displayFont, serifFont, textFont } from "./fonts";
 import "./globals.css";
@@ -47,6 +48,8 @@ export default function RootLayout({
         </AuthProvider>
         {/* Vercel Web Analytics: page views per page/post, no cookies. Enable it in the Vercel project's Analytics tab. */}
         <Analytics />
+        {/* Saves utm_* tags to Supabase (free UTM report on /traffic). */}
+        <UtmTracker />
       </body>
     </html>
   );
