@@ -18,6 +18,33 @@ export type BlogPost = {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "three-quick-questions-with-nicola-echo-neutra",
+    title: "Three Quick Questions with Nicola, Founder of Echo/Neutra",
+    date: "2026-10-29",
+    category: "Founder interview",
+    excerpt:
+      "I asked Nicola Callegaro, co-founder of the Italian brand echo/neutra, three quick questions. Here are his answers and the story behind the brand.",
+    body: [
+      "My Q&A reel with Nicola Callegaro, co-founder and designer of echo/neutra, is one of the most-watched things I've posted, so here's the longer version. You'll get the three questions I asked him, his answers, and a quick guide to the brand if you've never heard of it. If you like Swiss-made mechanical watches with a real design point of view, this is a brand worth knowing.",
+      "## Who is Nicola?",
+      "Nicola started echo/neutra in 2018 with his partner Cristiano Quaglia. The brand's own page says Nicola has worked in object design and brand creation for nearly 20 years, has a background in architecture, and founded a communication agency called Zeppelin Studio in 2008. He's into watches and Hi-Fi, and he says he built echo/neutra to make a watch brand that would satisfy him first. Cristiano is the engineering half: an aerospace engineer with a master's in propulsion systems, who grew up hiking in the Dolomites with the Italian Alpine Club.",
+      "The name is a nod to the architect Richard Neutra, who designed homes meant to be 'ready for anything.' Nicola describes the goal as 'to create an object to withstand the test of Time, with a timeless design.' The brand's word for that is 'Timeproof.'",
+      "## Question 1: [BRANDON: first question you asked Nicola in the reel]",
+      "[BRANDON: Nicola's answer to question 1, in his words from the reel]",
+      "## Question 2: [BRANDON: second question you asked Nicola]",
+      "[BRANDON: Nicola's answer to question 2]",
+      "## Question 3: [BRANDON: third question you asked Nicola]",
+      "[BRANDON: Nicola's answer to question 3]",
+      "## The watches",
+      "Echo/neutra watches are designed in Italy and Swiss made, and the mountains are everywhere. The first collection, Averau, is named after Mount Averau in the Dolomites and launched on Kickstarter in 2019. Back then it was a 42mm steel field watch with 100 meters of water resistance and a Swiss automatic movement. Today the Averau is a 39mm contemporary field watch, with versions that add a moon phase.",
+      "The rest of the lineup has grown fast. The 1956 collection takes its look and colors from the 1950s and 1960s, and its name points to the 1956 Winter Olympics held in Cortina, in the Dolomites. Cristallo is a 42mm dive watch rated to 500 meters with a ceramic bezel and a helium escape valve. Rivanera is a rectangular dress watch in sandblasted titanium, just 5.9mm thick. There are also one-of-a-kind pieces that are never repeated.",
+      "On price, European retailer Ocarat lists the watches from about €690 to €1,970 including VAT, and Teddy Baldassarre's brand review describes the field watches as under $1,500. Check echo/neutra's own site for today's US prices.",
+      "## My take",
+      "[BRANDON: what you like most about echo/neutra, and which model you'd pick for your own collection]",
+      "Want to hear Nicola's answers in his own voice? The Q&A reel is on Instagram at @brandonsbrands17. Founders and brands who want to do a quick-questions reel of their own can reach me at collab@brandonsbrands17.com.",
+    ],
+  },
+  {
     slug: "kurono-tokyo-malachite-anniversary-unboxing",
     title: "Unboxing the Kurono Tokyo Malachite Anniversary Watch",
     date: "2026-10-22",
