@@ -34,6 +34,30 @@ export const keywordPlan: KeywordWeek[] = [
     topic: "The Seiko Turtle: the history of the cushion-case diver and how to choose between today's versions",
     link: "/learn/affordable-mechanical-watches",
   },
+  {
+    weekOf: "2026-11-09",
+    keyword: "best watches under 200",
+    topic: "Watch gifts under $200: fun, tough, easy-to-love watches that make great stocking stuffers, and how to pick one for someone else",
+    link: "/learn/best-watches-by-budget",
+  },
+  {
+    weekOf: "2026-11-16",
+    keyword: "watch gift ideas",
+    topic: "Holiday watch gift ideas at every budget: how to find out their style and size quietly, safe choices, engraving, and ordering in time for the holidays",
+    link: "/learn/buying-a-watch-as-a-gift",
+  },
+  {
+    weekOf: "2026-11-23",
+    keyword: "best watches under 1000",
+    topic: "Microbrand watches as gifts: why a small independent maker's diver, GMT or field watch under $1,000 is a thoughtful present, and why to order early (small batches sell out)",
+    link: "/learn/best-microbrand-watches-under-1000",
+  },
+  {
+    weekOf: "2026-11-30",
+    keyword: "how to buy a pre-owned watch",
+    topic: "Shopping pre-owned this holiday season: how to buy a pre-owned watch safely (seller reputation, box and papers, service history, condition, returns)",
+    link: "/learn/buying-pre-owned-watches-safely",
+  },
 ];
 
 // The plan entry for the week containing this date, if any.

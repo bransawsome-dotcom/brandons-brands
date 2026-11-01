@@ -897,11 +897,12 @@ export const learnGuides: LearnGuide[] = [
   },
   {
     slug: "buying-a-watch-as-a-gift",
-    title: "How to Buy a Watch as a Gift",
+    title: "Watch Gift Ideas: How to Buy a Watch as a Holiday Gift",
     category: "Buying Guides",
-    description: "How to choose a watch someone will love: figuring out their style and size, safe choices, engraving, and making the moment special.",
-    minutes: 4,
-    updated: "2026-10-09",
+    description:
+      "Watch gift ideas for the holidays at every budget, and how to choose a watch someone will love: their style and size, safe choices, engraving, and timing your order.",
+    minutes: 5,
+    updated: "2026-11-01",
     sections: [
       {
         heading: "Find out their style quietly",
@@ -920,15 +921,38 @@ export const learnGuides: LearnGuide[] = [
         paragraphs: [],
       },
       {
+        heading: "Watch gift ideas at every budget",
+        paragraphs: [
+          "Our buying guides already list great watches at each price, so here's where to look for a holiday gift. Prices in those guides were checked in October 2026; check the brand's site before you order, since holiday sales come and go.",
+        ],
+        bullets: [
+          "Stocking stuffers under $200: the Casio Duro, Timex Weekender and G-Shock GA-2100 are fun, tough and easy to love (see Best watches under $200)",
+          "A first mechanical watch under $600: a Seiko 5 Sports, Orient Bambino or Timex Marlin Automatic makes a lovely introduction to watches that run without a battery (see Affordable mechanical watches)",
+          "Something different under $1,000: microbrand divers, GMTs and field watches are a thoughtful choice for someone who already knows the big names (see Best microbrand watches under $1,000)",
+          "A milestone gift: for graduations, weddings and big birthdays, our first luxury watch guide walks through choosing a watch to keep for decades",
+        ],
+      },
+      {
         heading: "Make it personal",
         paragraphs: [
           "An engraving on the caseback, a date or a short message turns a watch into an heirloom. Check that the caseback can be engraved and that the retailer allows returns on engraved pieces before you commit.",
           "Keep the receipt and warranty card, and ask about sizing: bracelets usually need links removed, which most retailers do for free.",
         ],
       },
+      {
+        heading: "Timing a holiday watch gift",
+        paragraphs: [
+          "Order early in the season. Small microbrands often make watches in limited batches, so popular models can sell out before the holidays, and engraving or bracelet sizing adds a few days.",
+          "Check the return or exchange window, and include a gift receipt so the size or color can be swapped. If you're buying pre-owned, read our guide to buying a pre-owned watch safely first.",
+        ],
+      },
     ],
     related: [
-      { label: "Best watches under $500, $1,000 and $5,000", href: "/learn/best-watches-by-budget" },
+      { label: "Best watches under $200, $500, $1,000 and $5,000", href: "/learn/best-watches-by-budget" },
+      { label: "Affordable mechanical watches", href: "/learn/affordable-mechanical-watches" },
+      { label: "Best microbrand watches under $1,000", href: "/learn/best-microbrand-watches-under-1000" },
+      { label: "How to buy your first luxury watch", href: "/learn/buying-your-first-luxury-watch" },
+      { label: "How to buy a pre-owned watch safely", href: "/learn/buying-pre-owned-watches-safely" },
       { label: "How to choose the right watch size", href: "/learn/choosing-the-right-watch-size" },
     ],
   },
