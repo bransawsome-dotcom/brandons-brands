@@ -18,6 +18,34 @@ export type BlogPost = {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "longines-spirit-pilot-flyback-chronograph-first-look",
+    title: "Longines Spirit Pilot Flyback Chronograph: A First Look",
+    date: "2026-11-05",
+    category: "First look",
+    excerpt:
+      "A hands-on first look at the Longines Spirit Pilot Flyback: a 39.5mm hand-wound, COSC-certified flyback chronograph, now in black or blue.",
+    body: [
+      "Is the Longines Spirit Pilot Flyback worth it? If you want a real pilot's chronograph from a historic Swiss brand without jumping to the five-figure club, I think it's one of the most interesting options out there right now. Here's what it is, what makes a flyback special, what it costs, and how it felt when I got it on my wrist.",
+      "## What it is",
+      "Longines was founded in Saint-Imier, Switzerland, in 1832, and it has a long history with exploration and early aviation. The Spirit collection launched in 2020 to bring flight-instrument design into a watch you can wear every day. In 2025 Longines added two new pilot models: a time-only Spirit Pilot and this one, the Spirit Pilot Flyback. The flyback first came with a matte black dial and gold-colored (gilt) numerals and hands. In 2026 Longines added a blue version with a matching blue ceramic bezel and white text, with no gilt at all.",
+      "[BRANDON: which version did you film in the reel, black or blue, and which one would you pick?]",
+      "## What a flyback actually does",
+      "On a normal chronograph, timing a new lap takes three button presses: stop, reset, start. A flyback does it in one. Push the reset button while the chronograph is running and the hands snap back to zero and start timing again right away. That's why pilots liked it for timing one leg of a flight after another. Longines isn't new to this: it was making flyback chronographs in the early 1930s and filed its patent in 1935.",
+      "## The specs",
+      "The case is stainless steel, 39.5mm wide and 13.4mm thick, with 20mm lugs and 100 meters of water resistance. There's a box-shaped sapphire crystal on the front and a see-through screw-down case back. The bezel turns both ways and has a ceramic insert with a countdown scale. The dial has small seconds at 9 o'clock and a 30-minute counter at 3.",
+      "Inside is the Longines calibre L792.4, a hand-wound column-wheel flyback chronograph. It's COSC-certified as a chronometer, runs at 4 Hz, has a silicon balance spring that helps it resist magnetism, and holds about 68 hours of power. Hand-winding means a little daily ritual, and the see-through back lets you watch the column wheel do its thing.",
+      "[BRANDON: how does 39.5mm by 13.4mm wear on your wrist? Does the box crystal make it feel taller?]",
+      "[BRANDON: what do the pushers and the flyback reset feel like when you use them?]",
+      "## What it costs",
+      "When the black version launched in 2025, Time+Tide listed it at about $5,350 on leather and $5,500 on the steel bracelet. Gear Patrol's September 2026 story on the blue version lists it at about $5,550 on the bracelet, the same as the black, and about $5,250 on the blue rubber strap, the lowest price in the line. Prices change, so check an authorized dealer before you buy.",
+      "Gear Patrol called it 'the best chronograph around $5,000,' and it's easy to see why. You get a movement made only for Longines, chronometer certification and a flyback, which you don't usually see together at this price.",
+      "## Who it's for",
+      "If you want one watch that does dress-down weekends, travel and a little pilot heritage, and you like winding your watch in the morning, this is a great fit. If you need a smaller or thinner chronograph, or you want an automatic you can forget about, it may not be the one for you. Not ready for a chronograph? The time-only Spirit Pilot starts at about $2,700.",
+      "[BRANDON: your verdict in one or two sentences: would you buy it, and why?]",
+      "Want to see it on the wrist? The reel is on Instagram at @brandonsbrands17. Brands and collectors who want to collaborate can reach me at collab@brandonsbrands17.com.",
+    ],
+  },
+  {
     slug: "meet-nicola-founder-of-echo-neutra",
     title: "Meet Nicola, Founder of Echo/Neutra",
     date: "2026-10-29",
