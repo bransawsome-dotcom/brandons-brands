@@ -18,6 +18,32 @@ export type BlogPost = {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "the-watch-collective-of-nj-how-to-join",
+    title: "Introducing The Watch Collective of NJ (and How to Join)",
+    date: "2026-11-12",
+    category: "Collector story",
+    excerpt:
+      "What The Watch Collective of NJ is, why Brandon started it, what members do together, and exactly how to join.",
+    body: [
+      "If you collect watches in New Jersey, or you're just getting curious about them, The Watch Collective of NJ is for you. It's the collector group I founded so watch people around here have a place to meet, share what's on their wrists and learn from each other. In this post you'll find out what the Collective is, why I started it, what we do together and exactly how to join.",
+      "## Why I started it",
+      "Watches have always been a shared thing for me. It started with my dad: watches were something we did together, and we still do. The best part of this hobby has never been the logo on the dial. It's the conversations: the story behind a design, the brand you've never heard of, the person across the table who's just as excited as you are.",
+      "[BRANDON: when did you start The Watch Collective of NJ, and what made you decide to do it? Was there a moment, like a meetup or a fair, where you thought New Jersey needed its own group?]",
+      "## What the Collective is",
+      "[BRANDON: describe the Collective in two or three sentences. How many members are there now, where are they from, and what kinds of watches do people bring, from first watches to grails?]",
+      "One thing I care about: every collector is welcome. You don't need an expensive watch or years of experience. A Seiko you love counts just as much as a Rolex, and microbrands and independents are a big part of what we talk about.",
+      "## What we do together",
+      "[BRANDON: what actually happens in the Collective? Meetups, group chats, trips to watch fairs, swaps? How often, and roughly where in NJ? Share one favorite moment so far.]",
+      "Watch fairs are a big part of collector life around here. In October, Windup Watch Fair NYC filled Center415 on Fifth Avenue with independent and microbrand watches, and you can read [my Windup recap](/blog/windup-nyc-2026-recap-what-brandon-saw). For the fairs, shows and meetups coming up, the [Events page](/events) on this site lists them with dates and links to each event's own website.",
+      "## How to join",
+      "[BRANDON: the exact steps to join. Where do people sign up or message (Instagram DM, a link, a group chat)? Is it free? Any age or location rules, or anything people should know before their first meetup?]",
+      "While you're here, you can also [create a free account](/signup) on Brandon's Brands. Members can log their collection and wishlist, post on the [Wrist Check wall](/wrist-check) and talk shop in the forum. The forum has a [Watch Clubs & Meetups](/forum?subject=clubs) section where collectors can talk about clubs and get-togethers, so it's a good place to say hi.",
+      "## See you there",
+      "[BRANDON: one or two lines in your own words to invite people, for example who you'd love to see join.]",
+      "The Watch Collective of NJ reel is on Instagram at @brandonsbrands17, so check it out to see what the group is like. Brands and collectors who want to work with the Collective can reach me at collab@brandonsbrands17.com.",
+    ],
+  },
+  {
     slug: "meet-nicola-founder-of-echo-neutra",
     title: "Meet Nicola, Founder of Echo/Neutra",
     date: "2026-10-29",
