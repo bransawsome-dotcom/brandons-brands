@@ -18,6 +18,32 @@ export type BlogPost = {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "holiday-watch-gift-guide-2026",
+    title: "Holiday Watch Gift Guide 2026: Great Watches at Every Budget",
+    date: "2026-11-19",
+    category: "Guide",
+    excerpt:
+      "Seven watch gift ideas from $77 to about $5,300, from a Timex Weekender to a Tudor Black Bay 58, plus tips for buying a watch as a gift.",
+    body: [
+      "Buying a watch for someone this holiday season? Good news: you don't need to spend a fortune to give a great one. Here are seven watches I'd be happy to unwrap, from a stocking stuffer to a once-in-a-lifetime gift, with each brand's US price when I checked in November 2026. [BRANDON: one line on the best watch gift you ever got or gave]",
+      "## Under $200: stocking stuffers",
+      "Timex Weekender 38mm ($77): a simple 38mm quartz watch on a fabric strap, with Timex's INDIGLO light-up dial and 30 meters of water resistance. It's an easy first watch, and the straps are cheap to swap so they can make it their own.",
+      "Casio G-Shock GA-2100 ($110 at Long Island Watch): the slim, eight-sided G-Shock. It mixes hands with a digital display, has 200 meters of water resistance, and is about as tough as watches get. Great for a teenager, an athlete or anyone who's hard on their stuff. [BRANDON: do you own one? What do you love about it?]",
+      "## Under $500: a first mechanical watch",
+      "Orient Bambino Version 7 ($430 list, on sale for $295 when I checked): a 38.4mm dress watch with a domed crystal and Orient's own F6724 automatic movement, which you can also wind by hand. It looks way more expensive than it is.",
+      "Seiko 5 Sports SRPD55 ($350): a 42.5mm automatic sports watch with Seiko's 4R36 movement, about 41 hours of power reserve, 100 meters of water resistance and a rotating bezel. This line has introduced a lot of people to mechanical watches.",
+      "## Under $1,000: a watch to keep for years",
+      "Hamilton Khaki Field Mechanical 38mm ($675): a hand-wound field watch with the H-50 movement and up to 80 hours of power reserve. Winding it every couple of days is part of the fun.",
+      "Tissot PRX Powermatic 80, 40mm ($850): the integrated-bracelet watch everyone seems to want right now. It has a Swiss automatic movement with an 80-hour power reserve and 100 meters of water resistance.",
+      "If they already know the big names, a microbrand watch is a thoughtful surprise. My [best microbrand watches under $1,000](/learn/best-microbrand-watches-under-1000) guide has divers, GMTs and field watches from small independent brands.",
+      "## The milestone gift",
+      "Tudor Black Bay 58 (39mm steel versions listed at about $5,225 to $5,350 on Tudor's US site): for a graduation, a wedding or a big birthday, this is a classic-sized dive watch that can be worn for decades. I went deep on the burgundy version in my [Black Bay 58 Burgundy review](/blog/tudor-black-bay-58-burgundy-review). [BRANDON: why the BB58 would be your pick for a milestone gift]",
+      "## Tips before you buy",
+      "Order early, because popular models and small-batch microbrands can sell out before the holidays, and engraving or bracelet sizing adds a few days. Check their wrist size quietly first, and include a gift receipt so the size or color can be swapped. Prices and sales change fast, so check the brand's site before you order. My guide to [buying a watch as a gift](/learn/buying-a-watch-as-a-gift) has more tips.",
+      "Follow @brandonsbrands17 on Instagram for the gift guide reel, and brands that want to be part of next year's guide can reach me at collab@brandonsbrands17.com.",
+    ],
+  },
+  {
     slug: "meet-nicola-founder-of-echo-neutra",
     title: "Meet Nicola, Founder of Echo/Neutra",
     date: "2026-10-29",
