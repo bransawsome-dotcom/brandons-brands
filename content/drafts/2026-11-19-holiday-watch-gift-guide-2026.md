@@ -10,11 +10,11 @@ Holiday watch gifts at every budget, from $77 to a lifetime watch.
 
 Timex Weekender. G-Shock GA-2100. Orient Bambino. Seiko 5 Sports.
 Hamilton Khaki Field. Tissot PRX. Tudor Black Bay 58.
-Which one would you want to unwrap? [BRANDON: your pick]
+Which one would you want to unwrap?
 
 Full gift guide with prices on the blog — link in bio.
 
-@timex @gshock_us @orientwatchusa @seikowatchusa @hamiltonwatch @tissot @tudorwatch [BRANDON: keep only the brands shown in the reel; check each handle]
+@timex @gshock_us @orientwatchusa @seikowatchusa @hamiltonwatch @tissot @tudorwatch
 
 #watchfam #watchcollector #watchesofinstagram #watchgift #holidaygiftguide #giftsforhim #affordablewatches #tudorbb58
 
@@ -46,5 +46,3 @@ Shopping for a watch lover this holiday season? I picked seven watches I'd be ha
 4. (11–16s) Winding the Hamilton Khaki Field crown, then the Tissot PRX bracelet — text: "Under $1,000"
 5. (16–22s) Tudor Black Bay 58 slow wrist roll — text: "The milestone gift"
 6. (22–28s) Brandon to camera — text: "Which one would you unwrap? Full guide: link in bio"
-
-[BRANDON: film only the watches you can get hands-on with; swap in stock shots or skip a tier if needed]
