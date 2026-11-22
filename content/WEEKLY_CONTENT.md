@@ -32,6 +32,13 @@ read exactly as it will appear before it's published.
 - End with a line pointing to the reel on Instagram (@brandonsbrands17) and the
   collab email collab@brandonsbrands17.com when it fits.
 - `category` = the calendar's Format. `excerpt` = one sentence, under 160 characters.
+- Product links: the first time each watch is named, link the name to the page
+  where it can be bought (the brand's own product page, or the retailer whose
+  price is quoted), written `[Watch name](url)`. Add
+  `?utm_source=brandonsbrands17&utm_medium=blog&utm_campaign=<slug>` so brands can
+  see the traffic the blog sends them. Only use URLs from pages actually opened.
+  If an affiliate link for that watch is listed in `content/affiliate-links.md`,
+  use it instead.
 
 ## Social posts (in the draft .md file)
 
