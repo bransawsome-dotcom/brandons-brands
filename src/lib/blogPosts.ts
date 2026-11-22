@@ -38,8 +38,8 @@ export const blogPosts: BlogPost[] = [
       "- Signature Edition I Purple: a circular-grained, violet anodized titanium dial, 25 pieces, marked sold out on Kieser's site when The Wind Up wrote about it",
       "Prices are in euros, so US buyers should expect shipping and import costs on top.",
       "## Who it's for",
-      "At €4,950 the tragwerk2.0 costs about as much as a Tudor Black Bay 58, but it's a completely different kind of watch: a tiny-batch, engineering-first design from an independent workshop. If you want something your friends have never seen and you love titanium, this is one to watch. Credit to [The Wind Up](https://www.the-wind-up.com/blog/kieser-design) for the great write-up that put it on my radar.",
-      "Follow @brandonsbrands17 on Instagram for more independent watches, and brands that want to be featured can reach me at collab@brandonsbrands17.com.",
+      "At €4,950 the tragwerk2.0 costs about as much as a Tudor Black Bay 58, but it's a completely different kind of watch: a tiny-batch, engineering-first design from an independent workshop. If you want something your friends have never seen and you love titanium, this is one to watch: [add it to your wishlist](/wishlist) on Brandon's Brands so you can keep track of it. Credit to [The Wind Up](https://www.the-wind-up.com/blog/kieser-design) for the great write-up that put it on my radar.",
+      "Want more independent finds like this? [Get the free weekly newsletter](/newsletter) and follow @brandonsbrands17 on Instagram. Already own a few watches? Track what they're worth with the [free watch value tracker](/watch-value-tracker). Brands that want to be featured can reach me at collab@brandonsbrands17.com.",
     ],
   },
   {
