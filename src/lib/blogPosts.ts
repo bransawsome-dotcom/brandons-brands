@@ -18,6 +18,31 @@ export type BlogPost = {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "kieser-design-tragwerk-2-0-first-look",
+    title: "Kieser Design tragwerk2.0: A First Look at the Titanium Dragonfly Watch",
+    date: "2026-11-24",
+    category: "First look",
+    excerpt:
+      "A first look at the Kieser Design tragwerk2.0: a 42mm titanium watch with a dragonfly-inspired exoskeleton, made in 25-piece editions for €4,950.",
+    body: [
+      "If you like watches that look like nothing else on the wrist, Kieser Design is a small German brand worth knowing. Its tragwerk2.0 wraps the case in a titanium exoskeleton inspired by a dragonfly, and each color comes in an edition of just 25 pieces. Here's what it is, what's inside and what it costs.",
+      "## Who is Kieser Design?",
+      "Matthias Kieser is at the center of the brand, and he comes from an engineering background. According to The Wind Up, Kieser Design works out of a small workshop in the Frankfurt area that handles machining, dial making, titanium anodizing and traditional hand finishing, with a master goldsmith working on components. That's a lot of in-house work for a brand this size.",
+      "## That dragonfly exoskeleton",
+      "The defining Kieser feature is the titanium exoskeleton: an open structure around the case, inspired by the wings of a dragonfly. The first version was machined from solid titanium. On the tragwerk2.0, the exoskeleton is 3D-printed titanium.",
+      "## The specs",
+      "The tragwerk2.0 is 42mm across, 43mm lug to lug and 11.2mm thick, so the lugs are short for a 42mm watch. The case is Grade 5 titanium with a sapphire crystal, a screw-down crown and 100 meters of water resistance. Inside is the automatic KD21-01, based on the Sellita SW200 Top Premium, with about 38 hours of power reserve.",
+      "## The editions",
+      "- [tragwerk2.0 Amber](https://kieserdesign-shop.de/en/products/tragwerk2-0-amber?utm_source=brandonsbrands17&utm_medium=blog&utm_campaign=kieser-first-look): a golden anodized titanium dial with more than 250 individually milled honeycomb cells, 25 pieces, €4,950",
+      "- [tragwerk2.0 Navy Blue](https://kieserdesign-shop.de/en/products/tragwerk2-0-navy-blue?utm_source=brandonsbrands17&utm_medium=blog&utm_campaign=kieser-first-look): a blue anodized titanium dial with a hexagonal pattern on a blue FKM rubber strap, 25 pieces, €4,950",
+      "- [Signature Edition I Purple](https://kieserdesign-shop.de/en/products/limited-edition-2024-indigo?utm_source=brandonsbrands17&utm_medium=blog&utm_campaign=kieser-first-look): a circular-grained, violet anodized titanium dial, 25 pieces, marked sold out on Kieser's site when The Wind Up wrote about it",
+      "Prices are in euros from Kieser's own shop, so check the site for shipping and import costs to the US before you order.",
+      "## Who it's for",
+      "At €4,950 the tragwerk2.0 costs about as much as a Tudor Black Bay 58, but it's a completely different kind of watch: a tiny-batch, engineering-first design from an independent workshop. If you want something your friends have never seen and you love titanium, this is one to watch. Credit to [The Wind Up](https://www.the-wind-up.com/blog/kieser-design) for the great write-up that put it on my radar.",
+      "Follow @brandonsbrands17 on Instagram for more independent watches, and brands that want to be featured can reach me at collab@brandonsbrands17.com.",
+    ],
+  },
+  {
     slug: "holiday-watch-gift-guide-2026",
     title: "Holiday Watch Gift Guide 2026: Great Watches at Every Budget",
     date: "2026-11-19",

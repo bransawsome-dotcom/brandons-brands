@@ -11,7 +11,7 @@ After the PR is merged, change the status to `published`. Add new rows at the bo
 | 2026-10-29 | Founder interview | Three quick questions with Nicola, founder of Echo/Neutra | Echo/Neutra Q&A reel (4,892 views) | published |
 | 2026-11-05 | First look | Longines Spirit Pilot Flyback Chronograph, hands-on | Longines reel | planned |
 | 2026-11-12 | Collector story | Introducing The Watch Collective of NJ and how to join | TWC NJ reel | planned |
-| 2026-11-19 | Guide | Holiday gift guide: great watches at every budget | New | drafted (PR #9) |
+| 2026-11-19 | Guide | Holiday gift guide: great watches at every budget | New | published |
 | 2026-11-26 | Founder interview | Three quick questions with Jerome, founder of Serica | Serica Q&A reel (3,625 views) | planned |
 | 2026-12-03 | First look | H. Moser Off-Grid: what makes it different | Moser reel | planned |
 | 2026-12-10 | Guide | Watch terms every new collector should know (GMT, chronograph, flyback, microbrand) | New | planned |
@@ -19,3 +19,4 @@ After the PR is merged, change the status to `published`. Add new rows at the bo
 | 2026-12-24 | Collector story | Road trip to Lancaster, PA | Lancaster post | planned |
 | 2026-12-31 | Guide | Brandon's watches of the year, 2026 | Year of posts | planned |
 | 2026-10-19 | Event recap | Windup Watch Fair NYC 2026: The Recap | Windup reels | published |
+| 2026-11-24 | First look | Kieser Design tragwerk2.0: the titanium dragonfly watch | The Wind Up article (Nov 19) | drafted |
