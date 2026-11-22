@@ -2,7 +2,7 @@
 
 Blog link: https://brandonsbrands17.com/blog/kieser-design-tragwerk-2-0-first-look
 
-Research note: every fact comes from The Wind Up's Nov 19 article (https://www.the-wind-up.com/blog/kieser-design). Kieser's own shop pages could not be opened from this session, so prices (€4,950) and availability are as The Wind Up reported them. The post's shop links carry utm tags (utm_source=brandonsbrands17) so Kieser can see visits coming from the blog. Kieser's Instagram handle wasn't found, so it isn't tagged below; add it if you have it.
+Research note: every fact comes from The Wind Up's Nov 19 article (https://www.the-wind-up.com/blog/kieser-design). Kieser's own shop pages could not be opened from this session, so prices (€4,950) and availability are as The Wind Up reported them. The post doesn't link to Kieser's shop. Kieser's Instagram handle wasn't found, so it isn't tagged below; add it if you have it.
 
 ## Instagram (reel caption)
 
