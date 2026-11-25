@@ -18,6 +18,33 @@ export type BlogPost = {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "three-quick-questions-with-jerome-founder-of-serica",
+    title: "Three Quick Questions with Jérôme, Founder of Serica",
+    date: "2026-11-26",
+    category: "Founder interview",
+    excerpt:
+      "Meet Jérôme Burgert, co-founder of the Paris watch brand Serica: his three quick answers, the idea behind the brand, and the watches it makes today.",
+    body: [
+      "My Q&A reel with Jérôme Burgert, co-founder of Serica, has passed 3,600 views, so here's the longer version. You'll get his three quick answers, the story of how a watch writer ended up running his own brand, and a simple guide to the watches. If you like tool watches that skip the flashy logo and focus on doing the job well, Serica is a brand worth knowing.",
+      "## Who is Jérôme?",
+      "Serica was founded in Paris in 2019 by Jérôme Burgert and Gabriel Vachette. In a 2026 interview with The Calibrated Wrist, Jérôme described it as 'a brand we founded back in 2019 with my associate Gabriel Vachette to share our vision of contemporary watchmaking.' Before Serica, the two were behind Les Rhabilleurs, a French watch blog and online magazine that Teddy Baldassarre calls one of the most respected French horology blogs around. Jérôme is the brand's designer, so he went from writing about watches to drawing them.",
+      "## My three quick questions",
+      "[BRANDON: question 1 from the reel, and Jérôme's answer in a sentence or two]",
+      "[BRANDON: question 2 from the reel, and Jérôme's answer]",
+      "[BRANDON: question 3 from the reel, and Jérôme's answer]",
+      "[BRANDON: what surprised you about talking with Jérôme, or what stuck with you after the interview?]",
+      "## The idea behind the brand",
+      "Serica describes its watches as instruments: 'precise, robust, and refined.' Each collection is built around a specific purpose. Watch Advice, which visited the brand in Paris in 2026, says the goal was to make mechanical watches useful again, and quotes Jérôme saying, 'Any time instrument is framed by specifications.' One detail I love: the watches go by reference numbers, and there's no logo on the dial. The name comes from an ancient word for East Asia, according to Watch Advice.",
+      "Jérôme also told The Calibrated Wrist something every collector can relate to: 'Time makes objects more beautiful.' That's the whole point of a watch you plan to wear for years.",
+      "## The watches",
+      "Serica's watches are designed in Paris and made in Switzerland. The lineup on its site today has field chronometers (Ref. 6190 and the new 35mm Ref. 7505), dive chronometers (Ref. 5303 and 5330), a GMT chronometer (Ref. 8315) and a dress watch (Ref. 1174, called Parade). Teddy Baldassarre's review lists the 6190 at 38mm and the 5303 at 39mm, and notes the brand uses COSC-certified chronometer movements. The slim Parade dress watch still has 100 meters of water resistance.",
+      "[BRANDON: which Serica have you handled or worn, and how did it feel on the wrist?]",
+      "## What they cost",
+      "Serica's own site lists prices in euros. When I checked, the 6190 field watch started at about €1,190 and the 1174 Parade was €1,490. Check Serica's site for today's prices and shipping to the US.",
+      "Want to hear Jérôme in his own words? The Q&A reel is on Instagram at @brandonsbrands17. Founders and brands who want to do a quick-questions reel of their own can reach me at collab@brandonsbrands17.com.",
+    ],
+  },
+  {
     slug: "holiday-watch-gift-guide-2026",
     title: "Holiday Watch Gift Guide 2026: Great Watches at Every Budget",
     date: "2026-11-19",
